@@ -1,0 +1,14 @@
+{
+    "editor.formatOnSave": true,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "search.exclude": {
+        "out": true,
+        "**/node_modules": true,
+        ".vscode-test": true
+    },
+    "tslint.autoFixOnSave": true,
+    "tslint.ignoreDefinitionFiles": true
+}

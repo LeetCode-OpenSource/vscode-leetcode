@@ -1,6 +1,6 @@
 {
     "name": "leetcode",
-    "displayName": "Leetcode",
+    "displayName": "LeetCode",
     "description": "",
     "version": "0.0.1",
     "publisher": "ShengChen",
@@ -11,14 +11,21 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onCommand:leetcode.signin",
+        "onCommand:leetcode.signout"
     ],
-    "main": "./out/extension",
+    "main": "./out/src/extension",
     "contributes": {
         "commands": [
             {
-                "command": "extension.sayHello",
-                "title": "Hello World"
+                "command": "leetcode.signin",
+                "title": "Sign in",
+                "category": "LeetCode"
+            },
+            {
+                "command": "leetcode.signout",
+                "title": "Sign out",
+                "category": "LeetCode"
             }
         ]
     },
@@ -36,5 +43,8 @@
         "tslint": "^5.9.1",
         "typescript": "^2.6.1",
         "vscode": "^1.1.6"
+    },
+    "dependencies": {
+        "leetcode-cli": "2.5.1"
     }
 }
