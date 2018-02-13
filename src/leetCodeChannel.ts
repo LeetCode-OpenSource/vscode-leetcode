@@ -6,6 +6,7 @@ export interface ILeetCodeChannel {
     appendLine(message: any, title?: string): void;
     append(message: any): void;
     show(): void;
+    dispose(): void;
 }
 
 class LeetCodeChannel implements ILeetCodeChannel {
@@ -26,6 +27,10 @@ class LeetCodeChannel implements ILeetCodeChannel {
 
     public show(): void {
         this.channel.show();
+    }
+
+    public dispose(): void {
+        this.channel.dispose();
     }
 }
 

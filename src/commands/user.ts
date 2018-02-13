@@ -3,6 +3,7 @@
 import * as cp from "child_process";
 import * as vscode from "vscode";
 import { leetcodeChannel } from "../leetCodeChannel";
+import { LeetCodeStatus, leetCodeStatusBarItem } from "../leetCodeStatusBarItem";
 import { leetCodeBinaryPath } from "../shared";
 import { executeCommand } from "../utils/cpUtils";
 import { DialogOptions, DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
@@ -18,7 +19,7 @@ export async function getSignedInAccount(): Promise<string | undefined> {
             DialogOptions.no,
         );
         if (choice === DialogOptions.yes) {
-            // sign in
+            await vscode.commands.executeCommand("leetcode.signin");
         }
         return undefined;
     }
@@ -27,7 +28,7 @@ export async function getSignedInAccount(): Promise<string | undefined> {
 export async function signIn(): Promise<void> {
     // work around for interactive login
     try {
-        await new Promise(async (resolve: (res: string) => void, reject: (e: Error) => void): Promise<void> => {
+        const userName: string = await new Promise(async (resolve: (res: string) => void, reject: (e: Error) => void): Promise<void> => {
             let result: string = "";
             const childProc: cp.ChildProcess = cp.spawn("node", [leetCodeBinaryPath, "user", "-l"]);
             childProc.stdout.on("data", (data: string | Buffer) => {
@@ -39,11 +40,12 @@ export async function signIn(): Promise<void> {
             childProc.stderr.on("data", (data: string | Buffer) => leetcodeChannel.append(data.toString()));
 
             childProc.on("error", reject);
-            childProc.on("exit", (code: number) => {
-                if (code !== 0 || result.indexOf("ERROR") > -1) {
-                    reject(new Error("Login failed"));
+            childProc.on("exit", () => {
+                const match: RegExpMatchArray | null = result.match(/(?:.*) Successfully login as (.*)/i);
+                if (match && match[1]) {
+                    resolve(match[1]);
                 } else {
-                    resolve(result);
+                    reject(new Error("Login failed"));
                 }
             });
             const user: string | undefined = await vscode.window.showInputBox({
@@ -68,6 +70,7 @@ export async function signIn(): Promise<void> {
             childProc.stdin.end();
         });
         vscode.window.showInformationMessage("Successfully signed in.");
+        leetCodeStatusBarItem.updateStatusBar(LeetCodeStatus.SignedIn, userName);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to sign in. Please open the output channel for details", DialogType.error);
     }
@@ -77,6 +80,7 @@ export async function signOut(): Promise<void> {
     try {
         await executeCommand("node", [leetCodeBinaryPath, "user", "-L"]);
         vscode.window.showInformationMessage("Successfully signed out.");
+        leetCodeStatusBarItem.updateStatusBar(LeetCodeStatus.SignedOut);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to sign out. Please open the output channel for details", DialogType.error);
     }

@@ -12,7 +12,8 @@
     ],
     "activationEvents": [
         "onCommand:leetcode.signin",
-        "onCommand:leetcode.signout"
+        "onCommand:leetcode.signout",
+        "onCommand:leetcode.selectSessions"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -25,6 +26,11 @@
             {
                 "command": "leetcode.signout",
                 "title": "Sign out",
+                "category": "LeetCode"
+            },
+            {
+                "command": "leetcode.selectSessions",
+                "title": "Select session",
                 "category": "LeetCode"
             }
         ]
