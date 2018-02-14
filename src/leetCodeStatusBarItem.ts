@@ -1,7 +1,6 @@
 "use strict";
 
 import * as vscode from "vscode";
-import { leetCodeManager } from "./leetCodeManager";
 import { UserStatus } from "./shared";
 
 export interface ILeetCodeStatusBarItem {

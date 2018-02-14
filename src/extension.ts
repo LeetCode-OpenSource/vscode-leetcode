@@ -2,8 +2,9 @@
 
 import * as vscode from "vscode";
 import * as session from "./commands/session";
+import * as show from "./commands/show";
 import { leetcodeChannel } from "./leetCodeChannel";
-import { LeetCodeTreeDataProvider } from "./leetCodeExplorer";
+import { LeetCodeTreeDataProvider, LeetCodeNode } from "./leetCodeExplorer";
 import { leetCodeManager } from "./leetCodeManager";
 import { leetCodeStatusBarItem } from "./leetCodeStatusBarItem";
 
@@ -15,6 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand("leetcode.signin", () => leetCodeManager.signIn()),
         vscode.commands.registerCommand("leetcode.signout", () => leetCodeManager.signOut()),
         vscode.commands.registerCommand("leetcode.selectSessions", () => session.selectSession()),
+        vscode.commands.registerCommand("leetcode.showProblem", (node?: LeetCodeNode) => show.showProblem(node)),
     );
     leetCodeManager.on("statusChanged", () => {
         leetCodeStatusBarItem.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser());

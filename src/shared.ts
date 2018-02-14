@@ -13,3 +13,20 @@ export enum UserStatus {
     SignedIn = 1,
     SignedOut = 2,
 }
+
+export const languages = [
+    "bash",
+    "c",
+    "cpp",
+    "csharp",
+    "golang",
+    "java",
+    "javascript",
+    "kotlin",
+    "mysql",
+    "python",
+    "python3",
+    "ruby",
+    "scala",
+    "swift"
+];

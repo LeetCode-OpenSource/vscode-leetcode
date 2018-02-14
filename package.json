@@ -33,6 +33,11 @@
                 "command": "leetcode.selectSessions",
                 "title": "Select session",
                 "category": "LeetCode"
+            },
+            {
+                "command": "leetcode.showProblem",
+                "title": "Solve problem",
+                "category": "LeetCode"
             }
         ],
         "views": {
@@ -40,6 +45,16 @@
                 {
                     "id": "leetCodeExplorer",
                     "name": "LeetCode"
+                }
+            ]
+        },
+        "menus": {
+            "view/title": [],
+            "view/item/context": [
+                {
+                    "command": "leetcode.showProblem",
+                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "group": "1@1"
                 }
             ]
         }
