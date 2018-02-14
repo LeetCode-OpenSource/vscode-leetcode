@@ -15,9 +15,6 @@ class LeetCodeStatusBarItem implements ILeetCodeStatusBarItem {
     constructor() {
         this.statusBarItem = vscode.window.createStatusBarItem();
         this.statusBarItem.command = "leetcode.selectSessions";
-        leetCodeManager.on("statusChanged", () => {
-            leetCodeStatusBarItem.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser());
-        });
     }
 
     public updateStatusBar(status: UserStatus, user?: string): void {

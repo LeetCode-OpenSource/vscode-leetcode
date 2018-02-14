@@ -13,7 +13,8 @@
     "activationEvents": [
         "onCommand:leetcode.signin",
         "onCommand:leetcode.signout",
-        "onCommand:leetcode.selectSessions"
+        "onCommand:leetcode.selectSessions",
+        "onView:leetCodeExplorer"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -33,7 +34,15 @@
                 "title": "Select session",
                 "category": "LeetCode"
             }
-        ]
+        ],
+        "views": {
+            "explorer": [
+                {
+                    "id": "leetCodeExplorer",
+                    "name": "LeetCode"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
