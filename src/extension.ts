@@ -2,16 +2,15 @@
 
 import * as vscode from "vscode";
 import * as session from "./commands/session";
-import * as user from "./commands/user";
 import { leetcodeChannel } from "./leetCodeChannel";
+import { leetCodeManager } from "./leetCodeManager";
 import { leetCodeStatusBarItem } from "./leetCodeStatusBarItem";
 
 export function activate(context: vscode.ExtensionContext) {
-    const terminal: vscode.Terminal = vscode.window.createTerminal("LeetCode");
+    leetCodeManager.getLoginStatus();
     context.subscriptions.push(
-        terminal,
-        vscode.commands.registerCommand("leetcode.signin", () => user.signIn()),
-        vscode.commands.registerCommand("leetcode.signout", () => user.signOut()),
+        vscode.commands.registerCommand("leetcode.signin", () => leetCodeManager.signIn()),
+        vscode.commands.registerCommand("leetcode.signout", () => leetCodeManager.signOut()),
         vscode.commands.registerCommand("leetcode.selectSessions", () => session.selectSession()),
     );
 }

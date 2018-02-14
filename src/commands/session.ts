@@ -1,13 +1,13 @@
 "use strict";
 
 import * as vscode from "vscode";
+import { leetCodeManager } from "../leetCodeManager";
 import { IQuickItemEx, leetCodeBinaryPath } from "../shared";
 import * as cp from "../utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
-import { getSignedInAccount } from "./user";
 
 export async function getSessionList(): Promise<ISession[]> {
-    const signInStatus = await getSignedInAccount();
+    const signInStatus = leetCodeManager.getUser();
     if (!signInStatus) {
         return [];
     }

@@ -8,3 +8,8 @@ export const leetCodeBinaryPath: string = path.join(__dirname, "..", "..", "node
 export interface IQuickItemEx<T> extends vscode.QuickPickItem {
     value: T;
 }
+
+export enum UserStatus {
+    SignedIn = 1,
+    SignedOut = 2,
+}
