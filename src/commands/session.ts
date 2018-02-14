@@ -14,7 +14,7 @@ export async function getSessionList(): Promise<ISession[]> {
     const result: string = await cp.executeCommand("node", [leetCodeBinaryPath, "session"]);
     const lines: string[] = result.split("\n");
     const sessions: ISession[] = [];
-    const reg: RegExp = /(✔?)\s*(\d+)\s+(.*)\s+(\d+ \(\s*\d+\.\d+ %\))\s+(\d+ \(\s*\d+\.\d+ %\))/;
+    const reg: RegExp = /(.?)\s*(\d+)\s+(.*)\s+(\d+ \(\s*\d+\.\d+ %\))\s+(\d+ \(\s*\d+\.\d+ %\))/;
     for (const line of lines.map((l: string) => l.trim()).filter(Boolean)) {
         const match: RegExpMatchArray | null = line.match(reg);
         if (match && match.length === 6) {
@@ -32,7 +32,7 @@ export async function getSessionList(): Promise<ISession[]> {
 
 export async function selectSession(): Promise<void> {
     const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(parseSessionsToPicks(getSessionList()));
-    if (!choice || choice.label.indexOf("✔") > -1) {
+    if (!choice || choice.description) {
         return;
     }
     try {
@@ -46,8 +46,8 @@ export async function selectSession(): Promise<void> {
 async function parseSessionsToPicks(p: Promise<ISession[]>): Promise<Array<IQuickItemEx<string>>> {
     return new Promise(async (resolve: (res: Array<IQuickItemEx<string>>) => void): Promise<void> => {
         const picks: Array<IQuickItemEx<string>> = (await p).map((s: ISession) => Object.assign({}, {
-            label: `${s.active ? "✔ " : ""}${s.name}`,
-            description: `ID: ${s.id}`,
+            label: `${s.active ? "$(check) " : ""}${s.name}`,
+            description: s.active ? "Active" : "",
             detail: `AC Questions: ${s.acQuestions}, AC Submits: ${s.acSubmits}`,
             value: s.id,
         }));

@@ -1,5 +1,6 @@
 "use strict";
 
+import * as path from "path";
 import * as vscode from "vscode";
 import * as list from "./commands/list";
 
@@ -36,6 +37,8 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     // tslint:disable-next-line:member-ordering
     public readonly onDidChangeTreeData: vscode.Event<any> = this.onDidChangeTreeDataEvent.event;
 
+    constructor(private context: vscode.ExtensionContext) { }
+
     public async refresh(): Promise<void> {
         this.treeData.clear();
         await this.getProblemData();
@@ -44,10 +47,15 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
 
     public getTreeItem(element: LeetCodeNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
         return {
-            label: element.name,
+            label: element.isProblem ? `[${element.id}] ${element.name}` : element.name,
             id: element.id,
             collapsibleState: element.isProblem ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
             contextValue: element.isProblem ? "problem" : "difficulty",
+            iconPath: element.isProblem ?
+                (element.solved ?
+                    this.context.asAbsolutePath(path.join("resources", "check.png"))
+                    : this.context.asAbsolutePath(path.join("resources", "blank.png")))
+                : "",
         };
     }
     public getChildren(element?: LeetCodeNode | undefined): vscode.ProviderResult<LeetCodeNode[]> {

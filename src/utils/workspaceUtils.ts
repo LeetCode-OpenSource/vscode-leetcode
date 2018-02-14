@@ -1,7 +1,7 @@
 "use strict";
 
-import * as vscode from "vscode"
 import * as os from "os";
+import * as vscode from "vscode";
 
 export async function selectWorkspaceFolder(): Promise<string> {
     let folder: vscode.WorkspaceFolder | undefined;

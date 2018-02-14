@@ -28,5 +28,5 @@ export const languages = [
     "python3",
     "ruby",
     "scala",
-    "swift"
+    "swift",
 ];

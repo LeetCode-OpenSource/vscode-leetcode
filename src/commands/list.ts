@@ -22,7 +22,7 @@ export async function listProblems(): Promise<IProblem[]> {
         const result: string = await executeCommand("node", [leetCodeBinaryPath, "list", "-q", "L"]);
         const problems: IProblem[] = [];
         const lines: string[] = result.split("\n");
-        const reg: RegExp = /(✔?)\s*\[(\d*)\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;
+        const reg: RegExp = /(.?)\s*\[\s*(\d*)\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;
         for (const line of lines.map((l: string) => l.trim()).filter(Boolean)) {
             const match: RegExpMatchArray | null = line.match(reg);
             if (match && match.length === 6) {

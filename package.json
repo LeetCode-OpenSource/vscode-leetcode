@@ -14,6 +14,9 @@
         "onCommand:leetcode.signin",
         "onCommand:leetcode.signout",
         "onCommand:leetcode.selectSessions",
+        "onCommand:leetcode.refreshExplorer",
+        "onCommand:leetcode.showProblem",
+        "onCommand:leetcode.searchProblem",
         "onView:leetCodeExplorer"
     ],
     "main": "./out/src/extension",
@@ -35,9 +38,24 @@
                 "category": "LeetCode"
             },
             {
+                "command": "leetcode.refreshExplorer",
+                "title": "Refresh",
+                "category": "LeetCode",
+                "icon": {
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
+                }
+            },
+            {
                 "command": "leetcode.showProblem",
                 "title": "Solve problem",
                 "category": "LeetCode"
+            },
+            {
+                "command": "leetcode.searchProblem",
+                "title": "Search",
+                "category": "LeetCode",
+                "icon": "resources/search.png"
             }
         ],
         "views": {
@@ -49,7 +67,18 @@
             ]
         },
         "menus": {
-            "view/title": [],
+            "view/title": [
+                {
+                    "command": "leetcode.searchProblem",
+                    "when": "view == leetCodeExplorer",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "leetcode.refreshExplorer",
+                    "when": "view == leetCodeExplorer",
+                    "group": "navigation@2"
+                }
+            ],
             "view/item/context": [
                 {
                     "command": "leetcode.showProblem",
