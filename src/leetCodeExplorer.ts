@@ -3,6 +3,7 @@
 import * as path from "path";
 import * as vscode from "vscode";
 import * as list from "./commands/list";
+import { leetCodeManager } from "./leetCodeManager";
 
 // tslint:disable:max-classes-per-file
 export class LeetCodeNode {
@@ -46,6 +47,17 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     }
 
     public getTreeItem(element: LeetCodeNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
+        if (element.id === "notSignIn") {
+            return {
+                label: element.name,
+                id: element.id,
+                collapsibleState: vscode.TreeItemCollapsibleState.None,
+                command: {
+                    command: "leetcode.signin",
+                    title: "Sign in to LeetCode",
+                },
+            };
+        }
         return {
             label: element.isProblem ? `[${element.id}] ${element.name}` : element.name,
             id: element.id,
@@ -58,7 +70,22 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 : "",
         };
     }
+
     public getChildren(element?: LeetCodeNode | undefined): vscode.ProviderResult<LeetCodeNode[]> {
+        if (!leetCodeManager.getUser()) {
+            return [
+                new LeetCodeNode(
+                    {
+                        solved: false,
+                        id: "notSignIn",
+                        name: "Sign in to LeetCode",
+                        difficulty: "",
+                        passRate: "",
+                    },
+                    false,
+                ),
+            ];
+        }
         if (!element) {
             return new Promise(async (resolve: (res: LeetCodeNode[]) => void): Promise<void> => {
                 await this.getProblemData();
@@ -110,6 +137,21 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 ),
             );
         }
+        difficultynodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => {
+            function getValue(input: string): number {
+                switch (input.toLowerCase()) {
+                    case "easy":
+                        return 1;
+                    case "medium":
+                        return 2;
+                    case "hard":
+                        return 3;
+                    default:
+                        return Number.MAX_SAFE_INTEGER;
+                }
+            }
+            return getValue(a.name) - getValue(b.name);
+        });
         return difficultynodes;
     }
 

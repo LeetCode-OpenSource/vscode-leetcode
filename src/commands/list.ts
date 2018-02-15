@@ -35,7 +35,7 @@ export async function listProblems(): Promise<IProblem[]> {
                 });
             }
         }
-        return problems;
+        return problems.reverse();
     } catch (error) {
         await promptForOpenOutputChannel("Failed to list problems. Please open the output channel for details", DialogType.error);
         return [];
