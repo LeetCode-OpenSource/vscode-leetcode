@@ -1,14 +1,22 @@
 "use strict";
 
+import * as opn from "opn";
+import * as vscode from "vscode";
 import { executeCommand } from "./cpUtils";
+import { DialogOptions } from "./uiUtils";
 
-export namespace mavenUtils {
-    const nodeCommand: string = "node";
-    export async function validateMavenInstalled(): Promise<void> {
-        try {
-            await executeCommand(nodeCommand, ["-v"]);
-        } catch (error) {
-            throw new Error('Failed to find "maven" on path.');
+export async function isNodeInstalled(): Promise<boolean> {
+    try {
+        await executeCommand("node", ["-v"]);
+        return true;
+    } catch (error) {
+        const choice = await vscode.window.showErrorMessage(
+            "LeetCode extension need Node.js installed in environment path",
+            DialogOptions.open,
+        );
+        if (choice === DialogOptions.open) {
+            opn("https://nodejs.org");
         }
+        return false;
     }
 }

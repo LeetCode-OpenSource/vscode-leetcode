@@ -14,6 +14,7 @@
         "onCommand:leetcode.signin",
         "onCommand:leetcode.signout",
         "onCommand:leetcode.selectSessions",
+        "onCommand:leetcode.createSession",
         "onCommand:leetcode.refreshExplorer",
         "onCommand:leetcode.showProblem",
         "onCommand:leetcode.searchProblem",
@@ -39,6 +40,11 @@
                 "category": "LeetCode"
             },
             {
+                "command": "leetcode.createSession",
+                "title": "Create new session",
+                "category": "LeetCode"
+            },
+            {
                 "command": "leetcode.refreshExplorer",
                 "title": "Refresh",
                 "category": "LeetCode",
@@ -54,7 +60,7 @@
             },
             {
                 "command": "leetcode.searchProblem",
-                "title": "Search",
+                "title": "Search Problem",
                 "category": "LeetCode",
                 "icon": "resources/search.png"
             },
@@ -112,6 +118,7 @@
     },
     "dependencies": {
         "fs-extra": "^5.0.0",
-        "leetcode-cli": "2.5.1"
+        "leetcode-cli": "2.5.1",
+        "opn": "^5.2.0"
     }
 }

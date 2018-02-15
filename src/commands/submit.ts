@@ -7,10 +7,11 @@ import * as vscode from "vscode";
 import { leetCodeManager } from "../leetCodeManager";
 import { leetCodeBinaryPath } from "../shared";
 import { executeCommand } from "../utils/cpUtils";
-import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
+import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 
 export async function submitSolution(): Promise<void> {
     if (!leetCodeManager.getUser()) {
+        promptForSignIn();
         return;
     }
     const textEditor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;

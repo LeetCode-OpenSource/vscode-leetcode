@@ -8,20 +8,28 @@ import { leetcodeChannel } from "./leetCodeChannel";
 import { LeetCodeNode, LeetCodeTreeDataProvider } from "./leetCodeExplorer";
 import { leetCodeManager } from "./leetCodeManager";
 import { leetCodeStatusBarItem } from "./leetCodeStatusBarItem";
+import { isNodeInstalled } from "./utils/nodeUtils";
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
+    if (!await isNodeInstalled()) {
+        return;
+    }
+
     leetCodeManager.getLoginStatus();
     const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider(context);
+
     context.subscriptions.push(
         vscode.window.registerTreeDataProvider("leetCodeExplorer", leetCodeTreeDataProvider),
         vscode.commands.registerCommand("leetcode.signin", () => leetCodeManager.signIn()),
         vscode.commands.registerCommand("leetcode.signout", () => leetCodeManager.signOut()),
         vscode.commands.registerCommand("leetcode.selectSessions", () => session.selectSession()),
+        vscode.commands.registerCommand("leetcode.createSession", () => session.createSession()),
         vscode.commands.registerCommand("leetcode.showProblem", (node: LeetCodeNode) => show.showProblem(node)),
         vscode.commands.registerCommand("leetcode.searchProblem", () => show.searchProblem()),
         vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
         vscode.commands.registerCommand("leetcode.submitSolution", () => submit.submitSolution()),
     );
+
     leetCodeManager.on("statusChanged", () => {
         leetCodeStatusBarItem.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser());
         leetCodeTreeDataProvider.refresh();

@@ -4,11 +4,12 @@ import * as vscode from "vscode";
 import { leetCodeManager } from "../leetCodeManager";
 import { IQuickItemEx, leetCodeBinaryPath } from "../shared";
 import * as cp from "../utils/cpUtils";
-import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
+import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 
 export async function getSessionList(): Promise<ISession[]> {
     const signInStatus = leetCodeManager.getUser();
     if (!signInStatus) {
+        promptForSignIn();
         return [];
     }
     const result: string = await cp.executeCommand("node", [leetCodeBinaryPath, "session"]);
@@ -32,7 +33,11 @@ export async function getSessionList(): Promise<ISession[]> {
 
 export async function selectSession(): Promise<void> {
     const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(parseSessionsToPicks(getSessionList()));
-    if (!choice || choice.description) {
+    if (!choice || choice.description === "Active") {
+        return;
+    }
+    if (choice.value === ":createNewSession") {
+        await vscode.commands.executeCommand("leetcode.createSession");
         return;
     }
     try {
@@ -51,8 +56,28 @@ async function parseSessionsToPicks(p: Promise<ISession[]>): Promise<Array<IQuic
             detail: `AC Questions: ${s.acQuestions}, AC Submits: ${s.acSubmits}`,
             value: s.id,
         }));
+        picks.push({
+            label: "$(plus) Create a new session",
+            description: "",
+            value: ":createNewSession",
+        });
         resolve(picks);
     });
+}
+
+export async function createSession(): Promise<void> {
+    const session: string | undefined = await vscode.window.showInputBox({
+        prompt: "Enter the new session name.",
+        validateInput: (s: string) => s.trim() ? undefined : "Session name must not be empty",
+    });
+    if (!session) {
+        return;
+    }
+    try {
+        await cp.executeCommand("node", [leetCodeBinaryPath, "session", "-c", session]);
+    } catch (error) {
+        await promptForOpenOutputChannel("Failed to create session. Please open the output channel for details", DialogType.error);
+    }
 }
 
 export interface ISession {

@@ -5,7 +5,7 @@ import { LeetCodeNode } from "../leetCodeExplorer";
 import { leetCodeManager } from "../leetCodeManager";
 import { IQuickItemEx, languages, leetCodeBinaryPath } from "../shared";
 import { executeCommand } from "../utils/cpUtils";
-import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
+import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as list from "./list";
 
@@ -18,6 +18,7 @@ export async function showProblem(node?: LeetCodeNode): Promise<void> {
 
 export async function searchProblem(): Promise<void> {
     if (!leetCodeManager.getUser()) {
+        promptForSignIn();
         return;
     }
     const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(

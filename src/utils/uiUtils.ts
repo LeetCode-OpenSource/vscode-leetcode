@@ -1,5 +1,6 @@
 "use strict";
 
+import * as opn from "opn";
 import * as vscode from "vscode";
 import { leetcodeChannel } from "../leetCodeChannel";
 
@@ -7,6 +8,7 @@ export namespace DialogOptions {
     export const open: vscode.MessageItem = { title: "Open" };
     export const yes: vscode.MessageItem = { title: "Yes" };
     export const no: vscode.MessageItem = { title: "No", isCloseAffordance: true };
+    export const register: vscode.MessageItem = { title: "Register" };
 }
 
 export async function promptForOpenOutputChannel(message: string, type: DialogType): Promise<void> {
@@ -27,6 +29,25 @@ export async function promptForOpenOutputChannel(message: string, type: DialogTy
 
     if (result === DialogOptions.open) {
         leetcodeChannel.show();
+    }
+}
+
+export async function promptForSignIn(): Promise<void> {
+    const choice = await vscode.window.showInformationMessage(
+        "Please sign in to LeetCode.",
+        DialogOptions.yes,
+        DialogOptions.no,
+        DialogOptions.register,
+    );
+    switch (choice) {
+        case DialogOptions.yes:
+            await vscode.commands.executeCommand("leetcode.signin");
+            break;
+        case DialogOptions.register:
+            opn("https://leetcode.com");
+            break;
+        default:
+            break;
     }
 }
 
