@@ -47,7 +47,7 @@ async function showProblemInternal(id: string): Promise<void> {
         const reg: RegExp = /\* Source Code:\s*(.*)/;
         const match: RegExpMatchArray | null = result.match(reg);
         if (match && match.length >= 2) {
-            await vscode.window.showTextDocument(vscode.Uri.file(match[1].trim()));
+            await vscode.window.showTextDocument(vscode.Uri.file(match[1].trim()), { preview: false });
         } else {
             throw new Error("Failed to fetch the problem information");
         }
