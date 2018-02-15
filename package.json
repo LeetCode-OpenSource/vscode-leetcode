@@ -1,15 +1,29 @@
 {
-    "name": "leetcode",
+    "name": "vscode-leetcode",
     "displayName": "LeetCode",
-    "description": "",
-    "version": "0.0.1",
-    "publisher": "ShengChen",
+    "description": "Solve LeetCode problems in VS Code",
+    "version": "0.1.0",
+    "author": "Sheng Chen",
+    "publisher": "shengchen",
+    "icon": "resources/LeetCode.png",
     "engines": {
         "vscode": "^1.20.0"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jdneo/vscode-leetcode"
+    },
+    "homepage": "https://github.com/jdneo/vscode-leetcode/blob/master/README.md",
     "categories": [
-        "Other"
+        "Other",
+        "Snippets"
     ],
+    "keywords": [
+        "leetcode",
+        "algorithm",
+        "interview"
+    ],
+    "preview": true,
     "activationEvents": [
         "onCommand:leetcode.signin",
         "onCommand:leetcode.signout",
