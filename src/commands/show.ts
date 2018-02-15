@@ -10,20 +10,20 @@ import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../util
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as list from "./list";
 
-export async function showProblem(node?: LeetCodeNode): Promise<void> {
+export async function showProblem(channel: vscode.OutputChannel, node?: LeetCodeNode): Promise<void> {
     if (!node) {
         return;
     }
-    await showProblemInternal(node.id);
+    await showProblemInternal(channel, node.id);
 }
 
-export async function searchProblem(): Promise<void> {
+export async function searchProblem(channel: vscode.OutputChannel): Promise<void> {
     if (!leetCodeManager.getUser()) {
         promptForSignIn();
         return;
     }
     const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(
-        parseProblemsToPicks(list.listProblems()),
+        parseProblemsToPicks(list.listProblems(channel)),
         {
             matchOnDetail: true,
             placeHolder: "Select one problem",
@@ -32,10 +32,10 @@ export async function searchProblem(): Promise<void> {
     if (!choice) {
         return;
     }
-    await showProblemInternal(choice.value);
+    await showProblemInternal(channel, choice.value);
 }
 
-async function showProblemInternal(id: string): Promise<void> {
+async function showProblemInternal(channel: vscode.OutputChannel, id: string): Promise<void> {
     try {
         const language: string | undefined = await vscode.window.showQuickPick(languages, { placeHolder: "Select the language you want to use" });
         if (!language) {
@@ -43,7 +43,7 @@ async function showProblemInternal(id: string): Promise<void> {
         }
         const outdir: string = await selectWorkspaceFolder();
         await fse.ensureDir(outdir);
-        const result: string = await executeCommand("node", [leetCodeBinaryPath, "show", id, "-gx", "-l", language, "-o", outdir]);
+        const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "show", id, "-gx", "-l", language, "-o", outdir]);
         const reg: RegExp = /\* Source Code:\s*(.*)/;
         const match: RegExpMatchArray | null = result.match(reg);
         if (match && match.length >= 2) {
@@ -52,7 +52,7 @@ async function showProblemInternal(id: string): Promise<void> {
             throw new Error("Failed to fetch the problem information");
         }
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to fetch the problem information. Please open the output channel for details", DialogType.error);
+        await promptForOpenOutputChannel("Failed to fetch the problem information. Please open the output channel for details", DialogType.error, channel);
     }
 }
 

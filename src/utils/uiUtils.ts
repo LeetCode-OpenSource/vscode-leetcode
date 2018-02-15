@@ -2,7 +2,6 @@
 
 import * as opn from "opn";
 import * as vscode from "vscode";
-import { leetcodeChannel } from "../leetCodeChannel";
 
 export namespace DialogOptions {
     export const open: vscode.MessageItem = { title: "Open" };
@@ -11,7 +10,7 @@ export namespace DialogOptions {
     export const singUp: vscode.MessageItem = { title: "Sign up" };
 }
 
-export async function promptForOpenOutputChannel(message: string, type: DialogType): Promise<void> {
+export async function promptForOpenOutputChannel(message: string, type: DialogType, channel: vscode.OutputChannel): Promise<void> {
     let result: vscode.MessageItem | undefined;
     switch (type) {
         case DialogType.info:
@@ -28,7 +27,7 @@ export async function promptForOpenOutputChannel(message: string, type: DialogTy
     }
 
     if (result === DialogOptions.open) {
-        leetcodeChannel.show();
+        channel.show();
     }
 }
 

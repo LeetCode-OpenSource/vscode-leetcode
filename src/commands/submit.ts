@@ -9,7 +9,7 @@ import { leetCodeBinaryPath } from "../shared";
 import { executeCommand } from "../utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 
-export async function submitSolution(): Promise<void> {
+export async function submitSolution(channel: vscode.OutputChannel): Promise<void> {
     if (!leetCodeManager.getUser()) {
         promptForSignIn();
         return;
@@ -24,12 +24,12 @@ export async function submitSolution(): Promise<void> {
     }
     const filePath: string = textEditor.document.uri.fsPath;
     try {
-        const result: string = await executeCommand("node", [leetCodeBinaryPath, "submit", filePath]);
+        const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "submit", filePath]);
         const resultPath: string = path.join(os.homedir(), ".leetcode", "Result");
         await fse.ensureFile(resultPath);
         await fse.writeFile(resultPath, result);
         await vscode.window.showTextDocument(vscode.Uri.file(resultPath));
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to submit the solution. Please open the output channel for details", DialogType.error);
+        await promptForOpenOutputChannel("Failed to submit the solution. Please open the output channel for details", DialogType.error, channel);
     }
 }

@@ -6,13 +6,13 @@ import { IQuickItemEx, leetCodeBinaryPath } from "../shared";
 import * as cp from "../utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 
-export async function getSessionList(): Promise<ISession[]> {
+export async function getSessionList(channel: vscode.OutputChannel): Promise<ISession[]> {
     const signInStatus = leetCodeManager.getUser();
     if (!signInStatus) {
         promptForSignIn();
         return [];
     }
-    const result: string = await cp.executeCommand("node", [leetCodeBinaryPath, "session"]);
+    const result: string = await cp.executeCommand(channel, "node", [leetCodeBinaryPath, "session"]);
     const lines: string[] = result.split("\n");
     const sessions: ISession[] = [];
     const reg: RegExp = /(.?)\s*(\d+)\s+(.*)\s+(\d+ \(\s*\d+\.\d+ %\))\s+(\d+ \(\s*\d+\.\d+ %\))/;
@@ -31,8 +31,8 @@ export async function getSessionList(): Promise<ISession[]> {
     return sessions;
 }
 
-export async function selectSession(): Promise<void> {
-    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(parseSessionsToPicks(getSessionList()));
+export async function selectSession(channel: vscode.OutputChannel): Promise<void> {
+    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(parseSessionsToPicks(getSessionList(channel)));
     if (!choice || choice.description === "Active") {
         return;
     }
@@ -41,11 +41,11 @@ export async function selectSession(): Promise<void> {
         return;
     }
     try {
-        await cp.executeCommand("node", [leetCodeBinaryPath, "session", "-e", choice.value]);
+        await cp.executeCommand(channel, "node", [leetCodeBinaryPath, "session", "-e", choice.value]);
         vscode.window.showInformationMessage(`Successfully switched to session '${choice.label}'.`);
         await vscode.commands.executeCommand("leetcode.refreshExplorer");
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to switch session. Please open the output channel for details", DialogType.error);
+        await promptForOpenOutputChannel("Failed to switch session. Please open the output channel for details", DialogType.error, channel);
     }
 }
 
@@ -67,7 +67,7 @@ async function parseSessionsToPicks(p: Promise<ISession[]>): Promise<Array<IQuic
     });
 }
 
-export async function createSession(): Promise<void> {
+export async function createSession(channel: vscode.OutputChannel): Promise<void> {
     const session: string | undefined = await vscode.window.showInputBox({
         prompt: "Enter the new session name.",
         validateInput: (s: string) => s.trim() ? undefined : "Session name must not be empty",
@@ -76,10 +76,10 @@ export async function createSession(): Promise<void> {
         return;
     }
     try {
-        await cp.executeCommand("node", [leetCodeBinaryPath, "session", "-c", session]);
+        await cp.executeCommand(channel, "node", [leetCodeBinaryPath, "session", "-c", session]);
         vscode.window.showInformationMessage("New session created, you can switch to it by clicking the status bar.");
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to create session. Please open the output channel for details", DialogType.error);
+        await promptForOpenOutputChannel("Failed to create session. Please open the output channel for details", DialogType.error, channel);
     }
 }
 

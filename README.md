@@ -33,6 +33,7 @@ Solve LeetCode problems in VS Code.
 
 ## Known Issues:
 - This extension will infer the current target problem according to the active editing file. Please do not change the file name.
+- Currently, only unlocked problems will be listed.
 
 ## Release Notes
 
@@ -72,6 +73,7 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 
 ## 已知问题
 - 本插件会根据文件名称推测当前的目标题目，因此建议不要改变文件名。
+- 本插件目前仅会显示左右已解锁的问题。
 
 ## 更新日志
 

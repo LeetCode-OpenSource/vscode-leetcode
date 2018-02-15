@@ -1,5 +1,6 @@
 "use strict";
 
+import * as vscode from "vscode";
 import { leetCodeManager } from "../leetCodeManager";
 import { leetCodeBinaryPath } from "../shared";
 import { UserStatus } from "../shared";
@@ -14,12 +15,12 @@ export interface IProblem {
     passRate: string;
 }
 
-export async function listProblems(): Promise<IProblem[]> {
+export async function listProblems(channel: vscode.OutputChannel): Promise<IProblem[]> {
     try {
         if (leetCodeManager.getStatus() === UserStatus.SignedOut) {
             return [];
         }
-        const result: string = await executeCommand("node", [leetCodeBinaryPath, "list", "-q", "L"]);
+        const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "list", "-q", "L"]);
         const problems: IProblem[] = [];
         const lines: string[] = result.split("\n");
         const reg: RegExp = /(.?)\s*\[\s*(\d*)\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;
@@ -37,7 +38,7 @@ export async function listProblems(): Promise<IProblem[]> {
         }
         return problems.reverse();
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to list problems. Please open the output channel for details", DialogType.error);
+        await promptForOpenOutputChannel("Failed to list problems. Please open the output channel for details", DialogType.error, channel);
         return [];
     }
 
