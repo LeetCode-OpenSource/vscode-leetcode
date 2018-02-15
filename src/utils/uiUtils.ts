@@ -8,7 +8,7 @@ export namespace DialogOptions {
     export const open: vscode.MessageItem = { title: "Open" };
     export const yes: vscode.MessageItem = { title: "Yes" };
     export const no: vscode.MessageItem = { title: "No", isCloseAffordance: true };
-    export const register: vscode.MessageItem = { title: "Register" };
+    export const singUp: vscode.MessageItem = { title: "Sign up" };
 }
 
 export async function promptForOpenOutputChannel(message: string, type: DialogType): Promise<void> {
@@ -37,13 +37,13 @@ export async function promptForSignIn(): Promise<void> {
         "Please sign in to LeetCode.",
         DialogOptions.yes,
         DialogOptions.no,
-        DialogOptions.register,
+        DialogOptions.singUp,
     );
     switch (choice) {
         case DialogOptions.yes:
             await vscode.commands.executeCommand("leetcode.signin");
             break;
-        case DialogOptions.register:
+        case DialogOptions.singUp:
             opn("https://leetcode.com");
             break;
         default:

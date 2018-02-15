@@ -17,14 +17,19 @@ Solve LeetCode problems in VS Code.
 - Submit solutions to LeetCode
 
 ### Sign In and Sign Out
+![SignInOut](resources/gif/sininout.gif)
 
 ### Switch and Create Session
+![SwitchSession](resources/gif/switchsession.gif)
 
 ### Show Problems in Explorer
+![ShowProblem](resources/gif/showproblem.gif)
 
 ### Search Problems by Keywords
+![SearchProblem](resources/gif/searchproblem.gif)
 
 ### Submit Solutions to LeetCode
+![SubmitSolution](resources/gif/solveproblem.gif)
 
 ## Known Issues:
 - This extension will infer the current target problem according to the active editing file. Please do not change the file name.
@@ -51,14 +56,19 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 - 向 LeetCode 提交答案
 
 ### 登陆及登出
+![SignInOut](resources/gif/sininout.gif)
 
 ### 切换及创建 session
+![SwitchSession](resources/gif/switchsession.gif)
 
 ### 在 Explorer 中展示题目
+![ShowProblem](resources/gif/showproblem.gif)
 
 ### 根据关键字搜索题目
+![SearchProblem](resources/gif/searchproblem.gif)
 
 ### 向 LeetCode 提交答案
+![SubmitSolution](resources/gif/solveproblem.gif)
 
 ## 已知问题
 - 本插件会根据文件名称推测当前的目标题目，因此建议不要改变文件名。

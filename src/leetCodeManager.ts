@@ -64,7 +64,7 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
                 }
                 childProc.stdin.write(`${name}\n`);
                 const pwd: string | undefined = await vscode.window.showInputBox({
-                    prompt: "Enter user name.",
+                    prompt: "Enter password.",
                     password: true,
                     validateInput: (s: string) => s ? undefined : "Password must not be empty",
                 });
