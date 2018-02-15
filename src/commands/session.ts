@@ -16,11 +16,11 @@ export async function getSessionList(): Promise<ISession[]> {
     const lines: string[] = result.split("\n");
     const sessions: ISession[] = [];
     const reg: RegExp = /(.?)\s*(\d+)\s+(.*)\s+(\d+ \(\s*\d+\.\d+ %\))\s+(\d+ \(\s*\d+\.\d+ %\))/;
-    for (const line of lines.map((l: string) => l.trim()).filter(Boolean)) {
+    for (const line of lines) {
         const match: RegExpMatchArray | null = line.match(reg);
         if (match && match.length === 6) {
             sessions.push({
-                active: !!match[1],
+                active: !!(match[1].trim()),
                 id: match[2].trim(),
                 name: match[3].trim(),
                 acQuestions: match[4].trim(),
@@ -43,6 +43,7 @@ export async function selectSession(): Promise<void> {
     try {
         await cp.executeCommand("node", [leetCodeBinaryPath, "session", "-e", choice.value]);
         vscode.window.showInformationMessage(`Successfully switched to session '${choice.label}'.`);
+        await vscode.commands.executeCommand("leetcode.refreshExplorer");
     } catch (error) {
         await promptForOpenOutputChannel("Failed to switch session. Please open the output channel for details", DialogType.error);
     }
@@ -59,6 +60,7 @@ async function parseSessionsToPicks(p: Promise<ISession[]>): Promise<Array<IQuic
         picks.push({
             label: "$(plus) Create a new session",
             description: "",
+            detail: "Click this item to create a new session",
             value: ":createNewSession",
         });
         resolve(picks);
@@ -75,6 +77,7 @@ export async function createSession(): Promise<void> {
     }
     try {
         await cp.executeCommand("node", [leetCodeBinaryPath, "session", "-c", session]);
+        vscode.window.showInformationMessage("New session created, you can switch to it by clicking the status bar.");
     } catch (error) {
         await promptForOpenOutputChannel("Failed to create session. Please open the output channel for details", DialogType.error);
     }

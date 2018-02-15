@@ -23,11 +23,11 @@ export async function listProblems(): Promise<IProblem[]> {
         const problems: IProblem[] = [];
         const lines: string[] = result.split("\n");
         const reg: RegExp = /(.?)\s*\[\s*(\d*)\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;
-        for (const line of lines.map((l: string) => l.trim()).filter(Boolean)) {
+        for (const line of lines) {
             const match: RegExpMatchArray | null = line.match(reg);
             if (match && match.length === 6) {
                 problems.push({
-                    solved: !!match[1],
+                    solved: !!(match[1].trim()),
                     id: match[2].trim(),
                     name: match[3].trim(),
                     difficulty: match[4].trim(),
