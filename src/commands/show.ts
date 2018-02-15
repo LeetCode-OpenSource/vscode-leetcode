@@ -17,8 +17,7 @@ export async function showProblem(node?: LeetCodeNode): Promise<void> {
 }
 
 export async function searchProblem(): Promise<void> {
-    const signInStatus = leetCodeManager.getUser();
-    if (!signInStatus) {
+    if (!leetCodeManager.getUser()) {
         return;
     }
     const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(

@@ -17,6 +17,7 @@
         "onCommand:leetcode.refreshExplorer",
         "onCommand:leetcode.showProblem",
         "onCommand:leetcode.searchProblem",
+        "onCommand:leetcode.submitSolution",
         "onView:leetCodeExplorer"
     ],
     "main": "./out/src/extension",
@@ -48,7 +49,7 @@
             },
             {
                 "command": "leetcode.showProblem",
-                "title": "Solve problem",
+                "title": "Show problem",
                 "category": "LeetCode"
             },
             {
@@ -56,6 +57,11 @@
                 "title": "Search",
                 "category": "LeetCode",
                 "icon": "resources/search.png"
+            },
+            {
+                "command": "leetcode.submitSolution",
+                "title": "Submit",
+                "category": "LeetCode"
             }
         ],
         "views": {
@@ -97,6 +103,7 @@
         "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose"
     },
     "devDependencies": {
+        "@types/fs-extra": "^5.0.0",
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
         "tslint": "^5.9.1",
@@ -104,6 +111,7 @@
         "vscode": "^1.1.6"
     },
     "dependencies": {
+        "fs-extra": "^5.0.0",
         "leetcode-cli": "2.5.1"
     }
 }
