@@ -17,7 +17,7 @@ Solve LeetCode problems in VS Code.
 - Submit solutions to LeetCode
 
 ### Sign In and Sign Out
-![SignInOut](resources/gif/sininout.gif)
+![SignInOut](resources/gif/signinout.gif)
 
 ### Switch and Create Session
 ![SwitchSession](resources/gif/switchsession.gif)
@@ -56,7 +56,7 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 - 向 LeetCode 提交答案
 
 ### 登陆及登出
-![SignInOut](resources/gif/sininout.gif)
+![SignInOut](resources/gif/signinout.gif)
 
 ### 切换及创建 session
 ![SwitchSession](resources/gif/switchsession.gif)
