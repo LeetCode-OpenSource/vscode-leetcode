@@ -25,7 +25,7 @@ export async function submitSolution(): Promise<void> {
     const filePath: string = textEditor.document.uri.fsPath;
     try {
         const result: string = await executeCommand("node", [leetCodeBinaryPath, "submit", filePath]);
-        const resultPath: string = path.join(os.tmpdir(), "Result");
+        const resultPath: string = path.join(os.homedir(), ".leetcode", "Result");
         await fse.ensureFile(resultPath);
         await fse.writeFile(resultPath, result);
         await vscode.window.showTextDocument(vscode.Uri.file(resultPath));

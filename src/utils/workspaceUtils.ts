@@ -1,6 +1,7 @@
 "use strict";
 
 import * as os from "os";
+import * as path from "path";
 import * as vscode from "vscode";
 
 export async function selectWorkspaceFolder(): Promise<string> {
@@ -14,5 +15,5 @@ export async function selectWorkspaceFolder(): Promise<string> {
             folder = vscode.workspace.workspaceFolders[0];
         }
     }
-    return folder ? folder.uri.fsPath : os.tmpdir();
+    return folder ? folder.uri.fsPath : path.join(os.homedir(), ".leetcode");
 }

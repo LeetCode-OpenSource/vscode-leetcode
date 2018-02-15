@@ -1,5 +1,6 @@
 "use strict";
 
+import * as fse from "fs-extra";
 import * as vscode from "vscode";
 import { LeetCodeNode } from "../leetCodeExplorer";
 import { leetCodeManager } from "../leetCodeManager";
@@ -41,6 +42,7 @@ async function showProblemInternal(id: string): Promise<void> {
             return;
         }
         const outdir: string = await selectWorkspaceFolder();
+        await fse.ensureDir(outdir);
         const result: string = await executeCommand("node", [leetCodeBinaryPath, "show", id, "-gx", "-l", language, "-o", outdir]);
         const reg: RegExp = /\* Source Code:\s*(.*)/;
         const match: RegExpMatchArray | null = result.match(reg);
