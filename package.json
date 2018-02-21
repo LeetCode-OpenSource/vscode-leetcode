@@ -2,7 +2,7 @@
     "name": "vscode-leetcode",
     "displayName": "LeetCode",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "author": "Sheng Chen",
     "publisher": "shengchen",
     "icon": "resources/LeetCode.png",

@@ -70,7 +70,7 @@ async function parseSessionsToPicks(p: Promise<ISession[]>): Promise<Array<IQuic
 export async function createSession(channel: vscode.OutputChannel): Promise<void> {
     const session: string | undefined = await vscode.window.showInputBox({
         prompt: "Enter the new session name.",
-        validateInput: (s: string) => s.trim() ? undefined : "Session name must not be empty",
+        validateInput: (s: string) => s && s.trim() ? undefined : "Session name must not be empty",
     });
     if (!session) {
         return;

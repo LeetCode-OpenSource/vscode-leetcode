@@ -6,6 +6,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [0.1.1]
 ### Fixed
 - Fixed a bug in LeetCode Explorer [(#3)](https://github.com/jdneo/vscode-leetcode/issues/3)
+- Remove the show problem command from command palette [(#4)](https://github.com/jdneo/vscode-leetcode/issues/4)
 
 ## [0.1.0]
 ### Added

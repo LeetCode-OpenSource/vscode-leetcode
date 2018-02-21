@@ -14,7 +14,7 @@ export async function showProblem(channel: vscode.OutputChannel, node?: LeetCode
     if (!node) {
         return;
     }
-    await showProblemInternal(channel, node.id.split(".")[1]);
+    await showProblemInternal(channel, node.id);
 }
 
 export async function searchProblem(channel: vscode.OutputChannel): Promise<void> {
