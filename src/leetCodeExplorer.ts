@@ -58,9 +58,11 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 },
             };
         }
+
+        const idPrefix: number = Date.now();
         return {
             label: element.isProblem ? `[${element.id}] ${element.name}` : element.name,
-            id: element.id,
+            id: `${idPrefix}.${element.id}`,
             collapsibleState: element.isProblem ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
             contextValue: element.isProblem ? "problem" : "difficulty",
             iconPath: element.isProblem ?
