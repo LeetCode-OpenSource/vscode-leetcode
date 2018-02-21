@@ -1,4 +1,6 @@
 # LeetCode
+[![Travis CI](https://travis-ci.org/jdneo/vscode-leetcode.svg?branch=master)](https://travis-ci.org/jdneo/vscode-leetcode)
+[![Marketplace Version](https://vsmarketplacebadge.apphb.com/version-short/shengchen.vscode-leetcode.svg)](https://vsmarketplacebadge.apphb.com/version-short/shengchen.vscode-leetcode.svg)
 
 Solve LeetCode problems in VS Code.
 - [中文](#中文)
@@ -50,13 +52,13 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
     > 注意: 请确保`Node`在`PATH`环境变量中，您可以通过执行：`node -v`进行查看。
 
 ## 功能
-- 登陆 / 登出 LeetCode
+- 登入 / 登出 LeetCode
 - 切换及创建 session
 - 在 Explorer 中展示题目
 - 根据关键字搜索题目
 - 向 LeetCode 提交答案
 
-### 登陆及登出
+### 登入及登出
 ![SignInOut](resources/gif/signinout.gif)
 
 ### 切换及创建 session
@@ -73,7 +75,7 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 
 ## 已知问题
 - 本插件会根据文件名称推测当前的目标题目，因此建议不要改变文件名。
-- 本插件目前仅会显示左右已解锁的问题。
+- 本插件目前仅会显示已解锁的问题。
 
 ## 更新日志
 
