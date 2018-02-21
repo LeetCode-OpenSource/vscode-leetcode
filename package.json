@@ -111,6 +111,12 @@
                     "when": "view == leetCodeExplorer && viewItem == problem",
                     "group": "1@1"
                 }
+            ],
+            "commandPalette": [
+                {
+                    "command": "leetcode.showProblem",
+                    "when": "never"
+                }
             ]
         }
     },
