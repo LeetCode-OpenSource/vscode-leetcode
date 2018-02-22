@@ -3,9 +3,13 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.1.2]
+### Fixed
+- Fix the deplicated nodes in LeetCode Explorer bug [(#6)](https://github.com/jdneo/vscode-leetcode/issues/6)
+
 ## [0.1.1]
 ### Fixed
-- Fixed a bug in LeetCode Explorer [(#3)](https://github.com/jdneo/vscode-leetcode/issues/3)
+- Fix a bug in LeetCode Explorer [(#3)](https://github.com/jdneo/vscode-leetcode/issues/3)
 - Remove the show problem command from command palette [(#4)](https://github.com/jdneo/vscode-leetcode/issues/4)
 
 ## [0.1.0]
