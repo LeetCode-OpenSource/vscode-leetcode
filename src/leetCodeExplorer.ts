@@ -41,7 +41,6 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     constructor(private context: vscode.ExtensionContext, private channel: vscode.OutputChannel) { }
 
     public async refresh(): Promise<void> {
-        this.treeData.clear();
         await this.getProblemData();
         this.onDidChangeTreeDataEvent.fire();
     }
@@ -100,6 +99,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
 
     private async getProblemData(): Promise<void> {
         const allProblems: list.IProblem[] = await list.listProblems(this.channel);
+        this.treeData.clear();
         for (const problem of allProblems) {
             const problems: list.IProblem[] | undefined = this.treeData.get(problem.difficulty);
             if (problems) {
@@ -107,7 +107,6 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             } else {
                 this.treeData.set(problem.difficulty, [problem]);
             }
-
         }
     }
 
@@ -156,5 +155,4 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         });
         return difficultynodes;
     }
-
 }
