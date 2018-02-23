@@ -38,7 +38,10 @@ export async function searchProblem(channel: vscode.OutputChannel): Promise<void
 async function showProblemInternal(channel: vscode.OutputChannel, id: string): Promise<void> {
     try {
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-        const defaultLanguage = leetCodeConfig.get<string>("defaultLanguage");
+        let defaultLanguage = leetCodeConfig.get<string>("defaultLanguage");
+        if (defaultLanguage && languages.indexOf(defaultLanguage) < 0) {
+            defaultLanguage = undefined;
+        }
         const language: string | undefined = defaultLanguage || await vscode.window.showQuickPick(languages, { placeHolder: "Select the language you want to use" });
         if (!language) {
             return;
