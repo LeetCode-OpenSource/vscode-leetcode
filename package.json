@@ -118,7 +118,41 @@
                     "when": "never"
                 }
             ]
-        }
+        },
+        "configuration": [
+            {
+                "title": "LeetCode",
+                "properties": {
+                    "leetcode.defaultLanguage": {
+                        "type": "string",
+                        "enum": [
+                            "bash",
+                            "c",
+                            "cpp",
+                            "csharp",
+                            "golang",
+                            "java",
+                            "javascript",
+                            "kotlin",
+                            "mysql",
+                            "python",
+                            "python3",
+                            "ruby",
+                            "scala",
+                            "swift"
+                        ],
+                        "scope": "window",
+                        "description": "Default language preference for solving the problems."
+                    },
+                    "leetcode.showSetDefaultLanguageHint": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "window",
+                        "description": "Show a hint to let user set the default language preference."
+                    }
+                }
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",

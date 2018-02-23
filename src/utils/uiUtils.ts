@@ -7,6 +7,7 @@ export namespace DialogOptions {
     export const open: vscode.MessageItem = { title: "Open" };
     export const yes: vscode.MessageItem = { title: "Yes" };
     export const no: vscode.MessageItem = { title: "No", isCloseAffordance: true };
+    export const never: vscode.MessageItem = { title: "Never" };
     export const singUp: vscode.MessageItem = { title: "Sign up" };
 }
 
