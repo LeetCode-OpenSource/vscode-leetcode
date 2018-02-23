@@ -142,13 +142,13 @@
                             "swift"
                         ],
                         "scope": "window",
-                        "description": "Default language preference for solving the problems."
+                        "description": "Default language for solving the problems."
                     },
                     "leetcode.showSetDefaultLanguageHint": {
                         "type": "boolean",
                         "default": true,
                         "scope": "window",
-                        "description": "Show a hint to let user set the default language preference."
+                        "description": "Show a hint to set the default language."
                     }
                 }
             }

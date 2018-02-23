@@ -1,6 +1,7 @@
 # LeetCode
 [![Travis CI](https://travis-ci.org/jdneo/vscode-leetcode.svg?branch=master)](https://travis-ci.org/jdneo/vscode-leetcode)
 [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version-short/shengchen.vscode-leetcode.svg)](https://vsmarketplacebadge.apphb.com/version-short/shengchen.vscode-leetcode.svg)
+[![Gitter](https://badges.gitter.im/vscode-leetcode/Lobby.svg)](https://gitter.im/vscode-leetcode/Lobby)
 
 Solve LeetCode problems in VS Code.
 - [中文](#中文)
