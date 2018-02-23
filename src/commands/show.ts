@@ -6,7 +6,7 @@ import { LeetCodeNode } from "../leetCodeExplorer";
 import { leetCodeManager } from "../leetCodeManager";
 import { IQuickItemEx, languages, leetCodeBinaryPath } from "../shared";
 import { executeCommand } from "../utils/cpUtils";
-import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
+import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as list from "./list";
 
@@ -37,9 +37,24 @@ export async function searchProblem(channel: vscode.OutputChannel): Promise<void
 
 async function showProblemInternal(channel: vscode.OutputChannel, id: string): Promise<void> {
     try {
-        const language: string | undefined = await vscode.window.showQuickPick(languages, { placeHolder: "Select the language you want to use" });
+        const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+        const defaultLanguage = leetCodeConfig.get<string>("defaultLanguage");
+        const language: string | undefined = defaultLanguage || await vscode.window.showQuickPick(languages, { placeHolder: "Select the language you want to use" });
         if (!language) {
             return;
+        }
+        if (!defaultLanguage && leetCodeConfig.get<boolean>("showSetDefaultLanguageHint")) {
+            const choice: vscode.MessageItem | undefined = await vscode.window.showInformationMessage(
+                `Would you like to set '${language}' as your default language?`,
+                DialogOptions.yes,
+                DialogOptions.no,
+                DialogOptions.never,
+            );
+            if (choice === DialogOptions.yes) {
+                leetCodeConfig.update("defaultLanguage", language, true /* UserSetting */);
+            } else if (choice === DialogOptions.never) {
+                leetCodeConfig.update("showSetDefaultLanguageHint", false, true /* UserSetting */);
+            }
         }
         const outdir: string = await selectWorkspaceFolder();
         await fse.ensureDir(outdir);
