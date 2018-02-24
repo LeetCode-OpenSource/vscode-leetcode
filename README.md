@@ -19,16 +19,6 @@ Solve LeetCode problems in VS Code.
 - Search problems by keywords
 - Submit solutions to LeetCode
 
-## Commands
-This extension provides several commands in the Command Palette (F1 or Ctrl + Shift + P):
-- **LeetCode: Sign in** -  Sign in to LeetCode
-- **LeetCode: Sign out** -  Sign out to LeetCode
-- **LeetCode: Select session** -  Select one session and make it active
-- **LeetCode: Create new session** -  Create a new session
-- **LeetCode: Refresh** -  Refresh the LeetCode Explorer
-- **LeetCode: Search Problem** -  Search for problems by keywords
-- **LeetCode: Submit** -  Submit the solution to LeetCode
-
 ### Sign In and Sign Out
 ![SignInOut](resources/gif/signinout.gif)
 
@@ -43,6 +33,16 @@ This extension provides several commands in the Command Palette (F1 or Ctrl + Sh
 
 ### Submit Solutions to LeetCode
 ![SubmitSolution](resources/gif/solveproblem.gif)
+
+## Commands
+This extension provides several commands in the Command Palette (F1 or Ctrl + Shift + P):
+- **LeetCode: Sign in** -  Sign in to LeetCode
+- **LeetCode: Sign out** -  Sign out to LeetCode
+- **LeetCode: Select session** -  Select one session and make it active
+- **LeetCode: Create new session** -  Create a new session
+- **LeetCode: Refresh** -  Refresh the LeetCode Explorer
+- **LeetCode: Search Problem** -  Search for problems by keywords
+- **LeetCode: Submit** -  Submit the solution to LeetCode
 
 ## Known Issues:
 - This extension will infer the current target problem according to the active editing file. Please do not change the file name.
@@ -69,16 +69,6 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 - 根据关键字搜索题目
 - 向 LeetCode 提交答案
 
-## 命令
-该插件在命令面板（F1 或 Ctrl + Shift + P）中支持下列命令：
-- **LeetCode: Sign in** -  登入 LeetCode
-- **LeetCode: Sign out** -  登出 LeetCode
-- **LeetCode: Select session** -  激活一个已有的答题进度存档
-- **LeetCode: Create new session** -  创建一个新的答题进度存档
-- **LeetCode: Refresh** -  刷新左侧题目列表视图
-- **LeetCode: Search Problem** -  根据关键字搜索题目
-- **LeetCode: Submit** -  提交答案到 LeetCode
-
 ### 登入及登出
 ![SignInOut](resources/gif/signinout.gif)
 
@@ -93,6 +83,16 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 
 ### 向 LeetCode 提交答案
 ![SubmitSolution](resources/gif/solveproblem.gif)
+
+## 命令
+该插件在命令面板（F1 或 Ctrl + Shift + P）中支持下列命令：
+- **LeetCode: Sign in** -  登入 LeetCode
+- **LeetCode: Sign out** -  登出 LeetCode
+- **LeetCode: Select session** -  激活一个已有的答题进度存档
+- **LeetCode: Create new session** -  创建一个新的答题进度存档
+- **LeetCode: Refresh** -  刷新左侧题目列表视图
+- **LeetCode: Search Problem** -  根据关键字搜索题目
+- **LeetCode: Submit** -  提交答案到 LeetCode
 
 ## 已知问题
 - 本插件会根据文件名称推测当前的目标题目，因此建议不要改变文件名。
