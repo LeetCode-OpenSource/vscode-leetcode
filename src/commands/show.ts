@@ -46,6 +46,18 @@ async function showProblemInternal(channel: vscode.OutputChannel, id: string): P
         if (!language) {
             return;
         }
+
+        const outdir: string = await selectWorkspaceFolder();
+        await fse.ensureDir(outdir);
+        const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "show", id, "-gx", "-l", language, "-o", outdir]);
+        const reg: RegExp = /\* Source Code:\s*(.*)/;
+        const match: RegExpMatchArray | null = result.match(reg);
+        if (match && match.length >= 2) {
+            await vscode.window.showTextDocument(vscode.Uri.file(match[1].trim()), { preview: false });
+        } else {
+            throw new Error("Failed to fetch the problem information");
+        }
+
         if (!defaultLanguage && leetCodeConfig.get<boolean>("showSetDefaultLanguageHint")) {
             const choice: vscode.MessageItem | undefined = await vscode.window.showInformationMessage(
                 `Would you like to set '${language}' as your default language?`,
@@ -58,16 +70,6 @@ async function showProblemInternal(channel: vscode.OutputChannel, id: string): P
             } else if (choice === DialogOptions.never) {
                 leetCodeConfig.update("showSetDefaultLanguageHint", false, true /* UserSetting */);
             }
-        }
-        const outdir: string = await selectWorkspaceFolder();
-        await fse.ensureDir(outdir);
-        const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "show", id, "-gx", "-l", language, "-o", outdir]);
-        const reg: RegExp = /\* Source Code:\s*(.*)/;
-        const match: RegExpMatchArray | null = result.match(reg);
-        if (match && match.length >= 2) {
-            await vscode.window.showTextDocument(vscode.Uri.file(match[1].trim()), { preview: false });
-        } else {
-            throw new Error("Failed to fetch the problem information");
         }
     } catch (error) {
         await promptForOpenOutputChannel("Failed to fetch the problem information. Please open the output channel for details", DialogType.error, channel);
