@@ -7,6 +7,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 - Support setting the default language to solve problems [(#5)](https://github.com/jdneo/vscode-leetcode/issues/5)
 
+### Fixed
+- When user cancels login, no further actions will happen [(#10)](https://github.com/jdneo/vscode-leetcode/issues/10)
+
 ## [0.1.2]
 ### Fixed
 - Fix the deplicated nodes in LeetCode Explorer bug [(#6)](https://github.com/jdneo/vscode-leetcode/issues/6)

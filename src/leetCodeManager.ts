@@ -59,7 +59,7 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
                 });
                 if (!name) {
                     childProc.kill();
-                    resolve(undefined);
+                    return resolve(undefined);
                 }
                 childProc.stdin.write(`${name}\n`);
                 const pwd: string | undefined = await vscode.window.showInputBox({
@@ -69,7 +69,7 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
                 });
                 if (!pwd) {
                     childProc.kill();
-                    resolve(undefined);
+                    return resolve(undefined);
                 }
                 childProc.stdin.write(`${pwd}\n`);
                 childProc.stdin.end();
