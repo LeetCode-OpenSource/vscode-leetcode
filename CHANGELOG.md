@@ -3,6 +3,11 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.2.1]
+### Fixed
+- Fix the wrong icon bug in LeetCode Explorer [(#9)](https://github.com/jdneo/vscode-leetcode/issues/9)
+- Fix the switch session bug when login session is experied [(#12)](https://github.com/jdneo/vscode-leetcode/issues/12)
+
 ## [0.2.0]
 ### Added
 - Support setting the default language to solve problems [(#5)](https://github.com/jdneo/vscode-leetcode/issues/5)
