@@ -1,14 +1,14 @@
 "use strict";
 
+import * as icon from "leetcode-cli/lib/icon";
 import * as vscode from "vscode";
 import { leetCodeManager } from "../leetCodeManager";
-import { leetCodeBinaryPath } from "../shared";
-import { UserStatus } from "../shared";
+import { leetCodeBinaryPath, ProblemState, UserStatus } from "../shared";
 import { executeCommand } from "../utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
 
 export interface IProblem {
-    solved: boolean;
+    state: ProblemState;
     id: string;
     name: string;
     difficulty: string;
@@ -28,7 +28,7 @@ export async function listProblems(channel: vscode.OutputChannel): Promise<IProb
             const match: RegExpMatchArray | null = line.match(reg);
             if (match && match.length === 6) {
                 problems.push({
-                    solved: !!(match[1].trim()),
+                    state: parseProblemState(match[1]),
                     id: match[2].trim(),
                     name: match[3].trim(),
                     difficulty: match[4].trim(),
@@ -41,5 +41,18 @@ export async function listProblems(channel: vscode.OutputChannel): Promise<IProb
         await promptForOpenOutputChannel("Failed to list problems. Please open the output channel for details", DialogType.error, channel);
         return [];
     }
+}
 
+function parseProblemState(stateOutput: string): ProblemState {
+    if (!stateOutput) {
+        return ProblemState.Unknown;
+    }
+    switch (stateOutput.trim()) {
+        case icon.yes:
+            return ProblemState.AC;
+        case icon.no:
+            return ProblemState.NotAC;
+        default:
+            return ProblemState.Unknown;
+    }
 }
