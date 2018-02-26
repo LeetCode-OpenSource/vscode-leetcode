@@ -32,7 +32,7 @@ export async function getSessionList(channel: vscode.OutputChannel): Promise<ISe
 }
 
 export async function selectSession(channel: vscode.OutputChannel): Promise<void> {
-    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(parseSessionsToPicks(getSessionList(channel)));
+    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(parseSessionsToPicks(channel));
     if (!choice || choice.description === "Active") {
         return;
     }
@@ -49,21 +49,26 @@ export async function selectSession(channel: vscode.OutputChannel): Promise<void
     }
 }
 
-async function parseSessionsToPicks(p: Promise<ISession[]>): Promise<Array<IQuickItemEx<string>>> {
+async function parseSessionsToPicks(channel: vscode.OutputChannel): Promise<Array<IQuickItemEx<string>>> {
     return new Promise(async (resolve: (res: Array<IQuickItemEx<string>>) => void): Promise<void> => {
-        const picks: Array<IQuickItemEx<string>> = (await p).map((s: ISession) => Object.assign({}, {
-            label: `${s.active ? "$(check) " : ""}${s.name}`,
-            description: s.active ? "Active" : "",
-            detail: `AC Questions: ${s.acQuestions}, AC Submits: ${s.acSubmits}`,
-            value: s.id,
-        }));
-        picks.push({
-            label: "$(plus) Create a new session",
-            description: "",
-            detail: "Click this item to create a new session",
-            value: ":createNewSession",
-        });
-        resolve(picks);
+        try {
+            const sessions: ISession[] = await getSessionList(channel);
+            const picks: Array<IQuickItemEx<string>> = sessions.map((s: ISession) => Object.assign({}, {
+                label: `${s.active ? "$(check) " : ""}${s.name}`,
+                description: s.active ? "Active" : "",
+                detail: `AC Questions: ${s.acQuestions}, AC Submits: ${s.acSubmits}`,
+                value: s.id,
+            }));
+            picks.push({
+                label: "$(plus) Create a new session",
+                description: "",
+                detail: "Click this item to create a new session",
+                value: ":createNewSession",
+            });
+            resolve(picks);
+        } catch (error) {
+            return await promptForOpenOutputChannel("Failed to list sessions. Please open the output channel for details", DialogType.error, channel);
+        }
     });
 }
 
