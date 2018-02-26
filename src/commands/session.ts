@@ -51,25 +51,24 @@ export async function selectSession(channel: vscode.OutputChannel): Promise<void
 
 async function parseSessionsToPicks(channel: vscode.OutputChannel): Promise<Array<IQuickItemEx<string>>> {
     return new Promise(async (resolve: (res: Array<IQuickItemEx<string>>) => void): Promise<void> => {
-        let sessions: ISession[];
         try {
-            sessions = await getSessionList(channel);
+            const sessions: ISession[] = await getSessionList(channel);
+            const picks: Array<IQuickItemEx<string>> = sessions.map((s: ISession) => Object.assign({}, {
+                label: `${s.active ? "$(check) " : ""}${s.name}`,
+                description: s.active ? "Active" : "",
+                detail: `AC Questions: ${s.acQuestions}, AC Submits: ${s.acSubmits}`,
+                value: s.id,
+            }));
+            picks.push({
+                label: "$(plus) Create a new session",
+                description: "",
+                detail: "Click this item to create a new session",
+                value: ":createNewSession",
+            });
+            resolve(picks);
         } catch (error) {
-            return await promptForOpenOutputChannel("Failed to switch session. Please open the output channel for details", DialogType.error, channel);
+            return await promptForOpenOutputChannel("Failed to list sessions. Please open the output channel for details", DialogType.error, channel);
         }
-        const picks: Array<IQuickItemEx<string>> = sessions.map((s: ISession) => Object.assign({}, {
-            label: `${s.active ? "$(check) " : ""}${s.name}`,
-            description: s.active ? "Active" : "",
-            detail: `AC Questions: ${s.acQuestions}, AC Submits: ${s.acSubmits}`,
-            value: s.id,
-        }));
-        picks.push({
-            label: "$(plus) Create a new session",
-            description: "",
-            detail: "Click this item to create a new session",
-            value: ":createNewSession",
-        });
-        resolve(picks);
     });
 }
 
