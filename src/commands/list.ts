@@ -1,6 +1,5 @@
 "use strict";
 
-import * as icon from "leetcode-cli/lib/icon";
 import * as vscode from "vscode";
 import { leetCodeManager } from "../leetCodeManager";
 import { leetCodeBinaryPath, ProblemState, UserStatus } from "../shared";
@@ -48,9 +47,13 @@ function parseProblemState(stateOutput: string): ProblemState {
         return ProblemState.Unknown;
     }
     switch (stateOutput.trim()) {
-        case icon.yes:
+        case "v":
+        case "✔":
+        case "√":
             return ProblemState.AC;
-        case icon.no:
+        case "X":
+        case "✘":
+        case "×":
             return ProblemState.NotAC;
         default:
             return ProblemState.Unknown;
