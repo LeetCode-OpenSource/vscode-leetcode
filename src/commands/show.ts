@@ -4,7 +4,7 @@ import * as fse from "fs-extra";
 import * as vscode from "vscode";
 import { LeetCodeNode } from "../leetCodeExplorer";
 import { leetCodeManager } from "../leetCodeManager";
-import { IQuickItemEx, languages, leetCodeBinaryPath } from "../shared";
+import { IQuickItemEx, languages, leetCodeBinaryPath, ProblemState } from "../shared";
 import { executeCommand } from "../utils/cpUtils";
 import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
@@ -79,11 +79,22 @@ async function showProblemInternal(channel: vscode.OutputChannel, id: string): P
 async function parseProblemsToPicks(p: Promise<list.IProblem[]>): Promise<Array<IQuickItemEx<string>>> {
     return new Promise(async (resolve: (res: Array<IQuickItemEx<string>>) => void): Promise<void> => {
         const picks: Array<IQuickItemEx<string>> = (await p).map((problem: list.IProblem) => Object.assign({}, {
-            label: `${problem.solved ? "$(check) " : ""}${problem.id}.${problem.name}`,
+            label: `${parseProblemDecorator(problem.state)}${problem.id}.${problem.name}`,
             description: "",
             detail: `AC rate: ${problem.passRate}, Difficulty: ${problem.difficulty}`,
             value: problem.id,
         }));
         resolve(picks);
     });
+}
+
+function parseProblemDecorator(state: ProblemState): string {
+    switch (state) {
+        case ProblemState.AC:
+            return "$(check) ";
+        case ProblemState.NotAC:
+            return "$(x) ";
+        default:
+            return "";
+    }
 }

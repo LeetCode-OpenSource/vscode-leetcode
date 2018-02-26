@@ -30,3 +30,9 @@ export const languages = [
     "scala",
     "swift",
 ];
+
+export enum ProblemState {
+    AC = 1,
+    NotAC = 2,
+    Unknown = 3,
+}

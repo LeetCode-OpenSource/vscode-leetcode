@@ -4,6 +4,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 import * as list from "./commands/list";
 import { leetCodeManager } from "./leetCodeManager";
+import { ProblemState } from "./shared";
 
 // tslint:disable:max-classes-per-file
 export class LeetCodeNode {
@@ -13,8 +14,8 @@ export class LeetCodeNode {
         return this.data.name;
     }
 
-    public get solved(): boolean {
-        return this.data.solved;
+    public get state(): ProblemState {
+        return this.data.state;
     }
 
     public get id(): string {
@@ -64,11 +65,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             id: `${idPrefix}.${element.id}`,
             collapsibleState: element.isProblem ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
             contextValue: element.isProblem ? "problem" : "difficulty",
-            iconPath: element.isProblem ?
-                (element.solved ?
-                    this.context.asAbsolutePath(path.join("resources", "check.png"))
-                    : this.context.asAbsolutePath(path.join("resources", "blank.png")))
-                : "",
+            iconPath: this.parseIconPathFromProblemState(element),
         };
     }
 
@@ -77,7 +74,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             return [
                 new LeetCodeNode(
                     {
-                        solved: false,
+                        state: ProblemState.Unknown,
                         id: "notSignIn",
                         name: "Sign in to LeetCode",
                         difficulty: "",
@@ -128,7 +125,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             difficultynodes.push(
                 new LeetCodeNode(
                     {
-                        solved: false,
+                        state: ProblemState.Unknown,
                         id: difficulty,
                         name: difficulty,
                         difficulty: "",
@@ -154,5 +151,21 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             return getValue(a.name) - getValue(b.name);
         });
         return difficultynodes;
+    }
+
+    private parseIconPathFromProblemState(element: LeetCodeNode): string {
+        if (!element.isProblem) {
+            return "";
+        }
+        switch (element.state) {
+            case ProblemState.AC:
+                return this.context.asAbsolutePath(path.join("resources", "check.png"));
+            case ProblemState.NotAC:
+                return this.context.asAbsolutePath(path.join("resources", "x.png"));
+            case ProblemState.Unknown:
+                return this.context.asAbsolutePath(path.join("resources", "blank.png"));
+            default:
+                return "";
+        }
     }
 }
