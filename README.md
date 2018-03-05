@@ -18,6 +18,7 @@ Solve LeetCode problems in VS Code.
 - Switch and create session
 - Show problems in explorer
 - Search problems by keywords
+- Test solutions by customized test case
 - Submit solutions to LeetCode
 
 ### Sign In and Sign Out
@@ -32,6 +33,9 @@ Solve LeetCode problems in VS Code.
 ### Search Problems by Keywords
 ![SearchProblem](resources/gif/searchproblem.gif)
 
+### Test solutions by customized test case
+![TestSolution](resources/gif/testsolution.gif)
+
 ### Submit Solutions to LeetCode
 ![SubmitSolution](resources/gif/solveproblem.gif)
 
@@ -43,6 +47,7 @@ This extension provides several commands in the Command Palette (F1 or Ctrl + Sh
 - **LeetCode: Create new session** -  Create a new session
 - **LeetCode: Refresh** -  Refresh the LeetCode Explorer
 - **LeetCode: Search Problem** -  Search for problems by keywords
+- **LeetCode: Test Current File** - Test the solution by customized test case
 - **LeetCode: Submit** -  Submit the solution to LeetCode
 
 ## Known Issues:
@@ -68,6 +73,7 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 - 切换及创建 session
 - 在 Explorer 中展示题目
 - 根据关键字搜索题目
+- 用自定义测试用例测试答案
 - 向 LeetCode 提交答案
 
 ### 登入及登出
@@ -82,6 +88,9 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 ### 根据关键字搜索题目
 ![SearchProblem](resources/gif/searchproblem.gif)
 
+### 用自定义测试用例测试答案
+![TestSolution](resources/gif/testsolution.gif)
+
 ### 向 LeetCode 提交答案
 ![SubmitSolution](resources/gif/solveproblem.gif)
 
@@ -93,6 +102,7 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 - **LeetCode: Create new session** -  创建一个新的答题进度存档
 - **LeetCode: Refresh** -  刷新左侧题目列表视图
 - **LeetCode: Search Problem** -  根据关键字搜索题目
+- **LeetCode: Test Current File** - 用自定义测试用例测试答案
 - **LeetCode: Submit** -  提交答案到 LeetCode
 
 ## 已知问题
