@@ -4,6 +4,7 @@ import * as vscode from "vscode";
 import * as session from "./commands/session";
 import * as show from "./commands/show";
 import * as submit from "./commands/submit";
+import * as test from "./commands/test";
 import { LeetCodeNode, LeetCodeTreeDataProvider } from "./leetCodeExplorer";
 import { leetCodeManager } from "./leetCodeManager";
 import { leetCodeStatusBarItem } from "./leetCodeStatusBarItem";
@@ -26,6 +27,7 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand("leetcode.showProblem", (node: LeetCodeNode) => show.showProblem(channel, node)),
         vscode.commands.registerCommand("leetcode.searchProblem", () => show.searchProblem(channel)),
         vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
+        vscode.commands.registerCommand("leetcode.testSolution", () => test.testSolution(channel)),
         vscode.commands.registerCommand("leetcode.submitSolution", () => submit.submitSolution(channel)),
     );
 

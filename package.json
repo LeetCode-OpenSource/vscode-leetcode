@@ -32,6 +32,7 @@
         "onCommand:leetcode.refreshExplorer",
         "onCommand:leetcode.showProblem",
         "onCommand:leetcode.searchProblem",
+        "onCommand:leetcode.testSolution",
         "onCommand:leetcode.submitSolution",
         "onView:leetCodeExplorer"
     ],
@@ -77,6 +78,11 @@
                 "title": "Search Problem",
                 "category": "LeetCode",
                 "icon": "resources/search.png"
+            },
+            {
+                "command": "leetcode.testSolution",
+                "title": "Test Current File",
+                "category": "LeetCode"
             },
             {
                 "command": "leetcode.submitSolution",

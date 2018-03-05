@@ -37,7 +37,7 @@ export async function listProblems(channel: vscode.OutputChannel): Promise<IProb
         }
         return problems.reverse();
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to list problems. Please open the output channel for details", DialogType.error, channel);
+        await promptForOpenOutputChannel("Failed to list problems. Please open the output channel for details.", DialogType.error, channel);
         return [];
     }
 }

@@ -55,7 +55,7 @@ async function showProblemInternal(channel: vscode.OutputChannel, id: string): P
         if (match && match.length >= 2) {
             await vscode.window.showTextDocument(vscode.Uri.file(match[1].trim()), { preview: false });
         } else {
-            throw new Error("Failed to fetch the problem information");
+            throw new Error("Failed to fetch the problem information.");
         }
 
         if (!defaultLanguage && leetCodeConfig.get<boolean>("showSetDefaultLanguageHint")) {
@@ -72,7 +72,7 @@ async function showProblemInternal(channel: vscode.OutputChannel, id: string): P
             }
         }
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to fetch the problem information. Please open the output channel for details", DialogType.error, channel);
+        await promptForOpenOutputChannel("Failed to fetch the problem information. Please open the output channel for details.", DialogType.error, channel);
     }
 }
 
