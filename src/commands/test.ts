@@ -67,7 +67,7 @@ export async function testSolution(channel: vscode.OutputChannel): Promise<void>
                 if (testFile && testFile.length) {
                     const input: string = await fse.readFile(testFile[0].fsPath, "utf-8");
                     if (input.trim()) {
-                        result = await executeCommand(channel, "node", [leetCodeBinaryPath, "test", filePath, "-t", `"${input.replace(/"/g, "")}"`]);
+                        result = await executeCommand(channel, "node", [leetCodeBinaryPath, "test", filePath, "-t", `"${input.replace(/"/g, "").replace(/\r?\n/g, "\\n")}"`]);
                     } else {
                         vscode.window.showErrorMessage("The selected test file must not be empty.");
                     }
