@@ -1,6 +1,9 @@
 "use strict";
 
+import * as fse from "fs-extra";
 import * as opn from "opn";
+import * as os from "os";
+import * as path from "path";
 import * as vscode from "vscode";
 
 export namespace DialogOptions {
@@ -49,6 +52,25 @@ export async function promptForSignIn(): Promise<void> {
         default:
             break;
     }
+}
+
+export async function showFileSelectDialog(): Promise<vscode.Uri[] | undefined> {
+    const defaultUri: vscode.Uri | undefined = vscode.workspace.rootPath ? vscode.Uri.file(vscode.workspace.rootPath) : undefined;
+    const options: vscode.OpenDialogOptions = {
+        defaultUri,
+        canSelectFiles: true,
+        canSelectFolders: false,
+        canSelectMany: false,
+        openLabel: "Select",
+    };
+    return await vscode.window.showOpenDialog(options);
+}
+
+export async function showResultFile(result: string): Promise<void> {
+    const resultPath: string = path.join(os.homedir(), ".leetcode", "Result");
+    await fse.ensureFile(resultPath);
+    await fse.writeFile(resultPath, result);
+    await vscode.window.showTextDocument(vscode.Uri.file(resultPath));
 }
 
 export enum DialogType {

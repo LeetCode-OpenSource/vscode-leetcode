@@ -3,7 +3,7 @@
 import * as vscode from "vscode";
 import { leetCodeManager } from "../leetCodeManager";
 import { IQuickItemEx, leetCodeBinaryPath } from "../shared";
-import * as cp from "../utils/cpUtils";
+import { executeCommand } from "../utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 
 export async function getSessionList(channel: vscode.OutputChannel): Promise<ISession[]> {
@@ -12,7 +12,7 @@ export async function getSessionList(channel: vscode.OutputChannel): Promise<ISe
         promptForSignIn();
         return [];
     }
-    const result: string = await cp.executeCommand(channel, "node", [leetCodeBinaryPath, "session"]);
+    const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "session"]);
     const lines: string[] = result.split("\n");
     const sessions: ISession[] = [];
     const reg: RegExp = /(.?)\s*(\d+)\s+(.*)\s+(\d+ \(\s*\d+\.\d+ %\))\s+(\d+ \(\s*\d+\.\d+ %\))/;
@@ -41,11 +41,11 @@ export async function selectSession(channel: vscode.OutputChannel): Promise<void
         return;
     }
     try {
-        await cp.executeCommand(channel, "node", [leetCodeBinaryPath, "session", "-e", choice.value]);
+        await executeCommand(channel, "node", [leetCodeBinaryPath, "session", "-e", choice.value]);
         vscode.window.showInformationMessage(`Successfully switched to session '${choice.label}'.`);
         await vscode.commands.executeCommand("leetcode.refreshExplorer");
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to switch session. Please open the output channel for details", DialogType.error, channel);
+        await promptForOpenOutputChannel("Failed to switch session. Please open the output channel for details.", DialogType.error, channel);
     }
 }
 
@@ -67,7 +67,7 @@ async function parseSessionsToPicks(channel: vscode.OutputChannel): Promise<Arra
             });
             resolve(picks);
         } catch (error) {
-            return await promptForOpenOutputChannel("Failed to list sessions. Please open the output channel for details", DialogType.error, channel);
+            return await promptForOpenOutputChannel("Failed to list sessions. Please open the output channel for details.", DialogType.error, channel);
         }
     });
 }
@@ -81,10 +81,10 @@ export async function createSession(channel: vscode.OutputChannel): Promise<void
         return;
     }
     try {
-        await cp.executeCommand(channel, "node", [leetCodeBinaryPath, "session", "-c", session]);
+        await executeCommand(channel, "node", [leetCodeBinaryPath, "session", "-c", session]);
         vscode.window.showInformationMessage("New session created, you can switch to it by clicking the status bar.");
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to create session. Please open the output channel for details", DialogType.error, channel);
+        await promptForOpenOutputChannel("Failed to create session. Please open the output channel for details.", DialogType.error, channel);
     }
 }
 

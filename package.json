@@ -2,7 +2,7 @@
     "name": "vscode-leetcode",
     "displayName": "LeetCode",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.2.1",
+    "version": "0.3.0",
     "author": "Sheng Chen",
     "publisher": "shengchen",
     "icon": "resources/LeetCode.png",
@@ -32,6 +32,7 @@
         "onCommand:leetcode.refreshExplorer",
         "onCommand:leetcode.showProblem",
         "onCommand:leetcode.searchProblem",
+        "onCommand:leetcode.testSolution",
         "onCommand:leetcode.submitSolution",
         "onView:leetCodeExplorer"
     ],
@@ -77,6 +78,11 @@
                 "title": "Search Problem",
                 "category": "LeetCode",
                 "icon": "resources/search.png"
+            },
+            {
+                "command": "leetcode.testSolution",
+                "title": "Test Current File",
+                "category": "LeetCode"
             },
             {
                 "command": "leetcode.submitSolution",
