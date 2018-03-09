@@ -77,7 +77,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             return [
                 new LeetCodeNode(
                     {
-                        favorate: false,
+                        favorite: false,
                         locked: false,
                         state: ProblemState.Unknown,
                         id: "notSignIn",
@@ -130,7 +130,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             difficultynodes.push(
                 new LeetCodeNode(
                     {
-                        favorate: false,
+                        favorite: false,
                         locked: false,
                         state: ProblemState.Unknown,
                         id: difficulty,

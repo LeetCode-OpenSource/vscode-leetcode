@@ -131,7 +131,7 @@
                 "properties": {
                     "leetcode.showLocked": {
                         "type": "boolean",
-                        "default": true,
+                        "default": false,
                         "description": "Show locked problems."
                     },
                     "leetcode.defaultLanguage": {

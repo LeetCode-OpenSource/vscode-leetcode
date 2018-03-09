@@ -7,7 +7,7 @@ import { executeCommand } from "../utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
 
 export interface IProblem {
-    favorate: boolean;
+    favorite: boolean;
     locked: boolean;
     state: ProblemState;
     id: string;
@@ -22,7 +22,7 @@ export async function listProblems(channel: vscode.OutputChannel): Promise<IProb
             return [];
         }
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-        const showLocked = leetCodeConfig.get<string>("showLocked");
+        const showLocked: boolean | undefined = leetCodeConfig.get<boolean>("showLocked");
         const result: string = await executeCommand(channel, "node", showLocked ? [leetCodeBinaryPath, "list"] : [leetCodeBinaryPath, "list", "-q", "L"]);
         const problems: IProblem[] = [];
         const lines: string[] = result.split("\n");
@@ -31,7 +31,7 @@ export async function listProblems(channel: vscode.OutputChannel): Promise<IProb
             const match: RegExpMatchArray | null = line.match(reg);
             if (match && match.length === 8) {
                 problems.push({
-                    favorate: match[1].trim().length > 0,
+                    favorite: match[1].trim().length > 0,
                     locked: match[2].trim().length > 0,
                     state: parseProblemState(match[3]),
                     id: match[4].trim(),
