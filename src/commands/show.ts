@@ -81,7 +81,7 @@ async function parseProblemsToPicks(p: Promise<list.IProblem[]>): Promise<Array<
         const picks: Array<IQuickItemEx<string>> = (await p).map((problem: list.IProblem) => Object.assign({}, {
             label: `${parseProblemDecorator(problem.state)}${problem.id}.${problem.name}`,
             description: "",
-            detail: `AC rate: ${problem.passRate}, Difficulty: ${problem.difficulty}`,
+            detail: `${parseLockDecorator(problem.locked)}AC rate: ${problem.passRate}, Difficulty: ${problem.difficulty}`,
             value: problem.id,
         }));
         resolve(picks);
@@ -97,4 +97,8 @@ function parseProblemDecorator(state: ProblemState): string {
         default:
             return "";
     }
+}
+
+function parseLockDecorator(locked: boolean): string {
+    return locked ? "$(lock) " : "";
 }
