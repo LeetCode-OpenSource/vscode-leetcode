@@ -7,6 +7,8 @@ import { executeCommand } from "../utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
 
 export interface IProblem {
+    favorite: boolean;
+    locked: boolean;
     state: ProblemState;
     id: string;
     name: string;
@@ -19,19 +21,23 @@ export async function listProblems(channel: vscode.OutputChannel): Promise<IProb
         if (leetCodeManager.getStatus() === UserStatus.SignedOut) {
             return [];
         }
-        const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "list", "-q", "L"]);
+        const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+        const showLocked: boolean | undefined = leetCodeConfig.get<boolean>("showLocked");
+        const result: string = await executeCommand(channel, "node", showLocked ? [leetCodeBinaryPath, "list"] : [leetCodeBinaryPath, "list", "-q", "L"]);
         const problems: IProblem[] = [];
         const lines: string[] = result.split("\n");
-        const reg: RegExp = /(.?)\s*\[\s*(\d*)\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;
+        const reg: RegExp = /^(.)\s(.{1,2})\s(.)\s\[\s*(\d*)\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;
         for (const line of lines) {
             const match: RegExpMatchArray | null = line.match(reg);
-            if (match && match.length === 6) {
+            if (match && match.length === 8) {
                 problems.push({
-                    state: parseProblemState(match[1]),
-                    id: match[2].trim(),
-                    name: match[3].trim(),
-                    difficulty: match[4].trim(),
-                    passRate: match[5].trim(),
+                    favorite: match[1].trim().length > 0,
+                    locked: match[2].trim().length > 0,
+                    state: parseProblemState(match[3]),
+                    id: match[4].trim(),
+                    name: match[5].trim(),
+                    difficulty: match[6].trim(),
+                    passRate: match[7].trim(),
                 });
             }
         }

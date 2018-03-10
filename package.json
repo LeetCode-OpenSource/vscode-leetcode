@@ -129,6 +129,11 @@
             {
                 "title": "LeetCode",
                 "properties": {
+                    "leetcode.showLocked": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Show locked problems."
+                    },
                     "leetcode.defaultLanguage": {
                         "type": "string",
                         "enum": [

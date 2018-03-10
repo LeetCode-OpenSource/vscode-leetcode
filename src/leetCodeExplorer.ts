@@ -10,6 +10,9 @@ import { ProblemState } from "./shared";
 export class LeetCodeNode {
     constructor(private data: list.IProblem, private isProblemNode = true) { }
 
+    public get locked(): boolean {
+        return this.data.locked;
+    }
     public get name(): string {
         return this.data.name;
     }
@@ -74,6 +77,8 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             return [
                 new LeetCodeNode(
                     {
+                        favorite: false,
+                        locked: false,
                         state: ProblemState.Unknown,
                         id: "notSignIn",
                         name: "Sign in to LeetCode",
@@ -125,6 +130,8 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             difficultynodes.push(
                 new LeetCodeNode(
                     {
+                        favorite: false,
+                        locked: false,
                         state: ProblemState.Unknown,
                         id: difficulty,
                         name: difficulty,
@@ -163,6 +170,9 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             case ProblemState.NotAC:
                 return this.context.asAbsolutePath(path.join("resources", "x.png"));
             case ProblemState.Unknown:
+                if (element.locked) {
+                    return this.context.asAbsolutePath(path.join("resources", "lock.png"));
+                }
                 return this.context.asAbsolutePath(path.join("resources", "blank.png"));
             default:
                 return "";
