@@ -18,6 +18,10 @@ export async function testSolution(channel: vscode.OutputChannel): Promise<void>
             vscode.window.showErrorMessage("Please open a LeetCode solution file first.");
             return;
         }
+        if (!activeText.document.save()) {
+            vscode.window.showWarningMessage("Please save the solution file first.");
+            return;
+        }
 
         const filePath = activeText.document.uri.fsPath;
         const picks: Array<IQuickItemEx<string>> = [];
