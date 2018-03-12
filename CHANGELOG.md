@@ -7,6 +7,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 - Support locked problem [(#20)](https://github.com/jdneo/vscode-leetcode/issues/20)
 
+### Changed
+- Simplify the command 'LeetCode: Test Current File' to 'LeetCode: Test' [(#18)](https://github.com/jdneo/vscode-leetcode/issues/18)
+- Will automatically save cuurent file when 'LeetCode: Test' command is triggered [(#17)](https://github.com/jdneo/vscode-leetcode/issues/17)
+
 ## [0.3.0]
 ### Added
 - Test current solution file [(#15)](https://github.com/jdneo/vscode-leetcode/issues/15)

@@ -17,6 +17,7 @@ Solve LeetCode problems in VS Code.
 - Sign in/out to LeetCode
 - Switch and create session
 - Show problems in explorer
+  > Note: To show the locked problems, please set `leetcode.showLocked` to **true**
 - Search problems by keywords
 - Test solutions by customized test case
 - Submit solutions to LeetCode
@@ -47,12 +48,11 @@ This extension provides several commands in the Command Palette (F1 or Ctrl + Sh
 - **LeetCode: Create new session** -  Create a new session
 - **LeetCode: Refresh** -  Refresh the LeetCode Explorer
 - **LeetCode: Search Problem** -  Search for problems by keywords
-- **LeetCode: Test Current File** - Test the solution by customized test case
+- **LeetCode: Test** - Test the current solution file by customized test case
 - **LeetCode: Submit** -  Submit the solution to LeetCode
 
 ## Known Issues:
 - This extension will infer the current target problem according to the active editing file. Please do not change the file name.
-- Currently, only unlocked problems will be listed.
 
 ## Release Notes
 
@@ -72,6 +72,7 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 - 登入 / 登出 LeetCode
 - 切换及创建 session
 - 在 Explorer 中展示题目
+  > 注意: 如果想要展示付费题目，您需要将 `leetcode.showLocked` 设置为 **true**
 - 根据关键字搜索题目
 - 用自定义测试用例测试答案
 - 向 LeetCode 提交答案
@@ -102,12 +103,11 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 - **LeetCode: Create new session** -  创建一个新的答题进度存档
 - **LeetCode: Refresh** -  刷新左侧题目列表视图
 - **LeetCode: Search Problem** -  根据关键字搜索题目
-- **LeetCode: Test Current File** - 用自定义测试用例测试答案
+- **LeetCode: Test** - 用自定义测试用例测试当前解答文件
 - **LeetCode: Submit** -  提交答案到 LeetCode
 
 ## 已知问题
 - 本插件会根据文件名称推测当前的目标题目，因此建议不要改变文件名。
-- 本插件目前仅会显示已解锁的问题。
 
 ## 更新日志
 
