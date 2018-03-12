@@ -132,6 +132,7 @@
                     "leetcode.showLocked": {
                         "type": "boolean",
                         "default": false,
+                        "scope": "window",
                         "description": "Show locked problems."
                     },
                     "leetcode.defaultLanguage": {

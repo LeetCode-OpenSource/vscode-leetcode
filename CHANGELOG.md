@@ -3,6 +3,10 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.4.0]
+### Added
+- Support locked problem [(#20)](https://github.com/jdneo/vscode-leetcode/issues/20)
+
 ## [0.3.0]
 ### Added
 - Test current solution file [(#15)](https://github.com/jdneo/vscode-leetcode/issues/15)
