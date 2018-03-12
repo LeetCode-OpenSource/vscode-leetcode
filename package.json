@@ -81,7 +81,7 @@
             },
             {
                 "command": "leetcode.testSolution",
-                "title": "Test Current File",
+                "title": "Test",
                 "category": "LeetCode"
             },
             {
