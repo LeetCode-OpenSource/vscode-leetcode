@@ -79,26 +79,22 @@ async function showProblemInternal(channel: vscode.OutputChannel, id: string): P
 async function parseProblemsToPicks(p: Promise<list.IProblem[]>): Promise<Array<IQuickItemEx<string>>> {
     return new Promise(async (resolve: (res: Array<IQuickItemEx<string>>) => void): Promise<void> => {
         const picks: Array<IQuickItemEx<string>> = (await p).map((problem: list.IProblem) => Object.assign({}, {
-            label: `${parseProblemDecorator(problem.state)}${problem.id}.${problem.name}`,
+            label: `${parseProblemDecorator(problem.state, problem.locked)}${problem.id}.${problem.name}`,
             description: "",
-            detail: `${parseLockDecorator(problem.locked)}AC rate: ${problem.passRate}, Difficulty: ${problem.difficulty}`,
+            detail: `AC rate: ${problem.passRate}, Difficulty: ${problem.difficulty}`,
             value: problem.id,
         }));
         resolve(picks);
     });
 }
 
-function parseProblemDecorator(state: ProblemState): string {
+function parseProblemDecorator(state: ProblemState, locked: boolean): string {
     switch (state) {
         case ProblemState.AC:
             return "$(check) ";
         case ProblemState.NotAC:
             return "$(x) ";
         default:
-            return "";
+            return locked ? "$(lock) " : "";
     }
-}
-
-function parseLockDecorator(locked: boolean): string {
-    return locked ? "$(lock) " : "";
 }
