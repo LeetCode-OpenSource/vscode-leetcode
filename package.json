@@ -81,7 +81,7 @@
             },
             {
                 "command": "leetcode.testSolution",
-                "title": "Test",
+                "title": "Test in LeetCode",
                 "category": "LeetCode"
             },
             {
@@ -115,7 +115,7 @@
                 {
                     "command": "leetcode.showProblem",
                     "when": "view == leetCodeExplorer && viewItem == problem",
-                    "group": "1@1"
+                    "group": "leetcode-explorer@1"
                 }
             ],
             "commandPalette": [
@@ -126,8 +126,14 @@
             ],
             "explorer/context": [
                 {
+                    "command": "leetcode.testSolution",
+                    "when": "explorerResourceIsFolder == false",
+                    "group": "file-explorer@1"
+                },
+                {
                     "command": "leetcode.submitSolution",
-                    "when": "explorerResourceIsFolder == false"
+                    "when": "explorerResourceIsFolder == false",
+                    "group": "file-explorer@2"
                 }
             ]
         },

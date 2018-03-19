@@ -17,3 +17,21 @@ export async function selectWorkspaceFolder(): Promise<string> {
     }
     return folder ? folder.uri.fsPath : path.join(os.homedir(), ".leetcode");
 }
+
+export async function getActivefilePath(uri?: vscode.Uri): Promise<string | undefined> {
+    let textEditor: vscode.TextEditor | undefined;
+    if (uri) {
+        textEditor = await vscode.window.showTextDocument(uri, { preview: false });
+    } else {
+        textEditor = vscode.window.activeTextEditor;
+    }
+
+    if (!textEditor) {
+        return undefined;
+    }
+    if (textEditor.document.isDirty && !await textEditor.document.save()) {
+        vscode.window.showWarningMessage("Please save the solution file first.");
+        return undefined;
+    }
+    return textEditor.document.uri.fsPath;
+}
