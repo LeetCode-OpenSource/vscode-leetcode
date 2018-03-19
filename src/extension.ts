@@ -28,7 +28,7 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand("leetcode.searchProblem", () => show.searchProblem(channel)),
         vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
         vscode.commands.registerCommand("leetcode.testSolution", () => test.testSolution(channel)),
-        vscode.commands.registerCommand("leetcode.submitSolution", () => submit.submitSolution(channel)),
+        vscode.commands.registerCommand("leetcode.submitSolution", (uri: vscode.Uri) => submit.submitSolution(channel, uri)),
     );
 
     leetCodeManager.on("statusChanged", () => {

@@ -86,7 +86,7 @@
             },
             {
                 "command": "leetcode.submitSolution",
-                "title": "Submit",
+                "title": "Submit to LeetCode",
                 "category": "LeetCode"
             }
         ],
@@ -122,6 +122,12 @@
                 {
                     "command": "leetcode.showProblem",
                     "when": "never"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "command": "leetcode.submitSolution",
+                    "when": "explorerResourceIsFolder == false"
                 }
             ]
         },
