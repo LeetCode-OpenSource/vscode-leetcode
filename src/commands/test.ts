@@ -6,24 +6,18 @@ import { leetCodeManager } from "../leetCodeManager";
 import { IQuickItemEx, leetCodeBinaryPath, UserStatus } from "../shared";
 import { executeCommand } from "../utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel, showFileSelectDialog, showResultFile } from "../utils/uiUtils";
+import { getActivefilePath } from "../utils/workspaceUtils";
 
-export async function testSolution(channel: vscode.OutputChannel): Promise<void> {
+export async function testSolution(channel: vscode.OutputChannel, uri?: vscode.Uri): Promise<void> {
     try {
         if (leetCodeManager.getStatus() === UserStatus.SignedOut) {
             return;
         }
 
-        const activeText: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
-        if (!activeText) {
-            vscode.window.showErrorMessage("Please open a LeetCode solution file first.");
+        const filePath: string | undefined = await getActivefilePath(uri);
+        if (!filePath) {
             return;
         }
-        if (!activeText.document.save()) {
-            vscode.window.showWarningMessage("Please save the solution file first.");
-            return;
-        }
-
-        const filePath = activeText.document.uri.fsPath;
         const picks: Array<IQuickItemEx<string>> = [];
         picks.push(
             {
