@@ -9,3 +9,4 @@ src/**
 package-lock.json
 tsconfig.json
 tslint.json
+**/*.gif
