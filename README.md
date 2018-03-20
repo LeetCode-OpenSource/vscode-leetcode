@@ -25,22 +25,22 @@ Solve LeetCode problems in VS Code.
 - Submit solutions to LeetCode
 
 ### Sign In and Sign Out
-![SignInOut](resources/gif/signinout.gif)
+![SignInOut](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/signinout.gif)
 
 ### Switch and Create Session
-![SwitchSession](resources/gif/switchsession.gif)
+![SwitchSession](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/switchsession.gif)
 
 ### Show Problems in Explorer
-![ShowProblem](resources/gif/showproblem.gif)
+![ShowProblem](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/showproblem.gif)
 
 ### Search Problems by Keywords
-![SearchProblem](resources/gif/searchproblem.gif)
+![SearchProblem](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/searchproblem.gif)
 
 ### Test solutions by customized test case
-![TestSolution](resources/gif/testsolution.gif)
+![TestSolution](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/testsolution.gif)
 
 ### Submit Solutions to LeetCode
-![SubmitSolution](resources/gif/solveproblem.gif)
+![SubmitSolution](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/solveproblem.gif)
 
 ## Commands
 This extension provides several commands in the Command Palette (F1 or Ctrl + Shift + P):
@@ -50,8 +50,8 @@ This extension provides several commands in the Command Palette (F1 or Ctrl + Sh
 - **LeetCode: Create new session** -  Create a new session
 - **LeetCode: Refresh** -  Refresh the LeetCode Explorer
 - **LeetCode: Search Problem** -  Search for problems by keywords
-- **LeetCode: Test** - Test the current solution file by customized test case
-- **LeetCode: Submit** -  Submit the solution to LeetCode
+- **LeetCode: Test in LeetCode** - Test the current solution file by customized test case
+- **LeetCode: Submit to LeetCode** -  Submit the solution to LeetCode
 
 ## Known Issues:
 - This extension will infer the current target problem according to the active editing file. Please do not change the file name.
@@ -80,22 +80,22 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 - 向 LeetCode 提交答案
 
 ### 登入及登出
-![SignInOut](resources/gif/signinout.gif)
+![SignInOut](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/signinout.gif)
 
 ### 切换及创建 session
-![SwitchSession](resources/gif/switchsession.gif)
+![SwitchSession](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/switchsession.gif)
 
 ### 在 Explorer 中展示题目
-![ShowProblem](resources/gif/showproblem.gif)
+![ShowProblem](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/showproblem.gif)
 
 ### 根据关键字搜索题目
-![SearchProblem](resources/gif/searchproblem.gif)
+![SearchProblem](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/searchproblem.gif)
 
 ### 用自定义测试用例测试答案
-![TestSolution](resources/gif/testsolution.gif)
+![TestSolution](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/testsolution.gif)
 
 ### 向 LeetCode 提交答案
-![SubmitSolution](resources/gif/solveproblem.gif)
+![SubmitSolution](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/solveproblem.gif)
 
 ## 命令
 该插件在命令面板（F1 或 Ctrl + Shift + P）中支持下列命令：
@@ -105,8 +105,8 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 - **LeetCode: Create new session** -  创建一个新的答题进度存档
 - **LeetCode: Refresh** -  刷新左侧题目列表视图
 - **LeetCode: Search Problem** -  根据关键字搜索题目
-- **LeetCode: Test** - 用自定义测试用例测试当前解答文件
-- **LeetCode: Submit** -  提交答案到 LeetCode
+- **LeetCode: Test in LeetCode** - 用自定义测试用例测试当前解答文件
+- **LeetCode: Submit to LeetCode** -  提交答案到 LeetCode
 
 ## 已知问题
 - 本插件会根据文件名称推测当前的目标题目，因此建议不要改变文件名。
