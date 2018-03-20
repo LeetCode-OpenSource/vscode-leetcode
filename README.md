@@ -99,7 +99,7 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 ### 向 LeetCode 提交答案 <sup>1</sup>
 ![SubmitSolution](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/solveproblem.gif)
 
-<sup>1</sup> 如果您通过命令面板触发 `Submit to LeetCode` 和 `Test in LeetCode` 命令，本插件将会提交当前文件。
+<sup>1</sup> 如果您通过命令面板触发 `Submit to LeetCode` 和 `Test in LeetCode` 命令，本插件将会提交当前文件至 LeetCode。
 
 ## 命令
 该插件在命令面板（F1 或 Ctrl + Shift + P）中支持下列命令：
