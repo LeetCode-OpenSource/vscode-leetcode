@@ -43,7 +43,7 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
         try {
             const userName: string | undefined = await new Promise(async (resolve: (res: string | undefined) => void, reject: (e: Error) => void): Promise<void> => {
                 let result: string = "";
-                const childProc: cp.ChildProcess = cp.spawn("node", [leetCodeBinaryPath, "user", "-l"]);
+                const childProc: cp.ChildProcess = cp.spawn("node", [leetCodeBinaryPath, "user", "-l"], { shell: true });
                 childProc.stdout.on("data", (data: string | Buffer) => {
                     data = data.toString();
                     result = result.concat(data);

@@ -19,7 +19,7 @@ export async function submitSolution(channel: vscode.OutputChannel, uri?: vscode
     }
 
     try {
-        const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "submit", filePath]);
+        const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "submit", `"${filePath}"`]);
         await showResultFile(result);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to submit the solution. Please open the output channel for details.", DialogType.error, channel);

@@ -47,7 +47,7 @@ export async function testSolution(channel: vscode.OutputChannel, uri?: vscode.U
         let result: string | undefined;
         switch (choice.value) {
             case ":default":
-                result = await executeCommand(channel, "node", [leetCodeBinaryPath, "test", filePath]);
+                result = await executeCommand(channel, "node", [leetCodeBinaryPath, "test", `"${filePath}"`]);
                 break;
             case ":direct":
                 const testString: string | undefined = await vscode.window.showInputBox({
@@ -57,7 +57,7 @@ export async function testSolution(channel: vscode.OutputChannel, uri?: vscode.U
                     ignoreFocusOut: true,
                 });
                 if (testString) {
-                    result = await executeCommand(channel, "node", [leetCodeBinaryPath, "test", filePath, "-t", `"${testString.replace(/"/g, "")}"`]);
+                    result = await executeCommand(channel, "node", [leetCodeBinaryPath, "test", `"${filePath}"`, "-t", `"${testString.replace(/"/g, "")}"`]);
                 }
                 break;
             case ":file":
@@ -65,7 +65,7 @@ export async function testSolution(channel: vscode.OutputChannel, uri?: vscode.U
                 if (testFile && testFile.length) {
                     const input: string = await fse.readFile(testFile[0].fsPath, "utf-8");
                     if (input.trim()) {
-                        result = await executeCommand(channel, "node", [leetCodeBinaryPath, "test", filePath, "-t", `"${input.replace(/"/g, "").replace(/\r?\n/g, "\\n")}"`]);
+                        result = await executeCommand(channel, "node", [leetCodeBinaryPath, "test", `"${filePath}"`, "-t", `"${input.replace(/"/g, "").replace(/\r?\n/g, "\\n")}"`]);
                     } else {
                         vscode.window.showErrorMessage("The selected test file must not be empty.");
                     }
