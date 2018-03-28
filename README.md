@@ -30,19 +30,20 @@ Solve LeetCode problems in VS Code.
 ### Switch and Create Session
 ![SwitchSession](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/switchsession.gif)
 
-### Show Problems in Explorer
+### Show Problems in Explorer <sup>1</sup>
 ![ShowProblem](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/showproblem.gif)
 
-### Search Problems by Keywords
+### Search Problems by Keywords <sup>1</sup>
 ![SearchProblem](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/searchproblem.gif)
 
-### Test solutions by customized test case <sup>1</sup>
+### Test solutions by customized test case <sup>2</sup>
 ![TestSolution](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/testsolution.gif)
 
-### Submit Solutions to LeetCode <sup>1</sup>
+### Submit Solutions to LeetCode <sup>2</sup>
 ![SubmitSolution](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/solveproblem.gif)
 
-<sup>1</sup> If you trigger the `Submit to LeetCode` and `Test in LeetCode` commands in the Command Palette, the extension will upload the current active file in editor.
+<sup>1</sup> If no folder is opened in VS Code, the extension will save the problem files in `$HOME/.leetcode/`. <br/>
+<sup>2</sup> If you trigger the `Submit to LeetCode` and `Test in LeetCode` commands in the Command Palette, the extension will upload the current active file in editor.
 
 ## Commands
 This extension provides several commands in the Command Palette (F1 or Ctrl + Shift + P):
@@ -87,19 +88,20 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 ### 切换及创建 session
 ![SwitchSession](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/switchsession.gif)
 
-### 在 Explorer 中展示题目
+### 在 Explorer 中展示题目 <sup>1</sup>
 ![ShowProblem](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/showproblem.gif)
 
-### 根据关键字搜索题目
+### 根据关键字搜索题目 <sup>1</sup>
 ![SearchProblem](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/searchproblem.gif)
 
-### 用自定义测试用例测试答案 <sup>1</sup>
+### 用自定义测试用例测试答案 <sup>2</sup>
 ![TestSolution](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/testsolution.gif)
 
-### 向 LeetCode 提交答案 <sup>1</sup>
+### 向 LeetCode 提交答案 <sup>2</sup>
 ![SubmitSolution](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/solveproblem.gif)
 
-<sup>1</sup> 如果您通过命令面板触发 `Submit to LeetCode` 和 `Test in LeetCode` 命令，本插件将会提交当前文件至 LeetCode。
+<sup>1</sup> 如果 VS Code 中没有已打开的文件夹，插件会将题目文件存储于 `$HOME/.leetcode/` 目录下。<br/>
+<sup>2</sup> 如果您通过命令面板触发 `Submit to LeetCode` 和 `Test in LeetCode` 命令，本插件将会提交当前文件至 LeetCode。
 
 ## 命令
 该插件在命令面板（F1 或 Ctrl + Shift + P）中支持下列命令：
