@@ -49,7 +49,7 @@ async function showProblemInternal(channel: vscode.OutputChannel, id: string): P
 
         const outdir: string = await selectWorkspaceFolder();
         await fse.ensureDir(outdir);
-        const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "show", id, "-gx", "-l", language, "-o", outdir]);
+        const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "show", id, "-gx", "-l", language, "-o", `"${outdir}"`]);
         const reg: RegExp = /\* Source Code:\s*(.*)/;
         const match: RegExpMatchArray | null = result.match(reg);
         if (match && match.length >= 2) {
