@@ -3,6 +3,10 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.5.1]
+### Fixed
+- Fix the bug when user's path contains whitespaces [#34](https://github.com/jdneo/vscode-leetcode/issues/34)
+
 ## [0.5.0]
 ### Added
 - Support submit and test solution files from the file explorer in VS Code ([#24](https://github.com/jdneo/vscode-leetcode/issues/24), [#26](https://github.com/jdneo/vscode-leetcode/issues/26))
