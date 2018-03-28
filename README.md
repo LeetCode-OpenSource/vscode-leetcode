@@ -42,7 +42,7 @@ Solve LeetCode problems in VS Code.
 ### Submit Solutions to LeetCode <sup>2</sup>
 ![SubmitSolution](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/solveproblem.gif)
 
-<sup>1</sup> If no folder is opened in VS Code, the extension will save the problem files in `$HOME/.leetcode/`.
+<sup>1</sup> If no folder is opened in VS Code, the extension will save the problem files in `$HOME/.leetcode/`. <br/>
 <sup>2</sup> If you trigger the `Submit to LeetCode` and `Test in LeetCode` commands in the Command Palette, the extension will upload the current active file in editor.
 
 ## Commands
@@ -100,7 +100,7 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 ### 向 LeetCode 提交答案 <sup>2</sup>
 ![SubmitSolution](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/solveproblem.gif)
 
-<sup>2</sup> 如果 VS Code 中没有已打开的文件夹，插件会将题目文件存储于 `$HOME/.leetcode/` 目录下。
+<sup>1</sup> 如果 VS Code 中没有已打开的文件夹，插件会将题目文件存储于 `$HOME/.leetcode/` 目录下。<br/>
 <sup>2</sup> 如果您通过命令面板触发 `Submit to LeetCode` 和 `Test in LeetCode` 命令，本插件将会提交当前文件至 LeetCode。
 
 ## 命令
