@@ -1,202 +1,216 @@
 {
-    "name": "vscode-leetcode",
-    "displayName": "LeetCode",
-    "description": "Solve LeetCode problems in VS Code",
-    "version": "0.5.1",
-    "author": "Sheng Chen",
-    "publisher": "shengchen",
-    "icon": "resources/LeetCode.png",
-    "engines": {
-        "vscode": "^1.20.0"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/jdneo/vscode-leetcode"
-    },
-    "homepage": "https://github.com/jdneo/vscode-leetcode/blob/master/README.md",
-    "categories": [
-        "Other",
-        "Snippets"
-    ],
-    "keywords": [
-        "leetcode",
-        "algorithm",
-        "interview"
-    ],
-    "preview": true,
-    "activationEvents": [
-        "onCommand:leetcode.signin",
-        "onCommand:leetcode.signout",
-        "onCommand:leetcode.selectSessions",
-        "onCommand:leetcode.createSession",
-        "onCommand:leetcode.refreshExplorer",
-        "onCommand:leetcode.showProblem",
-        "onCommand:leetcode.searchProblem",
-        "onCommand:leetcode.testSolution",
-        "onCommand:leetcode.submitSolution",
-        "onView:leetCodeExplorer"
-    ],
-    "main": "./out/src/extension",
-    "contributes": {
-        "commands": [
-            {
-                "command": "leetcode.signin",
-                "title": "Sign in",
-                "category": "LeetCode"
-            },
-            {
-                "command": "leetcode.signout",
-                "title": "Sign out",
-                "category": "LeetCode"
-            },
-            {
-                "command": "leetcode.selectSessions",
-                "title": "Select session",
-                "category": "LeetCode"
-            },
-            {
-                "command": "leetcode.createSession",
-                "title": "Create new session",
-                "category": "LeetCode"
-            },
-            {
-                "command": "leetcode.refreshExplorer",
-                "title": "Refresh",
-                "category": "LeetCode",
-                "icon": {
-                    "light": "resources/light/refresh.svg",
-                    "dark": "resources/dark/refresh.svg"
-                }
-            },
-            {
-                "command": "leetcode.showProblem",
-                "title": "Show problem",
-                "category": "LeetCode"
-            },
-            {
-                "command": "leetcode.searchProblem",
-                "title": "Search Problem",
-                "category": "LeetCode",
-                "icon": "resources/search.png"
-            },
-            {
-                "command": "leetcode.testSolution",
-                "title": "Test in LeetCode",
-                "category": "LeetCode"
-            },
-            {
-                "command": "leetcode.submitSolution",
-                "title": "Submit to LeetCode",
-                "category": "LeetCode"
-            }
-        ],
-        "views": {
-            "explorer": [
-                {
-                    "id": "leetCodeExplorer",
-                    "name": "LeetCode"
-                }
-            ]
-        },
-        "menus": {
-            "view/title": [
-                {
-                    "command": "leetcode.searchProblem",
-                    "when": "view == leetCodeExplorer",
-                    "group": "navigation@1"
-                },
-                {
-                    "command": "leetcode.refreshExplorer",
-                    "when": "view == leetCodeExplorer",
-                    "group": "navigation@2"
-                }
-            ],
-            "view/item/context": [
-                {
-                    "command": "leetcode.showProblem",
-                    "when": "view == leetCodeExplorer && viewItem == problem",
-                    "group": "leetcode-explorer@1"
-                }
-            ],
-            "commandPalette": [
-                {
-                    "command": "leetcode.showProblem",
-                    "when": "never"
-                }
-            ],
-            "explorer/context": [
-                {
-                    "command": "leetcode.testSolution",
-                    "when": "explorerResourceIsFolder == false",
-                    "group": "file-explorer@1"
-                },
-                {
-                    "command": "leetcode.submitSolution",
-                    "when": "explorerResourceIsFolder == false",
-                    "group": "file-explorer@2"
-                }
-            ]
-        },
-        "configuration": [
-            {
-                "title": "LeetCode",
-                "properties": {
-                    "leetcode.showLocked": {
-                        "type": "boolean",
-                        "default": false,
-                        "scope": "window",
-                        "description": "Show locked problems."
-                    },
-                    "leetcode.defaultLanguage": {
-                        "type": "string",
-                        "enum": [
-                            "bash",
-                            "c",
-                            "cpp",
-                            "csharp",
-                            "golang",
-                            "java",
-                            "javascript",
-                            "kotlin",
-                            "mysql",
-                            "python",
-                            "python3",
-                            "ruby",
-                            "scala",
-                            "swift"
-                        ],
-                        "scope": "window",
-                        "description": "Default language for solving the problems."
-                    },
-                    "leetcode.showSetDefaultLanguageHint": {
-                        "type": "boolean",
-                        "default": true,
-                        "scope": "window",
-                        "description": "Show a hint to set the default language."
-                    }
-                }
-            }
-        ]
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test",
-        "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose"
-    },
-    "devDependencies": {
-        "@types/fs-extra": "^5.0.0",
-        "@types/mocha": "^2.2.42",
-        "@types/node": "^7.0.43",
-        "tslint": "^5.9.1",
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6"
-    },
-    "dependencies": {
-        "fs-extra": "^5.0.0",
-        "leetcode-cli": "2.5.1",
-        "opn": "^5.2.0"
-    }
+	"name": "vscode-leetcode",
+	"displayName": "LeetCode",
+	"description": "Solve LeetCode problems in VS Code",
+	"version": "0.5.1",
+	"author": "Sheng Chen",
+	"publisher": "shengchen",
+	"icon": "resources/LeetCode.png",
+	"engines": {
+		"vscode": "^1.20.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jdneo/vscode-leetcode"
+	},
+	"homepage": "https://github.com/jdneo/vscode-leetcode/blob/master/README.md",
+	"categories": [
+		"Other",
+		"Snippets"
+	],
+	"keywords": [
+		"leetcode",
+		"algorithm",
+		"interview"
+	],
+	"preview": true,
+	"activationEvents": [
+		"onCommand:leetcode.signin",
+		"onCommand:leetcode.signout",
+		"onCommand:leetcode.selectSessions",
+		"onCommand:leetcode.createSession",
+		"onCommand:leetcode.refreshExplorer",
+		"onCommand:leetcode.showProblem",
+		"onCommand:leetcode.searchProblem",
+		"onCommand:leetcode.testSolution",
+		"onCommand:leetcode.submitSolution",
+		"onView:leetCodeExplorer"
+	],
+	"main": "./out/src/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "leetcode.signin",
+				"title": "Sign in",
+				"category": "LeetCode"
+			},
+			{
+				"command": "leetcode.signout",
+				"title": "Sign out",
+				"category": "LeetCode"
+			},
+			{
+				"command": "leetcode.selectSessions",
+				"title": "Select session",
+				"category": "LeetCode"
+			},
+			{
+				"command": "leetcode.createSession",
+				"title": "Create new session",
+				"category": "LeetCode"
+			},
+			{
+				"command": "leetcode.refreshExplorer",
+				"title": "Refresh",
+				"category": "LeetCode",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "leetcode.showProblem",
+				"title": "Show problem",
+				"category": "LeetCode"
+			},
+			{
+				"command": "leetcode.searchProblem",
+				"title": "Search Problem",
+				"category": "LeetCode",
+				"icon": "resources/search.png"
+			},
+			{
+				"command": "leetcode.testSolution",
+				"title": "Test in LeetCode",
+				"category": "LeetCode"
+			},
+			{
+				"command": "leetcode.submitSolution",
+				"title": "Submit to LeetCode",
+				"category": "LeetCode"
+			}
+		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "leetcode",
+					"title": "LeetCode",
+					"icon": "resources/LeetCode.svg"
+				}
+			]
+		},
+		"views": {
+			"leetcode": [
+				{
+					"id": "leetCodeExplorer",
+					"name": "LeetCode"
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "leetcode.searchProblem",
+					"when": "view == leetCodeExplorer",
+					"group": "navigation@1"
+				},
+				{
+					"command": "leetcode.refreshExplorer",
+					"when": "view == leetCodeExplorer",
+					"group": "navigation@2"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "leetcode.showProblem",
+					"when": "view == leetCodeExplorer && viewItem == problem",
+					"group": "leetcode-explorer@1"
+				}
+			],
+			"commandPalette": [
+				{
+					"command": "leetcode.showProblem",
+					"when": "never"
+				}
+			],
+			"explorer/context": [
+				{
+					"command": "leetcode.testSolution",
+					"when": "explorerResourceIsFolder == false",
+					"group": "file-explorer@1"
+				},
+				{
+					"command": "leetcode.submitSolution",
+					"when": "explorerResourceIsFolder == false",
+					"group": "file-explorer@2"
+				}
+			]
+		},
+		"configuration": [
+			{
+				"title": "LeetCode",
+				"properties": {
+					"leetcode.showLocked": {
+						"type": "boolean",
+						"default": false,
+						"scope": "window",
+						"description": "Show locked problems."
+					},
+					"leetcode.defaultLanguage": {
+						"type": "string",
+						"enum": [
+							"bash",
+							"c",
+							"cpp",
+							"csharp",
+							"golang",
+							"java",
+							"javascript",
+							"kotlin",
+							"mysql",
+							"python",
+							"python3",
+							"ruby",
+							"scala",
+							"swift"
+						],
+						"scope": "window",
+						"description": "Default language for solving the problems."
+					},
+					"leetcode.showSetDefaultLanguageHint": {
+						"type": "boolean",
+						"default": true,
+						"scope": "window",
+						"description": "Show a hint to set the default language."
+					}
+				}
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test",
+		"lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose"
+	},
+	"devDependencies": {
+		"@types/fs-extra": "^5.0.0",
+		"@types/mocha": "^2.2.42",
+		"@types/node": "^7.0.43",
+		"tslint": "^5.9.1",
+		"typescript": "^2.6.1",
+		"vscode": "^1.1.6"
+	},
+	"dependencies": {
+		"fs-extra": "^5.0.0",
+		"leetcode-cli": "2.5.1",
+		"opn": "^5.2.0"
+	},
+	"__metadata": {
+		"id": "66682185-9f80-4b70-8b8c-9e492935c105",
+		"publisherId": "c1c98ca2-5050-4935-9b8e-7570861e165c",
+		"publisherDisplayName": "ShengChen"
+	}
 }
