@@ -38,7 +38,8 @@
     ],
     "main": "./out/src/extension",
     "contributes": {
-        "commands": [{
+        "commands": [
+            {
                 "command": "leetcode.signin",
                 "title": "Sign in",
                 "category": "LeetCode"
@@ -90,89 +91,111 @@
             }
         ],
         "viewsContainers": {
-            "activitybar": [{
-                "id": "leetcode",
-                "title": "LeetCode",
-                "icon": "resources/LeetCode.svg"
-            }]
+            "activitybar": [
+                {
+                    "id": "leetcode",
+                    "title": "LeetCode",
+                    "icon": "resources/LeetCode.svg"
+                }
+            ]
         },
         "views": {
-            "leetcode": [{
-                "id": "leetCodeExplorer",
-                "name": "LeetCode"
-            }]
+            "leetcode": [
+                {
+                    "id": "leetCodeExplorer",
+                    "name": "LeetCode"
+                }
+            ]
         },
         "menus": {
-            "view/title": [{
+            "view/title": [
+                {
                     "command": "leetcode.searchProblem",
                     "when": "view == leetCodeExplorer",
-                    "group": "navigation@1"
+                    "group": "leetcode@1"
                 },
                 {
                     "command": "leetcode.refreshExplorer",
                     "when": "view == leetCodeExplorer",
-                    "group": "navigation@2"
+                    "group": "leetcode@2"
                 }
             ],
-            "view/item/context": [{
-                "command": "leetcode.showProblem",
-                "when": "view == leetCodeExplorer && viewItem == problem",
-                "group": "leetcode-explorer@1"
-            }],
-            "commandPalette": [{
-                "command": "leetcode.showProblem",
-                "when": "never"
-            }],
-            "explorer/context": [{
+            "view/item/context": [
+                {
+                    "command": "leetcode.showProblem",
+                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "group": "leetcode@1"
+                }
+            ],
+            "commandPalette": [
+                {
+                    "command": "leetcode.showProblem",
+                    "when": "never"
+                }
+            ],
+            "explorer/context": [
+                {
                     "command": "leetcode.testSolution",
                     "when": "explorerResourceIsFolder == false",
-                    "group": "file-explorer@1"
+                    "group": "leetcode@1"
                 },
                 {
                     "command": "leetcode.submitSolution",
                     "when": "explorerResourceIsFolder == false",
-                    "group": "file-explorer@2"
+                    "group": "leetcode@2"
+                }
+            ],
+            "editor/context": [
+                {
+                    "command": "leetcode.testSolution",
+                    "group": "leetcode@1"
+                },
+                {
+                    "command": "leetcode.submitSolution",
+                    "group": "leetcode@2"
                 }
             ]
         },
-        "configuration": [{
-            "title": "LeetCode",
-            "properties": {
-                "leetcode.showLocked": {
-                    "type": "boolean",
-                    "default": false,
-                    "scope": "window",
-                    "description": "Show locked problems."
-                },
-                "leetcode.defaultLanguage": {
-                    "type": "string",
-                    "enum": [
-                        "bash",
-                        "c",
-                        "cpp",
-                        "csharp",
-                        "golang",
-                        "java",
-                        "javascript",
-                        "kotlin",
-                        "mysql",
-                        "python",
-                        "python3",
-                        "ruby",
-                        "scala",
-                        "swift"
-                    ],
-                    "scope": "window",
-                    "description": "Default language for solving the problems."
-                },
-                "leetcode.showSetDefaultLanguageHint": {
-                    "type": "boolean",
-                    "default": true,
-                    "scope": "window",
-                    "description": "Show a hint to set the default language."
+        "configuration": [
+            {
+                "title": "LeetCode",
+                "properties": {
+                    "leetcode.showLocked": {
+                        "type": "boolean",
+                        "default": false,
+                        "scope": "window",
+                        "description": "Show locked problems."
+                    },
+                    "leetcode.defaultLanguage": {
+                        "type": "string",
+                        "enum": [
+                            "bash",
+                            "c",
+                            "cpp",
+                            "csharp",
+                            "golang",
+                            "java",
+                            "javascript",
+                            "kotlin",
+                            "mysql",
+                            "python",
+                            "python3",
+                            "ruby",
+                            "scala",
+                            "swift"
+                        ],
+                        "scope": "window",
+                        "description": "Default language for solving the problems."
+                    },
+                    "leetcode.showSetDefaultLanguageHint": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "window",
+                        "description": "Show a hint to set the default language."
+                    }
                 }
             }
-        }]
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
