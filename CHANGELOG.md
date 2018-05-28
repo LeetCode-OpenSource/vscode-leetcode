@@ -3,6 +3,13 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.6.0]
+### Changed
+- Move LeetCode explorer into activity bar ([#39](https://github.com/jdneo/vscode-leetcode/issues/39))
+
+### Added
+- Support trigger test & submit in the editor ([#37](https://github.com/jdneo/vscode-leetcode/issues/37))
+
 ## [0.5.1]
 ### Fixed
 - Fix the bug when user's path contains whitespaces ([#34](https://github.com/jdneo/vscode-leetcode/issues/34))
