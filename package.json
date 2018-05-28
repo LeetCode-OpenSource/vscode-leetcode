@@ -2,7 +2,7 @@
     "name": "vscode-leetcode",
     "displayName": "LeetCode",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.5.1",
+    "version": "0.6.0",
     "author": "Sheng Chen",
     "publisher": "shengchen",
     "icon": "resources/LeetCode.png",
@@ -103,7 +103,7 @@
             "leetcode": [
                 {
                     "id": "leetCodeExplorer",
-                    "name": "LeetCode"
+                    "name": "Problems"
                 }
             ]
         },
@@ -112,12 +112,12 @@
                 {
                     "command": "leetcode.searchProblem",
                     "when": "view == leetCodeExplorer",
-                    "group": "leetcode@1"
+                    "group": "navigation@1"
                 },
                 {
                     "command": "leetcode.refreshExplorer",
                     "when": "view == leetCodeExplorer",
-                    "group": "leetcode@2"
+                    "group": "navigation@2"
                 }
             ],
             "view/item/context": [
@@ -211,7 +211,7 @@
         "@types/node": "^7.0.43",
         "tslint": "^5.9.1",
         "typescript": "^2.6.1",
-        "vscode": "^1.1.6"
+        "vscode": "^1.1.18"
     },
     "dependencies": {
         "fs-extra": "^5.0.0",
