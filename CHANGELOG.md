@@ -10,6 +10,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 - Support trigger test & submit in the editor ([#37](https://github.com/jdneo/vscode-leetcode/issues/37))
 
+### Fixed
+- Fix the bug that cannot show problem ([#41](https://github.com/jdneo/vscode-leetcode/issues/41))
+
 ## [0.5.1]
 ### Fixed
 - Fix the bug when user's path contains whitespaces ([#34](https://github.com/jdneo/vscode-leetcode/issues/34))

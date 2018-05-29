@@ -215,7 +215,7 @@
     },
     "dependencies": {
         "fs-extra": "^5.0.0",
-        "leetcode-cli": "2.5.1",
+        "leetcode-cli": "2.5.2",
         "opn": "^5.2.0"
     }
 }
