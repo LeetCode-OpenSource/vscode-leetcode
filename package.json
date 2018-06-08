@@ -215,7 +215,7 @@
         "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose"
     },
     "devDependencies": {
-        "@types/fs-extra": "^5.0.0",
+        "@types/fs-extra": "^5.0.3",
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
         "tslint": "^5.9.1",
