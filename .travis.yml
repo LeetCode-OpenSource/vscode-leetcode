@@ -16,4 +16,4 @@ install:
 
 script:
   - npm run lint
-  - vsce package
+  - npm run compile
