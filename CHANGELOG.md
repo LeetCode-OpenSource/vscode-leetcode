@@ -3,6 +3,10 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.6.1]
+### Added
+- Add Sign in action into LeetCode Explorer title area ([#25](https://github.com/jdneo/vscode-leetcode/issues/25))
+
 ## [0.6.0]
 ### Changed
 - Move LeetCode explorer into activity bar ([#39](https://github.com/jdneo/vscode-leetcode/issues/39))
