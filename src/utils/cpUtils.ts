@@ -26,3 +26,19 @@ export async function executeCommand(channel: vscode.OutputChannel, command: str
         });
     });
 }
+
+export async function executeCommandWithProgress(message: string, channel: vscode.OutputChannel, command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
+    let result: string = "";
+    await vscode.window.withProgress({ location: vscode.ProgressLocation.Window }, async (p: vscode.Progress<{}>) => {
+        return new Promise(async (resolve: () => void, reject: (e: Error) => void): Promise<void> => {
+            p.report({ message });
+            try {
+                result = await executeCommand(channel, command, args, options);
+                resolve();
+            } catch (e) {
+                reject(e);
+            }
+        });
+    });
+    return result;
+}
