@@ -3,6 +3,10 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.7.0]
+### Added
+- Add spinner when submitting code([#43](https://github.com/jdneo/vscode-leetcode/issues/43))
+
 ## [0.6.1]
 ### Added
 - Add Sign in action into LeetCode Explorer title area ([#25](https://github.com/jdneo/vscode-leetcode/issues/25))

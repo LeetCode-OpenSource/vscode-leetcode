@@ -65,7 +65,10 @@ Refer to [CHANGELOG](CHANGELOG.md)
 
 ## Acknowledgement
 
-This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcode-cli](https://github.com/skygragon/leetcode-cli) open source project.
+- This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcode-cli](https://github.com/skygragon/leetcode-cli) open source project.
+- Thanks [@TsFreddie](https://github.com/TsFreddie) for contributing [#19](https://github.com/jdneo/vscode-leetcode/pull/19).
+- Thanks [@ntt2k](https://github.com/ntt2k) for contributing [#38](https://github.com/jdneo/vscode-leetcode/pull/38).
+
 
 
 # 中文
@@ -123,4 +126,6 @@ This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcod
 
 ## 鸣谢
 
-本插件基于[@skygragon](https://github.com/skygragon)的[leetcode-cli](https://github.com/skygragon/leetcode-cli)开源项目制作。
+- 本插件基于[@skygragon](https://github.com/skygragon)的[leetcode-cli](https://github.com/skygragon/leetcode-cli)开源项目制作。
+- 感谢[@TsFreddie](https://github.com/TsFreddie)贡献[#19](https://github.com/jdneo/vscode-leetcode/pull/19)。
+- 感谢[@ntt2k](https://github.com/ntt2k)贡献[#38](https://github.com/jdneo/vscode-leetcode/pull/38)。
