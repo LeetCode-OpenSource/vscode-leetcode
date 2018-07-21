@@ -19,7 +19,7 @@ export async function selectWorkspaceFolder(): Promise<string> {
 
     const workFolder = folder ? folder.uri.fsPath : path.join(os.homedir(), ".leetcode");
 
-    return wsl.useWsl() ? wsl.toWslPath(workFolder) : workFolder
+    return wsl.useWsl() ? wsl.toWslPath(workFolder) : workFolder;
 }
 
 export async function getActivefilePath(uri?: vscode.Uri): Promise<string | undefined> {

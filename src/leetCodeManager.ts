@@ -7,7 +7,7 @@ import { UserStatus } from "./shared";
 import { leetCodeBinaryPath } from "./shared";
 import { executeCommand } from "./utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
-import * as wsl from './utils/wslUtils'
+import * as wsl from "./utils/wslUtils";
 
 export interface ILeetCodeManager extends EventEmitter {
     getLoginStatus(channel: vscode.OutputChannel): void;
@@ -46,7 +46,7 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
                 let result: string = "";
 
                 const childProc: cp.ChildProcess = wsl.useWsl()
-                    ? cp.spawn("wsl", ['--', 'node', leetCodeBinaryPath, "user", "-l"], { shell: true })
+                    ? cp.spawn("wsl", ["--", "node", leetCodeBinaryPath, "user", "-l"], { shell: true })
                     : cp.spawn("node", [leetCodeBinaryPath, "user", "-l"], { shell: true });
 
                 childProc.stdout.on("data", (data: string | Buffer) => {

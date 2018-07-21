@@ -2,12 +2,12 @@
 
 import * as path from "path";
 import * as vscode from "vscode";
-import * as wsl from './utils/wslUtils'
+import * as wsl from "./utils/wslUtils";
 
-let binPath = path.join(__dirname, "..", "..", "node_modules", "leetcode-cli", "bin", "leetcode")
+let binPath = path.join(__dirname, "..", "..", "node_modules", "leetcode-cli", "bin", "leetcode");
 
 if (wsl.useWsl()) {
-    binPath = wsl.toWslPath(binPath)
+    binPath = wsl.toWslPath(binPath);
 }
 
 export const leetCodeBinaryPath: string = `"${binPath}"`;

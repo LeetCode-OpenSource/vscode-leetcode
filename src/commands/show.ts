@@ -8,8 +8,8 @@ import { IQuickItemEx, languages, leetCodeBinaryPath, ProblemState } from "../sh
 import { executeCommand } from "../utils/cpUtils";
 import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
+import * as wsl from "../utils/wslUtils";
 import * as list from "./list";
-import * as wsl from '../utils/wslUtils';
 
 export async function showProblem(channel: vscode.OutputChannel, node?: LeetCodeNode): Promise<void> {
     if (!node) {
@@ -54,7 +54,7 @@ async function showProblemInternal(channel: vscode.OutputChannel, id: string): P
         const reg: RegExp = /\* Source Code:\s*(.*)/;
         const match: RegExpMatchArray | null = result.match(reg);
         if (match && match.length >= 2) {
-            const filePath = wsl.useWsl() ? wsl.toWinPath(match[1].trim()) : match[1].trim()
+            const filePath = wsl.useWsl() ? wsl.toWinPath(match[1].trim()) : match[1].trim();
 
             await vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false });
         } else {

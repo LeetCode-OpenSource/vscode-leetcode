@@ -2,14 +2,14 @@
 
 import * as cp from "child_process";
 import * as vscode from "vscode";
-import * as wsl from './wslUtils'
+import * as wsl from "./wslUtils";
 
 export async function executeCommand(channel: vscode.OutputChannel, command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
     return new Promise((resolve: (res: string) => void, reject: (e: Error) => void): void => {
         let result: string = "";
 
         const childProc: cp.ChildProcess = wsl.useWsl()
-            ? cp.spawn('wsl', ['--', command].concat(args), options)
+            ? cp.spawn("wsl", ["--", command].concat(args), options)
             : cp.spawn(command, args, options);
 
         childProc.stdout.on("data", (data: string | Buffer) => {
