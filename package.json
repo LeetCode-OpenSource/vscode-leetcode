@@ -206,7 +206,7 @@
                         "type": "boolean",
                         "default": false,
                         "scope": "window",
-                        "description": "Show locked problems."
+                        "description": "Use nodejs inside the Windows Subsystem for Linux."
                     }
                 }
             }
