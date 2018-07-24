@@ -10,9 +10,9 @@ export function useWsl(): boolean {
 }
 
 export function toWslPath(path: string): string {
-    return cp.execFileSync("wsl", ["--", "wslpath", "-u", `${path.replace(/\\/g, "/")}`]).toString().trim();
+    return cp.execFileSync("wsl", ["wslpath", "-u", `${path.replace(/\\/g, "/")}`]).toString().trim();
 }
 
 export function toWinPath(path: string): string {
-    return cp.execFileSync("wsl", ["--", "wslpath", "-w", path]).toString().trim();
+    return cp.execFileSync("wsl", ["wslpath", "-w", path]).toString().trim();
 }

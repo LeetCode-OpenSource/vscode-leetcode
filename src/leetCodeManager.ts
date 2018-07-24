@@ -46,7 +46,7 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
                 let result: string = "";
 
                 const childProc: cp.ChildProcess = wsl.useWsl()
-                    ? cp.spawn("wsl", ["--", "node", leetCodeBinaryPath, "user", "-l"], { shell: true })
+                    ? cp.spawn("wsl", ["node", leetCodeBinaryPath, "user", "-l"], { shell: true })
                     : cp.spawn("node", [leetCodeBinaryPath, "user", "-l"], { shell: true });
 
                 childProc.stdout.on("data", (data: string | Buffer) => {

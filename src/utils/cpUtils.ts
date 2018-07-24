@@ -9,7 +9,7 @@ export async function executeCommand(channel: vscode.OutputChannel, command: str
         let result: string = "";
 
         const childProc: cp.ChildProcess = wsl.useWsl()
-            ? cp.spawn("wsl", ["--", command].concat(args), options)
+            ? cp.spawn("wsl", [command].concat(args), options)
             : cp.spawn(command, args, options);
 
         childProc.stdout.on("data", (data: string | Buffer) => {
