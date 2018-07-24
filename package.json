@@ -201,6 +201,12 @@
                         "default": true,
                         "scope": "window",
                         "description": "Show a hint to set the default language."
+                    },
+                    "leetcode.useWsl": {
+                        "type": "boolean",
+                        "default": false,
+                        "scope": "window",
+                        "description": "Use Node.js inside the Windows Subsystem for Linux."
                     }
                 }
             }

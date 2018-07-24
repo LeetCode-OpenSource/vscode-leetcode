@@ -3,6 +3,7 @@
 import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
+import * as wsl from "./wslUtils";
 
 export async function selectWorkspaceFolder(): Promise<string> {
     let folder: vscode.WorkspaceFolder | undefined;
@@ -15,7 +16,10 @@ export async function selectWorkspaceFolder(): Promise<string> {
             folder = vscode.workspace.workspaceFolders[0];
         }
     }
-    return folder ? folder.uri.fsPath : path.join(os.homedir(), ".leetcode");
+
+    const workFolder = folder ? folder.uri.fsPath : path.join(os.homedir(), ".leetcode");
+
+    return wsl.useWsl() ? wsl.toWslPath(workFolder) : workFolder;
 }
 
 export async function getActivefilePath(uri?: vscode.Uri): Promise<string | undefined> {
@@ -33,5 +37,5 @@ export async function getActivefilePath(uri?: vscode.Uri): Promise<string | unde
         vscode.window.showWarningMessage("Please save the solution file first.");
         return undefined;
     }
-    return textEditor.document.uri.fsPath;
+    return wsl.useWsl() ? wsl.toWslPath(textEditor.document.uri.fsPath) : textEditor.document.uri.fsPath;
 }
