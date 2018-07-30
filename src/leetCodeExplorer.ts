@@ -8,7 +8,7 @@ import { ProblemState } from "./shared";
 
 // tslint:disable:max-classes-per-file
 export class LeetCodeNode {
-    constructor(private data: list.IProblem, private isProblemNode = true) { }
+    constructor(private data: list.IProblem, private isProblemNode: boolean = true) { }
 
     public get locked(): boolean {
         return this.data.locked;

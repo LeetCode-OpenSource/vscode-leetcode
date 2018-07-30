@@ -52,7 +52,7 @@ export async function testSolution(channel: vscode.OutputChannel, uri?: vscode.U
             case ":direct":
                 const testString: string | undefined = await vscode.window.showInputBox({
                     prompt: "Enter the test cases.",
-                    validateInput: (s: string) => s && s.trim() ? undefined : "Test case must not be empty.",
+                    validateInput: (s: string): string | undefined => s && s.trim() ? undefined : "Test case must not be empty.",
                     placeHolder: "Example: [1,2,3]\\n4",
                     ignoreFocusOut: true,
                 });

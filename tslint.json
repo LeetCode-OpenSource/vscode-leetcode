@@ -6,10 +6,26 @@
     "jsRules": {},
     "rules": {
         "object-literal-sort-keys": false,
-        "indent": [true, "spaces"],
+        "indent": [
+            true,
+            "spaces"
+        ],
         "no-string-literal": false,
         "no-namespace": false,
-        "max-line-length": [false, 120]
+        "max-line-length": [
+            false,
+            120
+        ],
+        "typedef": [
+            true,
+            "call-signature",
+            "arrow-call-signature",
+            "parameter",
+            "arrow-parameter",
+            "property-declaration",
+            "variable-declaration",
+            "member-variable-declaration"
+        ]
     },
     "rulesDirectory": []
 }

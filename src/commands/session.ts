@@ -7,7 +7,7 @@ import { executeCommand } from "../utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 
 export async function getSessionList(channel: vscode.OutputChannel): Promise<ISession[]> {
-    const signInStatus = leetCodeManager.getUser();
+    const signInStatus: string | undefined = leetCodeManager.getUser();
     if (!signInStatus) {
         promptForSignIn();
         return [];
@@ -75,7 +75,7 @@ async function parseSessionsToPicks(channel: vscode.OutputChannel): Promise<Arra
 export async function createSession(channel: vscode.OutputChannel): Promise<void> {
     const session: string | undefined = await vscode.window.showInputBox({
         prompt: "Enter the new session name.",
-        validateInput: (s: string) => s && s.trim() ? undefined : "Session name must not be empty",
+        validateInput: (s: string): string | undefined => s && s.trim() ? undefined : "Session name must not be empty",
     });
     if (!session) {
         return;

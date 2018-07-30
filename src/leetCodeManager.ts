@@ -29,7 +29,7 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
 
     public async getLoginStatus(channel: vscode.OutputChannel): Promise<void> {
         try {
-            const result = await executeCommand(channel, "node", [leetCodeBinaryPath, "user"]);
+            const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "user"]);
             this.currentUser = result.slice("You are now login as".length).trim();
             this.userStatus = UserStatus.SignedIn;
         } catch (error) {
@@ -60,7 +60,7 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
                 childProc.on("error", reject);
                 const name: string | undefined = await vscode.window.showInputBox({
                     prompt: "Enter user name.",
-                    validateInput: (s: string) => s && s.trim() ? undefined : "User name must not be empty",
+                    validateInput: (s: string): string | undefined => s && s.trim() ? undefined : "User name must not be empty",
                 });
                 if (!name) {
                     childProc.kill();
@@ -70,7 +70,7 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
                 const pwd: string | undefined = await vscode.window.showInputBox({
                     prompt: "Enter password.",
                     password: true,
-                    validateInput: (s: string) => s ? undefined : "Password must not be empty",
+                    validateInput: (s: string): string | undefined => s ? undefined : "Password must not be empty",
                 });
                 if (!pwd) {
                     childProc.kill();

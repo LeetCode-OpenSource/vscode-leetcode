@@ -10,7 +10,7 @@ import { leetCodeManager } from "./leetCodeManager";
 import { leetCodeStatusBarItem } from "./leetCodeStatusBarItem";
 import { isNodeInstalled } from "./utils/nodeUtils";
 
-export async function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext): Promise<void> {
     const channel: vscode.OutputChannel = vscode.window.createOutputChannel("LeetCode");
     if (!await isNodeInstalled(channel)) {
         return;
@@ -37,6 +37,6 @@ export async function activate(context: vscode.ExtensionContext) {
     });
 }
 
-export function deactivate() {
+export function deactivate(): void {
     leetCodeStatusBarItem.dispose();
 }

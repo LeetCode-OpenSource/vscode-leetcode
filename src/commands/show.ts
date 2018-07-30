@@ -39,7 +39,7 @@ export async function searchProblem(channel: vscode.OutputChannel): Promise<void
 async function showProblemInternal(channel: vscode.OutputChannel, id: string): Promise<void> {
     try {
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-        let defaultLanguage = leetCodeConfig.get<string>("defaultLanguage");
+        let defaultLanguage: string | undefined = leetCodeConfig.get<string>("defaultLanguage");
         if (defaultLanguage && languages.indexOf(defaultLanguage) < 0) {
             defaultLanguage = undefined;
         }
@@ -54,7 +54,7 @@ async function showProblemInternal(channel: vscode.OutputChannel, id: string): P
         const reg: RegExp = /\* Source Code:\s*(.*)/;
         const match: RegExpMatchArray | null = result.match(reg);
         if (match && match.length >= 2) {
-            const filePath = wsl.useWsl() ? wsl.toWinPath(match[1].trim()) : match[1].trim();
+            const filePath: string = wsl.useWsl() ? wsl.toWinPath(match[1].trim()) : match[1].trim();
 
             await vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false });
         } else {

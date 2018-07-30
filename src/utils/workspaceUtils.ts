@@ -17,7 +17,7 @@ export async function selectWorkspaceFolder(): Promise<string> {
         }
     }
 
-    const workFolder = folder ? folder.uri.fsPath : path.join(os.homedir(), ".leetcode");
+    const workFolder: string = folder ? folder.uri.fsPath : path.join(os.homedir(), ".leetcode");
 
     return wsl.useWsl() ? wsl.toWslPath(workFolder) : workFolder;
 }

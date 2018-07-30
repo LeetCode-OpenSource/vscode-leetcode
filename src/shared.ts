@@ -4,7 +4,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 import * as wsl from "./utils/wslUtils";
 
-let binPath = path.join(__dirname, "..", "..", "node_modules", "leetcode-cli", "bin", "leetcode");
+let binPath: string = path.join(__dirname, "..", "..", "node_modules", "leetcode-cli", "bin", "leetcode");
 
 if (wsl.useWsl()) {
     binPath = wsl.toWslPath(binPath);
@@ -21,7 +21,7 @@ export enum UserStatus {
     SignedOut = 2,
 }
 
-export const languages = [
+export const languages: string[] = [
     "bash",
     "c",
     "cpp",

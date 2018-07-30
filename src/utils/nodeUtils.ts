@@ -10,7 +10,7 @@ export async function isNodeInstalled(channel: vscode.OutputChannel): Promise<bo
         await executeCommand(channel, "node", ["-v"]);
         return true;
     } catch (error) {
-        const choice = await vscode.window.showErrorMessage(
+        const choice: vscode.MessageItem | undefined = await vscode.window.showErrorMessage(
             "LeetCode extension need Node.js installed in environment path",
             DialogOptions.open,
         );
