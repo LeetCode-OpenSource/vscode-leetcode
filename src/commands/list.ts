@@ -16,14 +16,14 @@ export interface IProblem {
     passRate: string;
 }
 
-export async function listProblems(channel: vscode.OutputChannel): Promise<IProblem[]> {
+export async function listProblems(): Promise<IProblem[]> {
     try {
         if (leetCodeManager.getStatus() === UserStatus.SignedOut) {
             return [];
         }
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         const showLocked: boolean | undefined = leetCodeConfig.get<boolean>("showLocked");
-        const result: string = await executeCommand(channel, "node", showLocked ? [leetCodeBinaryPath, "list"] : [leetCodeBinaryPath, "list", "-q", "L"]);
+        const result: string = await executeCommand("node", showLocked ? [leetCodeBinaryPath, "list"] : [leetCodeBinaryPath, "list", "-q", "L"]);
         const problems: IProblem[] = [];
         const lines: string[] = result.split("\n");
         const reg: RegExp = /^(.)\s(.{1,2})\s(.)\s\[\s*(\d*)\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;
@@ -43,7 +43,7 @@ export async function listProblems(channel: vscode.OutputChannel): Promise<IProb
         }
         return problems.reverse();
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to list problems. Please open the output channel for details.", DialogType.error, channel);
+        await promptForOpenOutputChannel("Failed to list problems. Please open the output channel for details.", DialogType.error);
         return [];
     }
 }

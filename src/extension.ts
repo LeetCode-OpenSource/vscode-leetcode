@@ -5,30 +5,30 @@ import * as session from "./commands/session";
 import * as show from "./commands/show";
 import * as submit from "./commands/submit";
 import * as test from "./commands/test";
+import { leetCodeChannel } from "./leetCodeChannel";
 import { LeetCodeNode, LeetCodeTreeDataProvider } from "./leetCodeExplorer";
 import { leetCodeManager } from "./leetCodeManager";
 import { leetCodeStatusBarItem } from "./leetCodeStatusBarItem";
 import { isNodeInstalled } from "./utils/nodeUtils";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
-    const channel: vscode.OutputChannel = vscode.window.createOutputChannel("LeetCode");
-    if (!await isNodeInstalled(channel)) {
+    if (!await isNodeInstalled()) {
         return;
     }
-    leetCodeManager.getLoginStatus(channel);
-    const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider(context, channel);
+    leetCodeManager.getLoginStatus();
+    const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider(context);
 
     context.subscriptions.push(
         vscode.window.registerTreeDataProvider("leetCodeExplorer", leetCodeTreeDataProvider),
-        vscode.commands.registerCommand("leetcode.signin", () => leetCodeManager.signIn(channel)),
-        vscode.commands.registerCommand("leetcode.signout", () => leetCodeManager.signOut(channel)),
-        vscode.commands.registerCommand("leetcode.selectSessions", () => session.selectSession(channel)),
-        vscode.commands.registerCommand("leetcode.createSession", () => session.createSession(channel)),
-        vscode.commands.registerCommand("leetcode.showProblem", (node: LeetCodeNode) => show.showProblem(channel, node)),
-        vscode.commands.registerCommand("leetcode.searchProblem", () => show.searchProblem(channel)),
+        vscode.commands.registerCommand("leetcode.signin", () => leetCodeManager.signIn()),
+        vscode.commands.registerCommand("leetcode.signout", () => leetCodeManager.signOut()),
+        vscode.commands.registerCommand("leetcode.selectSessions", () => session.selectSession()),
+        vscode.commands.registerCommand("leetcode.createSession", () => session.createSession()),
+        vscode.commands.registerCommand("leetcode.showProblem", (node: LeetCodeNode) => show.showProblem(node)),
+        vscode.commands.registerCommand("leetcode.searchProblem", () => show.searchProblem()),
         vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
-        vscode.commands.registerCommand("leetcode.testSolution", (uri?: vscode.Uri) => test.testSolution(channel, uri)),
-        vscode.commands.registerCommand("leetcode.submitSolution", (uri?: vscode.Uri) => submit.submitSolution(channel, uri)),
+        vscode.commands.registerCommand("leetcode.testSolution", (uri?: vscode.Uri) => test.testSolution(uri)),
+        vscode.commands.registerCommand("leetcode.submitSolution", (uri?: vscode.Uri) => submit.submitSolution(uri)),
     );
 
     leetCodeManager.on("statusChanged", () => {
@@ -39,4 +39,5 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
 export function deactivate(): void {
     leetCodeStatusBarItem.dispose();
+    leetCodeChannel.dispose();
 }

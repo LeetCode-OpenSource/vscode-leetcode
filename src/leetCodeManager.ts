@@ -3,6 +3,7 @@
 import * as cp from "child_process";
 import { EventEmitter } from "events";
 import * as vscode from "vscode";
+import { leetCodeChannel } from "./leetCodeChannel";
 import { UserStatus } from "./shared";
 import { leetCodeBinaryPath } from "./shared";
 import { executeCommand } from "./utils/cpUtils";
@@ -10,11 +11,11 @@ import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 
 export interface ILeetCodeManager extends EventEmitter {
-    getLoginStatus(channel: vscode.OutputChannel): void;
+    getLoginStatus(): void;
     getStatus(): UserStatus;
     getUser(): string | undefined;
-    signIn(channel: vscode.OutputChannel): void;
-    signOut(channel: vscode.OutputChannel): void;
+    signIn(): void;
+    signOut(): void;
 }
 
 class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
@@ -27,9 +28,9 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
         this.userStatus = UserStatus.SignedOut;
     }
 
-    public async getLoginStatus(channel: vscode.OutputChannel): Promise<void> {
+    public async getLoginStatus(): Promise<void> {
         try {
-            const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "user"]);
+            const result: string = await executeCommand("node", [leetCodeBinaryPath, "user"]);
             this.currentUser = result.slice("You are now login as".length).trim();
             this.userStatus = UserStatus.SignedIn;
         } catch (error) {
@@ -40,7 +41,7 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
         }
     }
 
-    public async signIn(channel: vscode.OutputChannel): Promise<void> {
+    public async signIn(): Promise<void> {
         try {
             const userName: string | undefined = await new Promise(async (resolve: (res: string | undefined) => void, reject: (e: Error) => void): Promise<void> => {
                 let result: string = "";
@@ -52,10 +53,10 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
                 childProc.stdout.on("data", (data: string | Buffer) => {
                     data = data.toString();
                     result = result.concat(data);
-                    channel.append(data);
+                    leetCodeChannel.append(data);
                 });
 
-                childProc.stderr.on("data", (data: string | Buffer) => channel.append(data.toString()));
+                childProc.stderr.on("data", (data: string | Buffer) => leetCodeChannel.append(data.toString()));
 
                 childProc.on("error", reject);
                 const name: string | undefined = await vscode.window.showInputBox({
@@ -94,20 +95,20 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
                 this.emit("statusChanged");
             }
         } catch (error) {
-            promptForOpenOutputChannel("Failed to sign in. Please open the output channel for details", DialogType.error, channel);
+            promptForOpenOutputChannel("Failed to sign in. Please open the output channel for details", DialogType.error);
         }
 
     }
 
-    public async signOut(channel: vscode.OutputChannel): Promise<void> {
+    public async signOut(): Promise<void> {
         try {
-            await executeCommand(channel, "node", [leetCodeBinaryPath, "user", "-L"]);
+            await executeCommand("node", [leetCodeBinaryPath, "user", "-L"]);
             vscode.window.showInformationMessage("Successfully signed out.");
             this.currentUser = undefined;
             this.userStatus = UserStatus.SignedOut;
             this.emit("statusChanged");
         } catch (error) {
-            promptForOpenOutputChannel("Failed to sign out. Please open the output channel for details", DialogType.error, channel);
+            promptForOpenOutputChannel("Failed to sign out. Please open the output channel for details", DialogType.error);
         }
     }
 

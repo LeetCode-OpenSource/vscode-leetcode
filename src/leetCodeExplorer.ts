@@ -42,7 +42,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     // tslint:disable-next-line:member-ordering
     public readonly onDidChangeTreeData: vscode.Event<any> = this.onDidChangeTreeDataEvent.event;
 
-    constructor(private context: vscode.ExtensionContext, private channel: vscode.OutputChannel) { }
+    constructor(private context: vscode.ExtensionContext) { }
 
     public async refresh(): Promise<void> {
         await this.getProblemData();
@@ -100,7 +100,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     }
 
     private async getProblemData(): Promise<void> {
-        const allProblems: list.IProblem[] = await list.listProblems(this.channel);
+        const allProblems: list.IProblem[] = await list.listProblems();
         this.treeData.clear();
         for (const problem of allProblems) {
             const problems: list.IProblem[] | undefined = this.treeData.get(problem.difficulty);

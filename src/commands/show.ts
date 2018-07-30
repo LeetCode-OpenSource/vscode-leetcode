@@ -11,20 +11,20 @@ import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
 import * as list from "./list";
 
-export async function showProblem(channel: vscode.OutputChannel, node?: LeetCodeNode): Promise<void> {
+export async function showProblem(node?: LeetCodeNode): Promise<void> {
     if (!node) {
         return;
     }
-    await showProblemInternal(channel, node.id);
+    await showProblemInternal(node.id);
 }
 
-export async function searchProblem(channel: vscode.OutputChannel): Promise<void> {
+export async function searchProblem(): Promise<void> {
     if (!leetCodeManager.getUser()) {
         promptForSignIn();
         return;
     }
     const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(
-        parseProblemsToPicks(list.listProblems(channel)),
+        parseProblemsToPicks(list.listProblems()),
         {
             matchOnDetail: true,
             placeHolder: "Select one problem",
@@ -33,10 +33,10 @@ export async function searchProblem(channel: vscode.OutputChannel): Promise<void
     if (!choice) {
         return;
     }
-    await showProblemInternal(channel, choice.value);
+    await showProblemInternal(choice.value);
 }
 
-async function showProblemInternal(channel: vscode.OutputChannel, id: string): Promise<void> {
+async function showProblemInternal(id: string): Promise<void> {
     try {
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         let defaultLanguage: string | undefined = leetCodeConfig.get<string>("defaultLanguage");
@@ -50,7 +50,7 @@ async function showProblemInternal(channel: vscode.OutputChannel, id: string): P
 
         const outdir: string = await selectWorkspaceFolder();
         await fse.ensureDir(outdir);
-        const result: string = await executeCommand(channel, "node", [leetCodeBinaryPath, "show", id, "-gx", "-l", language, "-o", `"${outdir}"`]);
+        const result: string = await executeCommand("node", [leetCodeBinaryPath, "show", id, "-gx", "-l", language, "-o", `"${outdir}"`]);
         const reg: RegExp = /\* Source Code:\s*(.*)/;
         const match: RegExpMatchArray | null = result.match(reg);
         if (match && match.length >= 2) {
@@ -75,7 +75,7 @@ async function showProblemInternal(channel: vscode.OutputChannel, id: string): P
             }
         }
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to fetch the problem information. Please open the output channel for details.", DialogType.error, channel);
+        await promptForOpenOutputChannel("Failed to fetch the problem information. Please open the output channel for details.", DialogType.error);
     }
 }
 

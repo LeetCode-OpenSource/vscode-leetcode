@@ -8,7 +8,7 @@ import { executeCommandWithProgress } from "../utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel, showFileSelectDialog, showResultFile } from "../utils/uiUtils";
 import { getActivefilePath } from "../utils/workspaceUtils";
 
-export async function testSolution(channel: vscode.OutputChannel, uri?: vscode.Uri): Promise<void> {
+export async function testSolution(uri?: vscode.Uri): Promise<void> {
     try {
         if (leetCodeManager.getStatus() === UserStatus.SignedOut) {
             return;
@@ -47,7 +47,7 @@ export async function testSolution(channel: vscode.OutputChannel, uri?: vscode.U
         let result: string | undefined;
         switch (choice.value) {
             case ":default":
-                result = await executeCommandWithProgress("Submitting to LeetCode...", channel, "node", [leetCodeBinaryPath, "test", `"${filePath}"`]);
+                result = await executeCommandWithProgress("Submitting to LeetCode...", "node", [leetCodeBinaryPath, "test", `"${filePath}"`]);
                 break;
             case ":direct":
                 const testString: string | undefined = await vscode.window.showInputBox({
@@ -57,7 +57,7 @@ export async function testSolution(channel: vscode.OutputChannel, uri?: vscode.U
                     ignoreFocusOut: true,
                 });
                 if (testString) {
-                    result = await executeCommandWithProgress("Submitting to LeetCode...", channel, "node", [leetCodeBinaryPath, "test", `"${filePath}"`, "-t", `"${testString.replace(/"/g, "")}"`]);
+                    result = await executeCommandWithProgress("Submitting to LeetCode...", "node", [leetCodeBinaryPath, "test", `"${filePath}"`, "-t", `"${testString.replace(/"/g, "")}"`]);
                 }
                 break;
             case ":file":
@@ -65,7 +65,7 @@ export async function testSolution(channel: vscode.OutputChannel, uri?: vscode.U
                 if (testFile && testFile.length) {
                     const input: string = await fse.readFile(testFile[0].fsPath, "utf-8");
                     if (input.trim()) {
-                        result = await executeCommandWithProgress("Submitting to LeetCode...", channel, "node", [leetCodeBinaryPath, "test", `"${filePath}"`, "-t", `"${input.replace(/"/g, "").replace(/\r?\n/g, "\\n")}"`]);
+                        result = await executeCommandWithProgress("Submitting to LeetCode...", "node", [leetCodeBinaryPath, "test", `"${filePath}"`, "-t", `"${input.replace(/"/g, "").replace(/\r?\n/g, "\\n")}"`]);
                     } else {
                         vscode.window.showErrorMessage("The selected test file must not be empty.");
                     }
@@ -79,6 +79,6 @@ export async function testSolution(channel: vscode.OutputChannel, uri?: vscode.U
         }
         await showResultFile(result);
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to test the solution. Please open the output channel for details.", DialogType.error, channel);
+        await promptForOpenOutputChannel("Failed to test the solution. Please open the output channel for details.", DialogType.error);
     }
 }

@@ -5,9 +5,9 @@ import * as vscode from "vscode";
 import { executeCommand } from "./cpUtils";
 import { DialogOptions } from "./uiUtils";
 
-export async function isNodeInstalled(channel: vscode.OutputChannel): Promise<boolean> {
+export async function isNodeInstalled(): Promise<boolean> {
     try {
-        await executeCommand(channel, "node", ["-v"]);
+        await executeCommand("node", ["-v"]);
         return true;
     } catch (error) {
         const choice: vscode.MessageItem | undefined = await vscode.window.showErrorMessage(
