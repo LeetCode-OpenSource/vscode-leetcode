@@ -2,15 +2,8 @@
 
 import * as path from "path";
 import * as vscode from "vscode";
-import * as wsl from "./utils/wslUtils";
 
-let binPath: string = path.join(__dirname, "..", "..", "node_modules", "leetcode-cli", "bin", "leetcode");
-
-if (wsl.useWsl()) {
-    binPath = wsl.toWslPath(binPath);
-}
-
-export const leetCodeBinaryPath: string = `"${binPath}"`;
+export const leetCodeBinaryPath: string = `"${path.join(__dirname, "..", "..", "node_modules", "leetcode-cli", "bin", "leetcode")}"`;
 
 export interface IQuickItemEx<T> extends vscode.QuickPickItem {
     value: T;

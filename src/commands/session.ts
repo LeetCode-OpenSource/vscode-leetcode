@@ -1,6 +1,7 @@
 "use strict";
 
 import * as vscode from "vscode";
+import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IQuickItemEx, leetCodeBinaryPath } from "../shared";
 import { executeCommand } from "../utils/cpUtils";
@@ -12,7 +13,7 @@ export async function getSessionList(): Promise<ISession[]> {
         promptForSignIn();
         return [];
     }
-    const result: string = await executeCommand("node", [leetCodeBinaryPath, "session"]);
+    const result: string = await leetCodeExecutor.listSessions();
     const lines: string[] = result.split("\n");
     const sessions: ISession[] = [];
     const reg: RegExp = /(.?)\s*(\d+)\s+(.*)\s+(\d+ \(\s*\d+\.\d+ %\))\s+(\d+ \(\s*\d+\.\d+ %\))/;
@@ -41,7 +42,7 @@ export async function selectSession(): Promise<void> {
         return;
     }
     try {
-        await executeCommand("node", [leetCodeBinaryPath, "session", "-e", choice.value]);
+        await leetCodeExecutor.enableSession(choice.value);
         vscode.window.showInformationMessage(`Successfully switched to session '${choice.label}'.`);
         await vscode.commands.executeCommand("leetcode.refreshExplorer");
     } catch (error) {
@@ -81,7 +82,7 @@ export async function createSession(): Promise<void> {
         return;
     }
     try {
-        await executeCommand("node", [leetCodeBinaryPath, "session", "-c", session]);
+        await leetCodeExecutor.createSession(session);
         vscode.window.showInformationMessage("New session created, you can switch to it by clicking the status bar.");
     } catch (error) {
         await promptForOpenOutputChannel("Failed to create session. Please open the output channel for details.", DialogType.error);
