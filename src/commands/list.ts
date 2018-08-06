@@ -3,8 +3,7 @@
 import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { leetCodeBinaryPath, ProblemState, UserStatus } from "../shared";
-import { executeCommand } from "../utils/cpUtils";
+import { ProblemState, UserStatus } from "../shared";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
 
 export interface IProblem {

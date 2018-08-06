@@ -3,8 +3,7 @@
 import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { IQuickItemEx, leetCodeBinaryPath } from "../shared";
-import { executeCommand } from "../utils/cpUtils";
+import { IQuickItemEx } from "../shared";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 
 export async function getSessionList(): Promise<ISession[]> {
