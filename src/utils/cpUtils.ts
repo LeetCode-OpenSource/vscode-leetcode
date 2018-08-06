@@ -34,7 +34,7 @@ export async function executeCommand(command: string, args: string[], options: c
 
 export async function executeCommandWithProgress(message: string, command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
     let result: string = "";
-    await vscode.window.withProgress({ location: vscode.ProgressLocation.Window }, async (p: vscode.Progress<{}>) => {
+    await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification }, async (p: vscode.Progress<{}>) => {
         return new Promise(async (resolve: () => void, reject: (e: Error) => void): Promise<void> => {
             p.report({ message });
             try {

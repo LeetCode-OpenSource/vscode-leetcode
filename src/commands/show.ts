@@ -5,7 +5,7 @@ import * as vscode from "vscode";
 import { LeetCodeNode } from "../leetCodeExplorer";
 import { leetCodeManager } from "../leetCodeManager";
 import { IQuickItemEx, languages, leetCodeBinaryPath, ProblemState } from "../shared";
-import { executeCommand } from "../utils/cpUtils";
+import { executeCommandWithProgress } from "../utils/cpUtils";
 import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
@@ -50,7 +50,7 @@ async function showProblemInternal(id: string): Promise<void> {
 
         const outdir: string = await selectWorkspaceFolder();
         await fse.ensureDir(outdir);
-        const result: string = await executeCommand("node", [leetCodeBinaryPath, "show", id, "-gx", "-l", language, "-o", `"${outdir}"`]);
+        const result: string = await executeCommandWithProgress("Fetching problem data...", "node", [leetCodeBinaryPath, "show", id, "-gx", "-l", language, "-o", `"${outdir}"`]);
         const reg: RegExp = /\* Source Code:\s*(.*)/;
         const match: RegExpMatchArray | null = result.match(reg);
         if (match && match.length >= 2) {
