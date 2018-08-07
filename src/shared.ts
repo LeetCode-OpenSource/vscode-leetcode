@@ -1,6 +1,5 @@
 "use strict";
 
-import * as path from "path";
 import * as vscode from "vscode";
 
 export interface IQuickItemEx<T> extends vscode.QuickPickItem {
