@@ -1,6 +1,8 @@
 "use strict";
 
+import * as cp from "child_process";
 import * as path from "path";
+import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
 import * as wsl from "./utils/wslUtils";
 
 export interface ILeetCodeExecutor {
@@ -46,45 +48,59 @@ class LeetCodeExecutor implements ILeetCodeExecutor {
     }
 
     public async getUserInfo(): Promise<string> {
-        return await wsl.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "user"]);
+        return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "user"]);
     }
 
     public async signOut(): Promise<string> {
-        return await await wsl.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "user", "-L"]);
+        return await await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "user", "-L"]);
     }
 
     public async listProblems(showLocked: boolean): Promise<string> {
-        return await wsl.executeCommandEx("node", showLocked ?
+        return await this.executeCommandEx("node", showLocked ?
             [await this.getLeetCodeBinaryPath(), "list"] :
             [await this.getLeetCodeBinaryPath(), "list", "-q", "L"],
         );
     }
 
     public async showProblem(id: string, language: string, outdir: string): Promise<string> {
-        return await wsl.executeCommandWithProgressEx("Fetching problem data...", "node", [await this.getLeetCodeBinaryPath(), "show", id, "-gx", "-l", language, "-o", `"${outdir}"`]);
+        return await this.executeCommandWithProgressEx("Fetching problem data...", "node", [await this.getLeetCodeBinaryPath(), "show", id, "-gx", "-l", language, "-o", `"${outdir}"`]);
     }
 
     public async listSessions(): Promise<string> {
-        return await wsl.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "session"]);
+        return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "session"]);
     }
 
     public async enableSession(name: string): Promise<string> {
-        return await wsl.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "session", "-e", name]);
+        return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "session", "-e", name]);
     }
 
     public async createSession(name: string): Promise<string> {
-        return await wsl.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "session", "-c", name]);
+        return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "session", "-c", name]);
     }
 
     public async submitSolution(filePath: string): Promise<string> {
-        return await wsl.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "submit", `"${filePath}"`]);
+        return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "submit", `"${filePath}"`]);
     }
 
     public async testSolution(filePath: string, testString?: string): Promise<string> {
         if (testString) {
-            return await wsl.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`, "-t", `"${testString}"`]);
+            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`, "-t", `"${testString}"`]);
         }
-        return await wsl.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`]);
+        return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`]);
+    }
+
+    private async executeCommandEx(command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
+        if (wsl.useWsl()) {
+            return await executeCommand("wsl", [command].concat(args), options);
+        }
+        return await executeCommand(command, args, options);
+    }
+
+    private async executeCommandWithProgressEx(message: string, command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
+        if (wsl.useWsl()) {
+            return await executeCommandWithProgress(message, "wsl", [command].concat(args), options);
+        }
+        return await executeCommandWithProgress(message, command, args, options);
     }
 }
 
