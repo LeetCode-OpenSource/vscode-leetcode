@@ -1,11 +1,15 @@
 "use strict";
 
 import * as cp from "child_process";
+import * as opn from "opn";
 import * as path from "path";
+import * as vscode from "vscode";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
+import { DialogOptions } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 
 export interface ILeetCodeExecutor {
+    meetRequirements(): Promise<boolean>;
     getLeetCodeBinaryPath(): Promise<string>;
 
     /* section for user command */
@@ -45,6 +49,22 @@ class LeetCodeExecutor implements ILeetCodeExecutor {
             return `"${this.leetCodeBinaryPathInWsl}"`;
         }
         return `"${this.leetCodeBinaryPath}"`;
+    }
+
+    public async meetRequirements(): Promise<boolean> {
+        try {
+            await this.executeCommandEx("node", ["-v"]);
+            return true;
+        } catch (error) {
+            const choice: vscode.MessageItem | undefined = await vscode.window.showErrorMessage(
+                "LeetCode extension needs Node.js installed in environment path",
+                DialogOptions.open,
+            );
+            if (choice === DialogOptions.open) {
+                opn("https://nodejs.org");
+            }
+            return false;
+        }
     }
 
     public async getUserInfo(): Promise<string> {

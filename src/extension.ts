@@ -6,13 +6,13 @@ import * as show from "./commands/show";
 import * as submit from "./commands/submit";
 import * as test from "./commands/test";
 import { leetCodeChannel } from "./leetCodeChannel";
+import { leetCodeExecutor } from "./leetCodeExecutor";
 import { LeetCodeNode, LeetCodeTreeDataProvider } from "./leetCodeExplorer";
 import { leetCodeManager } from "./leetCodeManager";
 import { leetCodeStatusBarItem } from "./leetCodeStatusBarItem";
-import { isNodeInstalled } from "./utils/nodeUtils";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
-    if (!await isNodeInstalled()) {
+    if (!await leetCodeExecutor.meetRequirements()) {
         return;
     }
     leetCodeManager.getLoginStatus();
