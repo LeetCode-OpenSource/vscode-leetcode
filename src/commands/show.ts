@@ -2,10 +2,10 @@
 
 import * as fse from "fs-extra";
 import * as vscode from "vscode";
+import { leetCodeExecutor } from "../leetCodeExecutor";
 import { LeetCodeNode } from "../leetCodeExplorer";
 import { leetCodeManager } from "../leetCodeManager";
-import { IQuickItemEx, languages, leetCodeBinaryPath, ProblemState } from "../shared";
-import { executeCommandWithProgress } from "../utils/cpUtils";
+import { IQuickItemEx, languages, ProblemState } from "../shared";
 import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
@@ -50,11 +50,11 @@ async function showProblemInternal(id: string): Promise<void> {
 
         const outdir: string = await selectWorkspaceFolder();
         await fse.ensureDir(outdir);
-        const result: string = await executeCommandWithProgress("Fetching problem data...", "node", [leetCodeBinaryPath, "show", id, "-gx", "-l", language, "-o", `"${outdir}"`]);
+        const result: string = await leetCodeExecutor.showProblem(id, language, outdir);
         const reg: RegExp = /\* Source Code:\s*(.*)/;
         const match: RegExpMatchArray | null = result.match(reg);
         if (match && match.length >= 2) {
-            const filePath: string = wsl.useWsl() ? wsl.toWinPath(match[1].trim()) : match[1].trim();
+            const filePath: string = wsl.useWsl() ? await wsl.toWinPath(match[1].trim()) : match[1].trim();
 
             await vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false });
         } else {

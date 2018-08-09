@@ -2,9 +2,9 @@
 
 import * as fse from "fs-extra";
 import * as vscode from "vscode";
+import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { IQuickItemEx, leetCodeBinaryPath, UserStatus } from "../shared";
-import { executeCommandWithProgress } from "../utils/cpUtils";
+import { IQuickItemEx, UserStatus } from "../shared";
 import { DialogType, promptForOpenOutputChannel, showFileSelectDialog, showResultFile } from "../utils/uiUtils";
 import { getActivefilePath } from "../utils/workspaceUtils";
 
@@ -47,7 +47,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
         let result: string | undefined;
         switch (choice.value) {
             case ":default":
-                result = await executeCommandWithProgress("Submitting to LeetCode...", "node", [leetCodeBinaryPath, "test", `"${filePath}"`]);
+                result = await leetCodeExecutor.testSolution(filePath);
                 break;
             case ":direct":
                 const testString: string | undefined = await vscode.window.showInputBox({
@@ -57,7 +57,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
                     ignoreFocusOut: true,
                 });
                 if (testString) {
-                    result = await executeCommandWithProgress("Submitting to LeetCode...", "node", [leetCodeBinaryPath, "test", `"${filePath}"`, "-t", `"${testString.replace(/"/g, "")}"`]);
+                    result = await leetCodeExecutor.testSolution(filePath, testString.replace(/"/g, ""));
                 }
                 break;
             case ":file":
@@ -65,7 +65,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
                 if (testFile && testFile.length) {
                     const input: string = await fse.readFile(testFile[0].fsPath, "utf-8");
                     if (input.trim()) {
-                        result = await executeCommandWithProgress("Submitting to LeetCode...", "node", [leetCodeBinaryPath, "test", `"${filePath}"`, "-t", `"${input.replace(/"/g, "").replace(/\r?\n/g, "\\n")}"`]);
+                        result = await leetCodeExecutor.testSolution(filePath, input.replace(/"/g, "").replace(/\r?\n/g, "\\n"));
                     } else {
                         vscode.window.showErrorMessage("The selected test file must not be empty.");
                     }

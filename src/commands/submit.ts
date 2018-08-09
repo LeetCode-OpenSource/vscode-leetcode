@@ -1,9 +1,8 @@
 "use strict";
 
 import * as vscode from "vscode";
+import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { leetCodeBinaryPath } from "../shared";
-import { executeCommandWithProgress } from "../utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn, showResultFile } from "../utils/uiUtils";
 import { getActivefilePath } from "../utils/workspaceUtils";
 
@@ -19,7 +18,7 @@ export async function submitSolution(uri?: vscode.Uri): Promise<void> {
     }
 
     try {
-        const result: string = await executeCommandWithProgress("Submitting to LeetCode...", "node", [leetCodeBinaryPath, "submit", `"${filePath}"`]);
+        const result: string = await leetCodeExecutor.submitSolution(filePath);
         await showResultFile(result);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to submit the solution. Please open the output channel for details.", DialogType.error);

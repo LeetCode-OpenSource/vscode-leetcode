@@ -4,9 +4,8 @@ import * as cp from "child_process";
 import { EventEmitter } from "events";
 import * as vscode from "vscode";
 import { leetCodeChannel } from "./leetCodeChannel";
+import { leetCodeExecutor } from "./leetCodeExecutor";
 import { UserStatus } from "./shared";
-import { leetCodeBinaryPath } from "./shared";
-import { executeCommand } from "./utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 
@@ -30,7 +29,7 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
 
     public async getLoginStatus(): Promise<void> {
         try {
-            const result: string = await executeCommand("node", [leetCodeBinaryPath, "user"]);
+            const result: string = await leetCodeExecutor.getUserInfo();
             this.currentUser = result.slice("You are now login as".length).trim();
             this.userStatus = UserStatus.SignedIn;
         } catch (error) {
@@ -45,6 +44,8 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
         try {
             const userName: string | undefined = await new Promise(async (resolve: (res: string | undefined) => void, reject: (e: Error) => void): Promise<void> => {
                 let result: string = "";
+
+                const leetCodeBinaryPath: string = await leetCodeExecutor.getLeetCodeBinaryPath();
 
                 const childProc: cp.ChildProcess = wsl.useWsl()
                     ? cp.spawn("wsl", ["node", leetCodeBinaryPath, "user", "-l"], { shell: true })
@@ -102,7 +103,7 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
 
     public async signOut(): Promise<void> {
         try {
-            await executeCommand("node", [leetCodeBinaryPath, "user", "-L"]);
+            await leetCodeExecutor.signOut();
             vscode.window.showInformationMessage("Successfully signed out.");
             this.currentUser = undefined;
             this.userStatus = UserStatus.SignedOut;

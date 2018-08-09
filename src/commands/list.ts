@@ -1,9 +1,9 @@
 "use strict";
 
 import * as vscode from "vscode";
+import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { leetCodeBinaryPath, ProblemState, UserStatus } from "../shared";
-import { executeCommand } from "../utils/cpUtils";
+import { ProblemState, UserStatus } from "../shared";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
 
 export interface IProblem {
@@ -22,8 +22,8 @@ export async function listProblems(): Promise<IProblem[]> {
             return [];
         }
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-        const showLocked: boolean | undefined = leetCodeConfig.get<boolean>("showLocked");
-        const result: string = await executeCommand("node", showLocked ? [leetCodeBinaryPath, "list"] : [leetCodeBinaryPath, "list", "-q", "L"]);
+        const showLocked: boolean = !!leetCodeConfig.get<boolean>("showLocked");
+        const result: string = await leetCodeExecutor.listProblems(showLocked);
         const problems: IProblem[] = [];
         const lines: string[] = result.split("\n");
         const reg: RegExp = /^(.)\s(.{1,2})\s(.)\s\[\s*(\d*)\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;
