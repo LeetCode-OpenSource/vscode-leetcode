@@ -3,6 +3,11 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.8.0]
+### Added
+- Support LeetCode CN([#50](https://github.com/jdneo/vscode-leetcode/issues/50))
+- Support Windows Subsystem for Linux([#47](https://github.com/jdneo/vscode-leetcode/issues/47))
+
 ## [0.7.0]
 ### Added
 - Add spinner when submitting code([#43](https://github.com/jdneo/vscode-leetcode/issues/43))

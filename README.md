@@ -55,19 +55,19 @@ This extension provides several commands in the Command Palette (F1 or Ctrl + Sh
 - **LeetCode: Search Problem** -  Search for problems by keywords
 - **LeetCode: Test in LeetCode** - Test solution file by customized test case
 - **LeetCode: Submit to LeetCode** -  Submit the solution file to LeetCode
+- **LeetCode: Switch endpoint** - Switch the LeetCode endpoint. (LeetCode or LeetCode-cn)
 
 ## Known Issues:
 - This extension will infer the current target problem according to the active editing file. Please do not change the file name.
 
 ## Release Notes
 
-Refer to [CHANGELOG](CHANGELOG.md)
+Refer to [CHANGELOG](https://github.com/jdneo/vscode-leetcode/blob/master/CHANGELOG.md)
 
 ## Acknowledgement
 
 - This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcode-cli](https://github.com/skygragon/leetcode-cli) open source project.
-- Thanks [@TsFreddie](https://github.com/TsFreddie) for contributing [#19](https://github.com/jdneo/vscode-leetcode/pull/19).
-- Thanks [@ntt2k](https://github.com/ntt2k) for contributing [#38](https://github.com/jdneo/vscode-leetcode/pull/38).
+- Special thanks to our [contributors](https://github.com/jdneo/vscode-leetcode/blob/master/ACKNOWLEDGEMENTS.md)
 
 
 
@@ -116,16 +116,16 @@ Refer to [CHANGELOG](CHANGELOG.md)
 - **LeetCode: Search Problem** -  根据关键字搜索题目
 - **LeetCode: Test in LeetCode** - 用自定义测试用例进行测试
 - **LeetCode: Submit to LeetCode** -  提交答案到 LeetCode
+- **LeetCode: Switch endpoint** - 变更 LeetCode 终端（LeetCode 或 领扣）
 
 ## 已知问题
 - 本插件会根据文件名称推测当前的目标题目，因此建议不要改变文件名。
 
 ## 更新日志
 
-请参考[更新日志](CHANGELOG.md)
+请参考[更新日志](https://github.com/jdneo/vscode-leetcode/blob/master/CHANGELOG.md)
 
 ## 鸣谢
 
 - 本插件基于[@skygragon](https://github.com/skygragon)的[leetcode-cli](https://github.com/skygragon/leetcode-cli)开源项目制作。
-- 感谢[@TsFreddie](https://github.com/TsFreddie)贡献[#19](https://github.com/jdneo/vscode-leetcode/pull/19)。
-- 感谢[@ntt2k](https://github.com/ntt2k)贡献[#38](https://github.com/jdneo/vscode-leetcode/pull/38)。
+- 特别鸣谢这些[贡献者们](https://github.com/jdneo/vscode-leetcode/blob/master/ACKNOWLEDGEMENTS.md)。

@@ -2,7 +2,7 @@
     "name": "vscode-leetcode",
     "displayName": "LeetCode",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "author": "Sheng Chen",
     "publisher": "shengchen",
     "icon": "resources/LeetCode.png",
@@ -238,7 +238,7 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install && node ./node_modules/leetcode-cli/bin/leetcode plugin -i leetcode.cn",
+        "postinstall": "node ./node_modules/vscode/bin/install && node ./node_modules/leetcode-cli/bin/leetcode plugin -e leetcode.cn",
         "test": "npm run compile && node ./node_modules/vscode/bin/test",
         "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose"
     },
