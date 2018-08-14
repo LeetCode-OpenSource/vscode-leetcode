@@ -28,15 +28,11 @@ export async function toogleLeetCodeCn(): Promise<void> {
     }
     const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
     try {
-        if (choice.value === "on") {
-            await leetCodeExecutor.toggleLeetCodeCn(true);
-            await leetCodeConfig.update("endpoint", "leetcode.cn", true /* UserSetting */);
-            vscode.window.showInformationMessage("Switched the endpoint to leetcode-cn.");
-        } else {
-            await leetCodeExecutor.toggleLeetCodeCn(false);
-            await leetCodeConfig.update("endpoint", "leetcode", true /* UserSetting */);
-            vscode.window.showInformationMessage("Switched the endpoint to leetcode.");
-        }
+        const enabled: boolean = choice.value === "on";
+        const endpoint: string = enabled ? "leetcode.cn" : "leetcode";
+        await leetCodeExecutor.toggleLeetCodeCn(enabled);
+        await leetCodeConfig.update("endpoint", endpoint, true /* UserSetting */);
+        vscode.window.showInformationMessage(`Switched the endpoint to ${endpoint}`);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to switch endpoint. Please open the output channel for details.", DialogType.error);
     }
