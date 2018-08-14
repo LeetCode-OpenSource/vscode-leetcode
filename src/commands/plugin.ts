@@ -3,6 +3,7 @@
 import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { IQuickItemEx } from "../shared";
+import { Endpoint } from "../shared";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 
 export async function toogleLeetCodeCn(): Promise<void> {
@@ -12,13 +13,13 @@ export async function toogleLeetCodeCn(): Promise<void> {
         {
             label: `${isCnEnbaled ? "$(check) " : ""}On`,
             description: "",
-            detail: "Enable leetcode-cn.",
+            detail: `Enable ${Endpoint.LeetCodeCN}.`,
             value: "on",
         },
         {
             label: `${isCnEnbaled ? "" : "$(check) "}Off`,
             description: "",
-            detail: "Disable leetcode-cn.",
+            detail: `Disable ${Endpoint.LeetCodeCN}.`,
             value: "off",
         },
     );
@@ -29,7 +30,7 @@ export async function toogleLeetCodeCn(): Promise<void> {
     const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
     try {
         const enabled: boolean = choice.value === "on";
-        const endpoint: string = enabled ? "leetcode.cn" : "leetcode";
+        const endpoint: string = enabled ? Endpoint.LeetCodeCN : Endpoint.LeetCode;
         await leetCodeExecutor.toggleLeetCodeCn(enabled);
         await leetCodeConfig.update("endpoint", endpoint, true /* UserSetting */);
         vscode.window.showInformationMessage(`Switched the endpoint to ${endpoint}`);
@@ -52,7 +53,7 @@ export async function initializeEndpoint(): Promise<void> {
 export function isLeetCodeCnEnabled(): boolean {
     const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
     const endpoint: string | undefined = leetCodeConfig.get<string>("endpoint");
-    if (endpoint && endpoint === "leetcode.cn") {
+    if (endpoint && endpoint === Endpoint.LeetCodeCN) {
         return true;
     }
     return false;

@@ -226,7 +226,7 @@
                         "scope": "application",
                         "enum": [
                             "leetcode",
-                            "leetcode.cn"
+                            "leetcode-cn"
                         ],
                         "description": "Endpoint of the user account."
                     }
