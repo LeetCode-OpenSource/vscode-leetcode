@@ -67,7 +67,7 @@ Refer to [CHANGELOG](https://github.com/jdneo/vscode-leetcode/blob/master/CHANGE
 ## Acknowledgement
 
 - This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcode-cli](https://github.com/skygragon/leetcode-cli) open source project.
-- Special thanks to our [contributors](https://github.com/jdneo/vscode-leetcode/blob/master/ACKNOWLEDGEMENTS.md)
+- Special thanks to our [contributors](https://github.com/jdneo/vscode-leetcode/blob/master/ACKNOWLEDGEMENTS.md).
 
 
 
