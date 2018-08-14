@@ -30,6 +30,9 @@ export interface ILeetCodeExecutor {
     /* section for solution command */
     submitSolution(filePath: string): Promise<string>;
     testSolution(filePath: string, testString?: string): Promise<string>;
+
+    /* section for plugin command */
+    toggleLeetCodeCn(isEnable: boolean): Promise<string>;
 }
 
 class LeetCodeExecutor implements ILeetCodeExecutor {
@@ -107,6 +110,13 @@ class LeetCodeExecutor implements ILeetCodeExecutor {
             return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`, "-t", `"${testString}"`]);
         }
         return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`]);
+    }
+
+    public async toggleLeetCodeCn(isEnable: boolean): Promise<string> {
+        if (isEnable) {
+            return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-e", "leetcode.cn"]);
+        }
+        return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-d", "leetcode.cn"]);
     }
 
     private async executeCommandEx(command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {

@@ -33,3 +33,8 @@ export enum ProblemState {
     NotAC = 2,
     Unknown = 3,
 }
+
+export enum Endpoint {
+    LeetCode = "leetcode",
+    LeetCodeCN = "leetcode-cn",
+}

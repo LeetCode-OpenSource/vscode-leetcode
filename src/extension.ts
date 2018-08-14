@@ -1,6 +1,7 @@
 "use strict";
 
 import * as vscode from "vscode";
+import * as plugin from "./commands/plugin";
 import * as session from "./commands/session";
 import * as show from "./commands/show";
 import * as submit from "./commands/submit";
@@ -20,6 +21,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
     context.subscriptions.push(
         vscode.window.registerTreeDataProvider("leetCodeExplorer", leetCodeTreeDataProvider),
+        vscode.commands.registerCommand("leetcode.toogleLeetCodeCn", () => plugin.toogleLeetCodeCn()),
         vscode.commands.registerCommand("leetcode.signin", () => leetCodeManager.signIn()),
         vscode.commands.registerCommand("leetcode.signout", () => leetCodeManager.signOut()),
         vscode.commands.registerCommand("leetcode.selectSessions", () => session.selectSession()),
@@ -30,6 +32,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.commands.registerCommand("leetcode.testSolution", (uri?: vscode.Uri) => test.testSolution(uri)),
         vscode.commands.registerCommand("leetcode.submitSolution", (uri?: vscode.Uri) => submit.submitSolution(uri)),
     );
+
+    await plugin.initializeEndpoint();
 
     leetCodeManager.on("statusChanged", () => {
         leetCodeStatusBarItem.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser());

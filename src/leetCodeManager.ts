@@ -109,7 +109,7 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
             this.userStatus = UserStatus.SignedOut;
             this.emit("statusChanged");
         } catch (error) {
-            promptForOpenOutputChannel("Failed to sign out. Please open the output channel for details", DialogType.error);
+            // swallow the error when sign out.
         }
     }
 

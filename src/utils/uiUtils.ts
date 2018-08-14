@@ -5,6 +5,7 @@ import * as opn from "opn";
 import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
+import { isLeetCodeCnEnabled } from "../commands/plugin";
 import { leetCodeChannel } from "../leetCodeChannel";
 
 export namespace DialogOptions {
@@ -48,7 +49,11 @@ export async function promptForSignIn(): Promise<void> {
             await vscode.commands.executeCommand("leetcode.signin");
             break;
         case DialogOptions.singUp:
-            opn("https://leetcode.com");
+            if (isLeetCodeCnEnabled()) {
+                opn("https://leetcode-cn.com");
+            } else {
+                opn("https://leetcode.com");
+            }
             break;
         default:
             break;

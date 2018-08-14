@@ -25,6 +25,7 @@
     ],
     "preview": true,
     "activationEvents": [
+        "onCommand:leetcode.toogleLeetCodeCn",
         "onCommand:leetcode.signin",
         "onCommand:leetcode.signout",
         "onCommand:leetcode.selectSessions",
@@ -39,6 +40,12 @@
     "main": "./out/src/extension",
     "contributes": {
         "commands": [
+            {
+                "command": "leetcode.toogleLeetCodeCn",
+                "title": "Switch endpoint",
+                "category": "LeetCode",
+                "icon": "resources/cn.png"
+            },
             {
                 "command": "leetcode.signin",
                 "title": "Sign in",
@@ -114,19 +121,24 @@
         "menus": {
             "view/title": [
                 {
-                    "command": "leetcode.signin",
+                    "command": "leetcode.toogleLeetCodeCn",
                     "when": "view == leetCodeExplorer",
                     "group": "navigation@0"
                 },
                 {
-                    "command": "leetcode.searchProblem",
+                    "command": "leetcode.signin",
                     "when": "view == leetCodeExplorer",
                     "group": "navigation@1"
                 },
                 {
-                    "command": "leetcode.refreshExplorer",
+                    "command": "leetcode.searchProblem",
                     "when": "view == leetCodeExplorer",
                     "group": "navigation@2"
+                },
+                {
+                    "command": "leetcode.refreshExplorer",
+                    "when": "view == leetCodeExplorer",
+                    "group": "navigation@3"
                 }
             ],
             "view/item/context": [
@@ -172,7 +184,7 @@
                     "leetcode.showLocked": {
                         "type": "boolean",
                         "default": false,
-                        "scope": "window",
+                        "scope": "application",
                         "description": "Show locked problems."
                     },
                     "leetcode.defaultLanguage": {
@@ -193,20 +205,30 @@
                             "scala",
                             "swift"
                         ],
-                        "scope": "window",
+                        "scope": "application",
                         "description": "Default language for solving the problems."
                     },
                     "leetcode.showSetDefaultLanguageHint": {
                         "type": "boolean",
                         "default": true,
-                        "scope": "window",
+                        "scope": "application",
                         "description": "Show a hint to set the default language."
                     },
                     "leetcode.useWsl": {
                         "type": "boolean",
                         "default": false,
-                        "scope": "window",
+                        "scope": "application",
                         "description": "Use Node.js inside the Windows Subsystem for Linux."
+                    },
+                    "leetcode.endpoint": {
+                        "type": "string",
+                        "default": "leetcode",
+                        "scope": "application",
+                        "enum": [
+                            "leetcode",
+                            "leetcode-cn"
+                        ],
+                        "description": "Endpoint of the user account."
                     }
                 }
             }
@@ -216,7 +238,7 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
+        "postinstall": "node ./node_modules/vscode/bin/install && node ./node_modules/leetcode-cli/bin/leetcode plugin -i leetcode.cn",
         "test": "npm run compile && node ./node_modules/vscode/bin/test",
         "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose"
     },
