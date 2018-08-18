@@ -40,6 +40,7 @@ export async function toogleLeetCodeCn(): Promise<void> {
 
     try {
         await vscode.commands.executeCommand("leetcode.signout");
+        await vscode.commands.executeCommand("leetcode.deleteCache");
         await promptForSignIn();
     } catch (error) {
         await promptForOpenOutputChannel("Failed to sign in. Please open the output channel for details.", DialogType.error);

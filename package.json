@@ -41,6 +41,11 @@
     "contributes": {
         "commands": [
             {
+                "command": "leetcode.deleteCache",
+                "title": "Delete cache",
+                "category": "LeetCode"
+            },
+            {
                 "command": "leetcode.toogleLeetCodeCn",
                 "title": "Switch endpoint",
                 "category": "LeetCode",

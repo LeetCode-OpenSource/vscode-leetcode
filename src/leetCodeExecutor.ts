@@ -12,6 +12,9 @@ export interface ILeetCodeExecutor {
     meetRequirements(): Promise<boolean>;
     getLeetCodeBinaryPath(): Promise<string>;
 
+    /* section for cache command */
+    deleteCache(): Promise<string>;
+
     /* section for user command */
     getUserInfo(): Promise<string>;
     signOut(): Promise<string>;
@@ -68,6 +71,10 @@ class LeetCodeExecutor implements ILeetCodeExecutor {
             }
             return false;
         }
+    }
+
+    public async deleteCache(): Promise<string> {
+        return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "cache", "-d"]);
     }
 
     public async getUserInfo(): Promise<string> {

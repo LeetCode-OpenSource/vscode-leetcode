@@ -1,6 +1,7 @@
 "use strict";
 
 import * as vscode from "vscode";
+import * as cache from "./commands/cache";
 import * as plugin from "./commands/plugin";
 import * as session from "./commands/session";
 import * as show from "./commands/show";
@@ -21,6 +22,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
     context.subscriptions.push(
         vscode.window.registerTreeDataProvider("leetCodeExplorer", leetCodeTreeDataProvider),
+        vscode.commands.registerCommand("leetcode.deleteCache", () => cache.deleteCache()),
         vscode.commands.registerCommand("leetcode.toogleLeetCodeCn", () => plugin.toogleLeetCodeCn()),
         vscode.commands.registerCommand("leetcode.signin", () => leetCodeManager.signIn()),
         vscode.commands.registerCommand("leetcode.signout", () => leetCodeManager.signOut()),
