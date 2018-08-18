@@ -1,10 +1,14 @@
 "use strict";
 
+import * as fse from "fs-extra";
+import * as os from "os";
+import * as path from "path";
 import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { IQuickItemEx } from "../shared";
 import { Endpoint } from "../shared";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
+import { deleteCache } from "./cache";
 
 export async function toogleLeetCodeCn(): Promise<void> {
     const isCnEnbaled: boolean = isLeetCodeCnEnabled();
@@ -40,7 +44,7 @@ export async function toogleLeetCodeCn(): Promise<void> {
 
     try {
         await vscode.commands.executeCommand("leetcode.signout");
-        await vscode.commands.executeCommand("leetcode.deleteCache");
+        await deleteCache();
         await promptForSignIn();
     } catch (error) {
         await promptForOpenOutputChannel("Failed to sign in. Please open the output channel for details.", DialogType.error);
@@ -48,7 +52,12 @@ export async function toogleLeetCodeCn(): Promise<void> {
 }
 
 export async function initializeEndpoint(): Promise<void> {
-    await leetCodeExecutor.toggleLeetCodeCn(isLeetCodeCnEnabled());
+    const isCnEnabledInExtension: boolean = isLeetCodeCnEnabled();
+    const isCnEnabledInCli: boolean = await isLeetCodeCnEnabledInCli();
+    await leetCodeExecutor.toggleLeetCodeCn(isCnEnabledInExtension);
+    if (isCnEnabledInCli !== isCnEnabledInExtension) {
+        await deleteCache();
+    }
 }
 
 export function isLeetCodeCnEnabled(): boolean {
@@ -58,4 +67,13 @@ export function isLeetCodeCnEnabled(): boolean {
         return true;
     }
     return false;
+}
+
+async function isLeetCodeCnEnabledInCli(): Promise<boolean> {
+    const pluginsStatusFile: string = path.join(os.homedir(), ".lc", "plugins.json");
+    if (!await fse.pathExists(pluginsStatusFile)) {
+        return false;
+    }
+    const pluginsObj: {} = await fse.readJson(pluginsStatusFile);
+    return pluginsObj["leetcode.cn"];
 }
