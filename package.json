@@ -5,6 +5,7 @@
     "version": "0.8.0",
     "author": "Sheng Chen",
     "publisher": "shengchen",
+    "license": "MIT",
     "icon": "resources/LeetCode.png",
     "engines": {
         "vscode": "^1.23.0"
