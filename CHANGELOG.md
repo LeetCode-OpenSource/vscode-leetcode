@@ -5,7 +5,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.8.1]
 ### Changed
-- Upgrade LeetCode CLI to v2.6.0
+- Upgrade LeetCode CLI to v2.6.1
 
 ## [0.8.0]
 ### Added
