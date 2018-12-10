@@ -12,7 +12,7 @@ Solve LeetCode problems in VS Code.
 
 # English
 ## Requirements
-- [Node.js](https://nodejs.org)
+- [Node.js 8+](https://nodejs.org)
     > NOTE: Please make sure that `Node` is in your `PATH` environment variable. You can check this by running: `node -v`.
 
 ## Features
@@ -73,7 +73,7 @@ Refer to [CHANGELOG](https://github.com/jdneo/vscode-leetcode/blob/master/CHANGE
 
 # 中文
 ## 运行条件
-- [Node.js](https://nodejs.org)
+- [Node.js 8+](https://nodejs.org)
     > 注意: 请确保`Node`在`PATH`环境变量中，您可以通过执行：`node -v`进行查看。
 
 ## 功能
