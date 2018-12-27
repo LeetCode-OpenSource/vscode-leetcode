@@ -10,15 +10,7 @@ import { UserStatus } from "./shared";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 
-export interface ILeetCodeManager extends EventEmitter {
-    getLoginStatus(): void;
-    getStatus(): UserStatus;
-    getUser(): string | undefined;
-    signIn(): void;
-    signOut(): void;
-}
-
-class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
+class LeetCodeManager extends EventEmitter {
     private currentUser: string | undefined;
     private userStatus: UserStatus;
 
@@ -123,4 +115,4 @@ class LeetCodeManager extends EventEmitter implements ILeetCodeManager {
     }
 }
 
-export const leetCodeManager: ILeetCodeManager = new LeetCodeManager();
+export const leetCodeManager: LeetCodeManager = new LeetCodeManager();

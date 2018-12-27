@@ -9,37 +9,7 @@ import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
 import { DialogOptions } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 
-export interface ILeetCodeExecutor {
-    meetRequirements(): Promise<boolean>;
-    getLeetCodeBinaryPath(): Promise<string>;
-
-    /* section for cache command */
-    deleteCache(): Promise<string>;
-
-    /* section for user command */
-    getUserInfo(): Promise<string>;
-    signOut(): Promise<string>;
-    // TODO: implement login when leetcode-cli support login in batch mode.
-    // signIn(): Promise<string>;
-
-    /* section for problem command */
-    listProblems(showLocked: boolean): Promise<string>;
-    showProblem(id: string, language: string, outdir: string): Promise<string>;
-
-    /* section for session command */
-    listSessions(): Promise<string>;
-    enableSession(name: string): Promise<string>;
-    createSession(name: string): Promise<string>;
-
-    /* section for solution command */
-    submitSolution(filePath: string): Promise<string>;
-    testSolution(filePath: string, testString?: string): Promise<string>;
-
-    /* section for plugin command */
-    toggleLeetCodeCn(isEnable: boolean): Promise<string>;
-}
-
-class LeetCodeExecutor implements ILeetCodeExecutor {
+class LeetCodeExecutor {
     private leetCodeBinaryPath: string;
     private leetCodeBinaryPathInWsl: string;
 
@@ -142,4 +112,4 @@ class LeetCodeExecutor implements ILeetCodeExecutor {
     }
 }
 
-export const leetCodeExecutor: ILeetCodeExecutor = new LeetCodeExecutor();
+export const leetCodeExecutor: LeetCodeExecutor = new LeetCodeExecutor();

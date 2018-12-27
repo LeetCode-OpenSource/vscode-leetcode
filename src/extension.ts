@@ -22,6 +22,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider(context);
 
     context.subscriptions.push(
+        leetCodeStatusBarItem,
+        leetCodeChannel,
         vscode.window.registerTreeDataProvider("leetCodeExplorer", leetCodeTreeDataProvider),
         vscode.commands.registerCommand("leetcode.deleteCache", () => cache.deleteCache()),
         vscode.commands.registerCommand("leetcode.toogleLeetCodeCn", () => plugin.toogleLeetCodeCn()),
@@ -45,6 +47,5 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 }
 
 export function deactivate(): void {
-    leetCodeStatusBarItem.dispose();
-    leetCodeChannel.dispose();
+    // Do nothing.
 }
