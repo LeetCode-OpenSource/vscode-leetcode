@@ -1,5 +1,3 @@
-<img align="right" width="150" height="150" src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/LeetCode.png">
-
 # LeetCode
 [![Travis CI](https://travis-ci.org/jdneo/vscode-leetcode.svg?branch=master)](https://travis-ci.org/jdneo/vscode-leetcode)
 [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version-short/shengchen.vscode-leetcode.svg)](https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-leetcode)
