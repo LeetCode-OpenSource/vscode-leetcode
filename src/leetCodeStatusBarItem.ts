@@ -4,12 +4,7 @@
 import * as vscode from "vscode";
 import { UserStatus } from "./shared";
 
-export interface ILeetCodeStatusBarItem {
-    updateStatusBar(status: UserStatus, user?: string): void;
-    dispose(): void;
-}
-
-class LeetCodeStatusBarItem implements ILeetCodeStatusBarItem {
+class LeetCodeStatusBarItem implements vscode.Disposable {
     private readonly statusBarItem: vscode.StatusBarItem;
 
     constructor() {
@@ -35,4 +30,4 @@ class LeetCodeStatusBarItem implements ILeetCodeStatusBarItem {
     }
 }
 
-export const leetCodeStatusBarItem: ILeetCodeStatusBarItem = new LeetCodeStatusBarItem();
+export const leetCodeStatusBarItem: LeetCodeStatusBarItem = new LeetCodeStatusBarItem();

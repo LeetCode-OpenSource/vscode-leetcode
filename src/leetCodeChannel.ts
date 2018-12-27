@@ -3,14 +3,7 @@
 
 import * as vscode from "vscode";
 
-export interface ILeetCodeChannel {
-    appendLine(message: any, title?: string): void;
-    append(message: any): void;
-    show(): void;
-    dispose(): void;
-}
-
-class LeetCodeChannel implements ILeetCodeChannel {
+class LeetCodeChannel implements vscode.Disposable {
     private readonly channel: vscode.OutputChannel = vscode.window.createOutputChannel("LeetCode");
 
     public appendLine(message: string): void {
@@ -30,4 +23,4 @@ class LeetCodeChannel implements ILeetCodeChannel {
     }
 }
 
-export const leetCodeChannel: ILeetCodeChannel = new LeetCodeChannel();
+export const leetCodeChannel: LeetCodeChannel = new LeetCodeChannel();

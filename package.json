@@ -244,7 +244,7 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install && node ./node_modules/leetcode-cli/bin/leetcode plugin -e leetcode.cn",
+        "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "npm run compile && node ./node_modules/vscode/bin/test",
         "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose"
     },
