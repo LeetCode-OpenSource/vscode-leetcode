@@ -1,4 +1,5 @@
-"use strict";
+// Copyright (c) jdneo. All rights reserved.
+// Licensed under the MIT license.
 
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";

@@ -1,4 +1,5 @@
-"use strict";
+// Copyright (c) jdneo. All rights reserved.
+// Licensed under the MIT license.
 
 import * as vscode from "vscode";
 import { executeCommand } from "./cpUtils";
