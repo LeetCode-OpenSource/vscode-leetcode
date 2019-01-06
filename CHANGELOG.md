@@ -8,7 +8,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add Code Lens for submitting the answer to LeetCode
 
 ### Fixed
-- Fix the bug that the extension could not automatically sign in([72](https://github.com/jdneo/vscode-leetcode/issues/72))
+- Fix the bug that the extension could not automatically sign in ([#72](https://github.com/jdneo/vscode-leetcode/issues/72))
 
 ## [0.8.1]
 ### Changed
@@ -16,12 +16,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.8.0]
 ### Added
-- Support LeetCode CN([#50](https://github.com/jdneo/vscode-leetcode/issues/50))
-- Support Windows Subsystem for Linux([#47](https://github.com/jdneo/vscode-leetcode/issues/47))
+- Support LeetCode CN ([#50](https://github.com/jdneo/vscode-leetcode/issues/50))
+- Support Windows Subsystem for Linux ([#47](https://github.com/jdneo/vscode-leetcode/issues/47))
 
 ## [0.7.0]
 ### Added
-- Add spinner when submitting code([#43](https://github.com/jdneo/vscode-leetcode/issues/43))
+- Add spinner when submitting code ([#43](https://github.com/jdneo/vscode-leetcode/issues/43))
 
 ## [0.6.1]
 ### Added
