@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import * as vscode from "vscode";
+import { codeLensProvider } from "./codeLensProvider";
 import * as cache from "./commands/cache";
 import * as plugin from "./commands/plugin";
 import * as session from "./commands/session";
@@ -25,6 +26,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         leetCodeStatusBarItem,
         leetCodeChannel,
         vscode.window.registerTreeDataProvider("leetCodeExplorer", leetCodeTreeDataProvider),
+        vscode.languages.registerCodeLensProvider({ scheme: "file" }, codeLensProvider),
         vscode.commands.registerCommand("leetcode.deleteCache", () => cache.deleteCache()),
         vscode.commands.registerCommand("leetcode.toogleLeetCodeCn", () => plugin.toogleLeetCodeCn()),
         vscode.commands.registerCommand("leetcode.signin", () => leetCodeManager.signIn()),
