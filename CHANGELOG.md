@@ -7,6 +7,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 - Add Code Lens for submitting the answer to LeetCode
 
+### Fixed
+- Fix the bug that the extension could not automatically sign in([72](https://github.com/jdneo/vscode-leetcode/issues/72))
+
 ## [0.8.1]
 ### Changed
 - Upgrade LeetCode CLI to v2.6.1
