@@ -19,6 +19,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     if (!await leetCodeExecutor.meetRequirements()) {
         return;
     }
+
+    leetCodeManager.on("statusChanged", () => {
+        leetCodeStatusBarItem.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser());
+        leetCodeTreeDataProvider.refresh();
+    });
+
     leetCodeManager.getLoginStatus();
     const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider(context);
 
@@ -41,11 +47,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     );
 
     await plugin.initializeEndpoint();
-
-    leetCodeManager.on("statusChanged", () => {
-        leetCodeStatusBarItem.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser());
-        leetCodeTreeDataProvider.refresh();
-    });
 }
 
 export function deactivate(): void {
