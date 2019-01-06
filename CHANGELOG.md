@@ -3,6 +3,10 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.8.2]
+### Added
+- Add Code Lens for submitting the answer to LeetCode
+
 ## [0.8.1]
 ### Changed
 - Upgrade LeetCode CLI to v2.6.1
