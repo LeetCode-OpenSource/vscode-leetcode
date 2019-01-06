@@ -25,7 +25,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         leetCodeTreeDataProvider.refresh();
     });
 
-    leetCodeManager.getLoginStatus();
     const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider(context);
 
     context.subscriptions.push(
@@ -47,6 +46,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     );
 
     await plugin.initializeEndpoint();
+    leetCodeManager.getLoginStatus();
 }
 
 export function deactivate(): void {
