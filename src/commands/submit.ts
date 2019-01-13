@@ -4,7 +4,8 @@
 import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { DialogType, promptForOpenOutputChannel, promptForSignIn, showResultFile } from "../utils/uiUtils";
+import { leetCodeResultProvider } from "../leetCodeResultProvider";
+import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { getActivefilePath } from "../utils/workspaceUtils";
 
 export async function submitSolution(uri?: vscode.Uri): Promise<void> {
@@ -20,7 +21,7 @@ export async function submitSolution(uri?: vscode.Uri): Promise<void> {
 
     try {
         const result: string = await leetCodeExecutor.submitSolution(filePath);
-        await showResultFile(result);
+        await leetCodeResultProvider.show(result);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to submit the solution. Please open the output channel for details.", DialogType.error);
     }

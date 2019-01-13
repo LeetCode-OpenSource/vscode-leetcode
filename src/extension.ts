@@ -13,6 +13,7 @@ import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
 import { LeetCodeNode, LeetCodeTreeDataProvider } from "./leetCodeExplorer";
 import { leetCodeManager } from "./leetCodeManager";
+import { leetCodeResultProvider } from "./leetCodeResultProvider";
 import { leetCodeStatusBarItem } from "./leetCodeStatusBarItem";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
@@ -26,10 +27,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     });
 
     const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider(context);
+    leetCodeResultProvider.initialize(context);
 
     context.subscriptions.push(
         leetCodeStatusBarItem,
         leetCodeChannel,
+        leetCodeResultProvider,
         vscode.window.registerTreeDataProvider("leetCodeExplorer", leetCodeTreeDataProvider),
         vscode.languages.registerCodeLensProvider({ scheme: "file" }, codeLensProvider),
         vscode.commands.registerCommand("leetcode.deleteCache", () => cache.deleteCache()),
