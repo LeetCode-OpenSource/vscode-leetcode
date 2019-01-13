@@ -47,9 +47,9 @@ export async function promptForSignIn(): Promise<void> {
             break;
         case DialogOptions.singUp:
             if (isLeetCodeCnEnabled()) {
-                vscode.commands.executeCommand("vscode.open", vscode.Uri.parse("https://leetcode-cn.com"));
+                openUrl("https://leetcode-cn.com");
             } else {
-                vscode.commands.executeCommand("vscode.open", vscode.Uri.parse("https://leetcode.com"));
+                openUrl("https://leetcode.com");
             }
             break;
         default:
@@ -67,6 +67,10 @@ export async function showFileSelectDialog(): Promise<vscode.Uri[] | undefined> 
         openLabel: "Select",
     };
     return await vscode.window.showOpenDialog(options);
+}
+
+export async function openUrl(url: string): Promise<void> {
+    return vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(url));
 }
 
 export enum DialogType {

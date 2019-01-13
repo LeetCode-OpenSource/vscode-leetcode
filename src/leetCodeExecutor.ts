@@ -5,7 +5,7 @@ import * as cp from "child_process";
 import * as path from "path";
 import * as vscode from "vscode";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
-import { DialogOptions } from "./utils/uiUtils";
+import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 
 class LeetCodeExecutor {
@@ -37,7 +37,7 @@ class LeetCodeExecutor {
                 DialogOptions.open,
             );
             if (choice === DialogOptions.open) {
-                vscode.commands.executeCommand("vscode.open", vscode.Uri.parse("https://nodejs.org"));
+                openUrl("https://nodejs.org");
             }
             return false;
         }
