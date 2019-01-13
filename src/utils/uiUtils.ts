@@ -70,7 +70,7 @@ export async function showFileSelectDialog(): Promise<vscode.Uri[] | undefined> 
 }
 
 export async function openUrl(url: string): Promise<void> {
-    return vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(url));
+    vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(url));
 }
 
 export enum DialogType {
