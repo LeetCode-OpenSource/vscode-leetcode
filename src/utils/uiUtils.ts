@@ -1,7 +1,6 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import * as opn from "opn";
 import * as vscode from "vscode";
 import { isLeetCodeCnEnabled } from "../commands/plugin";
 import { leetCodeChannel } from "../leetCodeChannel";
@@ -48,9 +47,9 @@ export async function promptForSignIn(): Promise<void> {
             break;
         case DialogOptions.singUp:
             if (isLeetCodeCnEnabled()) {
-                opn("https://leetcode-cn.com");
+                openUrl("https://leetcode-cn.com");
             } else {
-                opn("https://leetcode.com");
+                openUrl("https://leetcode.com");
             }
             break;
         default:
@@ -68,6 +67,10 @@ export async function showFileSelectDialog(): Promise<vscode.Uri[] | undefined> 
         openLabel: "Select",
     };
     return await vscode.window.showOpenDialog(options);
+}
+
+export async function openUrl(url: string): Promise<void> {
+    vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(url));
 }
 
 export enum DialogType {
