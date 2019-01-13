@@ -5,8 +5,9 @@ import * as fse from "fs-extra";
 import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
+import { leetCodeResultProvider } from "../leetCodeResultProvider";
 import { IQuickItemEx, UserStatus } from "../shared";
-import { DialogType, promptForOpenOutputChannel, showFileSelectDialog, showResultFile } from "../utils/uiUtils";
+import { DialogType, promptForOpenOutputChannel, showFileSelectDialog } from "../utils/uiUtils";
 import { getActivefilePath } from "../utils/workspaceUtils";
 
 export async function testSolution(uri?: vscode.Uri): Promise<void> {
@@ -78,7 +79,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
         if (!result) {
             return;
         }
-        await showResultFile(result);
+        await leetCodeResultProvider.show(result);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to test the solution. Please open the output channel for details.", DialogType.error);
     }

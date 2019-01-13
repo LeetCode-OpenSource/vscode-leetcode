@@ -1,10 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import * as fse from "fs-extra";
 import * as opn from "opn";
-import * as os from "os";
-import * as path from "path";
 import * as vscode from "vscode";
 import { isLeetCodeCnEnabled } from "../commands/plugin";
 import { leetCodeChannel } from "../leetCodeChannel";
@@ -71,13 +68,6 @@ export async function showFileSelectDialog(): Promise<vscode.Uri[] | undefined> 
         openLabel: "Select",
     };
     return await vscode.window.showOpenDialog(options);
-}
-
-export async function showResultFile(result: string): Promise<void> {
-    const resultPath: string = path.join(os.homedir(), ".leetcode", "Result");
-    await fse.ensureFile(resultPath);
-    await fse.writeFile(resultPath, result);
-    await vscode.window.showTextDocument(vscode.Uri.file(resultPath));
 }
 
 export enum DialogType {
