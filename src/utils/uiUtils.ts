@@ -1,7 +1,6 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import * as opn from "opn";
 import * as vscode from "vscode";
 import { isLeetCodeCnEnabled } from "../commands/plugin";
 import { leetCodeChannel } from "../leetCodeChannel";
@@ -48,9 +47,9 @@ export async function promptForSignIn(): Promise<void> {
             break;
         case DialogOptions.singUp:
             if (isLeetCodeCnEnabled()) {
-                opn("https://leetcode-cn.com");
+                vscode.commands.executeCommand("vscode.open", vscode.Uri.parse("https://leetcode-cn.com"));
             } else {
-                opn("https://leetcode.com");
+                vscode.commands.executeCommand("vscode.open", vscode.Uri.parse("https://leetcode.com"));
             }
             break;
         default:

@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 import * as cp from "child_process";
-import * as opn from "opn";
 import * as path from "path";
 import * as vscode from "vscode";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
@@ -38,7 +37,7 @@ class LeetCodeExecutor {
                 DialogOptions.open,
             );
             if (choice === DialogOptions.open) {
-                opn("https://nodejs.org");
+                vscode.commands.executeCommand("vscode.open", vscode.Uri.parse("https://nodejs.org"));
             }
             return false;
         }
