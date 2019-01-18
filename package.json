@@ -43,12 +43,12 @@
         "commands": [
             {
                 "command": "leetcode.deleteCache",
-                "title": "Delete cache",
+                "title": "Delete Cache",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.toogleLeetCodeCn",
-                "title": "Switch endpoint",
+                "title": "Switch Endpoint",
                 "category": "LeetCode",
                 "icon": {
                     "light": "resources/light/endpoint.svg",
@@ -57,7 +57,7 @@
             },
             {
                 "command": "leetcode.signin",
-                "title": "Sign in",
+                "title": "Sign In",
                 "category": "LeetCode",
                 "icon": {
                     "light": "resources/light/signin.svg",
@@ -66,17 +66,17 @@
             },
             {
                 "command": "leetcode.signout",
-                "title": "Sign out",
+                "title": "Sign Out",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.selectSessions",
-                "title": "Select session",
+                "title": "Select Session",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.createSession",
-                "title": "Create new session",
+                "title": "Create New Session",
                 "category": "LeetCode"
             },
             {
@@ -90,7 +90,7 @@
             },
             {
                 "command": "leetcode.showProblem",
-                "title": "Show problem",
+                "title": "Show Problem",
                 "category": "LeetCode"
             },
             {
