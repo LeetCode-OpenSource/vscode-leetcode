@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import * as vscode from "vscode";
-import { isLeetCodeCnEnabled } from "../commands/plugin";
+import { getLeetCodeEndpoint } from "../commands/plugin";
 import { leetCodeChannel } from "../leetCodeChannel";
 
 export namespace DialogOptions {
@@ -46,7 +46,7 @@ export async function promptForSignIn(): Promise<void> {
             await vscode.commands.executeCommand("leetcode.signin");
             break;
         case DialogOptions.singUp:
-            if (isLeetCodeCnEnabled()) {
+            if (getLeetCodeEndpoint()) {
                 openUrl("https://leetcode-cn.com");
             } else {
                 openUrl("https://leetcode.com");

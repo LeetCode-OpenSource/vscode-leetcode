@@ -50,15 +50,18 @@
                 "command": "leetcode.toogleLeetCodeCn",
                 "title": "Switch endpoint",
                 "category": "LeetCode",
-                "icon": "resources/cn.png"
+                "icon": {
+                    "light": "resources/light/endpoint.svg",
+                    "dark": "resources/dark/endpoint.svg"
+                }
             },
             {
                 "command": "leetcode.signin",
                 "title": "Sign in",
                 "category": "LeetCode",
                 "icon": {
-                    "light": "resources/light/signin.png",
-                    "dark": "resources/dark/signin.png"
+                    "light": "resources/light/signin.svg",
+                    "dark": "resources/dark/signin.svg"
                 }
             },
             {
@@ -94,7 +97,10 @@
                 "command": "leetcode.searchProblem",
                 "title": "Search Problem",
                 "category": "LeetCode",
-                "icon": "resources/search.png"
+                "icon": {
+                    "light": "resources/light/search.svg",
+                    "dark": "resources/dark/search.svg"
+                }
             },
             {
                 "command": "leetcode.testSolution",

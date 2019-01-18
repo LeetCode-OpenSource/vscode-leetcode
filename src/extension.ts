@@ -36,7 +36,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.window.registerTreeDataProvider("leetCodeExplorer", leetCodeTreeDataProvider),
         vscode.languages.registerCodeLensProvider({ scheme: "file" }, codeLensProvider),
         vscode.commands.registerCommand("leetcode.deleteCache", () => cache.deleteCache()),
-        vscode.commands.registerCommand("leetcode.toogleLeetCodeCn", () => plugin.toogleLeetCodeCn()),
+        vscode.commands.registerCommand("leetcode.toogleLeetCodeCn", () => plugin.switchEndpoint()),
         vscode.commands.registerCommand("leetcode.signin", () => leetCodeManager.signIn()),
         vscode.commands.registerCommand("leetcode.signout", () => leetCodeManager.signOut()),
         vscode.commands.registerCommand("leetcode.selectSessions", () => session.selectSession()),
@@ -48,7 +48,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.commands.registerCommand("leetcode.submitSolution", (uri?: vscode.Uri) => submit.submitSolution(uri)),
     );
 
-    await plugin.initializeEndpoint();
+    await leetCodeExecutor.switchEndpoint(plugin.getLeetCodeEndpoint());
     leetCodeManager.getLoginStatus();
 }
 
