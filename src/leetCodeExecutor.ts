@@ -4,6 +4,7 @@
 import * as cp from "child_process";
 import * as path from "path";
 import * as vscode from "vscode";
+import { Endpoint } from "./shared";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
 import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
@@ -89,11 +90,14 @@ class LeetCodeExecutor {
         return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`]);
     }
 
-    public async toggleLeetCodeCn(isEnable: boolean): Promise<string> {
-        if (isEnable) {
-            return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-e", "leetcode.cn"]);
+    public async switchEndpoint(endpoint: string): Promise<string> {
+        switch (endpoint) {
+            case Endpoint.LeetCodeCN:
+                return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-e", "leetcode.cn"]);
+            case Endpoint.LeetCode:
+            default:
+                return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-d", "leetcode.cn"]);
         }
-        return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-d", "leetcode.cn"]);
     }
 
     private async executeCommandEx(command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {

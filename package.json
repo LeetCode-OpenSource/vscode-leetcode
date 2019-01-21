@@ -43,37 +43,40 @@
         "commands": [
             {
                 "command": "leetcode.deleteCache",
-                "title": "Delete cache",
+                "title": "Delete Cache",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.toogleLeetCodeCn",
-                "title": "Switch endpoint",
+                "title": "Switch Endpoint",
                 "category": "LeetCode",
-                "icon": "resources/cn.png"
+                "icon": {
+                    "light": "resources/light/endpoint.svg",
+                    "dark": "resources/dark/endpoint.svg"
+                }
             },
             {
                 "command": "leetcode.signin",
-                "title": "Sign in",
+                "title": "Sign In",
                 "category": "LeetCode",
                 "icon": {
-                    "light": "resources/light/signin.png",
-                    "dark": "resources/dark/signin.png"
+                    "light": "resources/light/signin.svg",
+                    "dark": "resources/dark/signin.svg"
                 }
             },
             {
                 "command": "leetcode.signout",
-                "title": "Sign out",
+                "title": "Sign Out",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.selectSessions",
-                "title": "Select session",
+                "title": "Select Session",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.createSession",
-                "title": "Create new session",
+                "title": "Create New Session",
                 "category": "LeetCode"
             },
             {
@@ -87,14 +90,17 @@
             },
             {
                 "command": "leetcode.showProblem",
-                "title": "Show problem",
+                "title": "Show Problem",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.searchProblem",
                 "title": "Search Problem",
                 "category": "LeetCode",
-                "icon": "resources/search.png"
+                "icon": {
+                    "light": "resources/light/search.svg",
+                    "dark": "resources/dark/search.svg"
+                }
             },
             {
                 "command": "leetcode.testSolution",
