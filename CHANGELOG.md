@@ -3,6 +3,12 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.9.0]
+### Changed
+- Improve the experience of switching endpoint ([#85](https://github.com/jdneo/vscode-leetcode/issues/85))
+- Use webview to show the result page ([#76](https://github.com/jdneo/vscode-leetcode/issues/76))
+
+
 ## [0.8.2]
 ### Added
 - Add Code Lens for submitting the answer to LeetCode

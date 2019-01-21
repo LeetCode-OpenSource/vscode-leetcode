@@ -14,7 +14,7 @@ class LeetCodeResultProvider implements Disposable {
 
     public async show(result: string): Promise<void> {
         if (!this.panel) {
-            this.panel = window.createWebviewPanel("leetCode", "LeetCode Results", ViewColumn.Active, {
+            this.panel = window.createWebviewPanel("leetCode", "LeetCode Results", ViewColumn.Two, {
                 retainContextWhenHidden: true,
                 enableFindWidget: true,
             });
@@ -25,7 +25,7 @@ class LeetCodeResultProvider implements Disposable {
         }
 
         this.panel.webview.html = await this.provideHtmlContent(result);
-        this.panel.reveal(ViewColumn.Active);
+        this.panel.reveal(ViewColumn.Two);
     }
 
     public dispose(): void {
