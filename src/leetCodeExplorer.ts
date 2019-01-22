@@ -85,6 +85,8 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                         name: "Sign in to LeetCode",
                         difficulty: "",
                         passRate: "",
+                        companies: [],
+                        tags: []
                     },
                     false,
                 ),
@@ -138,6 +140,8 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                         name: difficulty,
                         difficulty: "",
                         passRate: "",
+                        companies: [],
+                        tags: []
                     },
                     false,
                 ),

@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import * as vscode from "vscode";
+import * as path from "path";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { ProblemState, UserStatus } from "../shared";
@@ -15,6 +16,8 @@ export interface IProblem {
     name: string;
     difficulty: string;
     passRate: string;
+    tags: string[];
+    companies: string[];
 }
 
 export async function listProblems(): Promise<IProblem[]> {
@@ -28,17 +31,21 @@ export async function listProblems(): Promise<IProblem[]> {
         const problems: IProblem[] = [];
         const lines: string[] = result.split("\n");
         const reg: RegExp = /^(.)\s(.{1,2})\s(.)\s\[\s*(\d*)\s*\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;
+        const { companies, tags } = await getCompaniesAndTags();
         for (const line of lines) {
             const match: RegExpMatchArray | null = line.match(reg);
             if (match && match.length === 8) {
+                const id = match[4].trim();
                 problems.push({
                     favorite: match[1].trim().length > 0,
                     locked: match[2].trim().length > 0,
                     state: parseProblemState(match[3]),
-                    id: match[4].trim(),
+                    id: id,
                     name: match[5].trim(),
                     difficulty: match[6].trim(),
                     passRate: match[7].trim(),
+                    companies: companies[id],
+                    tags: tags[id]
                 });
             }
         }
@@ -65,4 +72,10 @@ function parseProblemState(stateOutput: string): ProblemState {
         default:
             return ProblemState.Unknown;
     }
+}
+
+async function getCompaniesAndTags(): Promise<{ companies: { [key: string]: string[] }, tags: { [key: string]: string[] } }> {
+    const COMPONIES_TAGS_PATH = path.join(await leetCodeExecutor.getLeetCodeRootPath(), "lib", "plugins", "company.js");
+    const { COMPONIES, TAGS } = require(COMPONIES_TAGS_PATH);
+    return { companies: COMPONIES, tags: TAGS };
 }
