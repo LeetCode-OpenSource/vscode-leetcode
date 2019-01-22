@@ -8,17 +8,19 @@ import { leetCodeManager } from "../leetCodeManager";
 import { ProblemState, UserStatus } from "../shared";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
 
-export interface IProblem {
-    favorite: boolean;
-    locked: boolean;
-    state: ProblemState;
-    id: string;
-    name: string;
-    difficulty: string;
-    passRate: string;
-    tags: string[];
-    companies: string[];
+export const IProblemDefault = {
+    favorite: false,
+    locked: false,
+    state: ProblemState.Unknown,
+    id: "",
+    name: "",
+    difficulty: "",
+    passRate: "",
+    companies: [] as string[],
+    tags: [] as string[]
 }
+
+export type IProblem = typeof IProblemDefault;
 
 export async function listProblems(): Promise<IProblem[]> {
     try {

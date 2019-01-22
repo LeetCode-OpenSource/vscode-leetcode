@@ -7,6 +7,8 @@ import * as list from "./commands/list";
 import { leetCodeManager } from "./leetCodeManager";
 import { ProblemState } from "./shared";
 
+export type Category = "Difficulty" | "Tag" | "Company";
+
 // tslint:disable:max-classes-per-file
 export class LeetCodeNode {
     constructor(private data: list.IProblem, private isProblemNode: boolean = true) { }
@@ -37,7 +39,11 @@ export class LeetCodeNode {
 
 export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCodeNode> {
 
-    private treeData: Map<string, list.IProblem[]> = new Map();
+    private treeData: {
+        Difficulty: Map<string, list.IProblem[]>,
+        Tag: Map<string, list.IProblem[]>,
+        Company: Map<string, list.IProblem[]>
+    }
 
     private onDidChangeTreeDataEvent: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
     // tslint:disable-next-line:member-ordering
@@ -77,46 +83,72 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         if (!leetCodeManager.getUser()) {
             return [
                 new LeetCodeNode(
-                    {
-                        favorite: false,
-                        locked: false,
-                        state: ProblemState.Unknown,
+                    Object.assign(list.IProblemDefault, {
                         id: "notSignIn",
                         name: "Sign in to LeetCode",
-                        difficulty: "",
-                        passRate: "",
-                        companies: [],
-                        tags: []
-                    },
+                    }),
                     false,
                 ),
             ];
         }
-        if (!element) {
+        if (!element) { // Root view
             return new Promise(async (resolve: (res: LeetCodeNode[]) => void): Promise<void> => {
                 await this.getProblemData();
-                resolve(this.composeDifficultyNodes());
+                resolve([
+                    new LeetCodeNode(Object.assign(list.IProblemDefault, {
+                        id: "Root",
+                        name: "Difficulty",
+                    }), false),
+                    new LeetCodeNode(Object.assign(list.IProblemDefault, {
+                        id: "Root",
+                        name: "Tag",
+                    }), false),
+                    new LeetCodeNode(Object.assign(list.IProblemDefault, {
+                        id: "Root",
+                        name: "Company",
+                    }), false)
+                ]);
             });
         } else {
-            return element.isProblem ? [] : this.composeProblemNodes(element.name);
-        }
-    }
-
-    private async getProblemData(): Promise<void> {
-        const allProblems: list.IProblem[] = await list.listProblems();
-        this.treeData.clear();
-        for (const problem of allProblems) {
-            const problems: list.IProblem[] | undefined = this.treeData.get(problem.difficulty);
-            if (problems) {
-                problems.push(problem);
-            } else {
-                this.treeData.set(problem.difficulty, [problem]);
+            switch (element.name) { // First-level
+                case "Difficulty":
+                case "Tag":
+                case "Company":
+                    return this.composeCategoryNodes(element);
+                default: // Second and lower levels
+                    return element.isProblem ? [] : this.composeProblemNodes(element);
             }
         }
     }
 
-    private composeProblemNodes(difficulty: string): LeetCodeNode[] {
-        const problems: list.IProblem[] | undefined = this.treeData.get(difficulty);
+    private async getProblemData(): Promise<void> {
+        this.treeData = {
+            Difficulty: new Map(),
+            Tag: new Map(),
+            Company: new Map()
+        }
+        for (const problem of await list.listProblems()) {
+            const categories = [
+                ["Difficulty", [problem.difficulty]],
+                ["Tag", problem.tags],
+                ["Company", problem.companies]
+            ] as [Category, string[]][];
+            for (const [parent, children] of categories) {
+                for (const subCategory of children) {
+                    const problems = this.treeData[parent].get(subCategory);
+                    if (problems) {
+                        problems.push(problem);
+                    } else {
+                        this.treeData.Difficulty.set(subCategory, [problem]);
+                    }
+                }
+            }
+        }
+    }
+
+    private composeProblemNodes(node: LeetCodeNode): LeetCodeNode[] {
+        // node.id stores the parent node name, node.name stores current node name.
+        const problems: list.IProblem[] | undefined = this.treeData[node.id].get(node.name);
         if (!problems || problems.length === 0) {
             return [];
         }
@@ -127,42 +159,32 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         return problemNodes;
     }
 
-    private composeDifficultyNodes(): LeetCodeNode[] {
-        const difficultynodes: LeetCodeNode[] = [];
-        for (const difficulty of this.treeData.keys()) {
-            difficultynodes.push(
-                new LeetCodeNode(
-                    {
-                        favorite: false,
-                        locked: false,
-                        state: ProblemState.Unknown,
-                        id: difficulty,
-                        name: difficulty,
-                        difficulty: "",
-                        passRate: "",
-                        companies: [],
-                        tags: []
-                    },
-                    false,
-                ),
-            );
-        }
-        difficultynodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => {
-            function getValue(input: string): number {
-                switch (input.toLowerCase()) {
-                    case "easy":
-                        return 1;
-                    case "medium":
-                        return 2;
-                    case "hard":
-                        return 3;
-                    default:
-                        return Number.MAX_SAFE_INTEGER;
+    private composeCategoryNodes(node: LeetCodeNode): LeetCodeNode[] {
+        const parent = node.id as Category;
+        const categoryNodes = Array.from(this.treeData[parent].keys()).map(subCategory =>
+            new LeetCodeNode(Object.assign(list.IProblemDefault, {
+                id: node.name,
+                name: subCategory,
+            }), false)
+        );
+        if (parent == "Difficulty") {
+            categoryNodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => {
+                function getValue(input: string): number {
+                    switch (input.toLowerCase()) {
+                        case "easy":
+                            return 1;
+                        case "medium":
+                            return 2;
+                        case "hard":
+                            return 3;
+                        default:
+                            return Number.MAX_SAFE_INTEGER;
+                    }
                 }
-            }
-            return getValue(a.name) - getValue(b.name);
-        });
-        return difficultynodes;
+                return getValue(a.name) - getValue(b.name);
+            });
+        }
+        return categoryNodes;
     }
 
     private parseIconPathFromProblemState(element: LeetCodeNode): string {
