@@ -10,22 +10,26 @@ import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 
 class LeetCodeExecutor {
-    private leetCodeBinaryPath: string;
-    private leetCodeBinaryPathInWsl: string;
+    private leetCodeRootPath: string;
+    private leetCodeRootPathInWsl: string;
 
     constructor() {
-        this.leetCodeBinaryPath = path.join(__dirname, "..", "..", "node_modules", "leetcode-cli", "bin", "leetcode");
-        this.leetCodeBinaryPathInWsl = "";
+        this.leetCodeRootPath = path.join(__dirname, "..", "..", "node_modules", "leetcode-cli");
+        this.leetCodeRootPathInWsl = "";
+    }
+
+    public async getLeetCodeRootPath(): Promise<string> {
+        if (wsl.useWsl()) {
+            if (!this.leetCodeRootPathInWsl) {
+                this.leetCodeRootPathInWsl = `${await wsl.toWslPath(this.leetCodeRootPath)}`;
+            }
+            return `"${this.leetCodeRootPathInWsl}"`;
+        }
+        return `"${this.leetCodeRootPath}"`;
     }
 
     public async getLeetCodeBinaryPath(): Promise<string> {
-        if (wsl.useWsl()) {
-            if (!this.leetCodeBinaryPathInWsl) {
-                this.leetCodeBinaryPathInWsl = `${await wsl.toWslPath(this.leetCodeBinaryPath)}`;
-            }
-            return `"${this.leetCodeBinaryPathInWsl}"`;
-        }
-        return `"${this.leetCodeBinaryPath}"`;
+        return path.join(await this.getLeetCodeRootPath(), "bin", "leetcode");
     }
 
     public async meetRequirements(): Promise<boolean> {
