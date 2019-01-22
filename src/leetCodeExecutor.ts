@@ -31,7 +31,6 @@ class LeetCodeExecutor {
     public async meetRequirements(): Promise<boolean> {
         try {
             await this.executeCommandEx("node", ["-v"]);
-            return true;
         } catch (error) {
             const choice: vscode.MessageItem | undefined = await vscode.window.showErrorMessage(
                 "LeetCode extension needs Node.js installed in environment path",
@@ -42,6 +41,12 @@ class LeetCodeExecutor {
             }
             return false;
         }
+        try { // Check company plugin
+            await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-e", "company"]);
+        } catch (error) { // Download company plugin and activate
+            await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-i", "company"]);
+        }
+        return true;
     }
 
     public async deleteCache(): Promise<string> {
