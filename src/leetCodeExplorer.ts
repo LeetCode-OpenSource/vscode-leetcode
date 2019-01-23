@@ -42,8 +42,9 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     private treeData: {
         Difficulty: Map<string, list.IProblem[]>,
         Tag: Map<string, list.IProblem[]>,
-        Company: Map<string, list.IProblem[]>
-    }
+        Company: Map<string, list.IProblem[]>,
+        Favorite: list.IProblem[]
+    };
 
     private onDidChangeTreeDataEvent: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
     // tslint:disable-next-line:member-ordering
@@ -104,6 +105,10 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                         id: "Root",
                         name: "Company",
                     }), false),
+                    new LeetCodeNode(Object.assign({}, list.IProblemDefault, {
+                        id: "Root",
+                        name: "Favorite",
+                    }), false),
                 ]
                 resolve(nodes);
             });
@@ -113,6 +118,8 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 case "Tag":
                 case "Company":
                     return this.composeCategoryNodes(element);
+                case "Favorite":
+                    return this.treeData.Favorite.map(p => new LeetCodeNode(p));
                 default: // Second and lower levels
                     return element.isProblem ? [] : this.composeProblemNodes(element);
             }
@@ -123,9 +130,11 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         this.treeData = {
             Difficulty: new Map(),
             Tag: new Map(),
-            Company: new Map()
+            Company: new Map(),
+            Favorite: []
         }
         for (const problem of await list.listProblems()) {
+            // Add problems according to category
             const categories = [
                 ["Difficulty", [problem.difficulty]],
                 ["Tag", problem.tags],
@@ -142,6 +151,10 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                         this.treeData[parent].set(subCategory, [problem]);
                     }
                 }
+            }
+            // Add favorite problems
+            if (problem.favorite) {
+                this.treeData.Favorite.push(problem)
             }
         }
     }
