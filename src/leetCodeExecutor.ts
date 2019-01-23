@@ -112,15 +112,16 @@ class LeetCodeExecutor {
 
     public async getCompaniesAndTags(): Promise<{ companies: { [key: string]: string[] }, tags: { [key: string]: string[] } }> {
         // preprocess the plugin source
-        const componiesTagsPath = path.join(await leetCodeExecutor.getLeetCodeRootPath(), "lib", "plugins", "company.js");
-        let componiesTagsSrc = await fs.readFileSync(componiesTagsPath, "utf8");
-        componiesTagsSrc = componiesTagsSrc.replace("module.exports = plugin", "module.exports = { COMPONIES, TAGS }");
+        const componiesTagsPath: string = path.join(await leetCodeExecutor.getLeetCodeRootPath(), "lib", "plugins", "company.js");
+        const componiesTagsSrc: string = (await fs.readFileSync(componiesTagsPath, "utf8")).replace(
+            "module.exports = plugin",
+            "module.exports = { COMPONIES, TAGS }",
+        );
         // require plugin from modified string
-        const requireFromString = require("require-from-string");
+        const requireFromString: (src: string, path: string) => any = require("require-from-string");
         const { COMPONIES, TAGS } = requireFromString(componiesTagsSrc, componiesTagsPath);
         return { companies: COMPONIES, tags: TAGS };
     }
-
 
     private async executeCommandEx(command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
         if (wsl.useWsl()) {

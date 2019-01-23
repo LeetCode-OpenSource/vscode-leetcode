@@ -7,6 +7,7 @@ import { leetCodeManager } from "../leetCodeManager";
 import { ProblemState, UserStatus } from "../shared";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
 
+// tslint:disable-next-line:typedef
 export const IProblemDefault = {
     favorite: false,
     locked: false,
@@ -16,8 +17,8 @@ export const IProblemDefault = {
     difficulty: "",
     passRate: "",
     companies: [] as string[],
-    tags: [] as string[]
-}
+    tags: [] as string[],
+};
 
 export type IProblem = typeof IProblemDefault;
 
@@ -36,17 +37,17 @@ export async function listProblems(): Promise<IProblem[]> {
         for (const line of lines) {
             const match: RegExpMatchArray | null = line.match(reg);
             if (match && match.length === 8) {
-                const id = match[4].trim();
+                const id: string = match[4].trim();
                 problems.push({
+                    id,
                     favorite: match[1].trim().length > 0,
                     locked: match[2].trim().length > 0,
                     state: parseProblemState(match[3]),
-                    id: id,
                     name: match[5].trim(),
                     difficulty: match[6].trim(),
                     passRate: match[7].trim(),
                     companies: companies[id] || ["Unknown"],
-                    tags: tags[id] || ["Unknown"]
+                    tags: tags[id] || ["Unknown"],
                 });
             }
         }

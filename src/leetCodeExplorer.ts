@@ -43,7 +43,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         Difficulty: Map<string, list.IProblem[]>,
         Tag: Map<string, list.IProblem[]>,
         Company: Map<string, list.IProblem[]>,
-        Favorite: list.IProblem[]
+        Favorite: list.IProblem[],
     };
 
     private onDidChangeTreeDataEvent: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
@@ -92,7 +92,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         if (!element) { // Root view
             return new Promise(async (resolve: (res: LeetCodeNode[]) => void): Promise<void> => {
                 await this.getProblemData();
-                const nodes = [
+                resolve([
                     new LeetCodeNode(Object.assign({}, list.IProblemDefault, {
                         id: "Root",
                         name: "Difficulty",
@@ -109,8 +109,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                         id: "Root",
                         name: "Favorite",
                     }), false),
-                ]
-                resolve(nodes);
+                ]);
             });
         } else {
             switch (element.name) { // First-level
@@ -119,7 +118,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 case "Company":
                     return this.composeCategoryNodes(element);
                 case "Favorite":
-                    return this.treeData.Favorite.map(p => new LeetCodeNode(p));
+                    return this.treeData.Favorite.map((p: list.IProblem) => new LeetCodeNode(p));
                 default: // Second and lower levels
                     return element.isProblem ? [] : this.composeProblemNodes(element);
             }
@@ -131,20 +130,20 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             Difficulty: new Map(),
             Tag: new Map(),
             Company: new Map(),
-            Favorite: []
-        }
+            Favorite: [],
+        };
         for (const problem of await list.listProblems()) {
             // Add problems according to category
-            const categories = [
+            const categories: Array<[Category, string[]]> = [
                 ["Difficulty", [problem.difficulty]],
                 ["Tag", problem.tags],
-                ["Company", problem.companies]
-            ] as [Category, string[]][];
+                ["Company", problem.companies],
+            ];
             for (const [parent, children] of categories) {
                 for (let subCategory of children) {
                     // map 'first-second' to 'First Second'
-                    subCategory = subCategory.split('-').map(c => c[0].toUpperCase() + c.slice(1)).join(' ');
-                    const problems = this.treeData[parent].get(subCategory);
+                    subCategory = subCategory.split("-").map((c: string) => c[0].toUpperCase() + c.slice(1)).join(" ");
+                    const problems: list.IProblem[] | undefined = this.treeData[parent].get(subCategory);
                     if (problems) {
                         problems.push(problem);
                     } else {
@@ -154,7 +153,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             }
             // Add favorite problems
             if (problem.favorite) {
-                this.treeData.Favorite.push(problem)
+                this.treeData.Favorite.push(problem);
             }
         }
     }
@@ -173,13 +172,13 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     }
 
     private composeCategoryNodes(node: LeetCodeNode): LeetCodeNode[] {
-        const parent = node.name as Category;
-        const categoryNodes = Array.from(this.treeData[parent].keys()).map(subCategory =>
-            new LeetCodeNode(Object.assign({}, list.IProblemDefault, {
-                id: parent,
-                name: subCategory,
-            }), false)
-        );
+        const parent: Category = node.name as Category;
+        const categoryNodes: LeetCodeNode[] =
+            Array.from(this.treeData[parent].keys()).map((subCategory: string) =>
+                new LeetCodeNode(Object.assign({}, list.IProblemDefault, {
+                    id: parent,
+                    name: subCategory,
+                }), false));
         // Sort lists
         switch (parent) {
             case "Difficulty": {
@@ -202,9 +201,9 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             case "Tag":
             case "Company": {
                 categoryNodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => {
-                    if (a.name == "Unknown") {
+                    if (a.name === "Unknown") {
                         return 1;
-                    } else if (b.name == "Unknown") {
+                    } else if (b.name === "Unknown") {
                         return -1;
                     } else {
                         return Number(a.name > b.name) - Number(a.name < b.name);
