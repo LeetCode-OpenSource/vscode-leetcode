@@ -70,11 +70,11 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         }
 
         const idPrefix: number = Date.now();
-        return {
+        return { // element.id -> parent node name, element.name -> node name
             label: element.isProblem ? `[${element.id}] ${element.name}` : element.name,
-            id: `${idPrefix}.${element.id}`,
+            id: `${idPrefix}.${element.id}.${element.name}`,
             collapsibleState: element.isProblem ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
-            contextValue: element.isProblem ? "problem" : "difficulty",
+            contextValue: element.isProblem ? "problem" : element.id.toLowerCase(),
             iconPath: this.parseIconPathFromProblemState(element),
         };
     }
@@ -82,32 +82,30 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     public getChildren(element?: LeetCodeNode | undefined): vscode.ProviderResult<LeetCodeNode[]> {
         if (!leetCodeManager.getUser()) {
             return [
-                new LeetCodeNode(
-                    Object.assign(list.IProblemDefault, {
-                        id: "notSignIn",
-                        name: "Sign in to LeetCode",
-                    }),
-                    false,
-                ),
+                new LeetCodeNode(Object.assign({}, list.IProblemDefault, {
+                    id: "notSignIn",
+                    name: "Sign in to LeetCode",
+                }), false),
             ];
         }
         if (!element) { // Root view
             return new Promise(async (resolve: (res: LeetCodeNode[]) => void): Promise<void> => {
                 await this.getProblemData();
-                resolve([
-                    new LeetCodeNode(Object.assign(list.IProblemDefault, {
+                const nodes = [
+                    new LeetCodeNode(Object.assign({}, list.IProblemDefault, {
                         id: "Root",
                         name: "Difficulty",
                     }), false),
-                    new LeetCodeNode(Object.assign(list.IProblemDefault, {
+                    new LeetCodeNode(Object.assign({}, list.IProblemDefault, {
                         id: "Root",
                         name: "Tag",
                     }), false),
-                    new LeetCodeNode(Object.assign(list.IProblemDefault, {
+                    new LeetCodeNode(Object.assign({}, list.IProblemDefault, {
                         id: "Root",
                         name: "Company",
-                    }), false)
-                ]);
+                    }), false),
+                ]
+                resolve(nodes);
             });
         } else {
             switch (element.name) { // First-level
@@ -134,12 +132,13 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 ["Company", problem.companies]
             ] as [Category, string[]][];
             for (const [parent, children] of categories) {
-                for (const subCategory of children) {
+                for (let subCategory of children) {
+                    // TODO: rectify sub category name here
                     const problems = this.treeData[parent].get(subCategory);
                     if (problems) {
                         problems.push(problem);
                     } else {
-                        this.treeData.Difficulty.set(subCategory, [problem]);
+                        this.treeData[parent].set(subCategory, [problem]);
                     }
                 }
             }
@@ -160,10 +159,10 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     }
 
     private composeCategoryNodes(node: LeetCodeNode): LeetCodeNode[] {
-        const parent = node.id as Category;
+        const parent = node.name as Category;
         const categoryNodes = Array.from(this.treeData[parent].keys()).map(subCategory =>
-            new LeetCodeNode(Object.assign(list.IProblemDefault, {
-                id: node.name,
+            new LeetCodeNode(Object.assign({}, list.IProblemDefault, {
+                id: parent,
                 name: subCategory,
             }), false)
         );
