@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import * as cp from "child_process";
+import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
 import { Endpoint } from "./shared";
@@ -18,18 +19,18 @@ class LeetCodeExecutor {
         this.leetCodeRootPathInWsl = "";
     }
 
-    public async getLeetCodeRootPath(): Promise<string> {
+    public async getLeetCodeRootPath(): Promise<string> { // not wrapped by ""
         if (wsl.useWsl()) {
             if (!this.leetCodeRootPathInWsl) {
                 this.leetCodeRootPathInWsl = `${await wsl.toWslPath(this.leetCodeRootPath)}`;
             }
-            return `"${this.leetCodeRootPathInWsl}"`;
+            return `${this.leetCodeRootPathInWsl}`;
         }
-        return `"${this.leetCodeRootPath}"`;
+        return `${this.leetCodeRootPath}`;
     }
 
-    public async getLeetCodeBinaryPath(): Promise<string> {
-        return path.join(await this.getLeetCodeRootPath(), "bin", "leetcode");
+    public async getLeetCodeBinaryPath(): Promise<string> { // wrapped by ""
+        return `"${path.join(await this.getLeetCodeRootPath(), "bin", "leetcode")}"`;
     }
 
     public async meetRequirements(): Promise<boolean> {
@@ -108,6 +109,18 @@ class LeetCodeExecutor {
                 return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-d", "leetcode.cn"]);
         }
     }
+
+    public async getCompaniesAndTags(): Promise<{ companies: { [key: string]: string[] }, tags: { [key: string]: string[] } }> {
+        // preprocess the plugin source
+        const componiesTagsPath = path.join(await leetCodeExecutor.getLeetCodeRootPath(), "lib", "plugins", "company.js");
+        let componiesTagsSrc = await fs.readFileSync(componiesTagsPath, "utf8");
+        componiesTagsSrc = componiesTagsSrc.replace("module.exports = plugin", "module.exports = { COMPONIES, TAGS }");
+        // require plugin from modified string
+        const requireFromString = require("require-from-string");
+        const { COMPONIES, TAGS } = requireFromString(componiesTagsSrc, componiesTagsPath);
+        return { companies: COMPONIES, tags: TAGS };
+    }
+
 
     private async executeCommandEx(command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
         if (wsl.useWsl()) {
