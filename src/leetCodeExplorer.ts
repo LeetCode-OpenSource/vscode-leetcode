@@ -133,7 +133,8 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             ] as [Category, string[]][];
             for (const [parent, children] of categories) {
                 for (let subCategory of children) {
-                    // TODO: rectify sub category name here
+                    // map 'first-second' to 'First Second'
+                    subCategory = subCategory.split('-').map(c => c[0].toUpperCase() + c.slice(1)).join(' ');
                     const problems = this.treeData[parent].get(subCategory);
                     if (problems) {
                         problems.push(problem);
@@ -166,22 +167,37 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 name: subCategory,
             }), false)
         );
-        if (parent == "Difficulty") {
-            categoryNodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => {
-                function getValue(input: string): number {
-                    switch (input.toLowerCase()) {
-                        case "easy":
-                            return 1;
-                        case "medium":
-                            return 2;
-                        case "hard":
-                            return 3;
-                        default:
-                            return Number.MAX_SAFE_INTEGER;
+        // Sort lists
+        switch (parent) {
+            case "Difficulty": {
+                categoryNodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => {
+                    function getValue(input: LeetCodeNode): number {
+                        switch (input.name.toLowerCase()) {
+                            case "easy":
+                                return 1;
+                            case "medium":
+                                return 2;
+                            case "hard":
+                                return 3;
+                            default:
+                                return Number.MAX_SAFE_INTEGER;
+                        }
                     }
-                }
-                return getValue(a.name) - getValue(b.name);
-            });
+                    return getValue(a) - getValue(b);
+                });
+            }
+            case "Tag":
+            case "Company": {
+                categoryNodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => {
+                    if (a.name == "Unknown") {
+                        return 1;
+                    } else if (b.name == "Unknown") {
+                        return -1;
+                    } else {
+                        return Number(a.name > b.name) - Number(a.name < b.name);
+                    }
+                });
+            }
         }
         return categoryNodes;
     }
