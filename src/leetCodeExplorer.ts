@@ -44,8 +44,6 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         Tag: Map<string, list.IProblem[]>,
         Company: Map<string, list.IProblem[]>,
         Favorite: list.IProblem[],
-        Accepted: list.IProblem[],
-        NotAccepted: list.IProblem[],
     };
 
     private onDidChangeTreeDataEvent: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
@@ -111,14 +109,6 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                         id: "Root",
                         name: "Favorite",
                     }), false),
-                    new LeetCodeNode(Object.assign({}, list.IProblemDefault, {
-                        id: "Root",
-                        name: "Accepted",
-                    }), false),
-                    new LeetCodeNode(Object.assign({}, list.IProblemDefault, {
-                        id: "Root",
-                        name: "Not Accepted",
-                    }), false),
                 ]);
             });
         } else {
@@ -129,10 +119,6 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                     return this.composeCategoryNodes(element);
                 case "Favorite":
                     return this.treeData.Favorite.map((p: list.IProblem) => new LeetCodeNode(p));
-                case "Accepted":
-                    return this.treeData.Accepted.map((p: list.IProblem) => new LeetCodeNode(p));
-                case "Not Accepted":
-                    return this.treeData.NotAccepted.map((p: list.IProblem) => new LeetCodeNode(p));
                 default: // Second and lower levels
                     return element.isProblem ? [] : this.composeProblemNodes(element);
             }
@@ -145,8 +131,6 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             Tag: new Map(),
             Company: new Map(),
             Favorite: [],
-            Accepted: [],
-            NotAccepted: [],
         };
         for (const problem of await list.listProblems()) {
             // Add problems according to category
@@ -167,15 +151,9 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                     }
                 }
             }
-            // Filter by favorite problems
+            // Add favorite problems
             if (problem.favorite) {
                 this.treeData.Favorite.push(problem);
-            }
-            // Filter by problem state
-            if (problem.state === ProblemState.AC) {
-                this.treeData.Accepted.push(problem);
-            } else if (problem.state === ProblemState.NotAC) {
-                this.treeData.NotAccepted.push(problem);
             }
         }
     }
