@@ -46,6 +46,8 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         Favorite: list.IProblem[],
     };
 
+    private leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+
     private onDidChangeTreeDataEvent: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
     // tslint:disable-next-line:member-ordering
     public readonly onDidChangeTreeData: vscode.Event<any> = this.onDidChangeTreeDataEvent.event;
@@ -133,6 +135,14 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             Favorite: [],
         };
         for (const problem of await list.listProblems()) {
+            // Add favorite problem, no matter whether it is solved.
+            if (problem.favorite) {
+                this.treeData.Favorite.push(problem);
+            }
+            // Hide solved problem in category view is specified in option.
+            if (problem.state === ProblemState.AC && this.leetCodeConfig.get<boolean>("hideSolved")) {
+                continue;
+            }
             // Add problems according to category
             const categories: Array<[Category, string[]]> = [
                 ["Difficulty", [problem.difficulty]],
@@ -150,10 +160,6 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                         this.treeData[parent].set(subCategory, [problem]);
                     }
                 }
-            }
-            // Add favorite problems
-            if (problem.favorite) {
-                this.treeData.Favorite.push(problem);
             }
         }
     }

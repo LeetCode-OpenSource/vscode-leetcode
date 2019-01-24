@@ -193,6 +193,12 @@
             {
                 "title": "LeetCode",
                 "properties": {
+                    "leetcode.hideSolved": {
+                        "type": "boolean",
+                        "default": false,
+                        "scope": "application",
+                        "description": "Hide solved problems."
+                    },
                     "leetcode.showLocked": {
                         "type": "boolean",
                         "default": false,
