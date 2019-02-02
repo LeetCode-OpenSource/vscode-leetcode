@@ -4,23 +4,8 @@
 import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { ProblemState, UserStatus } from "../shared";
+import { IProblem, ProblemState, UserStatus } from "../shared";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
-
-// tslint:disable-next-line:typedef
-export const IProblemDefault = {
-    favorite: false,
-    locked: false,
-    state: ProblemState.Unknown,
-    id: "",
-    name: "",
-    difficulty: "",
-    passRate: "",
-    companies: [] as string[],
-    tags: [] as string[],
-};
-
-export type IProblem = typeof IProblemDefault;
 
 export async function listProblems(): Promise<IProblem[]> {
     try {
@@ -40,7 +25,7 @@ export async function listProblems(): Promise<IProblem[]> {
                 const id: string = match[4].trim();
                 problems.push({
                     id,
-                    favorite: match[1].trim().length > 0,
+                    isFavorite: match[1].trim().length > 0,
                     locked: match[2].trim().length > 0,
                     state: parseProblemState(match[3]),
                     name: match[5].trim(),

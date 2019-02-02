@@ -2,8 +2,9 @@
 // Licensed under the MIT license.
 
 import * as cp from "child_process";
-import * as fs from "fs";
+import * as fse from "fs-extra";
 import * as path from "path";
+import * as requireFromString from "require-from-string";
 import * as vscode from "vscode";
 import { Endpoint } from "./shared";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
@@ -113,12 +114,10 @@ class LeetCodeExecutor {
     public async getCompaniesAndTags(): Promise<{ companies: { [key: string]: string[] }, tags: { [key: string]: string[] } }> {
         // preprocess the plugin source
         const componiesTagsPath: string = path.join(await leetCodeExecutor.getLeetCodeRootPath(), "lib", "plugins", "company.js");
-        const componiesTagsSrc: string = (await fs.readFileSync(componiesTagsPath, "utf8")).replace(
+        const componiesTagsSrc: string = (await fse.readFile(componiesTagsPath, "utf8")).replace(
             "module.exports = plugin",
             "module.exports = { COMPONIES, TAGS }",
         );
-        // require plugin from modified string
-        const requireFromString: (src: string, path: string) => any = require("require-from-string");
         const { COMPONIES, TAGS } = requireFromString(componiesTagsSrc, componiesTagsPath);
         return { companies: COMPONIES, tags: TAGS };
     }

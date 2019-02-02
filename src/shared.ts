@@ -39,3 +39,34 @@ export enum Endpoint {
     LeetCode = "leetcode",
     LeetCodeCN = "leetcode-cn",
 }
+
+export interface IProblem {
+    isFavorite: boolean;
+    locked: boolean;
+    state: ProblemState;
+    id: string;
+    name: string;
+    difficulty: string;
+    passRate: string;
+    companies: string[];
+    tags: string[];
+}
+
+export const defaultProblem: IProblem = {
+    isFavorite: false,
+    locked: false,
+    state: ProblemState.Unknown,
+    id: "",
+    name: "",
+    difficulty: "",
+    passRate: "",
+    companies: [] as string[],
+    tags: [] as string[],
+};
+
+export enum Category {
+    Difficulty = "Difficulty",
+    Tag = "Tag",
+    Company = "Company",
+    Favorite = "Favorite",
+}

@@ -40,3 +40,7 @@ export async function getActivefilePath(uri?: vscode.Uri): Promise<string | unde
     }
     return wsl.useWsl() ? wsl.toWslPath(textEditor.document.uri.fsPath) : textEditor.document.uri.fsPath;
 }
+
+export function getWorkspaceConfiguration(): vscode.WorkspaceConfiguration {
+    return vscode.workspace.getConfiguration("leetcode");
+}
