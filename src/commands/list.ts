@@ -4,18 +4,8 @@
 import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { ProblemState, UserStatus } from "../shared";
+import { IProblem, ProblemState, UserStatus } from "../shared";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
-
-export interface IProblem {
-    favorite: boolean;
-    locked: boolean;
-    state: ProblemState;
-    id: string;
-    name: string;
-    difficulty: string;
-    passRate: string;
-}
 
 export async function listProblems(): Promise<IProblem[]> {
     try {
@@ -28,17 +18,21 @@ export async function listProblems(): Promise<IProblem[]> {
         const problems: IProblem[] = [];
         const lines: string[] = result.split("\n");
         const reg: RegExp = /^(.)\s(.{1,2})\s(.)\s\[\s*(\d*)\s*\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;
+        const { companies, tags } = await leetCodeExecutor.getCompaniesAndTags();
         for (const line of lines) {
             const match: RegExpMatchArray | null = line.match(reg);
             if (match && match.length === 8) {
+                const id: string = match[4].trim();
                 problems.push({
-                    favorite: match[1].trim().length > 0,
+                    id,
+                    isFavorite: match[1].trim().length > 0,
                     locked: match[2].trim().length > 0,
                     state: parseProblemState(match[3]),
-                    id: match[4].trim(),
                     name: match[5].trim(),
                     difficulty: match[6].trim(),
                     passRate: match[7].trim(),
+                    companies: companies[id] || ["Unknown"],
+                    tags: tags[id] || ["Unknown"],
                 });
             }
         }

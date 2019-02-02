@@ -2,7 +2,9 @@
 // Licensed under the MIT license.
 
 import * as cp from "child_process";
+import * as fse from "fs-extra";
 import * as path from "path";
+import * as requireFromString from "require-from-string";
 import * as vscode from "vscode";
 import { Endpoint } from "./shared";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
@@ -10,28 +12,31 @@ import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 
 class LeetCodeExecutor {
-    private leetCodeBinaryPath: string;
-    private leetCodeBinaryPathInWsl: string;
+    private leetCodeRootPath: string;
+    private leetCodeRootPathInWsl: string;
 
     constructor() {
-        this.leetCodeBinaryPath = path.join(__dirname, "..", "..", "node_modules", "leetcode-cli", "bin", "leetcode");
-        this.leetCodeBinaryPathInWsl = "";
+        this.leetCodeRootPath = path.join(__dirname, "..", "..", "node_modules", "leetcode-cli");
+        this.leetCodeRootPathInWsl = "";
     }
 
-    public async getLeetCodeBinaryPath(): Promise<string> {
+    public async getLeetCodeRootPath(): Promise<string> { // not wrapped by ""
         if (wsl.useWsl()) {
-            if (!this.leetCodeBinaryPathInWsl) {
-                this.leetCodeBinaryPathInWsl = `${await wsl.toWslPath(this.leetCodeBinaryPath)}`;
+            if (!this.leetCodeRootPathInWsl) {
+                this.leetCodeRootPathInWsl = `${await wsl.toWslPath(this.leetCodeRootPath)}`;
             }
-            return `"${this.leetCodeBinaryPathInWsl}"`;
+            return `${this.leetCodeRootPathInWsl}`;
         }
-        return `"${this.leetCodeBinaryPath}"`;
+        return `${this.leetCodeRootPath}`;
+    }
+
+    public async getLeetCodeBinaryPath(): Promise<string> { // wrapped by ""
+        return `"${path.join(await this.getLeetCodeRootPath(), "bin", "leetcode")}"`;
     }
 
     public async meetRequirements(): Promise<boolean> {
         try {
             await this.executeCommandEx("node", ["-v"]);
-            return true;
         } catch (error) {
             const choice: vscode.MessageItem | undefined = await vscode.window.showErrorMessage(
                 "LeetCode extension needs Node.js installed in environment path",
@@ -42,6 +47,12 @@ class LeetCodeExecutor {
             }
             return false;
         }
+        try { // Check company plugin
+            await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-e", "company"]);
+        } catch (error) { // Download company plugin and activate
+            await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-i", "company"]);
+        }
+        return true;
     }
 
     public async deleteCache(): Promise<string> {
@@ -98,6 +109,17 @@ class LeetCodeExecutor {
             default:
                 return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-d", "leetcode.cn"]);
         }
+    }
+
+    public async getCompaniesAndTags(): Promise<{ companies: { [key: string]: string[] }, tags: { [key: string]: string[] } }> {
+        // preprocess the plugin source
+        const componiesTagsPath: string = path.join(await leetCodeExecutor.getLeetCodeRootPath(), "lib", "plugins", "company.js");
+        const componiesTagsSrc: string = (await fse.readFile(componiesTagsPath, "utf8")).replace(
+            "module.exports = plugin",
+            "module.exports = { COMPONIES, TAGS }",
+        );
+        const { COMPONIES, TAGS } = requireFromString(componiesTagsSrc, componiesTagsPath);
+        return { companies: COMPONIES, tags: TAGS };
     }
 
     private async executeCommandEx(command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {

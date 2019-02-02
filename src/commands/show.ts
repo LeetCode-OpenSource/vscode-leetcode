@@ -3,10 +3,10 @@
 
 import * as fse from "fs-extra";
 import * as vscode from "vscode";
+import { LeetCodeNode } from "../explorer/LeetCodeNode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
-import { LeetCodeNode } from "../leetCodeExplorer";
 import { leetCodeManager } from "../leetCodeManager";
-import { IQuickItemEx, languages, ProblemState } from "../shared";
+import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
 import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
@@ -80,9 +80,9 @@ async function showProblemInternal(id: string): Promise<void> {
     }
 }
 
-async function parseProblemsToPicks(p: Promise<list.IProblem[]>): Promise<Array<IQuickItemEx<string>>> {
+async function parseProblemsToPicks(p: Promise<IProblem[]>): Promise<Array<IQuickItemEx<string>>> {
     return new Promise(async (resolve: (res: Array<IQuickItemEx<string>>) => void): Promise<void> => {
-        const picks: Array<IQuickItemEx<string>> = (await p).map((problem: list.IProblem) => Object.assign({}, {
+        const picks: Array<IQuickItemEx<string>> = (await p).map((problem: IProblem) => Object.assign({}, {
             label: `${parseProblemDecorator(problem.state, problem.locked)}${problem.id}.${problem.name}`,
             description: "",
             detail: `AC rate: ${problem.passRate}, Difficulty: ${problem.difficulty}`,

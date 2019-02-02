@@ -193,6 +193,12 @@
             {
                 "title": "LeetCode",
                 "properties": {
+                    "leetcode.hideSolved": {
+                        "type": "boolean",
+                        "default": false,
+                        "scope": "application",
+                        "description": "Hide solved problems."
+                    },
                     "leetcode.showLocked": {
                         "type": "boolean",
                         "default": false,
@@ -258,12 +264,14 @@
         "@types/fs-extra": "5.0.0",
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
+        "@types/require-from-string": "^1.2.0",
         "tslint": "^5.9.1",
         "typescript": "^2.6.1",
         "vscode": "^1.1.22"
     },
     "dependencies": {
         "fs-extra": "^6.0.1",
-        "leetcode-cli": "2.6.1"
+        "leetcode-cli": "2.6.1",
+        "require-from-string": "^2.0.2"
     }
 }
