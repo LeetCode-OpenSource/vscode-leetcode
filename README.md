@@ -55,6 +55,15 @@ This extension provides several commands in the Command Palette (F1 or Ctrl + Sh
 - **LeetCode: Submit to LeetCode** -  Submit the solution file to LeetCode
 - **LeetCode: Switch endpoint** - Switch the LeetCode endpoint. (LeetCode or LeetCode-cn)
 
+## Settings
+| Setting Name | Description | Default Value |
+|---|---|---|
+| `leetcode.hideSolved` | Specify to hide the solved problems or not | `false` |
+| `leetcode.showLocked` | Specify to show the locked problems or not. Only Premium users could open the locked problems | `false` |
+| `leetcode.defaultLanguage` | Specify the default language used to solve the problem. Supported languages are: `bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `python`,`python3`,`ruby`,`scala`,`swift` | `N/A` |
+| `leetcode.useWsl` | Specify whether to use WSL or not | `false` |
+| `leetcode.endpoint` | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn` | `leetcode` |
+
 ## Known Issues:
 - This extension will infer the current target problem according to the active editing file. Please do not change the file name.
 
@@ -115,6 +124,15 @@ Refer to [CHANGELOG](https://github.com/jdneo/vscode-leetcode/blob/master/CHANGE
 - **LeetCode: Test in LeetCode** - 用自定义测试用例进行测试
 - **LeetCode: Submit to LeetCode** -  提交答案到 LeetCode
 - **LeetCode: Switch endpoint** - 变更 LeetCode 终端（LeetCode 或 领扣）
+
+## 插件配置项
+| 配置项名称 | 描述 | 默认值 |
+|---|---|---|
+| `leetcode.hideSolved` | 指定是否要隐藏已解决的问题 | `false` |
+| `leetcode.showLocked` | 指定是否显示付费题目，只有付费账户才可以打开付费题目 | `false` |
+| `leetcode.defaultLanguage` | 指定答题时使用的默认语言，可选语言有：`bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `python`,`python3`,`ruby`,`scala`,`swift` | `N/A` |
+| `leetcode.useWsl` | 指定是否启用 WSL | `false` |
+| `leetcode.endpoint` | 指定使用的终端，可用终端有：`leetcode`, `leetcode-cn` | `leetcode` |
 
 ## 已知问题
 - 本插件会根据文件名称推测当前的目标题目，因此建议不要改变文件名。
