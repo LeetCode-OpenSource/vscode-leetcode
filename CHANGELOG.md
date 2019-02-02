@@ -3,6 +3,11 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.10.0]
+## Added
+- Add an extension setting to hide solved problems ([#95](https://github.com/jdneo/vscode-leetcode/issues/95))
+- Support categorize problems by company, tag, difficulty and favorite ([#67](https://github.com/jdneo/vscode-leetcode/issues/67))
+
 ## [0.9.0]
 ### Changed
 - Improve the experience of switching endpoint ([#85](https://github.com/jdneo/vscode-leetcode/issues/85))
