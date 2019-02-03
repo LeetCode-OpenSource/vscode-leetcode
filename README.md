@@ -20,7 +20,8 @@
   </a>
 </p>
 
-[English](#Requirements) [中文]()
+- [English Document](#Requirements)
+- [中文文档](https://github.com/jdneo/vscode-leetcode/blob/cs/new-doc/docs/README_zh-CN.md)
 
 ## Requirements
 - [Node.js 8+](https://nodejs.org)
