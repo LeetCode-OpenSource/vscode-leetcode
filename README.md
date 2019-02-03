@@ -27,6 +27,7 @@
 ## Quick Start
 
 ## Features
+
 ### Sign In/Out
 <p align="center">
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/sign_in.png" alt="Sign in" />
@@ -37,6 +38,8 @@ Simply click `Sign in to LeetCode` in the `LeetCode Explorer` will let you sign 
 You can also use the following command to sign in/out:
 - **LeetCode: Sign in**
 - **LeetCode: Sign out**
+
+---
 
 ### Switch Endpoint
 <p align="center">
@@ -51,30 +54,53 @@ The supported endpoints are:
 
 > Note: The accounts of different endpoints are not shared. Please make sure you are using the right endpoint. The extension will use `leetcode.com` by default.
 
+---
+
 ### Pick a Problem
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/pick_problem.png" alt="Switch Endpoint" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/pick_problem.png" alt="Pick a problem" />
 </p>
+
+Right click the problem in the `LeetCode Explorer` and select `Show Problem` will generate a new file with the problem description for you.
+
+> Note: If no folder is opened in VS Code, the extension will save the problem files in $HOME/.leetcode/.
+
+---
 
 ### Submit the Answer
 <p align="center">
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/submit.png" alt="Switch Endpoint" />
 </p>
 
+You can submit the answer by clicking `🙏 Submit to LeetCode` at the bottom of the file. Or you can trigger the command: **LeetCode: Submit to LeetCode** to submit the active file as the answer.
+
+---
+
 ### Test the Answer
 <p align="center">
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/test.png" alt="Switch Endpoint" />
 </p>
+
+To test your answer, right click in the editor and select `Test in LeetCode`. You have 3 ways to test the answer:
+- **Test with the default cases**
+- **Write test cases in input box**
+- **Test with the writen cases in file**
+
+---
 
 ### Search problems by Keywords
 <p align="center">
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/search.png" alt="Switch Endpoint" />
 </p>
 
+By clicking the button ![btn_search](https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/btn_search.png) at the explorer's navigation bar, you can search the problems by keywords.
+
 ### Manage Session
 <p align="center">
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/session.png" alt="Switch Endpoint" />
 </p>
+
+To manage your LeetCode sessions, just clicking the `LeetCode: ***` at the bottom of the status bar. You can switch between sessions or create a new session.
 
 
 ## Settings
