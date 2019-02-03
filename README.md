@@ -20,11 +20,15 @@
   </a>
 </p>
 
+[English](#Requirements) [中文]()
+
 ## Requirements
 - [Node.js 8+](https://nodejs.org)
     > NOTE: Please make sure that `Node` is in your `PATH` environment variable. You can check this by running: `node -v`.
 
 ## Quick Start
+
+![demo](https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/gifs/demo.gif)
 
 ## Features
 
@@ -52,7 +56,7 @@
   - **leetcode.com**
   - **leetcode-cn.com**
 
-> Note: The accounts of different endpoints are **not** shared. Please make sure you are using the right endpoint. The extension will use `leetcode.com` by default.
+  > Note: The accounts of different endpoints are **not** shared. Please make sure you are using the right endpoint. The extension will use `leetcode.com` by default.
 
 ---
 
@@ -63,7 +67,7 @@
 
 - Right click the problem in the `LeetCode Explorer` and select `Show Problem` will generate a new file with the problem description for you.
 
-> Note: If no folder is opened in VS Code, the extension will save the problem files in **$HOME/.leetcode/**.
+  > Note: If no folder is opened in VS Code, the extension will save the problem files in **$HOME/.leetcode/**.
 
 ---
 
