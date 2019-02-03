@@ -3,7 +3,7 @@
 > Solve LeetCode problems in VS Code
 
 <p align="center">
-  <img src="https://github.com/jdneo/vscode-leetcode/blob/master/resources/LeetCode.png" alt="">
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/LeetCode.png" alt="">
 </p>
 <p align="center">
   <a href="https://travis-ci.org/jdneo/vscode-leetcode">
