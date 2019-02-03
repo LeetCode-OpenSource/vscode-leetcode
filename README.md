@@ -1,59 +1,46 @@
 # LeetCode
-[![Travis CI](https://travis-ci.org/jdneo/vscode-leetcode.svg?branch=master)](https://travis-ci.org/jdneo/vscode-leetcode)
-[![Marketplace Version](https://vsmarketplacebadge.apphb.com/version-short/shengchen.vscode-leetcode.svg)](https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-leetcode)
-[![license](https://img.shields.io/github/license/jdneo/vscode-leetcode.svg)](https://github.com/jdneo/vscode-leetcode/blob/master/LICENSE)
-[![Gitter](https://badges.gitter.im/vscode-leetcode/Lobby.svg)](https://gitter.im/vscode-leetcode/Lobby)
 
-Solve LeetCode problems in VS Code.
-- [中文](#中文)
-- [English](#english)
+> Solve LeetCode problems in VS Code
 
-# English
+<p align="center">
+  <img src="https://github.com/jdneo/vscode-leetcode/blob/master/resources/LeetCode.png" alt="">
+</p>
+<p align="center">
+  <a href="https://travis-ci.org/jdneo/vscode-leetcode">
+    <img src="https://img.shields.io/travis/jdneo/vscode-leetcode.svg?style=flat-square" alt="">
+  </a>
+  <a href="https://gitter.im/vscode-leetcode/Lobby">
+    <img src="https://img.shields.io/gitter/room/jdneo/vscode-leetcode.svg?style=flat-square" alt="">
+  </a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-leetcode">
+    <img src="https://img.shields.io/visual-studio-marketplace/d/shengchen.vscode-leetcode.svg?style=flat-square" alt="">
+  </a>
+  <a href="https://github.com/jdneo/vscode-leetcode/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/jdneo/vscode-leetcode.svg?style=flat-square" alt="">
+  </a>
+</p>
+
 ## Requirements
 - [Node.js 8+](https://nodejs.org)
     > NOTE: Please make sure that `Node` is in your `PATH` environment variable. You can check this by running: `node -v`.
 
+## Quick Start
+
 ## Features
-- Sign in/out to LeetCode
-- Switch and create session
-- Show problems in explorer
-  > Note: To show the locked problems, please set `leetcode.showLocked` to **true**
-- Search problems by keywords
-- Test solutions by customized test case
-- Submit solutions to LeetCode
+### Sign In/Out
 
-### Sign In and Sign Out
-![SignInOut](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/signinout.gif)
+### Switch Endpoint
 
-### Switch and Create Session
-![SwitchSession](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/switchsession.gif)
+### Pick a Problem
 
-### Show Problems in Explorer <sup>1</sup>
-![ShowProblem](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/showproblem.gif)
+### Submit the Answer
 
-### Search Problems by Keywords <sup>1</sup>
-![SearchProblem](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/searchproblem.gif)
+### Test the Answer
 
-### Test solutions by customized test case <sup>2</sup>
-![TestSolution](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/testsolution.gif)
+### Search problems by Keywords
 
-### Submit Solutions to LeetCode <sup>2</sup>
-![SubmitSolution](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/resources/gif/solveproblem.gif)
+### Manage Session
 
-<sup>1</sup> If no folder is opened in VS Code, the extension will save the problem files in `$HOME/.leetcode/`. <br/>
-<sup>2</sup> If you trigger the `Submit to LeetCode` and `Test in LeetCode` commands in the Command Palette, the extension will upload the current active file in editor.
-
-## Commands
-This extension provides several commands in the Command Palette (F1 or Ctrl + Shift + P):
-- **LeetCode: Sign in** -  Sign in to LeetCode
-- **LeetCode: Sign out** -  Sign out to LeetCode
-- **LeetCode: Select session** -  Select one session and make it active
-- **LeetCode: Create new session** -  Create a new session
-- **LeetCode: Refresh** -  Refresh the LeetCode Explorer
-- **LeetCode: Search Problem** -  Search for problems by keywords
-- **LeetCode: Test in LeetCode** - Test solution file by customized test case
-- **LeetCode: Submit to LeetCode** -  Submit the solution file to LeetCode
-- **LeetCode: Switch endpoint** - Switch the LeetCode endpoint. (LeetCode or LeetCode-cn)
 
 ## Settings
 | Setting Name | Description | Default Value |
@@ -63,9 +50,6 @@ This extension provides several commands in the Command Palette (F1 or Ctrl + Sh
 | `leetcode.defaultLanguage` | Specify the default language used to solve the problem. Supported languages are: `bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `python`,`python3`,`ruby`,`scala`,`swift` | `N/A` |
 | `leetcode.useWsl` | Specify whether to use WSL or not | `false` |
 | `leetcode.endpoint` | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn` | `leetcode` |
-
-## Known Issues:
-- This extension will infer the current target problem according to the active editing file. Please do not change the file name.
 
 ## Release Notes
 
