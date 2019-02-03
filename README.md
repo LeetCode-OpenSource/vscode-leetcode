@@ -31,11 +31,20 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/sign_in.png" alt="Sign in" />
 </p>
+Simply click `Sign in to LeetCode` in the `LeetCode Explorer` will let you sign in with your LeetCode account.
+
+You can also use the following command to sign in/out:
+- **LeetCode: Sign in**
+- **LeetCode: Sign out**
 
 ### Switch Endpoint
 <p align="center">
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/endpoint.png" alt="Switch Endpoint" />
 </p>
+By clicking the button <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/btn_endpoint.png" alt="Switch Endpoint" /> at the explorer's navigation bar, you can switch between different endpoints. Supported endpoints are:
+- **leetcode.com**
+- **leetcode-cn.com**
+> Note: The accounts of different endpoints are not shared. Please make sure you are using the right endpoint. The extension will use `leetcode.com` by default.
 
 ### Pick a Problem
 <p align="center">
