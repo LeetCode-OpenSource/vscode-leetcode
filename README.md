@@ -28,18 +28,39 @@
 
 ## Features
 ### Sign In/Out
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/sign_in.png" alt="Sign in" />
+</p>
 
 ### Switch Endpoint
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/endpoint.png" alt="Switch Endpoint" />
+</p>
 
 ### Pick a Problem
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/pick_problem.png" alt="Switch Endpoint" />
+</p>
 
 ### Submit the Answer
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/submit.png" alt="Switch Endpoint" />
+</p>
 
 ### Test the Answer
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/test.png" alt="Switch Endpoint" />
+</p>
 
 ### Search problems by Keywords
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/search.png" alt="Switch Endpoint" />
+</p>
 
 ### Manage Session
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/session.png" alt="Switch Endpoint" />
+</p>
 
 
 ## Settings
