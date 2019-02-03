@@ -3,7 +3,7 @@
 > 在 VS Code 中练习 LeetCode
 
 <p align="center">
-  <img src="https://github.com/jdneo/vscode-leetcode/blob/cs/new-doc/resources/LeetCode.png" alt="">
+  <img src="https://github.com/jdneo/vscode-leetcode/blob/master/resources/LeetCode.png" alt="">
 </p>
 <p align="center">
   <a href="https://travis-ci.org/jdneo/vscode-leetcode">
@@ -21,7 +21,7 @@
 </p>
 
 - [English Document](#Requirements)
-- [中文文档](https://github.com/jdneo/vscode-leetcode/blob/cs/new-doc/docs/README_zh-CN.md)
+- [中文文档](https://github.com/jdneo/vscode-leetcode/blob/master/docs/README_zh-CN.md)
 
 ## 运行条件
 - [Node.js 8+](https://nodejs.org)
@@ -29,13 +29,13 @@
 
 ## 快速开始
 
-![demo](https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/gifs/demo.gif)
+![demo](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/gifs/demo.gif)
 
 ## 功能
 
 ### 登入登出
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/sign_in.png" alt="Sign in" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/sign_in.png" alt="Sign in" />
 </p>
 
 - 点击 `LeetCode Explorer` 中的 `Sign in to LeetCode` 即可登入。
@@ -48,10 +48,10 @@
 
 ### 切换 LeetCode 版本
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/endpoint.png" alt="Switch Endpoint" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/endpoint.png" alt="Switch Endpoint" />
 </p>
 
-- LeetCode 目前有**英文版**和**中文版**两种版本。点击 `LeetCode Explorer` 导航栏中的 ![btn_endpoint](https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/btn_endpoint.png) 按钮可切换版本。
+- LeetCode 目前有**英文版**和**中文版**两种版本。点击 `LeetCode Explorer` 导航栏中的 ![btn_endpoint](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/btn_endpoint.png) 按钮可切换版本。
 
 - 目前可切换的版本有:
   - **leetcode.com**
@@ -63,7 +63,7 @@
 
 ### 选择题目
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/pick_problem.png" alt="Pick a problem" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="Pick a problem" />
 </p>
 
 - 在 `LeetCode Explorer` 中**右键**题目并选择 `Show Problem` 进行答题。
@@ -74,19 +74,19 @@
 
 ### 提交答案
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/submit.png" alt="Switch Endpoint" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/submit.png" alt="Switch Endpoint" />
 </p>
 
-- 通过点击文件最下方的 `🙏 Submit to LeetCode` 可提交答案。 你也可以触发 **LeetCode: Submit to LeetCode** 命令将当前文件作为答案进行提交。
+- 通过点击文件最下方的 `🙏 Submit to LeetCode` 可提交答案。 你也可以触发 **LeetCode: Submit to LeetCode** 命令将**当前**文件作为答案进行提交。
 
 ---
 
 ### 测试答案
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/test.png" alt="Switch Endpoint" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/test.png" alt="Switch Endpoint" />
 </p>
 
-- 在编辑区内右键并选择 `Test in LeetCode`，可对当前答案进行测试。
+- 在编辑区内右键并选择 `Test in LeetCode`，可对**当前**答案进行测试。
 
 - 有下列三种测试集来源：
   - **默认测试集**：Test with the default cases
@@ -97,19 +97,19 @@
 
 ### 通过关键字搜索题目
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/search.png" alt="Switch Endpoint" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/search.png" alt="Switch Endpoint" />
 </p>
 
-- 点击 `LeetCode Explorer` 导航栏中的 ![btn_search](https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/btn_search.png) 按钮可按照关键字搜索题目。
+- 点击 `LeetCode Explorer` 导航栏中的 ![btn_search](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/btn_search.png) 按钮可按照关键字搜索题目。
 
 ---
 
 ### 管理存档
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/cs/new-doc/docs/imgs/session.png" alt="Switch Endpoint" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/session.png" alt="Switch Endpoint" />
 </p>
 
-- 点击位于 VS Code 底部状态栏的 `LeetCode: ***` 可管理 `LeetCode 存档`。你可以**切换**存档或者**创建**新的存档。
+- 点击位于 VS Code 底部状态栏的 `LeetCode: ***` 管理 `LeetCode 存档`。你可以**切换**存档或者**创建**新的存档。
 
 
 ## 插件配置项
@@ -120,9 +120,6 @@
 | `leetcode.defaultLanguage` | 指定答题时使用的默认语言，可选语言有：`bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `python`,`python3`,`ruby`,`scala`,`swift` | `N/A` |
 | `leetcode.useWsl` | 指定是否启用 WSL | `false` |
 | `leetcode.endpoint` | 指定使用的终端，可用终端有：`leetcode`, `leetcode-cn` | `leetcode` |
-
-## 已知问题
-- 本插件会根据文件名称推测当前的目标题目，因此建议不要改变文件名。
 
 ## 更新日志
 
