@@ -3,6 +3,10 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.10.1]
+## Changed
+- Refine the README page.
+
 ## [0.10.0]
 ## Added
 - Add an extension setting to hide solved problems ([#95](https://github.com/jdneo/vscode-leetcode/issues/95))
