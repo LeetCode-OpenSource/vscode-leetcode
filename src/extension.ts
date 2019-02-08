@@ -47,6 +47,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
         vscode.commands.registerCommand("leetcode.testSolution", (uri?: vscode.Uri) => test.testSolution(uri)),
         vscode.commands.registerCommand("leetcode.submitSolution", (uri?: vscode.Uri) => submit.submitSolution(uri)),
+        vscode.commands.registerCommand("leetcode.switchDefaultLanguage", () => plugin.switchDefaultLanguage()),
     );
 
     await leetCodeExecutor.switchEndpoint(plugin.getLeetCodeEndpoint());

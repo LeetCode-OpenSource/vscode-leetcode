@@ -4,9 +4,18 @@
 import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { IQuickItemEx } from "../shared";
-import { Endpoint } from "../shared";
+import { Endpoint, languages } from "../shared";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { deleteCache } from "./cache";
+
+export async function switchDefaultLanguage(): Promise<void> {
+    const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+    const language: string | undefined = await vscode.window.showQuickPick(languages, { placeHolder: "Select the language you want to use" });
+    if (!language) {
+        return;
+    }
+    leetCodeConfig.update("defaultLanguage", language, true);
+}
 
 export async function switchEndpoint(): Promise<void> {
     const isCnEnbaled: boolean = getLeetCodeEndpoint() === Endpoint.LeetCodeCN;
