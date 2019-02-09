@@ -6,7 +6,7 @@ import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { leetCodeResultProvider } from "../leetCodeResultProvider";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
-import { getActivefilePath } from "../utils/workspaceUtils";
+import { getActiveFilePath } from "../utils/workspaceUtils";
 
 export async function submitSolution(uri?: vscode.Uri): Promise<void> {
     if (!leetCodeManager.getUser()) {
@@ -14,7 +14,7 @@ export async function submitSolution(uri?: vscode.Uri): Promise<void> {
         return;
     }
 
-    const filePath: string | undefined = await getActivefilePath(uri);
+    const filePath: string | undefined = await getActiveFilePath(uri);
     if (!filePath) {
         return;
     }

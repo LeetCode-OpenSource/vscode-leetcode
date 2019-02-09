@@ -92,7 +92,7 @@
 - There are 3 ways to test the answer:
   - **Test with the default cases**
   - **Write test cases in input box**
-  - **Test with the writen cases in file**
+  - **Test with the written cases in file**
 
 ---
 
