@@ -26,7 +26,7 @@
     ],
     "preview": true,
     "activationEvents": [
-        "onCommand:leetcode.toogleLeetCodeCn",
+        "onCommand:leetcode.toggleLeetCodeCn",
         "onCommand:leetcode.signin",
         "onCommand:leetcode.signout",
         "onCommand:leetcode.selectSessions",
@@ -47,7 +47,7 @@
                 "category": "LeetCode"
             },
             {
-                "command": "leetcode.toogleLeetCodeCn",
+                "command": "leetcode.toggleLeetCodeCn",
                 "title": "Switch Endpoint",
                 "category": "LeetCode",
                 "icon": {
@@ -133,7 +133,7 @@
         "menus": {
             "view/title": [
                 {
-                    "command": "leetcode.toogleLeetCodeCn",
+                    "command": "leetcode.toggleLeetCodeCn",
                     "when": "view == leetCodeExplorer",
                     "group": "navigation@0"
                 },

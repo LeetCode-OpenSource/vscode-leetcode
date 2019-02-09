@@ -36,7 +36,7 @@
 
 ### 登入登出
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/sign_in.png" alt="Sign in" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/sign_in.png" alt="登入登出" />
 </p>
 
 - 点击 `LeetCode Explorer` 中的 `Sign in to LeetCode` 即可登入。
@@ -49,7 +49,7 @@
 
 ### 切换 LeetCode 版本
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/endpoint.png" alt="Switch Endpoint" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/endpoint.png" alt="切换 LeetCode 版本" />
 </p>
 
 - LeetCode 目前有**英文版**和**中文版**两种版本。点击 `LeetCode Explorer` 导航栏中的 ![btn_endpoint](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/btn_endpoint.png) 按钮可切换版本。
@@ -64,7 +64,7 @@
 
 ### 选择题目
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="Pick a problem" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="选择题目" />
 </p>
 
 - 在 `LeetCode Explorer` 中**右键**题目并选择 `Show Problem` 进行答题。
@@ -75,7 +75,7 @@
 
 ### 提交答案
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/submit.png" alt="Switch Endpoint" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/submit.png" alt="提交答案" />
 </p>
 
 - 通过点击文件最下方的 `🙏 Submit to LeetCode` 可提交答案。 你也可以触发 **LeetCode: Submit to LeetCode** 命令将**当前**文件作为答案进行提交。
@@ -84,7 +84,7 @@
 
 ### 测试答案
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/test.png" alt="Switch Endpoint" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/test.png" alt="测试答案" />
 </p>
 
 - 在编辑区内右键并选择 `Test in LeetCode`，可对**当前**答案进行测试。
@@ -92,13 +92,13 @@
 - 有下列三种测试集来源：
   - **默认测试集**：Test with the default cases
   - **在输入框内输入测试集**：Write test cases in input box
-  - **提供自定义测试集文件**：Test with the writen cases in file
+  - **提供自定义测试集文件**：Test with the written cases in file
 
 ---
 
 ### 通过关键字搜索题目
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/search.png" alt="Switch Endpoint" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/search.png" alt="通过关键字搜索题目" />
 </p>
 
 - 点击 `LeetCode Explorer` 导航栏中的 ![btn_search](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/btn_search.png) 按钮可按照关键字搜索题目。
@@ -107,7 +107,7 @@
 
 ### 管理存档
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/session.png" alt="Switch Endpoint" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/session.png" alt="管理存档" />
 </p>
 
 - 点击位于 VS Code 底部状态栏的 `LeetCode: ***` 管理 `LeetCode 存档`。你可以**切换**存档或者**创建**新的存档。

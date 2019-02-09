@@ -8,7 +8,7 @@ import { leetCodeManager } from "../leetCodeManager";
 import { leetCodeResultProvider } from "../leetCodeResultProvider";
 import { IQuickItemEx, UserStatus } from "../shared";
 import { DialogType, promptForOpenOutputChannel, showFileSelectDialog } from "../utils/uiUtils";
-import { getActivefilePath } from "../utils/workspaceUtils";
+import { getActiveFilePath } from "../utils/workspaceUtils";
 
 export async function testSolution(uri?: vscode.Uri): Promise<void> {
     try {
@@ -16,7 +16,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
             return;
         }
 
-        const filePath: string | undefined = await getActivefilePath(uri);
+        const filePath: string | undefined = await getActiveFilePath(uri);
         if (!filePath) {
             return;
         }
@@ -37,7 +37,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
             {
                 label: "$(file-text) Browse...",
                 description: "",
-                detail: "Test with the writen cases in file",
+                detail: "Test with the written cases in file",
                 value: ":file",
             },
         );

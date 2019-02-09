@@ -9,17 +9,17 @@ import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../util
 import { deleteCache } from "./cache";
 
 export async function switchEndpoint(): Promise<void> {
-    const isCnEnbaled: boolean = getLeetCodeEndpoint() === Endpoint.LeetCodeCN;
+    const isCnEnabled: boolean = getLeetCodeEndpoint() === Endpoint.LeetCodeCN;
     const picks: Array<IQuickItemEx<string>> = [];
     picks.push(
         {
-            label: `${isCnEnbaled ? "" : "$(check) "}LeetCode`,
+            label: `${isCnEnabled ? "" : "$(check) "}LeetCode`,
             description: "leetcode.com",
             detail: `Enable LeetCode US`,
             value: Endpoint.LeetCode,
         },
         {
-            label: `${isCnEnbaled ? "$(check) " : ""}力扣`,
+            label: `${isCnEnabled ? "$(check) " : ""}力扣`,
             description: "leetcode-cn.com",
             detail: `启用中国版 LeetCode`,
             value: Endpoint.LeetCodeCN,

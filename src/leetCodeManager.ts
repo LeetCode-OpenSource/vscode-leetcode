@@ -78,7 +78,7 @@ class LeetCodeManager extends EventEmitter {
                     if (match && match[1]) {
                         resolve(match[1]);
                     } else {
-                        reject(new Error("Failed to sigin in."));
+                        reject(new Error("Failed to sign in."));
                     }
                 });
             });

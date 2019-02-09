@@ -49,9 +49,9 @@ async function showProblemInternal(id: string): Promise<void> {
             return;
         }
 
-        const outdir: string = await selectWorkspaceFolder();
-        await fse.ensureDir(outdir);
-        const result: string = await leetCodeExecutor.showProblem(id, language, outdir);
+        const outDir: string = await selectWorkspaceFolder();
+        await fse.ensureDir(outDir);
+        const result: string = await leetCodeExecutor.showProblem(id, language, outDir);
         const reg: RegExp = /\* Source Code:\s*(.*)/;
         const match: RegExpMatchArray | null = result.match(reg);
         if (match && match.length >= 2) {
