@@ -24,6 +24,7 @@
 - [中文文档](https://github.com/jdneo/vscode-leetcode/blob/master/docs/README_zh-CN.md)
 
 ## 运行条件
+- [VS Code 1.23.0+](https://code.visualstudio.com/)
 - [Node.js 8+](https://nodejs.org)
     > 注意：请确保`Node`在`PATH`环境变量中，您可以通过执行：`node -v`进行查看。
 
