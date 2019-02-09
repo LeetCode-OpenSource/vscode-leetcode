@@ -59,7 +59,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
                     ignoreFocusOut: true,
                 });
                 if (testString) {
-                    result = await leetCodeExecutor.testSolution(filePath, testString.replace(/"/g, ""));
+                    result = await leetCodeExecutor.testSolution(filePath, testString);
                 }
                 break;
             case ":file":
@@ -67,7 +67,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
                 if (testFile && testFile.length) {
                     const input: string = await fse.readFile(testFile[0].fsPath, "utf-8");
                     if (input.trim()) {
-                        result = await leetCodeExecutor.testSolution(filePath, input.replace(/"/g, "").replace(/\r?\n/g, "\\n"));
+                        result = await leetCodeExecutor.testSolution(filePath, input.replace(/\r?\n/g, "\\n"));
                     } else {
                         vscode.window.showErrorMessage("The selected test file must not be empty.");
                     }
