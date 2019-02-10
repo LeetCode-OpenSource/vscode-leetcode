@@ -74,8 +74,8 @@ class LeetCodeExecutor {
         );
     }
 
-    public async showProblem(id: string, language: string, outdir: string): Promise<string> {
-        return await this.executeCommandWithProgressEx("Fetching problem data...", "node", [await this.getLeetCodeBinaryPath(), "show", id, "-gx", "-l", language, "-o", `"${outdir}"`]);
+    public async showProblem(id: string, language: string, outDir: string): Promise<string> {
+        return await this.executeCommandWithProgressEx("Fetching problem data...", "node", [await this.getLeetCodeBinaryPath(), "show", id, "-gx", "-l", language, "-o", `"${outDir}"`]);
     }
 
     public async listSessions(): Promise<string> {
@@ -96,7 +96,7 @@ class LeetCodeExecutor {
 
     public async testSolution(filePath: string, testString?: string): Promise<string> {
         if (testString) {
-            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`, "-t", `"${testString}"`]);
+            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`, "-t", `${testString}`]);
         }
         return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`]);
     }
@@ -113,12 +113,12 @@ class LeetCodeExecutor {
 
     public async getCompaniesAndTags(): Promise<{ companies: { [key: string]: string[] }, tags: { [key: string]: string[] } }> {
         // preprocess the plugin source
-        const componiesTagsPath: string = path.join(await leetCodeExecutor.getLeetCodeRootPath(), "lib", "plugins", "company.js");
-        const componiesTagsSrc: string = (await fse.readFile(componiesTagsPath, "utf8")).replace(
+        const companiesTagsPath: string = path.join(await leetCodeExecutor.getLeetCodeRootPath(), "lib", "plugins", "company.js");
+        const companiesTagsSrc: string = (await fse.readFile(companiesTagsPath, "utf8")).replace(
             "module.exports = plugin",
             "module.exports = { COMPONIES, TAGS }",
         );
-        const { COMPONIES, TAGS } = requireFromString(componiesTagsSrc, componiesTagsPath);
+        const { COMPONIES, TAGS } = requireFromString(companiesTagsSrc, companiesTagsPath);
         return { companies: COMPONIES, tags: TAGS };
     }
 

@@ -15,7 +15,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [0.9.0]
 ### Changed
 - Improve the experience of switching endpoint ([#85](https://github.com/jdneo/vscode-leetcode/issues/85))
-- Use webview to show the result page ([#76](https://github.com/jdneo/vscode-leetcode/issues/76))
+- Use web view to show the result page ([#76](https://github.com/jdneo/vscode-leetcode/issues/76))
 
 
 ## [0.8.2]
@@ -54,7 +54,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.5.1]
 ### Fixed
-- Fix the bug when user's path contains whitespaces ([#34](https://github.com/jdneo/vscode-leetcode/issues/34))
+- Fix the bug when user's path contains white spaces ([#34](https://github.com/jdneo/vscode-leetcode/issues/34))
 
 ## [0.5.0]
 ### Added
@@ -66,7 +66,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 - Simplify the command 'LeetCode: Test Current File' to 'LeetCode: Test' ([#18](https://github.com/jdneo/vscode-leetcode/issues/18))
-- Will automatically save cuurent file when 'LeetCode: Test' command is triggered ([#17](https://github.com/jdneo/vscode-leetcode/issues/17))
+- Will automatically save current file when 'LeetCode: Test' command is triggered ([#17](https://github.com/jdneo/vscode-leetcode/issues/17))
 
 ## [0.3.0]
 ### Added
@@ -75,7 +75,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [0.2.1]
 ### Fixed
 - Fix the wrong icon bug in LeetCode Explorer ([#9](https://github.com/jdneo/vscode-leetcode/issues/9))
-- Fix the switch session bug when login session is experied ([#12](https://github.com/jdneo/vscode-leetcode/issues/12))
+- Fix the switch session bug when login session is expired ([#12](https://github.com/jdneo/vscode-leetcode/issues/12))
 
 ## [0.2.0]
 ### Added
@@ -86,7 +86,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.1.2]
 ### Fixed
-- Fix the deplicated nodes in LeetCode Explorer bug ([#6](https://github.com/jdneo/vscode-leetcode/issues/6))
+- Fix the duplicated nodes in LeetCode Explorer bug ([#6](https://github.com/jdneo/vscode-leetcode/issues/6))
 
 ## [0.1.1]
 ### Fixed

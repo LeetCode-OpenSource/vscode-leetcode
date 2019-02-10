@@ -7,8 +7,10 @@ import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { leetCodeResultProvider } from "../leetCodeResultProvider";
 import { IQuickItemEx, UserStatus } from "../shared";
+import { isWindows, usingCmd } from "../utils/osUtils";
 import { DialogType, promptForOpenOutputChannel, showFileSelectDialog } from "../utils/uiUtils";
-import { getActivefilePath } from "../utils/workspaceUtils";
+import { getActiveFilePath } from "../utils/workspaceUtils";
+import * as wsl from "../utils/wslUtils";
 
 export async function testSolution(uri?: vscode.Uri): Promise<void> {
     try {
@@ -16,7 +18,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
             return;
         }
 
-        const filePath: string | undefined = await getActivefilePath(uri);
+        const filePath: string | undefined = await getActiveFilePath(uri);
         if (!filePath) {
             return;
         }
@@ -37,7 +39,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
             {
                 label: "$(file-text) Browse...",
                 description: "",
-                detail: "Test with the writen cases in file",
+                detail: "Test with the written cases in file",
                 value: ":file",
             },
         );
@@ -59,15 +61,15 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
                     ignoreFocusOut: true,
                 });
                 if (testString) {
-                    result = await leetCodeExecutor.testSolution(filePath, testString.replace(/"/g, ""));
+                    result = await leetCodeExecutor.testSolution(filePath, parseTestString(testString));
                 }
                 break;
             case ":file":
                 const testFile: vscode.Uri[] | undefined = await showFileSelectDialog();
                 if (testFile && testFile.length) {
-                    const input: string = await fse.readFile(testFile[0].fsPath, "utf-8");
-                    if (input.trim()) {
-                        result = await leetCodeExecutor.testSolution(filePath, input.replace(/"/g, "").replace(/\r?\n/g, "\\n"));
+                    const input: string = (await fse.readFile(testFile[0].fsPath, "utf-8")).trim();
+                    if (input) {
+                        result = await leetCodeExecutor.testSolution(filePath, parseTestString(input.replace(/\r?\n/g, "\\n")));
                     } else {
                         vscode.window.showErrorMessage("The selected test file must not be empty.");
                     }
@@ -82,5 +84,19 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
         await leetCodeResultProvider.show(result);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to test the solution. Please open the output channel for details.", DialogType.error);
+    }
+}
+
+function parseTestString(test: string): string {
+    if (wsl.useWsl() || !isWindows()) {
+        return `'${test}'`;
+    }
+
+    // In windows and not using WSL
+    if (usingCmd()) {
+        return `"${test.replace(/"/g, '\\"')}"`;
+    } else {
+        // Assume using PowerShell
+        return `'${test.replace(/"/g, '\\"')}'`;
     }
 }
