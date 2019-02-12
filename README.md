@@ -67,7 +67,8 @@
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="Pick a Problem" />
 </p>
 
-- Right click the problem in the `LeetCode Explorer` and select `Show Problem` will generate a new file with the problem description for you.
+- Right click the problem in the `LeetCode Explorer` and select `Show problem` will generate a new file with the problem description for you.
+- Right click the problem in the `LeetCode Explorer` and select `Show problem with tag` will generate a new file with the problem description and classified by tag folder.
 
   > Note: If no folder is opened in VS Code, the extension will save the problem files in **$HOME/.leetcode/**.
 
@@ -114,13 +115,13 @@
 
 
 ## Settings
-| Setting Name | Description | Default Value |
-|---|---|---|
-| `leetcode.hideSolved` | Specify to hide the solved problems or not | `false` |
-| `leetcode.showLocked` | Specify to show the locked problems or not. Only Premium users could open the locked problems | `false` |
-| `leetcode.defaultLanguage` | Specify the default language used to solve the problem. Supported languages are: `bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `python`,`python3`,`ruby`,`scala`,`swift` | `N/A` |
-| `leetcode.useWsl` | Specify whether to use WSL or not | `false` |
-| `leetcode.endpoint` | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn` | `leetcode` |
+| Setting Name               | Description                                                                                                                                                                                                 | Default Value |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `leetcode.hideSolved`      | Specify to hide the solved problems or not                                                                                                                                                                  | `false`       |
+| `leetcode.showLocked`      | Specify to show the locked problems or not. Only Premium users could open the locked problems                                                                                                               | `false`       |
+| `leetcode.defaultLanguage` | Specify the default language used to solve the problem. Supported languages are: `bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `python`,`python3`,`ruby`,`scala`,`swift` | `N/A`         |
+| `leetcode.useWsl`          | Specify whether to use WSL or not                                                                                                                                                                           | `false`       |
+| `leetcode.endpoint`        | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn`                                                                                                                             | `leetcode`    |
 
 ## Release Notes
 

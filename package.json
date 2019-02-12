@@ -94,6 +94,11 @@
                 "category": "LeetCode"
             },
             {
+                "command": "leetcode.showProblemWithTag",
+                "title": "Show problem with tag",
+                "category": "LeetCode"
+            },
+            {
                 "command": "leetcode.searchProblem",
                 "title": "Search Problem",
                 "category": "LeetCode",
@@ -156,6 +161,11 @@
             "view/item/context": [
                 {
                     "command": "leetcode.showProblem",
+                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "group": "leetcode@1"
+                },
+                {
+                    "command": "leetcode.showProblemWithTag",
                     "when": "view == leetCodeExplorer && viewItem == problem",
                     "group": "leetcode@1"
                 }

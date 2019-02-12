@@ -67,7 +67,8 @@
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="选择题目" />
 </p>
 
-- 在 `LeetCode Explorer` 中**右键**题目并选择 `Show Problem` 进行答题。
+- 在 `LeetCode Explorer` 中**右键**题目并选择 `Show problem` 进行答题。
+- 在 `LeetCode Explorer` 中**右键**题目并选择 `Show problem with tag`，题目会被放进分类好的文件夹，并进行答题。
 
   > 注意：若当前 VS Code 没有已打开的文件夹，则生成的题目文件会存储于 **$HOME/.leetcode/** 目录下。
 
@@ -114,13 +115,13 @@
 
 
 ## 插件配置项
-| 配置项名称 | 描述 | 默认值 |
-|---|---|---|
-| `leetcode.hideSolved` | 指定是否要隐藏已解决的问题 | `false` |
-| `leetcode.showLocked` | 指定是否显示付费题目，只有付费账户才可以打开付费题目 | `false` |
-| `leetcode.defaultLanguage` | 指定答题时使用的默认语言，可选语言有：`bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `python`,`python3`,`ruby`,`scala`,`swift` | `N/A` |
-| `leetcode.useWsl` | 指定是否启用 WSL | `false` |
-| `leetcode.endpoint` | 指定使用的终端，可用终端有：`leetcode`, `leetcode-cn` | `leetcode` |
+| 配置项名称                 | 描述                                                                                                                                                             | 默认值     |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `leetcode.hideSolved`      | 指定是否要隐藏已解决的问题                                                                                                                                       | `false`    |
+| `leetcode.showLocked`      | 指定是否显示付费题目，只有付费账户才可以打开付费题目                                                                                                             | `false`    |
+| `leetcode.defaultLanguage` | 指定答题时使用的默认语言，可选语言有：`bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `python`,`python3`,`ruby`,`scala`,`swift` | `N/A`      |
+| `leetcode.useWsl`          | 指定是否启用 WSL                                                                                                                                                 | `false`    |
+| `leetcode.endpoint`        | 指定使用的终端，可用终端有：`leetcode`, `leetcode-cn`                                                                                                            | `leetcode` |
 
 ## 更新日志
 

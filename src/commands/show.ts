@@ -12,11 +12,11 @@ import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
 import * as list from "./list";
 
-export async function showProblem(node?: LeetCodeNode): Promise<void> {
+export async function showProblem(node?: LeetCodeNode, withTagFloder?: boolean): Promise<void> {
     if (!node) {
         return;
     }
-    await showProblemInternal(node.id);
+    await showProblemInternal(node.id, withTagFloder);
 }
 
 export async function searchProblem(): Promise<void> {
@@ -37,7 +37,7 @@ export async function searchProblem(): Promise<void> {
     await showProblemInternal(choice.value);
 }
 
-async function showProblemInternal(id: string): Promise<void> {
+async function showProblemInternal(id: string, withTagFloder?: boolean): Promise<void> {
     try {
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         let defaultLanguage: string | undefined = leetCodeConfig.get<string>("defaultLanguage");
@@ -49,7 +49,11 @@ async function showProblemInternal(id: string): Promise<void> {
             return;
         }
 
-        const outDir: string = await selectWorkspaceFolder();
+        let outDir: string = await selectWorkspaceFolder();
+        if (withTagFloder) {
+            const { tags } = await leetCodeExecutor.getCompaniesAndTags();
+            outDir = `${outDir}/${tags[id][0].split("-").map((c: string) => c[0].toUpperCase() + c.slice(1)).join(" ")}`;
+        }
         await fse.ensureDir(outDir);
         const result: string = await leetCodeExecutor.showProblem(id, language, outDir);
         const reg: RegExp = /\* Source Code:\s*(.*)/;
