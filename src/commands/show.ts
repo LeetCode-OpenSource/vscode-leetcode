@@ -16,6 +16,13 @@ export async function showProblem(node?: LeetCodeNode): Promise<void> {
     if (!node) {
         return;
     }
+    await showProblemContent(node);
+}
+
+export async function showToSolveProblem(node?: LeetCodeNode): Promise<void> {
+    if (!node) {
+        return;
+    }
     await showProblemInternal(node.id);
 }
 
@@ -37,6 +44,51 @@ export async function searchProblem(): Promise<void> {
     await showProblemInternal(choice.value);
 }
 
+async function showProblemContent(node: LeetCodeNode): Promise<void> {
+    try {
+        const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+        let defaultLanguage: string | undefined = leetCodeConfig.get<string>("defaultLanguage");
+        if (defaultLanguage && languages.indexOf(defaultLanguage) < 0) {
+            defaultLanguage = undefined;
+        }
+        const language: string | undefined = defaultLanguage || await vscode.window.showQuickPick(languages, { placeHolder: "Select the language you want to use" });
+        if (!language) {
+            return;
+        }
+
+        const result: string = await leetCodeExecutor.showProblem(node.id, language);
+        //TODO: format the string in message box, or use other method to show the problem contents
+        //TODO: only complete the right-click function, how to use left-click or double left-click to show the problem?
+        console.log(result);
+        if (result) {
+            const choice: vscode.MessageItem | undefined = await vscode.window.showInformationMessage(
+                result,
+                DialogOptions.solve,
+                DialogOptions.close
+            );
+            if (choice === DialogOptions.solve) {
+                showToSolveProblem(node);
+            }
+        }
+
+        if (!defaultLanguage && leetCodeConfig.get<boolean>("showSetDefaultLanguageHint")) {
+            const choice: vscode.MessageItem | undefined = await vscode.window.showInformationMessage(
+                `Would you like to set '${language}' as your default language?`,
+                DialogOptions.yes,
+                DialogOptions.no,
+                DialogOptions.never,
+            );
+            if (choice === DialogOptions.yes) {
+                leetCodeConfig.update("defaultLanguage", language, true /* UserSetting */);
+            } else if (choice === DialogOptions.never) {
+                leetCodeConfig.update("showSetDefaultLanguageHint", false, true /* UserSetting */);
+            }
+        }
+    } catch (error) {
+        await promptForOpenOutputChannel("Failed to fetch the problem information. Please open the output channel for details.", DialogType.error);
+    }
+}
+
 async function showProblemInternal(id: string): Promise<void> {
     try {
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
@@ -51,7 +103,7 @@ async function showProblemInternal(id: string): Promise<void> {
 
         const outDir: string = await selectWorkspaceFolder();
         await fse.ensureDir(outDir);
-        const result: string = await leetCodeExecutor.showProblem(id, language, outDir);
+        const result: string = await leetCodeExecutor.showToSolveProblem(id, language, outDir);
         const reg: RegExp = /\* Source Code:\s*(.*)/;
         const match: RegExpMatchArray | null = result.match(reg);
         if (match && match.length >= 2) {

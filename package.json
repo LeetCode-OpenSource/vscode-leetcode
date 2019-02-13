@@ -32,6 +32,7 @@
         "onCommand:leetcode.selectSessions",
         "onCommand:leetcode.createSession",
         "onCommand:leetcode.refreshExplorer",
+        "onCommand:leetcode.showToSolveProblem",
         "onCommand:leetcode.showProblem",
         "onCommand:leetcode.searchProblem",
         "onCommand:leetcode.testSolution",
@@ -40,8 +41,7 @@
     ],
     "main": "./out/src/extension",
     "contributes": {
-        "commands": [
-            {
+        "commands": [{
                 "command": "leetcode.deleteCache",
                 "title": "Delete Cache",
                 "category": "LeetCode"
@@ -94,6 +94,11 @@
                 "category": "LeetCode"
             },
             {
+                "command": "leetcode.showToSolveProblem",
+                "title": "Solve Problem",
+                "category": "LeetCode"
+            },
+            {
                 "command": "leetcode.searchProblem",
                 "title": "Search Problem",
                 "category": "LeetCode",
@@ -114,25 +119,20 @@
             }
         ],
         "viewsContainers": {
-            "activitybar": [
-                {
-                    "id": "leetcode",
-                    "title": "LeetCode",
-                    "icon": "resources/LeetCode.svg"
-                }
-            ]
+            "activitybar": [{
+                "id": "leetcode",
+                "title": "LeetCode",
+                "icon": "resources/LeetCode.svg"
+            }]
         },
         "views": {
-            "leetcode": [
-                {
-                    "id": "leetCodeExplorer",
-                    "name": "Problems"
-                }
-            ]
+            "leetcode": [{
+                "id": "leetCodeExplorer",
+                "name": "Problems"
+            }]
         },
         "menus": {
-            "view/title": [
-                {
+            "view/title": [{
                     "command": "leetcode.toggleLeetCodeCn",
                     "when": "view == leetCodeExplorer",
                     "group": "navigation@0"
@@ -153,21 +153,22 @@
                     "group": "navigation@3"
                 }
             ],
-            "view/item/context": [
+            "view/item/context": [{
+                    "command": "leetcode.showToSolveProblem",
+                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "group": "leetcode@1"
+                },
                 {
                     "command": "leetcode.showProblem",
                     "when": "view == leetCodeExplorer && viewItem == problem",
                     "group": "leetcode@1"
                 }
             ],
-            "commandPalette": [
-                {
-                    "command": "leetcode.showProblem",
-                    "when": "never"
-                }
-            ],
-            "explorer/context": [
-                {
+            "commandPalette": [{
+                "command": "leetcode.showToSolveProblem",
+                "when": "never"
+            }],
+            "explorer/context": [{
                     "command": "leetcode.testSolution",
                     "when": "explorerResourceIsFolder == false",
                     "group": "leetcode@1"
@@ -178,8 +179,7 @@
                     "group": "leetcode@2"
                 }
             ],
-            "editor/context": [
-                {
+            "editor/context": [{
                     "command": "leetcode.testSolution",
                     "group": "leetcode@1"
                 },
@@ -189,68 +189,66 @@
                 }
             ]
         },
-        "configuration": [
-            {
-                "title": "LeetCode",
-                "properties": {
-                    "leetcode.hideSolved": {
-                        "type": "boolean",
-                        "default": false,
-                        "scope": "application",
-                        "description": "Hide solved problems."
-                    },
-                    "leetcode.showLocked": {
-                        "type": "boolean",
-                        "default": false,
-                        "scope": "application",
-                        "description": "Show locked problems."
-                    },
-                    "leetcode.defaultLanguage": {
-                        "type": "string",
-                        "enum": [
-                            "bash",
-                            "c",
-                            "cpp",
-                            "csharp",
-                            "golang",
-                            "java",
-                            "javascript",
-                            "kotlin",
-                            "mysql",
-                            "python",
-                            "python3",
-                            "ruby",
-                            "scala",
-                            "swift"
-                        ],
-                        "scope": "application",
-                        "description": "Default language for solving the problems."
-                    },
-                    "leetcode.showSetDefaultLanguageHint": {
-                        "type": "boolean",
-                        "default": true,
-                        "scope": "application",
-                        "description": "Show a hint to set the default language."
-                    },
-                    "leetcode.useWsl": {
-                        "type": "boolean",
-                        "default": false,
-                        "scope": "application",
-                        "description": "Use Node.js inside the Windows Subsystem for Linux."
-                    },
-                    "leetcode.endpoint": {
-                        "type": "string",
-                        "default": "leetcode",
-                        "scope": "application",
-                        "enum": [
-                            "leetcode",
-                            "leetcode-cn"
-                        ],
-                        "description": "Endpoint of the user account."
-                    }
+        "configuration": [{
+            "title": "LeetCode",
+            "properties": {
+                "leetcode.hideSolved": {
+                    "type": "boolean",
+                    "default": false,
+                    "scope": "application",
+                    "description": "Hide solved problems."
+                },
+                "leetcode.showLocked": {
+                    "type": "boolean",
+                    "default": false,
+                    "scope": "application",
+                    "description": "Show locked problems."
+                },
+                "leetcode.defaultLanguage": {
+                    "type": "string",
+                    "enum": [
+                        "bash",
+                        "c",
+                        "cpp",
+                        "csharp",
+                        "golang",
+                        "java",
+                        "javascript",
+                        "kotlin",
+                        "mysql",
+                        "python",
+                        "python3",
+                        "ruby",
+                        "scala",
+                        "swift"
+                    ],
+                    "scope": "application",
+                    "description": "Default language for solving the problems."
+                },
+                "leetcode.showSetDefaultLanguageHint": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "application",
+                    "description": "Show a hint to set the default language."
+                },
+                "leetcode.useWsl": {
+                    "type": "boolean",
+                    "default": false,
+                    "scope": "application",
+                    "description": "Use Node.js inside the Windows Subsystem for Linux."
+                },
+                "leetcode.endpoint": {
+                    "type": "string",
+                    "default": "leetcode",
+                    "scope": "application",
+                    "enum": [
+                        "leetcode",
+                        "leetcode-cn"
+                    ],
+                    "description": "Endpoint of the user account."
                 }
             }
-        ]
+        }]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
