@@ -67,8 +67,7 @@
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="Pick a Problem" />
 </p>
 
-- Right click the problem in the `LeetCode Explorer` and select `Show problem` will generate a new file with the problem description for you.
-- Right click the problem in the `LeetCode Explorer` and select `Show problem with tag` will generate a new file with the problem description and classified by tag folder.
+- Right click the problem in the `LeetCode Explorer` and select `Show Problem` will generate a new file with the problem description for you.
 
   > Note: If no folder is opened in VS Code, the extension will save the problem files in **$HOME/.leetcode/**.
 
@@ -122,6 +121,10 @@
 | `leetcode.defaultLanguage` | Specify the default language used to solve the problem. Supported languages are: `bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `python`,`python3`,`ruby`,`scala`,`swift` | `N/A`         |
 | `leetcode.useWsl`          | Specify whether to use WSL or not                                                                                                                                                                           | `false`       |
 | `leetcode.endpoint`        | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn`                                                                                                                             | `leetcode`    |
+| `leetcode.outputPath`      | * `${tag}` - a directory based on the problem's tag. For example, if the problem belongs to: `Binary Indexed Tree`, then a folder named `binary_indexed_tree` will be used here.                            |
+* `${language}` - a directory based on the language used. For example, `java` for Java language
+* `${difficulty}` - a directory based on the problem's difficulty. For example, `easy`
+* If this setting is not set, the files will be generated to the base path of the workspace folder                                                                                                                     | `root`        |
 
 ## Release Notes
 

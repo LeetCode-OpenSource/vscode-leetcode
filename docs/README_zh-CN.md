@@ -67,8 +67,7 @@
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="选择题目" />
 </p>
 
-- 在 `LeetCode Explorer` 中**右键**题目并选择 `Show problem` 进行答题。
-- 在 `LeetCode Explorer` 中**右键**题目并选择 `Show problem with tag`，题目会被放进分类好的文件夹，并进行答题。
+- 在 `LeetCode Explorer` 中**右键**题目并选择 `Show Problem` 进行答题。
 
   > 注意：若当前 VS Code 没有已打开的文件夹，则生成的题目文件会存储于 **$HOME/.leetcode/** 目录下。
 

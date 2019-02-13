@@ -12,11 +12,11 @@ import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
 import * as list from "./list";
 
-export async function showProblem(node?: LeetCodeNode, withTagFloder?: boolean): Promise<void> {
+export async function showProblem(node?: LeetCodeNode): Promise<void> {
     if (!node) {
         return;
     }
-    await showProblemInternal(node.id, withTagFloder);
+    await showProblemInternal(node.id);
 }
 
 export async function searchProblem(): Promise<void> {
@@ -37,7 +37,7 @@ export async function searchProblem(): Promise<void> {
     await showProblemInternal(choice.value);
 }
 
-async function showProblemInternal(id: string, withTagFloder?: boolean): Promise<void> {
+async function showProblemInternal(id: string): Promise<void> {
     try {
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         let defaultLanguage: string | undefined = leetCodeConfig.get<string>("defaultLanguage");
@@ -50,9 +50,23 @@ async function showProblemInternal(id: string, withTagFloder?: boolean): Promise
         }
 
         let outDir: string = await selectWorkspaceFolder();
-        if (withTagFloder) {
-            const { tags } = await leetCodeExecutor.getCompaniesAndTags();
-            outDir = `${outDir}/${tags[id][0].split("-").map((c: string) => c[0].toUpperCase() + c.slice(1)).join(" ")}`;
+        const outputPath: string = leetCodeConfig.get<string>("outputPath") || "root";
+        switch (outputPath) {
+            case "root": {
+                break;
+            }
+            case "tag": {
+                const { tags } = await leetCodeExecutor.getCompaniesAndTags();
+                outDir = `${outDir}/${tags[id][0].split("-").map((c: string) => c[0].toUpperCase() + c.slice(1)).join("")}`;
+                break;
+            }
+            case "language": {
+                outDir = `${outDir}/${language}`;
+                break;
+            }
+            case "difficulty": {
+                break;
+            }
         }
         await fse.ensureDir(outDir);
         const result: string = await leetCodeExecutor.showProblem(id, language, outDir);

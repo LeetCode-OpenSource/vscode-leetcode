@@ -94,11 +94,6 @@
                 "category": "LeetCode"
             },
             {
-                "command": "leetcode.showProblemWithTag",
-                "title": "Show problem with tag",
-                "category": "LeetCode"
-            },
-            {
                 "command": "leetcode.searchProblem",
                 "title": "Search Problem",
                 "category": "LeetCode",
@@ -161,11 +156,6 @@
             "view/item/context": [
                 {
                     "command": "leetcode.showProblem",
-                    "when": "view == leetCodeExplorer && viewItem == problem",
-                    "group": "leetcode@1"
-                },
-                {
-                    "command": "leetcode.showProblemWithTag",
                     "when": "view == leetCodeExplorer && viewItem == problem",
                     "group": "leetcode@1"
                 }
@@ -257,6 +247,18 @@
                             "leetcode-cn"
                         ],
                         "description": "Endpoint of the user account."
+                    },
+                    "leetcode.outputPath": {
+                        "type": "string",
+                        "default": "root",
+                        "scope": "application",
+                        "enum": [
+                            "root",
+                            "tag",
+                            "language",
+                            "difficulty"
+                        ],
+                        "description": "Specifies the relative path to save the problem files."
                     }
                 }
             }
