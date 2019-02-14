@@ -39,6 +39,7 @@ export async function searchProblem(): Promise<void> {
 
 async function showProblemInternal(id: string): Promise<void> {
     try {
+        const listProblems: IProblem[] = await list.listProblems();
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         let defaultLanguage: string | undefined = leetCodeConfig.get<string>("defaultLanguage");
         if (defaultLanguage && languages.indexOf(defaultLanguage) < 0) {
@@ -50,21 +51,30 @@ async function showProblemInternal(id: string): Promise<void> {
         }
 
         let outDir: string = await selectWorkspaceFolder();
-        const outputPath: string = leetCodeConfig.get<string>("outputPath") || "root";
+        const outputPath: string = leetCodeConfig.get<string>("outputPath") || "";
+        const problem: IProblem | undefined = listProblems.find((item: IProblem) => item.id === id);
         switch (outputPath) {
-            case "root": {
+            case "": {
                 break;
             }
-            case "tag": {
-                const { tags } = await leetCodeExecutor.getCompaniesAndTags();
-                outDir = `${outDir}/${tags[id][0].split("-").map((c: string) => c[0].toUpperCase() + c.slice(1)).join("")}`;
+            case "${tag}": {
+                if (problem) {
+                    outDir = `${outDir}/${problem.tags[0]}`;
+                }
                 break;
             }
-            case "language": {
+            case "${language}": {
                 outDir = `${outDir}/${language}`;
                 break;
             }
-            case "difficulty": {
+            case "${difficulty}": {
+                if (problem) {
+                    outDir = `${outDir}/${problem.difficulty}`;
+                }
+                break;
+            }
+            default: {
+                outDir = `${outDir}/${outputPath}`;
                 break;
             }
         }

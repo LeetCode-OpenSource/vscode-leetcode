@@ -114,17 +114,16 @@
 
 
 ## Settings
-| Setting Name               | Description                                                                                                                                                                                                 | Default Value |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `leetcode.hideSolved`      | Specify to hide the solved problems or not                                                                                                                                                                  | `false`       |
-| `leetcode.showLocked`      | Specify to show the locked problems or not. Only Premium users could open the locked problems                                                                                                               | `false`       |
-| `leetcode.defaultLanguage` | Specify the default language used to solve the problem. Supported languages are: `bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `python`,`python3`,`ruby`,`scala`,`swift` | `N/A`         |
-| `leetcode.useWsl`          | Specify whether to use WSL or not                                                                                                                                                                           | `false`       |
-| `leetcode.endpoint`        | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn`                                                                                                                             | `leetcode`    |
-| `leetcode.outputPath`      | * `${tag}` - a directory based on the problem's tag. For example, if the problem belongs to: `Binary Indexed Tree`, then a folder named `binary_indexed_tree` will be used here.                            |
-* `${language}` - a directory based on the language used. For example, `java` for Java language
-* `${difficulty}` - a directory based on the problem's difficulty. For example, `easy`
-* If this setting is not set, the files will be generated to the base path of the workspace folder                                                                                                                     | `root`        |
+| Setting Name | Description | Default Value |
+|---|---|---|
+| `leetcode.hideSolved` | Specify to hide the solved problems or not | `false` |
+| `leetcode.showLocked` | Specify to show the locked problems or not. Only Premium users could open the locked problems | `false` |
+| `leetcode.defaultLanguage` | Specify the default language used to solve the problem. Supported languages are: `bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `python`,`python3`,`ruby`,`scala`,`swift` | `N/A` |
+| `leetcode.useWsl` | Specify whether to use WSL or not | `false` |
+| `leetcode.endpoint` | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn` | `leetcode` |
+
+## Troubleshooting
+When you meet any problem, you can check the [Troubleshooting page](https://github.com/jdneo/vscode-leetcode/wiki/Troubleshooting) first.
 
 ## Release Notes
 

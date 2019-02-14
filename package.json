@@ -250,14 +250,8 @@
                     },
                     "leetcode.outputPath": {
                         "type": "string",
-                        "default": "root",
+                        "default": "",
                         "scope": "application",
-                        "enum": [
-                            "root",
-                            "tag",
-                            "language",
-                            "difficulty"
-                        ],
                         "description": "Specifies the relative path to save the problem files."
                     }
                 }
