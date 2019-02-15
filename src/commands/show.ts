@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import * as fse from "fs-extra";
+import * as path from "path";
 import * as vscode from "vscode";
 import { LeetCodeNode } from "../explorer/LeetCodeNode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
@@ -16,7 +17,7 @@ export async function showProblem(node?: LeetCodeNode): Promise<void> {
     if (!node) {
         return;
     }
-    await showProblemInternal(node.id);
+    await showProblemInternal(node);
 }
 
 export async function searchProblem(): Promise<void> {
@@ -24,8 +25,9 @@ export async function searchProblem(): Promise<void> {
         promptForSignIn();
         return;
     }
+    const problems: IProblem[] = await list.listProblems();
     const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(
-        parseProblemsToPicks(list.listProblems()),
+        parseProblemsToPicks(problems),
         {
             matchOnDetail: true,
             placeHolder: "Select one problem",
@@ -34,12 +36,11 @@ export async function searchProblem(): Promise<void> {
     if (!choice) {
         return;
     }
-    await showProblemInternal(choice.value);
+    await showProblemInternal(problems.find((problem: IProblem) => problem.id === choice.value) as IProblem);
 }
 
-async function showProblemInternal(id: string): Promise<void> {
+async function showProblemInternal(node: IProblem): Promise<void> {
     try {
-        const listProblems: IProblem[] = await list.listProblems();
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         let defaultLanguage: string | undefined = leetCodeConfig.get<string>("defaultLanguage");
         if (defaultLanguage && languages.indexOf(defaultLanguage) < 0) {
@@ -51,35 +52,35 @@ async function showProblemInternal(id: string): Promise<void> {
         }
 
         let outDir: string = await selectWorkspaceFolder();
-        const outputPath: string = leetCodeConfig.get<string>("outputPath") || "";
-        const problem: IProblem | undefined = listProblems.find((item: IProblem) => item.id === id);
-        switch (outputPath) {
-            case "": {
-                break;
-            }
-            case "${tag}": {
-                if (problem) {
-                    outDir = `${outDir}/${problem.tags[0]}`;
+        const outputPathCfg: string = leetCodeConfig.get<string>("outputPath") || "";
+        const outputPath: RegExpMatchArray | null = outputPathCfg.match(/\$\{(.*?)\}/);
+        if (outputPath) {
+            switch (outputPath[1].toLowerCase()) {
+                case "tag": {
+                    const closestTag: string = node.tags.reduce((prev: string, curr: string) => {
+                        return curr.length > prev.length ?
+                            curr :
+                            prev;
+                    }, "");
+                    outDir = path.join(outDir, closestTag);
+                    break;
                 }
-                break;
-            }
-            case "${language}": {
-                outDir = `${outDir}/${language}`;
-                break;
-            }
-            case "${difficulty}": {
-                if (problem) {
-                    outDir = `${outDir}/${problem.difficulty}`;
+                case "language": {
+                    outDir = path.join(outDir, language);
+                    break;
                 }
-                break;
-            }
-            default: {
-                outDir = `${outDir}/${outputPath}`;
-                break;
+                case "difficulty": {
+                    outDir = path.join(outDir, node.difficulty);
+                    break;
+                }
+                default: {
+                    break;
+                }
+
             }
         }
         await fse.ensureDir(outDir);
-        const result: string = await leetCodeExecutor.showProblem(id, language, outDir);
+        const result: string = await leetCodeExecutor.showProblem(node.id, language, outDir);
         const reg: RegExp = /\* Source Code:\s*(.*)/;
         const match: RegExpMatchArray | null = result.match(reg);
         if (match && match.length >= 2) {
@@ -108,9 +109,9 @@ async function showProblemInternal(id: string): Promise<void> {
     }
 }
 
-async function parseProblemsToPicks(p: Promise<IProblem[]>): Promise<Array<IQuickItemEx<string>>> {
+async function parseProblemsToPicks(p: IProblem[]): Promise<Array<IQuickItemEx<string>>> {
     return new Promise(async (resolve: (res: Array<IQuickItemEx<string>>) => void): Promise<void> => {
-        const picks: Array<IQuickItemEx<string>> = (await p).map((problem: IProblem) => Object.assign({}, {
+        const picks: Array<IQuickItemEx<string>> = p.map((problem: IProblem) => Object.assign({}, {
             label: `${parseProblemDecorator(problem.state, problem.locked)}${problem.id}.${problem.name}`,
             description: "",
             detail: `AC rate: ${problem.passRate}, Difficulty: ${problem.difficulty}`,

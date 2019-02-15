@@ -250,9 +250,8 @@
                     },
                     "leetcode.outputPath": {
                         "type": "string",
-                        "default": "",
                         "scope": "application",
-                        "description": "Specifies the relative path to save the problem files."
+                        "description": "Specify the relative path to save the problem files."
                     }
                 }
             }
