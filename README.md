@@ -122,6 +122,9 @@
 | `leetcode.useWsl` | Specify whether to use WSL or not | `false` |
 | `leetcode.endpoint` | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn` | `leetcode` |
 
+## Troubleshooting
+When you meet any problem, you can check the [Troubleshooting page](https://github.com/jdneo/vscode-leetcode/wiki/Troubleshooting) first.
+
 ## Release Notes
 
 Refer to [CHANGELOG](https://github.com/jdneo/vscode-leetcode/blob/master/CHANGELOG.md)
