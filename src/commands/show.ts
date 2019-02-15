@@ -56,7 +56,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         const outputPath: RegExpMatchArray | null = outputPathCfg.match(/\$\{(.*?)\}/);
         if (outputPath) {
             switch (outputPath[1].toLowerCase()) {
-                case "tag": {
+                case "tag":
                     const closestTag: string = node.tags.reduce((prev: string, curr: string) => {
                         return curr.length > prev.length ?
                             curr :
@@ -64,20 +64,19 @@ async function showProblemInternal(node: IProblem): Promise<void> {
                     }, "");
                     outDir = path.join(outDir, closestTag);
                     break;
-                }
-                case "language": {
+                case "language":
                     outDir = path.join(outDir, language);
                     break;
-                }
-                case "difficulty": {
+                case "difficulty":
                     outDir = path.join(outDir, node.difficulty);
                     break;
-                }
                 default: {
                     break;
                 }
 
             }
+        } else {
+            outDir = path.join(outDir, outputPathCfg);
         }
         await fse.ensureDir(outDir);
         const result: string = await leetCodeExecutor.showProblem(node.id, language, outDir);
