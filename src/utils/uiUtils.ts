@@ -11,8 +11,6 @@ export namespace DialogOptions {
     export const no: vscode.MessageItem = { title: "No", isCloseAffordance: true };
     export const never: vscode.MessageItem = { title: "Never" };
     export const singUp: vscode.MessageItem = { title: "Sign up" };
-    export const solve: vscode.MessageItem = { title: "Solve" };
-    export const close: vscode.MessageItem = { title: "Close" };
 }
 
 export async function promptForOpenOutputChannel(message: string, type: DialogType): Promise<void> {
