@@ -60,7 +60,7 @@ async function showProblemContent(node: LeetCodeNode): Promise<void> {
 
         // TODO: only complete the right-click function, how to use left-click or double left-click to show the problem?
         // this request referring to the leetcode-cli, for it doesn't provide export for its function.
-        const opts = {};
+        const opts: any = {};
         opts.headers = {};
         opts.url = "https://leetcode.com/graphql";
         opts.headers.Origin = "https://leetcode.com";
@@ -84,15 +84,15 @@ async function showProblemContent(node: LeetCodeNode): Promise<void> {
             operationName: "getQuestionDetail",
         };
 
-        request.post(opts, function (e, resp, body) {
+        request.post(opts, (e: any, resp: any, body: any) => {
             // TODO: add error handling
-            const content = body.data.question.content;
+            const content: any = body.data.question.content;
 
-            const panel = vscode.window.createWebviewPanel(
+            const panel: any = vscode.window.createWebviewPanel(
                 "problemContent",
                 node.name,
                 vscode.ViewColumn.One,
-                {}
+                {},
             );
 
             panel.webview.html = getWebviewContent(content);
@@ -116,7 +116,7 @@ async function showProblemContent(node: LeetCodeNode): Promise<void> {
     }
 }
 
-function getWebviewContent(inputContent: string) {
+function getWebviewContent(inputContent: string): string {
     return `<!DOCTYPE html>
     <html lang="en">
 

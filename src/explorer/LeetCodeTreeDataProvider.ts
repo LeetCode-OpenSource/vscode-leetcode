@@ -89,12 +89,12 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 case Category.Favorite:
                     const nodes: IProblem[] = this.treeData[Category.Favorite];
                     return nodes.map((p: IProblem) => {
-                        const item = new LeetCodeNode(p, Category.Favorite);
+                        const item: LeetCodeNode = new LeetCodeNode(p, Category.Favorite);
                         item.command = {
                             command: "leetcode.showProblem",
                             title: "Select Node",
                             arguments: [item],
-                        }
+                        };
                         return item;
                     });
                 case Category.Difficulty:
@@ -138,12 +138,12 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         const problems: IProblem[] = map.get(node.name) || [];
         const problemNodes: LeetCodeNode[] = [];
         for (const problem of problems) {
-            const item = new LeetCodeNode(problem, node.name);
+            const item: LeetCodeNode = new LeetCodeNode(problem, node.name);
             item.command = {
                 command: "leetcode.showProblem",
                 title: "Select Node",
                 arguments: [item],
-            }
+            };
             problemNodes.push(item);
         }
         return problemNodes;
