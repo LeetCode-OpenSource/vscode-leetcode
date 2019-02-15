@@ -2,10 +2,12 @@
 // Licensed under the MIT license.
 
 import * as fse from "fs-extra";
+import * as request from "request";
 import * as vscode from "vscode";
 import { LeetCodeNode } from "../explorer/LeetCodeNode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
+import { } from "../shared";
 import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
 import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
@@ -56,20 +58,45 @@ async function showProblemContent(node: LeetCodeNode): Promise<void> {
             return;
         }
 
-        const result: string = await leetCodeExecutor.showProblem(node.id, language);
-        //TODO: format the string in message box, or use other method to show the problem contents
-        //TODO: only complete the right-click function, how to use left-click or double left-click to show the problem?
-        console.log(result);
-        if (result) {
-            const choice: vscode.MessageItem | undefined = await vscode.window.showInformationMessage(
-                result,
-                DialogOptions.solve,
-                DialogOptions.close
+        // TODO: only complete the right-click function, how to use left-click or double left-click to show the problem?
+        // this request referring to the leetcode-cli, for it doesn't provide export for its function.
+        const opts = {};
+        opts.headers = {};
+        opts.url = "https://leetcode.com/graphql";
+        opts.headers.Origin = "https://leetcode.com";
+
+        opts.json = true;
+        opts.body = {
+            query: [
+                "query getQuestionDetail($titleSlug: String!) {",
+                "  question(titleSlug: $titleSlug) {",
+                "    content",
+                "    stats",
+                "    codeDefinition",
+                "    sampleTestCase",
+                "    enableRunCode",
+                "    metaData",
+                "    translatedContent",
+                "  }",
+                "}",
+            ].join("\n"),
+            variables: { titleSlug: node.name.replace(/ /g, "-").toLocaleLowerCase() },
+            operationName: "getQuestionDetail",
+        };
+
+        request.post(opts, function (e, resp, body) {
+            // TODO: add error handling
+            const content = body.data.question.content;
+
+            const panel = vscode.window.createWebviewPanel(
+                "problemContent",
+                node.name,
+                vscode.ViewColumn.One,
+                {}
             );
-            if (choice === DialogOptions.solve) {
-                showToSolveProblem(node);
-            }
-        }
+
+            panel.webview.html = getWebviewContent(content);
+        });
 
         if (!defaultLanguage && leetCodeConfig.get<boolean>("showSetDefaultLanguageHint")) {
             const choice: vscode.MessageItem | undefined = await vscode.window.showInformationMessage(
@@ -87,6 +114,22 @@ async function showProblemContent(node: LeetCodeNode): Promise<void> {
     } catch (error) {
         await promptForOpenOutputChannel("Failed to fetch the problem information. Please open the output channel for details.", DialogType.error);
     }
+}
+
+function getWebviewContent(inputContent: string) {
+    return `<!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cat Coding</title>
+    </head>
+
+    <body>
+        ${inputContent}
+    </body>
+    </html>`;
 }
 
 async function showProblemInternal(id: string): Promise<void> {
