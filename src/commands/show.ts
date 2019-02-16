@@ -52,7 +52,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         }
 
         let outDir: string = await selectWorkspaceFolder();
-        let relativePath: string = (leetCodeConfig.get<string>("outputPath") || "").trim();
+        let relativePath: string = (leetCodeConfig.get<string>("outputFolder") || "").trim();
         const matchResult: RegExpMatchArray | null = relativePath.match(/\$\{(.*?)\}/);
         if (matchResult) {
             const resolvedPath: string | undefined = await resolveRelativePath(matchResult[1].toLocaleLowerCase(), node, language);
