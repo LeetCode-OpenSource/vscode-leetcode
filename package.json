@@ -247,6 +247,11 @@
                             "leetcode-cn"
                         ],
                         "description": "Endpoint of the user account."
+                    },
+                    "leetcode.outputFolder": {
+                        "type": "string",
+                        "scope": "application",
+                        "description": "Specify the relative path to save the problem files."
                     }
                 }
             }
