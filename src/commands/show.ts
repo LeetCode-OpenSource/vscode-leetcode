@@ -57,7 +57,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         if (matchResult) {
             const resolvedPath: string | undefined = await resolveRelativePath(matchResult[1].toLocaleLowerCase(), node, language);
             if (!resolvedPath) {
-                leetCodeChannel.appendLine("No tag is picked, skip showing the problem.");
+                leetCodeChannel.appendLine("Showing problem canceled by user.");
                 return;
             }
             relativePath = resolvedPath;
