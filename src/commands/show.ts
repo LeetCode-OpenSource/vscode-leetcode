@@ -5,6 +5,7 @@ import * as fse from "fs-extra";
 import * as path from "path";
 import * as vscode from "vscode";
 import { LeetCodeNode } from "../explorer/LeetCodeNode";
+import { leetCodeChannel } from "../leetCodeChannel";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
@@ -25,9 +26,8 @@ export async function searchProblem(): Promise<void> {
         promptForSignIn();
         return;
     }
-    const problems: IProblem[] = await list.listProblems();
     const choice: IQuickItemEx<IProblem> | undefined = await vscode.window.showQuickPick(
-        parseProblemsToPicks(problems),
+        parseProblemsToPicks(list.listProblems()),
         {
             matchOnDetail: true,
             placeHolder: "Select one problem",
@@ -52,42 +52,18 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         }
 
         let outDir: string = await selectWorkspaceFolder();
-        const outputPathCfg: string = leetCodeConfig.get<string>("outputPath") || "";
-        const outputPath: RegExpMatchArray | null = outputPathCfg.match(/\$\{(.*?)\}/);
-        if (outputPath) {
-            switch (outputPath[1].toLowerCase()) {
-                case "tag":
-                    let tag: string | undefined;
-                    if (node.tags.length === 1) {
-                        tag = node.tags[0];
-                    } else {
-                        tag = await vscode.window.showQuickPick(
-                            node.tags,
-                            {
-                                matchOnDetail: true,
-                                placeHolder: "Select one tag",
-                            },
-                        );
-                    }
-                    if (!tag) {
-                        return;
-                    }
-                    outDir = path.join(outDir, tag);
-                    break;
-                case "language":
-                    outDir = path.join(outDir, language);
-                    break;
-                case "difficulty":
-                    outDir = path.join(outDir, node.difficulty);
-                    break;
-                default: {
-                    break;
-                }
-
+        let relativePath: string = (leetCodeConfig.get<string>("outputPath") || "").trim();
+        const matchResult: RegExpMatchArray | null = relativePath.match(/\$\{(.*?)\}/);
+        if (matchResult) {
+            const resolvedPath: string | undefined = await resolveRelativePath(matchResult[1].toLocaleLowerCase(), node, language);
+            if (!resolvedPath) {
+                leetCodeChannel.appendLine("No tag is picked, skip showing the problem.");
+                return;
             }
-        } else {
-            outDir = path.join(outDir, outputPathCfg);
+            relativePath = resolvedPath;
         }
+
+        outDir = path.join(outDir, relativePath);
         await fse.ensureDir(outDir);
         const result: string = await leetCodeExecutor.showProblem(node.id, language, outDir);
         const reg: RegExp = /\* Source Code:\s*(.*)/;
@@ -114,13 +90,13 @@ async function showProblemInternal(node: IProblem): Promise<void> {
             }
         }
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to fetch the problem information. Please open the output channel for details.", DialogType.error);
+        await promptForOpenOutputChannel("Failed to show the problem. Please open the output channel for details.", DialogType.error);
     }
 }
 
-async function parseProblemsToPicks(p: IProblem[]): Promise<Array<IQuickItemEx<IProblem>>> {
+async function parseProblemsToPicks(p: Promise<IProblem[]>): Promise<Array<IQuickItemEx<IProblem>>> {
     return new Promise(async (resolve: (res: Array<IQuickItemEx<IProblem>>) => void): Promise<void> => {
-        const picks: Array<IQuickItemEx<IProblem>> = p.map((problem: IProblem) => Object.assign({}, {
+        const picks: Array<IQuickItemEx<IProblem>> = (await p).map((problem: IProblem) => Object.assign({}, {
             label: `${parseProblemDecorator(problem.state, problem.locked)}${problem.id}.${problem.name}`,
             description: "",
             detail: `AC rate: ${problem.passRate}, Difficulty: ${problem.difficulty}`,
@@ -138,5 +114,30 @@ function parseProblemDecorator(state: ProblemState, locked: boolean): string {
             return "$(x) ";
         default:
             return locked ? "$(lock) " : "";
+    }
+}
+
+async function resolveRelativePath(value: string, node: IProblem, selectedLanguage: string): Promise<string | undefined> {
+    switch (value) {
+        case "tag":
+            if (node.tags.length === 1) {
+                return node.tags[0];
+            }
+            return await vscode.window.showQuickPick(
+                node.tags,
+                {
+                    matchOnDetail: true,
+                    placeHolder: "Select one tag",
+                    ignoreFocusOut: true,
+                },
+            );
+        case "language":
+            return selectedLanguage;
+        case "difficulty":
+            return node.difficulty;
+        default:
+            const errorMsg: string = `The config '${value}' is not supported.`;
+            leetCodeChannel.appendLine(errorMsg);
+            throw new Error(errorMsg);
     }
 }
