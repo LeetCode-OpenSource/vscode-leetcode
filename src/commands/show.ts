@@ -26,7 +26,7 @@ export async function searchProblem(): Promise<void> {
         return;
     }
     const problems: IProblem[] = await list.listProblems();
-    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(
+    const choice: IQuickItemEx<IProblem> | undefined = await vscode.window.showQuickPick(
         parseProblemsToPicks(problems),
         {
             matchOnDetail: true,
@@ -36,7 +36,7 @@ export async function searchProblem(): Promise<void> {
     if (!choice) {
         return;
     }
-    await showProblemInternal(problems.find((problem: IProblem) => problem.id === choice.value) as IProblem);
+    await showProblemInternal(choice.value);
 }
 
 async function showProblemInternal(node: IProblem): Promise<void> {
@@ -57,12 +57,22 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         if (outputPath) {
             switch (outputPath[1].toLowerCase()) {
                 case "tag":
-                    const closestTag: string = node.tags.reduce((prev: string, curr: string) => {
-                        return curr.length > prev.length ?
-                            curr :
-                            prev;
-                    }, "");
-                    outDir = path.join(outDir, closestTag);
+                    let tag: string | undefined;
+                    if (node.tags.length === 1) {
+                        tag = node.tags[0];
+                    } else {
+                        tag = await vscode.window.showQuickPick(
+                            node.tags,
+                            {
+                                matchOnDetail: true,
+                                placeHolder: "Select one tag",
+                            },
+                        );
+                    }
+                    if (!tag) {
+                        return;
+                    }
+                    outDir = path.join(outDir, tag);
                     break;
                 case "language":
                     outDir = path.join(outDir, language);
@@ -108,13 +118,13 @@ async function showProblemInternal(node: IProblem): Promise<void> {
     }
 }
 
-async function parseProblemsToPicks(p: IProblem[]): Promise<Array<IQuickItemEx<string>>> {
-    return new Promise(async (resolve: (res: Array<IQuickItemEx<string>>) => void): Promise<void> => {
-        const picks: Array<IQuickItemEx<string>> = p.map((problem: IProblem) => Object.assign({}, {
+async function parseProblemsToPicks(p: IProblem[]): Promise<Array<IQuickItemEx<IProblem>>> {
+    return new Promise(async (resolve: (res: Array<IQuickItemEx<IProblem>>) => void): Promise<void> => {
+        const picks: Array<IQuickItemEx<IProblem>> = p.map((problem: IProblem) => Object.assign({}, {
             label: `${parseProblemDecorator(problem.state, problem.locked)}${problem.id}.${problem.name}`,
             description: "",
             detail: `AC rate: ${problem.passRate}, Difficulty: ${problem.difficulty}`,
-            value: problem.id,
+            value: problem,
         }));
         resolve(picks);
     });
