@@ -127,7 +127,7 @@ async function resolveRelativePath(value: string, node: IProblem, selectedLangua
                 node.tags,
                 {
                     matchOnDetail: true,
-                    placeHolder: "Select one tag",
+                    placeHolder: "Multiple tags available, please select one",
                     ignoreFocusOut: true,
                 },
             );
