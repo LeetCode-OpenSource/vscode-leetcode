@@ -2,12 +2,12 @@
 // Licensed under the MIT license.
 
 import * as fse from "fs-extra";
-import * as request from "request";
+import * as path from "path";
 import * as vscode from "vscode";
 import { LeetCodeNode } from "../explorer/LeetCodeNode";
+import { leetCodeChannel } from "../leetCodeChannel";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { } from "../shared";
 import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
 import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
@@ -18,14 +18,7 @@ export async function showProblem(node?: LeetCodeNode): Promise<void> {
     if (!node) {
         return;
     }
-    await showProblemContent(node);
-}
-
-export async function showToSolveProblem(node?: LeetCodeNode): Promise<void> {
-    if (!node) {
-        return;
-    }
-    await showProblemInternal(node.id);
+    await showProblemInternal(node);
 }
 
 export async function searchProblem(): Promise<void> {
@@ -33,7 +26,7 @@ export async function searchProblem(): Promise<void> {
         promptForSignIn();
         return;
     }
-    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(
+    const choice: IQuickItemEx<IProblem> | undefined = await vscode.window.showQuickPick(
         parseProblemsToPicks(list.listProblems()),
         {
             matchOnDetail: true,
@@ -46,7 +39,7 @@ export async function searchProblem(): Promise<void> {
     await showProblemInternal(choice.value);
 }
 
-async function showProblemContent(node: LeetCodeNode): Promise<void> {
+async function showProblemInternal(node: IProblem): Promise<void> {
     try {
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         let defaultLanguage: string | undefined = leetCodeConfig.get<string>("defaultLanguage");
@@ -58,95 +51,21 @@ async function showProblemContent(node: LeetCodeNode): Promise<void> {
             return;
         }
 
-        // TODO: only complete the right-click function, how to use left-click or double left-click to show the problem?
-        // this request referring to the leetcode-cli, for it doesn't provide export for its function.
-        const opts: any = {};
-        opts.headers = {};
-        opts.url = "https://leetcode.com/graphql";
-        opts.headers.Origin = "https://leetcode.com";
-
-        opts.json = true;
-        opts.body = {
-            query: [
-                "query getQuestionDetail($titleSlug: String!) {",
-                "  question(titleSlug: $titleSlug) {",
-                "    content",
-                "    stats",
-                "    codeDefinition",
-                "    sampleTestCase",
-                "    enableRunCode",
-                "    metaData",
-                "    translatedContent",
-                "  }",
-                "}",
-            ].join("\n"),
-            variables: { titleSlug: node.name.replace(/ /g, "-").toLocaleLowerCase() },
-            operationName: "getQuestionDetail",
-        };
-
-        request.post(opts, (e: any, resp: any, body: any) => {
-            // TODO: add error handling
-            const content: any = body.data.question.content;
-
-            const panel: any = vscode.window.createWebviewPanel(
-                "problemContent",
-                node.name,
-                vscode.ViewColumn.One,
-                {},
-            );
-
-            panel.webview.html = getWebviewContent(content);
-        });
-
-        if (!defaultLanguage && leetCodeConfig.get<boolean>("showSetDefaultLanguageHint")) {
-            const choice: vscode.MessageItem | undefined = await vscode.window.showInformationMessage(
-                `Would you like to set '${language}' as your default language?`,
-                DialogOptions.yes,
-                DialogOptions.no,
-                DialogOptions.never,
-            );
-            if (choice === DialogOptions.yes) {
-                leetCodeConfig.update("defaultLanguage", language, true /* UserSetting */);
-            } else if (choice === DialogOptions.never) {
-                leetCodeConfig.update("showSetDefaultLanguageHint", false, true /* UserSetting */);
+        let outDir: string = await selectWorkspaceFolder();
+        let relativePath: string = (leetCodeConfig.get<string>("outputFolder") || "").trim();
+        const matchResult: RegExpMatchArray | null = relativePath.match(/\$\{(.*?)\}/);
+        if (matchResult) {
+            const resolvedPath: string | undefined = await resolveRelativePath(matchResult[1].toLocaleLowerCase(), node, language);
+            if (!resolvedPath) {
+                leetCodeChannel.appendLine("Showing problem canceled by user.");
+                return;
             }
-        }
-    } catch (error) {
-        await promptForOpenOutputChannel("Failed to fetch the problem information. Please open the output channel for details.", DialogType.error);
-    }
-}
-
-function getWebviewContent(inputContent: string): string {
-    return `<!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Cat Coding</title>
-    </head>
-
-    <body>
-        ${inputContent}
-    </body>
-    </html>`;
-}
-
-async function showProblemInternal(id: string): Promise<void> {
-    try {
-        const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-        let defaultLanguage: string | undefined = leetCodeConfig.get<string>("defaultLanguage");
-        if (defaultLanguage && languages.indexOf(defaultLanguage) < 0) {
-            defaultLanguage = undefined;
-        }
-        const language: string | undefined = defaultLanguage || await vscode.window.showQuickPick(languages, { placeHolder: "Select the language you want to use" });
-        if (!language) {
-            return;
+            relativePath = resolvedPath;
         }
 
-        const outDir: string = await selectWorkspaceFolder();
+        outDir = path.join(outDir, relativePath);
         await fse.ensureDir(outDir);
-        const result: string = await leetCodeExecutor.showToSolveProblem(id, language, outDir);
+        const result: string = await leetCodeExecutor.showProblem(node.id, language, outDir);
         const reg: RegExp = /\* Source Code:\s*(.*)/;
         const match: RegExpMatchArray | null = result.match(reg);
         if (match && match.length >= 2) {
@@ -171,17 +90,17 @@ async function showProblemInternal(id: string): Promise<void> {
             }
         }
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to fetch the problem information. Please open the output channel for details.", DialogType.error);
+        await promptForOpenOutputChannel("Failed to show the problem. Please open the output channel for details.", DialogType.error);
     }
 }
 
-async function parseProblemsToPicks(p: Promise<IProblem[]>): Promise<Array<IQuickItemEx<string>>> {
-    return new Promise(async (resolve: (res: Array<IQuickItemEx<string>>) => void): Promise<void> => {
-        const picks: Array<IQuickItemEx<string>> = (await p).map((problem: IProblem) => Object.assign({}, {
+async function parseProblemsToPicks(p: Promise<IProblem[]>): Promise<Array<IQuickItemEx<IProblem>>> {
+    return new Promise(async (resolve: (res: Array<IQuickItemEx<IProblem>>) => void): Promise<void> => {
+        const picks: Array<IQuickItemEx<IProblem>> = (await p).map((problem: IProblem) => Object.assign({}, {
             label: `${parseProblemDecorator(problem.state, problem.locked)}${problem.id}.${problem.name}`,
             description: "",
             detail: `AC rate: ${problem.passRate}, Difficulty: ${problem.difficulty}`,
-            value: problem.id,
+            value: problem,
         }));
         resolve(picks);
     });
@@ -195,5 +114,30 @@ function parseProblemDecorator(state: ProblemState, locked: boolean): string {
             return "$(x) ";
         default:
             return locked ? "$(lock) " : "";
+    }
+}
+
+async function resolveRelativePath(value: string, node: IProblem, selectedLanguage: string): Promise<string | undefined> {
+    switch (value) {
+        case "tag":
+            if (node.tags.length === 1) {
+                return node.tags[0];
+            }
+            return await vscode.window.showQuickPick(
+                node.tags,
+                {
+                    matchOnDetail: true,
+                    placeHolder: "Multiple tags available, please select one",
+                    ignoreFocusOut: true,
+                },
+            );
+        case "language":
+            return selectedLanguage;
+        case "difficulty":
+            return node.difficulty;
+        default:
+            const errorMsg: string = `The config '${value}' is not supported.`;
+            leetCodeChannel.appendLine(errorMsg);
+            throw new Error(errorMsg);
     }
 }

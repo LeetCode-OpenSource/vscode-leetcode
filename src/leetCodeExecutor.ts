@@ -74,11 +74,7 @@ class LeetCodeExecutor {
         );
     }
 
-    public async showProblem(id: string, language: string): Promise<string> {
-        return await this.executeCommandWithProgressEx("Fetching problem data...", "node", [await this.getLeetCodeBinaryPath(), "show", id, "-l", language]);
-    }
-
-    public async showToSolveProblem(id: string, language: string, outDir: string): Promise<string> {
+    public async showProblem(id: string, language: string, outDir: string): Promise<string> {
         return await this.executeCommandWithProgressEx("Fetching problem data...", "node", [await this.getLeetCodeBinaryPath(), "show", id, "-gx", "-l", language, "-o", `"${outDir}"`]);
     }
 

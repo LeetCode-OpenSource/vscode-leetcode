@@ -1,13 +1,10 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import { TreeItem } from "vscode";
 import { IProblem, ProblemState } from "../shared";
 
-export class LeetCodeNode extends TreeItem {
-    constructor(private data: IProblem, private parentNodeName: string, private isProblemNode: boolean = true) {
-        super(data.name);
-    }
+export class LeetCodeNode {
+    constructor(private data: IProblem, private parentNodeName: string, private isProblemNode: boolean = true) { }
 
     public get locked(): boolean {
         return this.data.locked;

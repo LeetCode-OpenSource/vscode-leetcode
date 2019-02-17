@@ -43,7 +43,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.commands.registerCommand("leetcode.selectSessions", () => session.selectSession()),
         vscode.commands.registerCommand("leetcode.createSession", () => session.createSession()),
         vscode.commands.registerCommand("leetcode.showProblem", (node: LeetCodeNode) => show.showProblem(node)),
-        vscode.commands.registerCommand("leetcode.showToSolveProblem", (node: LeetCodeNode) => show.showToSolveProblem(node)),
         vscode.commands.registerCommand("leetcode.searchProblem", () => show.searchProblem()),
         vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
         vscode.commands.registerCommand("leetcode.testSolution", (uri?: vscode.Uri) => test.testSolution(uri)),
