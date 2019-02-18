@@ -123,7 +123,7 @@
 | `leetcode.endpoint` | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn` | `leetcode` |
 
 ## Troubleshooting
-When you meet any problem, you can check the [Troubleshooting page](https://github.com/jdneo/vscode-leetcode/wiki/Troubleshooting) first.
+When you meet any problem, you can check the [Troubleshooting Page](https://github.com/jdneo/vscode-leetcode/wiki/Troubleshooting) first.
 
 ## Release Notes
 

@@ -122,6 +122,9 @@
 | `leetcode.useWsl` | 指定是否启用 WSL | `false` |
 | `leetcode.endpoint` | 指定使用的终端，可用终端有：`leetcode`, `leetcode-cn` | `leetcode` |
 
+## 疑难解答
+在遇到任何问题时，可以先查看一下[疑难解答](https://github.com/jdneo/vscode-leetcode/wiki/%E7%96%91%E9%9A%BE%E8%A7%A3%E7%AD%94)文档寻求帮助。
+
 ## 更新日志
 
 请参考[更新日志](https://github.com/jdneo/vscode-leetcode/blob/master/CHANGELOG.md)
