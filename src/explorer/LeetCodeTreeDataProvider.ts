@@ -178,15 +178,15 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
 
         const problems: IProblem[] = this.treeData[element.parentName].get(element.id);
 
-        let numAC: number = 0;
-        let numNotAC: number = 0;
+        let acceptedNum: number = 0;
+        let failedNum: number = 0;
         for (const prob of problems) {
             switch (prob.state) {
                 case ProblemState.AC:
-                    numAC++;
+                    acceptedNum++;
                     break;
                 case ProblemState.NotAC:
-                    numNotAC++;
+                    failedNum++;
                     break;
                 default:
                     break;
@@ -194,8 +194,8 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         }
 
         return [
-            `AC: ${numAC}`,
-            `Failed: ${numNotAC}`,
+            `AC: ${acceptedNum}`,
+            `Failed: ${failedNum}`,
             `Total: ${problems.length}`,
         ].join(os.EOL);
     }
