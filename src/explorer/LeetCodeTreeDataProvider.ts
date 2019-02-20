@@ -180,7 +180,6 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
 
         let numAC: number = 0;
         let numNotAC: number = 0;
-        let numUnknown: number = 0;
         for (const prob of problems) {
             switch (prob.state) {
                 case ProblemState.AC:
@@ -189,9 +188,6 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 case ProblemState.NotAC:
                     numNotAC++;
                     break;
-                case ProblemState.Unknown:
-                    numUnknown++;
-                    break;
                 default:
                     break;
             }
@@ -199,8 +195,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
 
         return [
             `AC: ${numAC}`,
-            `Not AC: ${numNotAC}`,
-            `Unknown: ${numUnknown}`,
+            `Failed: ${numNotAC}`,
             `Total: ${problems.length}`,
         ].join(os.EOL);
     }
