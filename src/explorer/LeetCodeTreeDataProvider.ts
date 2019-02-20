@@ -46,6 +46,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         const idPrefix: number = Date.now();
         return {
             label: element.isProblem ? `[${element.id}] ${element.name}` : element.name,
+            tooltip: this.getSubCategoryTooltip(element),
             id: `${idPrefix}.${element.parentName}.${element.id}`,
             collapsibleState: element.isProblem ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
             contextValue: element.isProblem ? "problem" : element.id.toLowerCase(),
@@ -166,6 +167,36 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             default:
                 return "";
         }
+    }
+
+    private getSubCategoryTooltip(element: LeetCodeNode): string {
+        // return '' unless it is a sub-category node
+        if (element.isProblem || !this.treeData[element.parentName]) {
+            return "";
+        }
+
+        const problems: IProblem[] = this.treeData[element.parentName].get(element.id);
+
+        let numAC: number = 0;
+        let numNotAC: number = 0;
+        let numUnknown: number = 0;
+        for (const prob of problems) {
+            switch (prob.state) {
+                case ProblemState.AC:
+                    numAC++;
+                    break;
+                case ProblemState.NotAC:
+                    numNotAC++;
+                    break;
+                case ProblemState.Unknown:
+                    numUnknown++;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return `AC: ${numAC}\nNot AC: ${numNotAC}\nUnknown: ${numUnknown}\nTotal: ${problems.length}`;
     }
 
     private addProblemToTreeData(problem: IProblem): void {
