@@ -1,6 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
+import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
 import * as list from "../commands/list";
@@ -196,7 +197,12 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             }
         }
 
-        return `AC: ${numAC}\nNot AC: ${numNotAC}\nUnknown: ${numUnknown}\nTotal: ${problems.length}`;
+        return [
+            `AC: ${numAC}`,
+            `Not AC: ${numNotAC}`,
+            `Unknown: ${numUnknown}`,
+            `Total: ${problems.length}`,
+        ].join(os.EOL);
     }
 
     private addProblemToTreeData(problem: IProblem): void {
