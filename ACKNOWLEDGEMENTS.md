@@ -6,3 +6,5 @@ A big thanks to the following individuals for contributing:
 - [@Xeonacid](https://github.com/Xeonacid) for contributing [#58](https://github.com/jdneo/vscode-leetcode/pull/58).
 - [@Himself65](https://github.com/Himself65) for contributing [#61](https://github.com/jdneo/vscode-leetcode/pull/61)
 - [@Vigilans](https://github.com/Vigilans) for contributing [#94](https://github.com/jdneo/vscode-leetcode/pull/94)
+- [@ringcrl](https://github.com/ringcrl) for contributing [#123](https://github.com/jdneo/vscode-leetcode/pull/123)
+- [@pujiaxun](https://github.com/pujiaxun) for contributing [#143](https://github.com/jdneo/vscode-leetcode/pull/143)

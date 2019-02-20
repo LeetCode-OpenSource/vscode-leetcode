@@ -121,6 +121,7 @@
 | `leetcode.defaultLanguage` | Specify the default language used to solve the problem. Supported languages are: `bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `python`,`python3`,`ruby`,`scala`,`swift` | `N/A` |
 | `leetcode.useWsl` | Specify whether to use WSL or not | `false` |
 | `leetcode.endpoint` | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn` | `leetcode` |
+| `leetcode.outputFolder`| Specify the relative path to save the problem files. Besides using customized path, there are also several reserved words which can be used here: <ul><li>`${tag}`: Categorize the problem according to their tags.<li>`${language}`: Categorize the problem according to their language.</li><li>`${difficulty}`: Categorize the problem according to their difficulty.</li></ul> | N/A |
 
 ## Troubleshooting
 When you meet any problem, you can check the [Troubleshooting Page](https://github.com/jdneo/vscode-leetcode/wiki/Troubleshooting) first.
