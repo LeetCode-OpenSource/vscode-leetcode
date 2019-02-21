@@ -8,6 +8,7 @@ import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
 import { UserStatus } from "./shared";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
+import { createEnvOption } from "./utils/workspaceUtils";
 import * as wsl from "./utils/wslUtils";
 
 class LeetCodeManager extends EventEmitter {
@@ -42,7 +43,10 @@ class LeetCodeManager extends EventEmitter {
 
                 const childProc: cp.ChildProcess = wsl.useWsl()
                     ? cp.spawn("wsl", ["node", leetCodeBinaryPath, "user", "-l"], { shell: true })
-                    : cp.spawn("node", [leetCodeBinaryPath, "user", "-l"], { shell: true });
+                    : cp.spawn("node", [leetCodeBinaryPath, "user", "-l"], {
+                        shell: true,
+                        env: createEnvOption(),
+                    });
 
                 childProc.stdout.on("data", (data: string | Buffer) => {
                     data = data.toString();

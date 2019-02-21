@@ -4,12 +4,13 @@
 import * as cp from "child_process";
 import * as vscode from "vscode";
 import { leetCodeChannel } from "../leetCodeChannel";
+import { createEnvOption } from "./workspaceUtils";
 
 export async function executeCommand(command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
     return new Promise((resolve: (res: string) => void, reject: (e: Error) => void): void => {
         let result: string = "";
 
-        const childProc: cp.ChildProcess = cp.spawn(command, args, options);
+        const childProc: cp.ChildProcess = cp.spawn(command, args, { ...options, env: createEnvOption() });
 
         childProc.stdout.on("data", (data: string | Buffer) => {
             data = data.toString();
