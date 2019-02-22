@@ -8,7 +8,7 @@ import * as requireFromString from "require-from-string";
 import * as vscode from "vscode";
 import { Endpoint, IProblem } from "./shared";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
-import { genFileName } from './utils/problemUtils';
+import { genFileName } from "./utils/problemUtils";
 import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 
@@ -78,9 +78,8 @@ class LeetCodeExecutor {
     public async showProblem(node: IProblem, language: string, outDir: string): Promise<string> {
         const fileName: string = genFileName(node, language);
         const filePath: string = path.join(outDir, fileName);
-        const hasLocalCode: boolean = await fse.pathExists(filePath);
 
-        if (!hasLocalCode) {
+        if (!await fse.pathExists(filePath)) {
             const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", "node", [await this.getLeetCodeBinaryPath(), "show", node.id, "-cx", "-l", language]);
             await fse.writeFile(filePath, codeTemplate);
         }
