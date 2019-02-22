@@ -267,6 +267,7 @@
     },
     "devDependencies": {
         "@types/fs-extra": "5.0.0",
+        "@types/lodash.kebabcase": "^4.1.5",
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
         "@types/require-from-string": "^1.2.0",
@@ -277,6 +278,7 @@
     "dependencies": {
         "fs-extra": "^6.0.1",
         "leetcode-cli": "2.6.1",
+        "lodash.kebabcase": "^4.1.1",
         "require-from-string": "^2.0.2"
     }
 }

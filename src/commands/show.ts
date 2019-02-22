@@ -65,16 +65,10 @@ async function showProblemInternal(node: IProblem): Promise<void> {
 
         outDir = path.join(outDir, relativePath);
         await fse.ensureDir(outDir);
-        const result: string = await leetCodeExecutor.showProblem(node.id, language, outDir);
-        const reg: RegExp = /\* Source Code:\s*(.*)/;
-        const match: RegExpMatchArray | null = result.match(reg);
-        if (match && match.length >= 2) {
-            const filePath: string = wsl.useWsl() ? await wsl.toWinPath(match[1].trim()) : match[1].trim();
 
-            await vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false });
-        } else {
-            throw new Error("Failed to fetch the problem information.");
-        }
+        const originFilePath: string = await leetCodeExecutor.showProblem(node, language, outDir);
+        const filePath: string = wsl.useWsl() ? await wsl.toWinPath(originFilePath) : originFilePath;
+        await vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false });
 
         if (!defaultLanguage && leetCodeConfig.get<boolean>("showSetDefaultLanguageHint")) {
             const choice: vscode.MessageItem | undefined = await vscode.window.showInformationMessage(

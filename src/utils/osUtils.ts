@@ -6,7 +6,7 @@ export function isWindows(): boolean {
 }
 
 export function usingCmd(): boolean {
-    const comSpec: string = process.env.ComSpec;
+    const comSpec: string | undefined = process.env.ComSpec;
     // 'cmd.exe' is used as a fallback if process.env.ComSpec is unavailable.
     if (!comSpec) {
         return true;
