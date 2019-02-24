@@ -46,10 +46,6 @@ export async function executeCommandWithProgress(message: string, command: strin
     return result;
 }
 
-function getHttpAgent(): string | undefined {
-    return vscode.workspace.getConfiguration("http").get<string>("proxy");
-}
-
 // clone process.env and add http proxy
 export function createEnvOption(): {} {
     const proxy: string | undefined = getHttpAgent();
@@ -59,4 +55,8 @@ export function createEnvOption(): {} {
         return env;
     }
     return process.env;
+}
+
+function getHttpAgent(): string | undefined {
+    return vscode.workspace.getConfiguration("http").get<string>("proxy");
 }
