@@ -29,6 +29,23 @@ export const languages: string[] = [
     "swift",
 ];
 
+export const langExt: Map<string, string> = new Map([
+    ["bash", "sh"],
+    ["c", "c"],
+    ["cpp", "cpp"],
+    ["csharp", "cs"],
+    ["golang", "go"],
+    ["java", "java"],
+    ["javascript", "js"],
+    ["kotlin", "kt"],
+    ["mysql", "sql"],
+    ["python", "py"],
+    ["python3", "py"],
+    ["ruby", "rb"],
+    ["scala", "scala"],
+    ["swift", "swift"],
+]);
+
 export enum ProblemState {
     AC = 1,
     NotAC = 2,
