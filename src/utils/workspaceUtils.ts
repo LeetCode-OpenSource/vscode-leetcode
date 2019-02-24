@@ -44,18 +44,3 @@ export async function getActiveFilePath(uri?: vscode.Uri): Promise<string | unde
 export function getWorkspaceConfiguration(): vscode.WorkspaceConfiguration {
     return vscode.workspace.getConfiguration("leetcode");
 }
-
-function getHttpAgent(): string | undefined {
-    return vscode.workspace.getConfiguration("http").get<string>("proxy");
-}
-
-// clone process.env and add http proxy
-export function createEnvOption(): {} {
-    const proxy: string | undefined = getHttpAgent();
-    if (proxy) {
-        const env: any = Object.create(process.env);
-        env.http_proxy = proxy;
-        return env;
-    }
-    return process.env;
-}

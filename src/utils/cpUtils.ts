@@ -4,7 +4,6 @@
 import * as cp from "child_process";
 import * as vscode from "vscode";
 import { leetCodeChannel } from "../leetCodeChannel";
-import { createEnvOption } from "./workspaceUtils";
 
 export async function executeCommand(command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
     return new Promise((resolve: (res: string) => void, reject: (e: Error) => void): void => {
@@ -45,4 +44,19 @@ export async function executeCommandWithProgress(message: string, command: strin
         });
     });
     return result;
+}
+
+function getHttpAgent(): string | undefined {
+    return vscode.workspace.getConfiguration("http").get<string>("proxy");
+}
+
+// clone process.env and add http proxy
+export function createEnvOption(): {} {
+    const proxy: string | undefined = getHttpAgent();
+    if (proxy) {
+        const env: any = Object.create(process.env);
+        env.http_proxy = proxy;
+        return env;
+    }
+    return process.env;
 }

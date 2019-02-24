@@ -7,8 +7,8 @@ import * as vscode from "vscode";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
 import { UserStatus } from "./shared";
+import { createEnvOption } from "./utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
-import { createEnvOption } from "./utils/workspaceUtils";
 import * as wsl from "./utils/wslUtils";
 
 class LeetCodeManager extends EventEmitter {
