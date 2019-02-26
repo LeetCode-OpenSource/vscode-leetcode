@@ -1,6 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
+import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
 import * as list from "../commands/list";
@@ -46,6 +47,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         const idPrefix: number = Date.now();
         return {
             label: element.isProblem ? `[${element.id}] ${element.name}` : element.name,
+            tooltip: this.getSubCategoryTooltip(element),
             id: `${idPrefix}.${element.parentName}.${element.id}`,
             collapsibleState: element.isProblem ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
             contextValue: element.isProblem ? "problem" : element.id.toLowerCase(),
@@ -166,6 +168,36 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             default:
                 return "";
         }
+    }
+
+    private getSubCategoryTooltip(element: LeetCodeNode): string {
+        // return '' unless it is a sub-category node
+        if (element.isProblem || !this.treeData[element.parentName]) {
+            return "";
+        }
+
+        const problems: IProblem[] = this.treeData[element.parentName].get(element.id);
+
+        let acceptedNum: number = 0;
+        let failedNum: number = 0;
+        for (const prob of problems) {
+            switch (prob.state) {
+                case ProblemState.AC:
+                    acceptedNum++;
+                    break;
+                case ProblemState.NotAC:
+                    failedNum++;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return [
+            `AC: ${acceptedNum}`,
+            `Failed: ${failedNum}`,
+            `Total: ${problems.length}`,
+        ].join(os.EOL);
     }
 
     private addProblemToTreeData(problem: IProblem): void {
