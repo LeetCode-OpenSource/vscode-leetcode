@@ -75,8 +75,8 @@ class LeetCodeExecutor {
         );
     }
 
-    public async showProblem(node: IProblem, language: string, outDir: string): Promise<string> {
-        const fileName: string = genFileName(node, language);
+    public async showProblem(node: IProblem, language: string, endpoint: Endpoint, outDir: string): Promise<string> {
+        const fileName: string = genFileName(node, language, endpoint);
         const filePath: string = path.join(outDir, fileName);
 
         if (!await fse.pathExists(filePath)) {

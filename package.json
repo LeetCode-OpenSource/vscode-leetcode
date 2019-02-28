@@ -266,10 +266,11 @@
         "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose"
     },
     "devDependencies": {
-        "@types/fs-extra": "5.0.0",
+        "@types/fs-extra": "^5.0.5",
         "@types/lodash.kebabcase": "^4.1.5",
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
+        "@types/pinyin": "^2.8.1",
         "@types/require-from-string": "^1.2.0",
         "tslint": "^5.9.1",
         "typescript": "^2.6.1",
@@ -279,6 +280,7 @@
         "fs-extra": "^6.0.1",
         "leetcode-cli": "2.6.1",
         "lodash.kebabcase": "^4.1.1",
+        "pinyin": "^2.8.3",
         "require-from-string": "^2.0.2"
     }
 }

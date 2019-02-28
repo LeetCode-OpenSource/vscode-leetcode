@@ -66,7 +66,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         outDir = path.join(outDir, relativePath);
         await fse.ensureDir(outDir);
 
-        const originFilePath: string = await leetCodeExecutor.showProblem(node, language, outDir);
+        const originFilePath: string = await leetCodeExecutor.showProblem(node, language, leetCodeConfig.endpoint, outDir);
         const filePath: string = wsl.useWsl() ? await wsl.toWinPath(originFilePath) : originFilePath;
         await vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false });
 
