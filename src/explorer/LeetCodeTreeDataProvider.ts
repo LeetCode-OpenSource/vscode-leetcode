@@ -66,7 +66,6 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         }
         if (!element) { // Root view
             return new Promise(async (resolve: (res: LeetCodeNode[]) => void): Promise<void> => {
-                await this.getProblemData();
                 resolve([
                     new LeetCodeNode(Object.assign({}, defaultProblem, {
                         id: Category.Difficulty,
