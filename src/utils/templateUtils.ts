@@ -1,11 +1,11 @@
-import { IProblem } from '../shared';
-import * as vscode from 'vscode';
-import { leetCodeChannel } from '../leetCodeChannel';
+import { IProblem } from "../shared";
+import * as vscode from "vscode";
+import { leetCodeChannel } from "../leetCodeChannel";
 
 export async function supplantTpl(tpl: string, node: IProblem, selectedLanguage: string): Promise<string | undefined> {
   const reg = /[^{][a-zA-Z0-9]+(?=\})/g;
   let matchResults: RegExpMatchArray = tpl.match(reg) || [];
-  let str: string = '';
+  let str: string = "";
   for (let token of matchResults) {
     str += await getFiledValue(token, node, selectedLanguage);
   }
@@ -15,30 +15,30 @@ export async function supplantTpl(tpl: string, node: IProblem, selectedLanguage:
 
 async function getFiledValue(value: string, node: IProblem, selectedLanguage: string): Promise<string | undefined> {
   switch (value) {
-    case 'id':
+    case "id":
       return node.id;
-    case 'name':
+    case "name":
       return node.name;
-    case 'language':
+    case "language":
       return selectedLanguage;
-    case 'difficulty':
+    case "difficulty":
       return node.difficulty;
-    case 'tag':
+    case "tag":
       if (node.tags.length === 1) {
         return node.tags[0];
       }
       return await vscode.window.showQuickPick(node.tags, {
         matchOnDetail: true,
-        placeHolder: 'Multiple tags available, please select one',
+        placeHolder: "Multiple tags available, please select one",
         ignoreFocusOut: true
       });
-    case 'company':
+    case "company":
       if (node.companies.length === 1) {
         return node.companies[0];
       }
       return await vscode.window.showQuickPick(node.companies, {
         matchOnDetail: true,
-        placeHolder: 'Multiple companies available, please select one',
+        placeHolder: "Multiple companies available, please select one",
         ignoreFocusOut: true
       });
     default:

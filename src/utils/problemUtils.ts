@@ -1,10 +1,10 @@
-import kebabCase = require('lodash.kebabcase');
-import { IProblem, langExt } from '../shared';
-import * as vscode from 'vscode';
-import { supplantTpl } from './templateUtils';
+import kebabCase = require("lodash.kebabcase");
+import { IProblem, langExt } from "../shared";
+import * as vscode from "vscode";
+import { supplantTpl } from "./templateUtils";
 
-const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration('leetcode');
-let fileNameTpl: string = leetCodeConfig.get<string>('fileName') || '';
+const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+let fileNameTpl: string = leetCodeConfig.get<string>("fileName") || "";
 
 export function genFileExt(language: string): string {
   const ext: string | undefined = langExt.get(language);
