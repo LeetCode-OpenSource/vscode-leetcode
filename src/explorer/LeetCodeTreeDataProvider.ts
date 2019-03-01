@@ -65,27 +65,24 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             ];
         }
         if (!element) { // Root view
-            return new Promise(async (resolve: (res: LeetCodeNode[]) => void): Promise<void> => {
-                await this.getProblemData();
-                resolve([
-                    new LeetCodeNode(Object.assign({}, defaultProblem, {
-                        id: Category.Difficulty,
-                        name: Category.Difficulty,
-                    }), "ROOT", false),
-                    new LeetCodeNode(Object.assign({}, defaultProblem, {
-                        id: Category.Tag,
-                        name: Category.Tag,
-                    }), "ROOT", false),
-                    new LeetCodeNode(Object.assign({}, defaultProblem, {
-                        id: Category.Company,
-                        name: Category.Company,
-                    }), "ROOT", false),
-                    new LeetCodeNode(Object.assign({}, defaultProblem, {
-                        id: Category.Favorite,
-                        name: Category.Favorite,
-                    }), "ROOT", false),
-                ]);
-            });
+            return [
+                new LeetCodeNode(Object.assign({}, defaultProblem, {
+                    id: Category.Difficulty,
+                    name: Category.Difficulty,
+                }), "ROOT", false),
+                new LeetCodeNode(Object.assign({}, defaultProblem, {
+                    id: Category.Tag,
+                    name: Category.Tag,
+                }), "ROOT", false),
+                new LeetCodeNode(Object.assign({}, defaultProblem, {
+                    id: Category.Company,
+                    name: Category.Company,
+                }), "ROOT", false),
+                new LeetCodeNode(Object.assign({}, defaultProblem, {
+                    id: Category.Favorite,
+                    name: Category.Favorite,
+                }), "ROOT", false),
+            ];
         } else {
             switch (element.name) { // First-level
                 case Category.Favorite:
