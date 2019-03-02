@@ -36,6 +36,7 @@
         "onCommand:leetcode.searchProblem",
         "onCommand:leetcode.testSolution",
         "onCommand:leetcode.submitSolution",
+        "onCommand:leetcode.switchDefaultLanguage",
         "onView:leetCodeExplorer"
     ],
     "main": "./out/src/extension",
@@ -110,6 +111,11 @@
             {
                 "command": "leetcode.submitSolution",
                 "title": "Submit to LeetCode",
+                "category": "LeetCode"
+            },
+            {
+                "command": "leetcode.switchDefaultLanguage",
+                "title": "Switch Default Language",
                 "category": "LeetCode"
             }
         ],
