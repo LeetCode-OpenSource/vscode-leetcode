@@ -283,7 +283,7 @@
     },
     "dependencies": {
         "fs-extra": "^6.0.1",
-        "leetcode-cli": "2.6.1",
+        "vsc-leetcode-cli": "2.6.2",
         "lodash.kebabcase": "^4.1.1",
         "require-from-string": "^2.0.2"
     }

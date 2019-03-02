@@ -120,7 +120,7 @@
 |---|---|---|
 | `leetcode.hideSolved` | 指定是否要隐藏已解决的问题 | `false` |
 | `leetcode.showLocked` | 指定是否显示付费题目，只有付费账户才可以打开付费题目 | `false` |
-| `leetcode.defaultLanguage` | 指定答题时使用的默认语言，可选语言有：`bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `python`,`python3`,`ruby`,`scala`,`swift` | `N/A` |
+| `leetcode.defaultLanguage` | 指定答题时使用的默认语言，可选语言有：`bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `php`, `python`,`python3`,`ruby`, `rust`, `scala`,`swift` | `N/A` |
 | `leetcode.useWsl` | 指定是否启用 WSL | `false` |
 | `leetcode.endpoint` | 指定使用的终端，可用终端有：`leetcode`, `leetcode-cn` | `leetcode` |
 | `leetcode.outputFolder` | 指定保存文件时所用的相对文件夹路径。除了用户自定义路径外，也可以使用保留项，包括：<ul><li>`${tag}`: 根据题目的类别进行分类。<li>`${language}`: 根据题目的语言进行分类。</li><li>`${difficulty}`: 根据题目的难度进行分类。</li></ul> | N/A |
