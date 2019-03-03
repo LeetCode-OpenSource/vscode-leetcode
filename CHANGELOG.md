@@ -6,6 +6,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [0.12.0]
 ## Added
 - Add new command `LeetCode: Switch Default Language` to support switching the default language [#115](https://github.com/jdneo/vscode-leetcode/issues/115)
+- Support `PHP` and `Rust` ([#83](https://github.com/jdneo/vscode-leetcode/issues/83), [#103](https://github.com/jdneo/vscode-leetcode/issues/103))
+
+## Fixed
+- Cannot retrieve time and memory result [#105](https://github.com/jdneo/vscode-leetcode/issues/105)
+- Power operator displays in a wrong way [#74](https://github.com/jdneo/vscode-leetcode/issues/74)
 
 ## [0.11.0]
 ## Added
