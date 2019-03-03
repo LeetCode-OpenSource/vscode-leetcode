@@ -71,6 +71,8 @@
 
   > Note: If no folder is opened in VS Code, the extension will save the problem files in **$HOME/.leetcode/**.
 
+  > You can switch the default language by triggering the command: `LeetCode: Switch Default Language`.
+
 ---
 
 ### Submit the Answer

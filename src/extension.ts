@@ -4,6 +4,7 @@
 import * as vscode from "vscode";
 import { codeLensProvider } from "./codeLensProvider";
 import * as cache from "./commands/cache";
+import { switchDefaultLanguage } from "./commands/language";
 import * as plugin from "./commands/plugin";
 import * as session from "./commands/session";
 import * as show from "./commands/show";
@@ -47,6 +48,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
         vscode.commands.registerCommand("leetcode.testSolution", (uri?: vscode.Uri) => test.testSolution(uri)),
         vscode.commands.registerCommand("leetcode.submitSolution", (uri?: vscode.Uri) => submit.submitSolution(uri)),
+        vscode.commands.registerCommand("leetcode.switchDefaultLanguage", () => switchDefaultLanguage()),
     );
 
     await leetCodeExecutor.switchEndpoint(plugin.getLeetCodeEndpoint());
