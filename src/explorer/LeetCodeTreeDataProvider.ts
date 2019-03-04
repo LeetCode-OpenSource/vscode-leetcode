@@ -249,6 +249,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                     }
                     return getValue(a) - getValue(b);
                 });
+                break;
             case Category.Tag:
             case Category.Company:
                 subCategoryNodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => {
@@ -260,6 +261,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                         return Number(a.name > b.name) - Number(a.name < b.name);
                     }
                 });
+                break;
             default:
                 break;
         }
