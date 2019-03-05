@@ -23,7 +23,7 @@ export async function selectWorkspaceFolder(): Promise<string> {
     return wsl.useWsl() ? wsl.toWslPath(workFolder) : workFolder;
 }
 
-export async function getActivefilePath(uri?: vscode.Uri): Promise<string | undefined> {
+export async function getActiveFilePath(uri?: vscode.Uri): Promise<string | undefined> {
     let textEditor: vscode.TextEditor | undefined;
     if (uri) {
         textEditor = await vscode.window.showTextDocument(uri, { preview: false });
@@ -39,4 +39,8 @@ export async function getActivefilePath(uri?: vscode.Uri): Promise<string | unde
         return undefined;
     }
     return wsl.useWsl() ? wsl.toWslPath(textEditor.document.uri.fsPath) : textEditor.document.uri.fsPath;
+}
+
+export function getWorkspaceConfiguration(): vscode.WorkspaceConfiguration {
+    return vscode.workspace.getConfiguration("leetcode");
 }

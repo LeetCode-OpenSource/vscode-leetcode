@@ -11,3 +11,5 @@ tsconfig.json
 tslint.json
 **/*.gif
 ACKNOWLEDGEMENTS.md
+docs
+.github

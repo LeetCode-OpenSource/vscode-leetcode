@@ -4,14 +4,16 @@
 import * as vscode from "vscode";
 import { codeLensProvider } from "./codeLensProvider";
 import * as cache from "./commands/cache";
+import { switchDefaultLanguage } from "./commands/language";
 import * as plugin from "./commands/plugin";
 import * as session from "./commands/session";
 import * as show from "./commands/show";
 import * as submit from "./commands/submit";
 import * as test from "./commands/test";
+import { LeetCodeNode } from "./explorer/LeetCodeNode";
+import { LeetCodeTreeDataProvider } from "./explorer/LeetCodeTreeDataProvider";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
-import { LeetCodeNode, LeetCodeTreeDataProvider } from "./leetCodeExplorer";
 import { leetCodeManager } from "./leetCodeManager";
 import { leetCodeResultProvider } from "./leetCodeResultProvider";
 import { leetCodeStatusBarItem } from "./leetCodeStatusBarItem";
@@ -36,7 +38,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.window.registerTreeDataProvider("leetCodeExplorer", leetCodeTreeDataProvider),
         vscode.languages.registerCodeLensProvider({ scheme: "file" }, codeLensProvider),
         vscode.commands.registerCommand("leetcode.deleteCache", () => cache.deleteCache()),
-        vscode.commands.registerCommand("leetcode.toogleLeetCodeCn", () => plugin.switchEndpoint()),
+        vscode.commands.registerCommand("leetcode.toggleLeetCodeCn", () => plugin.switchEndpoint()),
         vscode.commands.registerCommand("leetcode.signin", () => leetCodeManager.signIn()),
         vscode.commands.registerCommand("leetcode.signout", () => leetCodeManager.signOut()),
         vscode.commands.registerCommand("leetcode.selectSessions", () => session.selectSession()),
@@ -46,6 +48,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
         vscode.commands.registerCommand("leetcode.testSolution", (uri?: vscode.Uri) => test.testSolution(uri)),
         vscode.commands.registerCommand("leetcode.submitSolution", (uri?: vscode.Uri) => submit.submitSolution(uri)),
+        vscode.commands.registerCommand("leetcode.switchDefaultLanguage", () => switchDefaultLanguage()),
     );
 
     await leetCodeExecutor.switchEndpoint(plugin.getLeetCodeEndpoint());

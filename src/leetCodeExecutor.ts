@@ -2,36 +2,42 @@
 // Licensed under the MIT license.
 
 import * as cp from "child_process";
+import * as fse from "fs-extra";
 import * as path from "path";
+import * as requireFromString from "require-from-string";
 import * as vscode from "vscode";
-import { Endpoint } from "./shared";
+import { Endpoint, IProblem } from "./shared";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
+import { genFileName } from "./utils/problemUtils";
 import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 
 class LeetCodeExecutor {
-    private leetCodeBinaryPath: string;
-    private leetCodeBinaryPathInWsl: string;
+    private leetCodeRootPath: string;
+    private leetCodeRootPathInWsl: string;
 
     constructor() {
-        this.leetCodeBinaryPath = path.join(__dirname, "..", "..", "node_modules", "leetcode-cli", "bin", "leetcode");
-        this.leetCodeBinaryPathInWsl = "";
+        this.leetCodeRootPath = path.join(__dirname, "..", "..", "node_modules", "vsc-leetcode-cli");
+        this.leetCodeRootPathInWsl = "";
     }
 
-    public async getLeetCodeBinaryPath(): Promise<string> {
+    public async getLeetCodeRootPath(): Promise<string> { // not wrapped by ""
         if (wsl.useWsl()) {
-            if (!this.leetCodeBinaryPathInWsl) {
-                this.leetCodeBinaryPathInWsl = `${await wsl.toWslPath(this.leetCodeBinaryPath)}`;
+            if (!this.leetCodeRootPathInWsl) {
+                this.leetCodeRootPathInWsl = `${await wsl.toWslPath(this.leetCodeRootPath)}`;
             }
-            return `"${this.leetCodeBinaryPathInWsl}"`;
+            return `${this.leetCodeRootPathInWsl}`;
         }
-        return `"${this.leetCodeBinaryPath}"`;
+        return `${this.leetCodeRootPath}`;
+    }
+
+    public async getLeetCodeBinaryPath(): Promise<string> { // wrapped by ""
+        return `"${path.join(await this.getLeetCodeRootPath(), "bin", "leetcode")}"`;
     }
 
     public async meetRequirements(): Promise<boolean> {
         try {
             await this.executeCommandEx("node", ["-v"]);
-            return true;
         } catch (error) {
             const choice: vscode.MessageItem | undefined = await vscode.window.showErrorMessage(
                 "LeetCode extension needs Node.js installed in environment path",
@@ -42,6 +48,12 @@ class LeetCodeExecutor {
             }
             return false;
         }
+        try { // Check company plugin
+            await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-e", "company"]);
+        } catch (error) { // Download company plugin and activate
+            await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-i", "company"]);
+        }
+        return true;
     }
 
     public async deleteCache(): Promise<string> {
@@ -63,8 +75,16 @@ class LeetCodeExecutor {
         );
     }
 
-    public async showProblem(id: string, language: string, outdir: string): Promise<string> {
-        return await this.executeCommandWithProgressEx("Fetching problem data...", "node", [await this.getLeetCodeBinaryPath(), "show", id, "-gx", "-l", language, "-o", `"${outdir}"`]);
+    public async showProblem(node: IProblem, language: string, outDir: string): Promise<string> {
+        const fileName: string = genFileName(node, language);
+        const filePath: string = path.join(outDir, fileName);
+
+        if (!await fse.pathExists(filePath)) {
+            const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", "node", [await this.getLeetCodeBinaryPath(), "show", node.id, "-cx", "-l", language]);
+            await fse.writeFile(filePath, codeTemplate);
+        }
+
+        return filePath;
     }
 
     public async listSessions(): Promise<string> {
@@ -85,7 +105,7 @@ class LeetCodeExecutor {
 
     public async testSolution(filePath: string, testString?: string): Promise<string> {
         if (testString) {
-            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`, "-t", `"${testString}"`]);
+            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`, "-t", `${testString}`]);
         }
         return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`]);
     }
@@ -98,6 +118,17 @@ class LeetCodeExecutor {
             default:
                 return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-d", "leetcode.cn"]);
         }
+    }
+
+    public async getCompaniesAndTags(): Promise<{ companies: { [key: string]: string[] }, tags: { [key: string]: string[] } }> {
+        // preprocess the plugin source
+        const companiesTagsPath: string = path.join(await leetCodeExecutor.getLeetCodeRootPath(), "lib", "plugins", "company.js");
+        const companiesTagsSrc: string = (await fse.readFile(companiesTagsPath, "utf8")).replace(
+            "module.exports = plugin",
+            "module.exports = { COMPONIES, TAGS }",
+        );
+        const { COMPONIES, TAGS } = requireFromString(companiesTagsSrc, companiesTagsPath);
+        return { companies: COMPONIES, tags: TAGS };
     }
 
     private async executeCommandEx(command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {

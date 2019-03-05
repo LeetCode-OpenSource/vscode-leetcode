@@ -22,12 +22,33 @@ export const languages: string[] = [
     "javascript",
     "kotlin",
     "mysql",
+    "php",
     "python",
     "python3",
     "ruby",
+    "rust",
     "scala",
     "swift",
 ];
+
+export const langExt: Map<string, string> = new Map([
+    ["bash", "sh"],
+    ["c", "c"],
+    ["cpp", "cpp"],
+    ["csharp", "cs"],
+    ["golang", "go"],
+    ["java", "java"],
+    ["javascript", "js"],
+    ["kotlin", "kt"],
+    ["mysql", "sql"],
+    ["php", "php"],
+    ["python", "py"],
+    ["python3", "py"],
+    ["ruby", "rb"],
+    ["rust", "rs"],
+    ["scala", "scala"],
+    ["swift", "swift"],
+]);
 
 export enum ProblemState {
     AC = 1,
@@ -38,4 +59,35 @@ export enum ProblemState {
 export enum Endpoint {
     LeetCode = "leetcode",
     LeetCodeCN = "leetcode-cn",
+}
+
+export interface IProblem {
+    isFavorite: boolean;
+    locked: boolean;
+    state: ProblemState;
+    id: string;
+    name: string;
+    difficulty: string;
+    passRate: string;
+    companies: string[];
+    tags: string[];
+}
+
+export const defaultProblem: IProblem = {
+    isFavorite: false,
+    locked: false,
+    state: ProblemState.Unknown,
+    id: "",
+    name: "",
+    difficulty: "",
+    passRate: "",
+    companies: [] as string[],
+    tags: [] as string[],
+};
+
+export enum Category {
+    Difficulty = "Difficulty",
+    Tag = "Tag",
+    Company = "Company",
+    Favorite = "Favorite",
 }

@@ -2,7 +2,7 @@
     "name": "vscode-leetcode",
     "displayName": "LeetCode",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.9.0",
+    "version": "0.12.0",
     "author": "Sheng Chen",
     "publisher": "shengchen",
     "license": "MIT",
@@ -26,7 +26,7 @@
     ],
     "preview": true,
     "activationEvents": [
-        "onCommand:leetcode.toogleLeetCodeCn",
+        "onCommand:leetcode.toggleLeetCodeCn",
         "onCommand:leetcode.signin",
         "onCommand:leetcode.signout",
         "onCommand:leetcode.selectSessions",
@@ -36,6 +36,7 @@
         "onCommand:leetcode.searchProblem",
         "onCommand:leetcode.testSolution",
         "onCommand:leetcode.submitSolution",
+        "onCommand:leetcode.switchDefaultLanguage",
         "onView:leetCodeExplorer"
     ],
     "main": "./out/src/extension",
@@ -47,7 +48,7 @@
                 "category": "LeetCode"
             },
             {
-                "command": "leetcode.toogleLeetCodeCn",
+                "command": "leetcode.toggleLeetCodeCn",
                 "title": "Switch Endpoint",
                 "category": "LeetCode",
                 "icon": {
@@ -111,6 +112,11 @@
                 "command": "leetcode.submitSolution",
                 "title": "Submit to LeetCode",
                 "category": "LeetCode"
+            },
+            {
+                "command": "leetcode.switchDefaultLanguage",
+                "title": "Switch Default Language",
+                "category": "LeetCode"
             }
         ],
         "viewsContainers": {
@@ -133,7 +139,7 @@
         "menus": {
             "view/title": [
                 {
-                    "command": "leetcode.toogleLeetCodeCn",
+                    "command": "leetcode.toggleLeetCodeCn",
                     "when": "view == leetCodeExplorer",
                     "group": "navigation@0"
                 },
@@ -193,6 +199,12 @@
             {
                 "title": "LeetCode",
                 "properties": {
+                    "leetcode.hideSolved": {
+                        "type": "boolean",
+                        "default": false,
+                        "scope": "application",
+                        "description": "Hide solved problems."
+                    },
                     "leetcode.showLocked": {
                         "type": "boolean",
                         "default": false,
@@ -241,6 +253,11 @@
                             "leetcode-cn"
                         ],
                         "description": "Endpoint of the user account."
+                    },
+                    "leetcode.outputFolder": {
+                        "type": "string",
+                        "scope": "application",
+                        "description": "Specify the relative path to save the problem files."
                     }
                 }
             }
@@ -256,14 +273,18 @@
     },
     "devDependencies": {
         "@types/fs-extra": "5.0.0",
+        "@types/lodash.kebabcase": "^4.1.5",
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
+        "@types/require-from-string": "^1.2.0",
         "tslint": "^5.9.1",
         "typescript": "^2.6.1",
         "vscode": "^1.1.22"
     },
     "dependencies": {
         "fs-extra": "^6.0.1",
-        "leetcode-cli": "2.6.1"
+        "vsc-leetcode-cli": "2.6.2",
+        "lodash.kebabcase": "^4.1.1",
+        "require-from-string": "^2.0.2"
     }
 }
