@@ -77,6 +77,10 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         if (!element) { // Root view
             return [
                 new LeetCodeNode(Object.assign({}, defaultProblem, {
+                    id: Category.All,
+                    name: Category.All,
+                }), "ROOT", false),
+                new LeetCodeNode(Object.assign({}, defaultProblem, {
                     id: Category.Difficulty,
                     name: Category.Difficulty,
                 }), "ROOT", false),
@@ -95,6 +99,9 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             ];
         } else {
             switch (element.name) { // First-level
+                case Category.All:
+                    const all: IProblem[] = [...this.allProblems.values()];
+                    return all.map((p: IProblem) => new LeetCodeNode(p, Category.All));
                 case Category.Favorite:
                     const nodes: IProblem[] = this.treeData[Category.Favorite];
                     return nodes.map((p: IProblem) => new LeetCodeNode(p, Category.Favorite));
@@ -180,12 +187,26 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     }
 
     private getSubCategoryTooltip(element: LeetCodeNode): string {
-        // return '' unless it is a sub-category node
-        if (element.isProblem || !this.treeData[element.parentName]) {
+        // return '' if it does not directly hold problems.
+        if (element.isProblem) {
             return "";
         }
-
-        const problems: IProblem[] = this.treeData[element.parentName].get(element.id);
+        let problems: IProblem[];
+        switch (element.name) {
+            case Category.Difficulty:
+            case Category.Tag:
+            case Category.Company:
+                return "";
+            case Category.All:
+                problems = [...this.allProblems.values()];
+                break;
+            case Category.Favorite:
+                problems = this.treeData[Category.Favorite];
+                break;
+            default:
+                problems = this.treeData[element.parentName].get(element.id);
+                break;
+        }
 
         let acceptedNum: number = 0;
         let failedNum: number = 0;

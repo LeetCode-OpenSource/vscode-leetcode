@@ -86,6 +86,7 @@ export const defaultProblem: IProblem = {
 };
 
 export enum Category {
+    All = "All Problems",
     Difficulty = "Difficulty",
     Tag = "Tag",
     Company = "Company",
