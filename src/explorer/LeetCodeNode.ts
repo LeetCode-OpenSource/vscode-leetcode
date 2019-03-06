@@ -6,15 +6,24 @@ import { IProblem, ProblemState } from "../shared";
 export class LeetCodeNode {
     constructor(private data: IProblem, private parentNodeName: string, private isProblemNode: boolean = true) { }
 
+    public get nodeData(): IProblem {
+        return this.data;
+    }
+
+    public get isProblem(): boolean {
+        return this.isProblemNode;
+    }
+
+    public get parentName(): string {
+        return this.parentNodeName;
+    }
+
     public get locked(): boolean {
         return this.data.locked;
     }
+
     public get name(): string {
         return this.data.name;
-    }
-
-    public get state(): ProblemState {
-        return this.data.state;
     }
 
     public get id(): string {
@@ -37,15 +46,11 @@ export class LeetCodeNode {
         return this.data.companies;
     }
 
+    public get state(): ProblemState {
+        return this.data.state;
+    }
+
     public get isFavorite(): boolean {
         return this.data.isFavorite;
-    }
-
-    public get isProblem(): boolean {
-        return this.isProblemNode;
-    }
-
-    public get parentName(): string {
-        return this.parentNodeName;
     }
 }
