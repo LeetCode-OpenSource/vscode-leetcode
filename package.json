@@ -95,6 +95,11 @@
                 "category": "LeetCode"
             },
             {
+                "command": "leetcode.starProblem",
+                "title": "Star/Unstar Problem",
+                "category": "LeetCode"
+            },
+            {
                 "command": "leetcode.searchProblem",
                 "title": "Search Problem",
                 "category": "LeetCode",
@@ -164,11 +169,20 @@
                     "command": "leetcode.showProblem",
                     "when": "view == leetCodeExplorer && viewItem == problem",
                     "group": "leetcode@1"
+                },
+                {
+                    "command": "leetcode.starProblem",
+                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "group": "leetcode@1"
                 }
             ],
             "commandPalette": [
                 {
                     "command": "leetcode.showProblem",
+                    "when": "never"
+                },
+                {
+                    "command": "leetcode.starProblem",
                     "when": "never"
                 }
             ],

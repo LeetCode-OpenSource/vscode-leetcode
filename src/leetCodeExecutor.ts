@@ -87,6 +87,16 @@ class LeetCodeExecutor {
         return filePath;
     }
 
+    public async starProblem(node: IProblem, markStarred: boolean): Promise<boolean> {
+        let description: string = "";
+        if (markStarred) {
+            description = await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "star", node.id]);
+        } else {
+            description = await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "star", node.id, "-d"]);
+        }
+        return description.includes("♥");
+    }
+
     public async listSessions(): Promise<string> {
         return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "session"]);
     }

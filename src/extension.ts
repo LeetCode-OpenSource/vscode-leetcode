@@ -8,6 +8,7 @@ import { switchDefaultLanguage } from "./commands/language";
 import * as plugin from "./commands/plugin";
 import * as session from "./commands/session";
 import * as show from "./commands/show";
+import * as star from "./commands/star";
 import * as submit from "./commands/submit";
 import * as test from "./commands/test";
 import { LeetCodeNode } from "./explorer/LeetCodeNode";
@@ -44,6 +45,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.commands.registerCommand("leetcode.selectSessions", () => session.selectSession()),
         vscode.commands.registerCommand("leetcode.createSession", () => session.createSession()),
         vscode.commands.registerCommand("leetcode.showProblem", (node: LeetCodeNode) => show.showProblem(node)),
+        vscode.commands.registerCommand("leetcode.starProblem", (node: LeetCodeNode) => star.starProblem(leetCodeTreeDataProvider, node)),
         vscode.commands.registerCommand("leetcode.searchProblem", () => show.searchProblem()),
         vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
         vscode.commands.registerCommand("leetcode.testSolution", (uri?: vscode.Uri) => test.testSolution(uri)),

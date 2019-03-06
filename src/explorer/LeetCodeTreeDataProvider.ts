@@ -56,7 +56,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
 
         const idPrefix: number = Date.now();
         return {
-            label: element.isProblem ? `[${element.id}] ${element.name}` : element.name,
+            label: element.isProblem ? `[${element.id}] ${element.name} ${element.isFavorite ? "♥" : ""}` : element.name,
             tooltip: this.getSubCategoryTooltip(element),
             id: `${idPrefix}.${element.parentName}.${element.id}`,
             collapsibleState: element.isProblem ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
