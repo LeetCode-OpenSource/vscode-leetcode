@@ -94,6 +94,11 @@
                 "title": "Show Problem",
                 "category": "LeetCode"
             },
+			{
+                "command": "leetcode.previewProblem",
+                "title": "Preview Problem",
+                "category": "LeetCode"
+            },
             {
                 "command": "leetcode.searchProblem",
                 "title": "Search Problem",
@@ -162,6 +167,11 @@
             "view/item/context": [
                 {
                     "command": "leetcode.showProblem",
+                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "group": "leetcode@1"
+                },
+				{
+                    "command": "leetcode.previewProblem",
                     "when": "view == leetCodeExplorer && viewItem == problem",
                     "group": "leetcode@1"
                 }

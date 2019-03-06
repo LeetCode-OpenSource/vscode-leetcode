@@ -50,6 +50,14 @@ export class LeetCodeNode {
         return this.parentNodeName;
     }
 
+    public get previewCommand(): Command {
+        return {
+            title: "Preview Problem",
+            command: "leetcode.previewProblem",
+            arguments: [this],
+        };
+    }
+
     public get selectedCommand(): Command {
         return {
             title: "Open Problem",

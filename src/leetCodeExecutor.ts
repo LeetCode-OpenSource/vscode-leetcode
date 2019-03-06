@@ -87,6 +87,10 @@ class LeetCodeExecutor {
         return filePath;
     }
 
+    public async getDescription(node: IProblem): Promise<string> {
+        return await this.executeCommandWithProgressEx("Fetching problem description...", "node", [await this.getLeetCodeBinaryPath(), "show", node.id, "-x"]);
+    }
+
     public async listSessions(): Promise<string> {
         return await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "session"]);
     }

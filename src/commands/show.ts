@@ -8,8 +8,9 @@ import { LeetCodeNode } from "../explorer/LeetCodeNode";
 import { leetCodeChannel } from "../leetCodeChannel";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
+import { Command, IProblem, IQuickItemEx, IWebViewMessage, languages, ProblemState } from "../shared";
 import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
+import { renderHTML } from "../utils/webviewUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
 import * as list from "./list";
@@ -134,4 +135,22 @@ async function resolveRelativePath(value: string, node: IProblem, selectedLangua
             leetCodeChannel.appendLine(errorMsg);
             throw new Error(errorMsg);
     }
+}
+
+export async function previewProblem(node: IProblem): Promise<void> {
+    const panelType: string = "previewProblem";
+    const panelTitle: string = node.name;
+    const panel: vscode.WebviewPanel = vscode.window.createWebviewPanel(panelType, panelTitle, vscode.ViewColumn.Active, {
+        enableScripts: true,
+        enableCommandUris: true,
+    });
+    panel.webview.onDidReceiveMessage(async (message: IWebViewMessage) => {
+        switch (message.command) {
+            case Command.ShowProblem:
+                await showProblemInternal(node);
+                panel.dispose();
+                return;
+        }
+    });
+    panel.webview.html = await renderHTML(node);
 }
