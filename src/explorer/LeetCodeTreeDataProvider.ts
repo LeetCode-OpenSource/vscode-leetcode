@@ -33,9 +33,10 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         this.onDidChangeTreeDataEvent.fire();
     }
 
-    public async updateProblemNode(node: LeetCodeNode): Promise<void> {
-        if (this.allProblems.has(node.id)) {
-            Object.assign(this.allProblems[node.id], node); // problem reference is preserved
+    public async updateProblem(problem: IProblem): Promise<void> {
+        if (this.allProblems.has(problem.id)) {
+            this.updateTreeDataByProblem(problem); // only modify the content of tree data, problem is not updated.
+            Object.assign(this.allProblems.get(problem.id), problem); // update problem, where reference is preserved.
             this.onDidChangeTreeDataEvent.fire();
         }
     }
@@ -206,6 +207,18 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             `Failed: ${failedNum}`,
             `Total: ${problems.length}`,
         ].join(os.EOL);
+    }
+
+    private updateTreeDataByProblem(problem: IProblem): void {
+        const origin: IProblem | undefined = this.allProblems.get(problem.id);
+        if (origin && origin.isFavorite !== problem.isFavorite) {
+            const problemIndex: number = this.treeData.Favorite.findIndex((p: LeetCodeNode) => Number(p.id) >= Number(problem.id));
+            if (problem.isFavorite) {
+                this.treeData.Favorite.splice(problemIndex, 0, origin); // insert original problem's reference as favorite
+            } else {
+                this.treeData.Favorite.splice(problemIndex, 1); // delete favorite
+            }
+        }
     }
 
     private addProblemToTreeData(problem: IProblem): void {
