@@ -1,6 +1,8 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
+import * as hljs from "highlight.js";
+import * as MarkdownIt from "markdown-it";
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
 import { Solution } from "./shared";
 
@@ -8,9 +10,16 @@ class LeetCodeSolutionProvider implements Disposable {
 
     private context: ExtensionContext;
     private panel: WebviewPanel | undefined;
+    private markdown: MarkdownIt;
+    private solution: Solution;
 
     public initialize(context: ExtensionContext): void {
         this.context = context;
+        this.markdown = new MarkdownIt({
+            linkify: true,
+            typographer: true,
+            highlight: this.codeHighlighter.bind(this),
+        });
     }
 
     public async show(solutionString: string): Promise<void> {
@@ -25,9 +34,9 @@ class LeetCodeSolutionProvider implements Disposable {
             }, null, this.context.subscriptions);
         }
 
-        const solution: Solution = this.parseSolution(solutionString);
-        this.panel.title = solution.title;
-        this.panel.webview.html = this.getWebViewContent(solution.body);
+        this.solution = this.parseSolution(solutionString);
+        this.panel.title = this.solution.title;
+        this.panel.webview.html = this.getWebViewContent(this.solution.body);
         this.panel.reveal(ViewColumn.Active);
     }
 
@@ -50,20 +59,35 @@ class LeetCodeSolutionProvider implements Disposable {
         return solution;
     }
 
-    private getWebViewContent(result: string): string {
-        return `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>LeetCode Top Voted Solution</title>
-            </head>
-            <body>
-                <pre>${result}</pre>
-            </body>
-            </html>
-        `;
+    private codeHighlighter(code: string, lang: string | undefined): string {
+        if (!lang) {
+            lang = this.solution.lang;
+        }
+        // tslint:disable-next-line:typedef
+        const hljst = hljs;
+        if (hljst.getLanguage(lang)) {
+            try {
+                return hljst.highlight(lang, code).value;
+            } catch (error) { /* do not highlight */ }
+        }
+        return ""; // use external default escaping
+    }
+
+    private getWebViewContent(body: string): string {
+        return this.markdown.render(body);
+        // return `
+        //     <!DOCTYPE html>
+        //     <html lang="en">
+        //     <head>
+        //         <meta charset="UTF-8">
+        //         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        //         <title>LeetCode Top Voted Solution</title>
+        //     </head>
+        //     <body>
+        //         <pre>${body}</pre>
+        //     </body>
+        //     </html>
+        // `;
     }
 }
 

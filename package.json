@@ -287,7 +287,9 @@
     },
     "devDependencies": {
         "@types/fs-extra": "5.0.0",
+        "@types/highlight.js": "^9.12.3",
         "@types/lodash.kebabcase": "^4.1.5",
+        "@types/markdown-it": "0.0.7",
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
         "@types/require-from-string": "^1.2.0",
@@ -297,8 +299,10 @@
     },
     "dependencies": {
         "fs-extra": "^6.0.1",
-        "vsc-leetcode-cli": "2.6.2",
+        "highlight.js": "^9.15.6",
         "lodash.kebabcase": "^4.1.1",
-        "require-from-string": "^2.0.2"
+        "markdown-it": "^8.4.2",
+        "require-from-string": "^2.0.2",
+        "vsc-leetcode-cli": "2.6.2"
     }
 }
