@@ -16,10 +16,11 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     private allProblems: Map<string, IProblem>; // store reference of all problems.
 
     private treeData: {
-        Difficulty: Map<string, IProblem[]>,
-        Tag: Map<string, IProblem[]>,
-        Company: Map<string, IProblem[]>,
-        Favorite: IProblem[],
+        [Category.All]: IProblem[],
+        [Category.Difficulty]: Map<string, IProblem[]>,
+        [Category.Tag]: Map<string, IProblem[]>,
+        [Category.Company]: Map<string, IProblem[]>,
+        [Category.Favorite]: IProblem[],
     };
 
     private onDidChangeTreeDataEvent: vscode.EventEmitter<LeetCodeNode> = new vscode.EventEmitter<LeetCodeNode>();
@@ -29,7 +30,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     constructor(private context: vscode.ExtensionContext) { }
 
     public async refresh(): Promise<void> {
-        await this.getProblemData();
+        await this.getFullProblemData();
         this.onDidChangeTreeDataEvent.fire();
     }
 
@@ -82,18 +83,22 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             ];
         }
         if (!element) { // Root view
-            return Object.keys(Category).map((c: Category) => new LeetCodeNode(
+            return [
+                Category.All,
+                Category.Difficulty,
+                Category.Tag,
+                Category.Company,
+                Category.Favorite,
+            ].map((c: Category) => new LeetCodeNode(
                 Object.assign({}, defaultProblem, { id: c, name: c }), "Root", false,
             ));
         } else {
             // First-level
             switch (element.name) {
                 case Category.All:
-                    const all: IProblem[] = [...this.allProblems.values()];
-                    return all.map((p: IProblem) => new LeetCodeNode(p, Category.All));
                 case Category.Favorite:
-                    const nodes: IProblem[] = this.treeData[Category.Favorite];
-                    return nodes.map((p: IProblem) => new LeetCodeNode(p, Category.Favorite));
+                    const nodes: IProblem[] = this.treeData[element.name];
+                    return nodes.map((p: IProblem) => new LeetCodeNode(p, element.name));
                 case Category.Difficulty:
                 case Category.Tag:
                 case Category.Company:
@@ -104,16 +109,18 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         }
     }
 
-    private async getProblemData(): Promise<void> {
+    private async getFullProblemData(): Promise<void> {
         // clear cache
         this.allProblems = new Map<string, IProblem>();
         this.treeData = {
-            Difficulty: new Map<string, IProblem[]>(),
-            Tag: new Map<string, IProblem[]>(),
-            Company: new Map<string, IProblem[]>(),
-            Favorite: [],
+            [Category.All]: [],
+            [Category.Difficulty]: new Map<string, IProblem[]>(),
+            [Category.Tag]: new Map<string, IProblem[]>(),
+            [Category.Company]: new Map<string, IProblem[]>(),
+            [Category.Favorite]: [],
         };
         for (const problem of await list.listProblems()) {
+            // Add every problem to problem pool
             this.allProblems.set(problem.id, problem);
             // Add favorite problem, no matter whether it is solved.
             if (problem.isFavorite) {
@@ -144,8 +151,8 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
 
     private composeSubCategoryNodes(node: LeetCodeNode): LeetCodeNode[] {
         const category: Category = node.name as Category;
-        if (category === Category.Favorite) {
-            leetCodeChannel.appendLine("No sub-level for Favorite nodes");
+        if (category === Category.All || category === Category.Favorite) {
+            leetCodeChannel.appendLine("No sub-level for All or Favorite nodes");
             return [];
         }
         const map: Map<string, IProblem[]> | undefined = this.treeData[category];
@@ -187,14 +194,11 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             case Category.Company:
                 return "";
             case Category.All:
-                problems = [...this.allProblems.values()];
-                break;
             case Category.Favorite:
-                problems = this.treeData[Category.Favorite];
+                problems = this.treeData[element.name];
                 break;
             default:
                 problems = this.treeData[element.parentId].get(element.id);
-                break;
         }
 
         let acceptedNum: number = 0;
@@ -232,12 +236,13 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     }
 
     private addProblemToTreeData(problem: IProblem): void {
-        this.putProblemToMap(this.treeData.Difficulty, problem.difficulty, problem);
+        this.treeData[Category.All].push(problem);
+        this.putProblemToMap(this.treeData[Category.Difficulty], problem.difficulty, problem);
         for (const tag of problem.tags) {
-            this.putProblemToMap(this.treeData.Tag, this.beautifyCategoryName(tag), problem);
+            this.putProblemToMap(this.treeData[Category.Tag], this.beautifyCategoryName(tag), problem);
         }
         for (const company of problem.companies) {
-            this.putProblemToMap(this.treeData.Company, this.beautifyCategoryName(company), problem);
+            this.putProblemToMap(this.treeData[Category.Company], this.beautifyCategoryName(company), problem);
         }
     }
 
