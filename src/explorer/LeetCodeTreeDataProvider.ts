@@ -13,7 +13,7 @@ import { LeetCodeNode } from "./LeetCodeNode";
 
 export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCodeNode> {
 
-    private allProblems: Map<string, IProblem>; // store reference of all problems.
+    private allProblems: Map<string, IProblem>; // maintains the ownership of all problems.
 
     private treeData: {
         [Category.All]: IProblem[],
@@ -38,7 +38,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         if (this.allProblems.has(problem.id)) {
             this.updateTreeDataByProblem(problem); // only modify the content of tree data, problem is not updated.
             Object.assign(this.allProblems.get(problem.id), problem); // update problem, where reference is preserved.
-            this.onDidChangeTreeDataEvent.fire(new LeetCodeNode(problem, Category.Favorite, true));
+            this.onDidChangeTreeDataEvent.fire();
         }
     }
 
@@ -226,11 +226,12 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     private updateTreeDataByProblem(problem: IProblem): void {
         const origin: IProblem | undefined = this.allProblems.get(problem.id);
         if (origin && origin.isFavorite !== problem.isFavorite) {
-            const problemIndex: number = this.treeData.Favorite.findIndex((p: LeetCodeNode) => Number(p.id) >= Number(problem.id));
+            // Find appropriate index to insert/delete a problem
+            const problemIndex: number = this.treeData[Category.Favorite].findIndex((p: LeetCodeNode) => Number(p.id) >= Number(problem.id));
             if (problem.isFavorite) {
-                this.treeData.Favorite.splice(problemIndex, 0, origin); // insert original problem's reference as favorite
+                this.treeData[Category.Favorite].splice(problemIndex, 0, origin); // insert original problem's reference as favorite
             } else {
-                this.treeData.Favorite.splice(problemIndex, 1); // delete favorite
+                this.treeData[Category.Favorite].splice(problemIndex, 1); // delete favorite
             }
         }
     }

@@ -96,7 +96,7 @@
             },
             {
                 "command": "leetcode.toggleFavorite",
-                "title": "Star/Unstar Problem",
+                "title": "Toggle Favorite Problem",
                 "category": "LeetCode"
             },
             {
