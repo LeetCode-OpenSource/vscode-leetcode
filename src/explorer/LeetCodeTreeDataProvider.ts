@@ -42,7 +42,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     }
 
     public getTreeItem(element: LeetCodeNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
-        if (element.id === "notSignIn") {
+        if (element.id === "NotSignIn") {
             return {
                 label: element.name,
                 id: element.id,
@@ -52,53 +52,42 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                     title: "Sign in to LeetCode",
                 },
             };
+        } else if (!element.isProblem) { // category
+            return {
+                label: element.name,
+                tooltip: this.getSubCategoryTooltip(element),
+                id: `LeetCode.Category::${element.parentId}.${element.id}`,
+                collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
+                contextValue: `${element.parentId}.${element.id}`.toLowerCase(),
+            };
+        } else { // problem
+            return {
+                label: `[${element.id}] ${element.name} ${element.isFavorite ? "♥" : ""}`,
+                tooltip: "", // TODO: Add Problem Tooltip
+                id: `LeetCode.Problem::${element.parentId}.${element.id}`,
+                collapsibleState: vscode.TreeItemCollapsibleState.None,
+                contextValue: "problem",
+                iconPath: this.parseIconPathFromProblemState(element),
+            };
         }
-
-        const idPrefix: number = Date.now();
-        return {
-            label: element.isProblem ? `[${element.id}] ${element.name} ${element.isFavorite ? "♥" : ""}` : element.name,
-            tooltip: this.getSubCategoryTooltip(element),
-            id: `${idPrefix}.${element.parentId}.${element.id}`,
-            collapsibleState: element.isProblem ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
-            contextValue: element.isProblem ? "problem" : element.id.toLowerCase(),
-            iconPath: this.parseIconPathFromProblemState(element),
-        };
     }
 
     public getChildren(element?: LeetCodeNode | undefined): vscode.ProviderResult<LeetCodeNode[]> {
         if (!leetCodeManager.getUser()) {
             return [
                 new LeetCodeNode(Object.assign({}, defaultProblem, {
-                    id: "notSignIn",
+                    id: "NotSignIn",
                     name: "Sign in to LeetCode",
-                }), "ROOT", false),
+                }), "Root", false),
             ];
         }
         if (!element) { // Root view
-            return [
-                new LeetCodeNode(Object.assign({}, defaultProblem, {
-                    id: Category.All,
-                    name: Category.All,
-                }), "ROOT", false),
-                new LeetCodeNode(Object.assign({}, defaultProblem, {
-                    id: Category.Difficulty,
-                    name: Category.Difficulty,
-                }), "ROOT", false),
-                new LeetCodeNode(Object.assign({}, defaultProblem, {
-                    id: Category.Tag,
-                    name: Category.Tag,
-                }), "ROOT", false),
-                new LeetCodeNode(Object.assign({}, defaultProblem, {
-                    id: Category.Company,
-                    name: Category.Company,
-                }), "ROOT", false),
-                new LeetCodeNode(Object.assign({}, defaultProblem, {
-                    id: Category.Favorite,
-                    name: Category.Favorite,
-                }), "ROOT", false),
-            ];
+            return Object.keys(Category).map((c: Category) => new LeetCodeNode(
+                Object.assign({}, defaultProblem, { id: c, name: c }), "Root", false,
+            ));
         } else {
-            switch (element.name) { // First-level
+            // First-level
+            switch (element.name) {
                 case Category.All:
                     const all: IProblem[] = [...this.allProblems.values()];
                     return all.map((p: IProblem) => new LeetCodeNode(p, Category.All));
@@ -109,9 +98,9 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 case Category.Tag:
                 case Category.Company:
                     return this.composeSubCategoryNodes(element);
-                default: // Second and lower levels
-                    return element.isProblem ? [] : this.composeProblemNodes(element);
             }
+            // Second and lower levels
+            return element.isProblem ? [] : this.composeProblemNodes(element);
         }
     }
 
@@ -168,7 +157,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     }
 
     private parseIconPathFromProblemState(element: LeetCodeNode): string {
-        if (!element.isProblem) {
+        if (!element.isProblem) { // In fact will never be satisfied
             return "";
         }
         switch (element.state) {
@@ -188,7 +177,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
 
     private getSubCategoryTooltip(element: LeetCodeNode): string {
         // return '' if it does not directly hold problems.
-        if (element.isProblem) {
+        if (element.isProblem) { // In fact will never be satisfied
             return "";
         }
         let problems: IProblem[];
