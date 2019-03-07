@@ -95,7 +95,7 @@
                 "category": "LeetCode"
             },
             {
-                "command": "leetcode.starProblem",
+                "command": "leetcode.toggleFavorite",
                 "title": "Star/Unstar Problem",
                 "category": "LeetCode"
             },
@@ -171,7 +171,7 @@
                     "group": "leetcode@1"
                 },
                 {
-                    "command": "leetcode.starProblem",
+                    "command": "leetcode.toggleFavorite",
                     "when": "view == leetCodeExplorer && viewItem == problem",
                     "group": "leetcode@1"
                 }
@@ -182,7 +182,7 @@
                     "when": "never"
                 },
                 {
-                    "command": "leetcode.starProblem",
+                    "command": "leetcode.toggleFavorite",
                     "when": "never"
                 }
             ],

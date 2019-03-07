@@ -4,7 +4,10 @@
 import { IProblem, ProblemState } from "../shared";
 
 export class LeetCodeNode {
-    constructor(private data: IProblem, private parentNodeName: string, private isProblemNode: boolean = true) { }
+    constructor(
+        private data: IProblem,
+        private parentNodeId: string,
+        private isProblemNode: boolean = true) { }
 
     public get nodeData(): IProblem {
         return this.data;
@@ -14,8 +17,8 @@ export class LeetCodeNode {
         return this.isProblemNode;
     }
 
-    public get parentName(): string {
-        return this.parentNodeName;
+    public get parentId(): string {
+        return this.parentNodeId;
     }
 
     public get locked(): boolean {

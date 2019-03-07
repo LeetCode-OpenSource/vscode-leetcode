@@ -22,9 +22,9 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         Favorite: IProblem[],
     };
 
-    private onDidChangeTreeDataEvent: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
+    private onDidChangeTreeDataEvent: vscode.EventEmitter<LeetCodeNode> = new vscode.EventEmitter<LeetCodeNode>();
     // tslint:disable-next-line:member-ordering
-    public readonly onDidChangeTreeData: vscode.Event<any> = this.onDidChangeTreeDataEvent.event;
+    public readonly onDidChangeTreeData: vscode.Event<LeetCodeNode> = this.onDidChangeTreeDataEvent.event;
 
     constructor(private context: vscode.ExtensionContext) { }
 
@@ -37,7 +37,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         if (this.allProblems.has(problem.id)) {
             this.updateTreeDataByProblem(problem); // only modify the content of tree data, problem is not updated.
             Object.assign(this.allProblems.get(problem.id), problem); // update problem, where reference is preserved.
-            this.onDidChangeTreeDataEvent.fire();
+            this.onDidChangeTreeDataEvent.fire(new LeetCodeNode(problem, Category.Favorite, true));
         }
     }
 
@@ -58,7 +58,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         return {
             label: element.isProblem ? `[${element.id}] ${element.name} ${element.isFavorite ? "♥" : ""}` : element.name,
             tooltip: this.getSubCategoryTooltip(element),
-            id: `${idPrefix}.${element.parentName}.${element.id}`,
+            id: `${idPrefix}.${element.parentId}.${element.id}`,
             collapsibleState: element.isProblem ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
             contextValue: element.isProblem ? "problem" : element.id.toLowerCase(),
             iconPath: this.parseIconPathFromProblemState(element),
@@ -140,9 +140,9 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     }
 
     private composeProblemNodes(node: LeetCodeNode): LeetCodeNode[] {
-        const map: Map<string, IProblem[]> | undefined = this.treeData[node.parentName];
+        const map: Map<string, IProblem[]> | undefined = this.treeData[node.parentId];
         if (!map) {
-            leetCodeChannel.appendLine(`Category: ${node.parentName} is not available.`);
+            leetCodeChannel.appendLine(`Category: ${node.parentId} is not available.`);
             return [];
         }
         const problems: IProblem[] = map.get(node.name) || [];
@@ -204,7 +204,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 problems = this.treeData[Category.Favorite];
                 break;
             default:
-                problems = this.treeData[element.parentName].get(element.id);
+                problems = this.treeData[element.parentId].get(element.id);
                 break;
         }
 

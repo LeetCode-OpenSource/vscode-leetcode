@@ -7,10 +7,10 @@ import { leetCodeExecutor } from "../leetCodeExecutor";
 import { IProblem } from "../shared";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
 
-export async function starProblem(provider: LeetCodeTreeDataProvider, node: LeetCodeNode): Promise<void> {
+export async function toggleFavorite(provider: LeetCodeTreeDataProvider, node: LeetCodeNode): Promise<void> {
     try {
         const problem: IProblem = Object.assign({}, node.nodeData, {
-            isFavorite: await leetCodeExecutor.starProblem(node, !node.isFavorite),
+            isFavorite: await leetCodeExecutor.toggleFavorite(node, !node.isFavorite),
         });
         provider.updateProblem(problem);
     } catch (error) {

@@ -87,7 +87,7 @@ class LeetCodeExecutor {
         return filePath;
     }
 
-    public async starProblem(node: IProblem, markStarred: boolean): Promise<boolean> {
+    public async toggleFavorite(node: IProblem, markStarred: boolean): Promise<boolean> {
         let description: string = "";
         if (markStarred) {
             description = await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "star", node.id]);
