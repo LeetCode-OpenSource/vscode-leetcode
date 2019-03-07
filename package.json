@@ -104,6 +104,11 @@
                 }
             },
             {
+                "command": "leetcode.showSolution",
+                "title": "Show Top Voted Solution",
+                "category": "LeetCode"
+            },
+            {
                 "command": "leetcode.testSolution",
                 "title": "Test in LeetCode",
                 "category": "LeetCode"
@@ -164,11 +169,20 @@
                     "command": "leetcode.showProblem",
                     "when": "view == leetCodeExplorer && viewItem == problem",
                     "group": "leetcode@1"
+                },
+                {
+                    "command": "leetcode.showSolution",
+                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "group": "leetcode@2"
                 }
             ],
             "commandPalette": [
                 {
                     "command": "leetcode.showProblem",
+                    "when": "never"
+                },
+                {
+                    "command": "leetcode.showSolution",
                     "when": "never"
                 }
             ],
