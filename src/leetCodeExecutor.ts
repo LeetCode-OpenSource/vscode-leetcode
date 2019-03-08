@@ -17,7 +17,7 @@ class LeetCodeExecutor {
     private leetCodeRootPathInWsl: string;
 
     constructor() {
-        this.leetCodeRootPath = path.join(__dirname, "..", "..", "node_modules", "leetcode-cli");
+        this.leetCodeRootPath = path.join(__dirname, "..", "..", "node_modules", "vsc-leetcode-cli");
         this.leetCodeRootPathInWsl = "";
     }
 

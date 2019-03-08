@@ -22,9 +22,11 @@ export const languages: string[] = [
     "javascript",
     "kotlin",
     "mysql",
+    "php",
     "python",
     "python3",
     "ruby",
+    "rust",
     "scala",
     "swift",
 ];
@@ -39,9 +41,11 @@ export const langExt: Map<string, string> = new Map([
     ["javascript", "js"],
     ["kotlin", "kt"],
     ["mysql", "sql"],
+    ["php", "php"],
     ["python", "py"],
     ["python3", "py"],
     ["ruby", "rb"],
+    ["rust", "rs"],
     ["scala", "scala"],
     ["swift", "swift"],
 ]);
