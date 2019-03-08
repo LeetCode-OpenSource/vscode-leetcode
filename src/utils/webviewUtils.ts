@@ -1,5 +1,5 @@
 import { leetCodeExecutor } from "../leetCodeExecutor";
-import { Command, IProblem } from "../shared";
+import { IProblem } from "../shared";
 
 export async function renderHTML(node: IProblem): Promise<string> {
     const description: string = await leetCodeExecutor.getDescription(node);
@@ -15,16 +15,16 @@ export async function renderHTML(node: IProblem): Promise<string> {
         <style>
             #solve {
                 position: fixed;
-                bottom: 10px;
-                right: 10px;
+                bottom: 1rem;
+                right: 1rem;
                 border: 0;
-                margin: 10px 0;
-                padding: 2px 14px;
+                margin: 1rem 0;
+                padding: 0.2rem 1rem;
                 color: white;
-                background-color: rgb(14, 99, 156);
+                background-color: var(--vscode-button-background);
             }
             #solve:hover {
-                background-color: rgb(17, 119, 187);
+                background-color: var(--vscode-button-hoverBackground);
             }
             #solve:active {
                 border: 0;
@@ -42,7 +42,7 @@ export async function renderHTML(node: IProblem): Promise<string> {
                     button.onclick = solveHandler;
                     function solveHandler() {
                         vscode.postMessage({
-                            command: '${Command.ShowProblem}',
+                            command: 'ShowProblem',
                         })
                     }
                 }())

@@ -92,10 +92,6 @@ export enum Category {
     Favorite = "Favorite",
 }
 
-export enum Command {
-    ShowProblem = "ShowProblem",
-}
-
 export interface IWebViewMessage {
     command: string;
 }

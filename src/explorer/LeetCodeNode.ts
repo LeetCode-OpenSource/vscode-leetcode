@@ -58,11 +58,4 @@ export class LeetCodeNode {
         };
     }
 
-    public get selectedCommand(): Command {
-        return {
-            title: "Open Problem",
-            command: "leetcode.showProblem",
-            arguments: [this],
-        };
-    }
 }
