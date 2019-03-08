@@ -30,7 +30,7 @@ class LeetCodePreviewProvider implements Disposable {
 
         this.panel.webview.onDidReceiveMessage(async (message: IWebViewMessage) => {
             switch (message.command) {
-                case 'ShowProblem':
+                case "ShowProblem":
                     await commands.executeCommand("leetcode.showProblem", node);
                     this.dispose();
                     return;
@@ -46,7 +46,7 @@ class LeetCodePreviewProvider implements Disposable {
     }
 
     private async provideHtmlContent(node: IProblem): Promise<string> {
-        return await renderHTML(node)
+        return await renderHTML(node);
     }
 }
 
