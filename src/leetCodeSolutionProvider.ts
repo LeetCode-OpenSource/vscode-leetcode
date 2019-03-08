@@ -24,6 +24,17 @@ class LeetCodeSolutionProvider implements Disposable {
             highlight: this.codeHighlighter.bind(this),
         });
         this.markdownPath = path.join(process.env.VSCODE_CWD as string, "resources", "app", "extensions", "markdown-language-features");
+
+        // Override code_block rule for highlighting in solution language
+        // tslint:disable-next-line:typedef
+        this.markdown.renderer.rules["code_block"] = (tokens, idx, options, _, self) => {
+            const highlight: string = options.highlight(tokens[idx].content, undefined);
+            return [
+                `<pre><code ${self.renderAttrs(tokens[idx])} >`,
+                highlight || this.markdown.utils.escapeHtml(tokens[idx].content),
+                "</code></pre>",
+            ].join("\n");
+        };
     }
 
     public async show(solutionString: string): Promise<void> {
@@ -68,11 +79,9 @@ class LeetCodeSolutionProvider implements Disposable {
         if (!lang) {
             lang = this.solution.lang;
         }
-        // tslint:disable-next-line:typedef
-        const hljst = hljs;
-        if (hljst.getLanguage(lang)) {
+        if (hljs.getLanguage(lang)) {
             try {
-                return hljst.highlight(lang, code).value;
+                return hljs.highlight(lang, code, true).value;
             } catch (error) { /* do not highlight */ }
         }
         return ""; // use external default escaping
