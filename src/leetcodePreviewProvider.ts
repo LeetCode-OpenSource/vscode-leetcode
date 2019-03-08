@@ -27,7 +27,6 @@ class LeetCodePreviewProvider implements Disposable {
             this.panel = undefined;
         }, null, this.context.subscriptions);
 
-
         this.panel.webview.onDidReceiveMessage(async (message: IWebViewMessage) => {
             switch (message.command) {
                 case "ShowProblem":
