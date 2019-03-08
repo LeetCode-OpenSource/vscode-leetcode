@@ -6,7 +6,7 @@ import * as MarkdownIt from "markdown-it";
 import * as path from "path";
 import * as vscode from "vscode";
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
-import { Solution } from "./shared";
+import { IProblem, Solution } from "./shared";
 
 class LeetCodeSolutionProvider implements Disposable {
 
@@ -37,7 +37,7 @@ class LeetCodeSolutionProvider implements Disposable {
         };
     }
 
-    public async show(solutionString: string): Promise<void> {
+    public async show(solutionString: string, problem: IProblem): Promise<void> {
         if (!this.panel) {
             this.panel = window.createWebviewPanel("leetCode", "Top voted solution", ViewColumn.Active, {
                 retainContextWhenHidden: true,
@@ -51,7 +51,7 @@ class LeetCodeSolutionProvider implements Disposable {
         }
 
         this.solution = this.parseSolution(solutionString);
-        this.panel.title = this.solution.title;
+        this.panel.title = problem.name;
         this.panel.webview.html = this.getWebViewContent(this.solution);
         this.panel.reveal(ViewColumn.Active);
     }
@@ -96,6 +96,14 @@ class LeetCodeSolutionProvider implements Disposable {
         const styles: string = this.getMarkdownStyles()
             .map((style: vscode.Uri) => `<link rel="stylesheet" type="text/css" href="${style.toString()}">`)
             .join("\n");
+        const { title, url, lang, author, votes } = solution;
+        const head: string = this.markdown.render(`# [${title}](${url})`);
+        const auth: string = `[${author}](https://leetcode.com/${author}/)`;
+        const info: string = this.markdown.render([
+            `| Language |  Author  |  Votes   |`,
+            `| :------: | :------: | :------: |`,
+            `| ${lang}  | ${auth}  | ${votes} |`,
+        ].join("\n"));
         const body: string = this.markdown.render(solution.body);
         return `
             <!DOCTYPE html>
@@ -104,6 +112,8 @@ class LeetCodeSolutionProvider implements Disposable {
                 ${styles}
             </head>
             <body class="vscode-body 'scrollBeyondLastLine' 'wordWrap' 'showEditorSelection'" style="tab-size:4">
+                ${head}
+                ${info}
                 ${body}
             </body>
             </html>
