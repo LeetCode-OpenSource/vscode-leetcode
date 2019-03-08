@@ -7,20 +7,20 @@ const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfig
 const fileNameTpl: string = leetCodeConfig.get<string>("fileName") || "";
 
 export function genFileExt(language: string): string {
-  const ext: string | undefined = langExt.get(language);
-  if (!ext) {
-    throw new Error(`The language "${language}" is not supported.`);
-  }
-  return ext;
+    const ext: string | undefined = langExt.get(language);
+    if (!ext) {
+        throw new Error(`The language "${language}" is not supported.`);
+    }
+    return ext;
 }
 
 export async function genFileName(node: IProblem, language: string): Promise<string> {
-  const slug: string = kebabCase(node.name);
-  const ext: string = genFileExt(language);
-  const name: string = `${node.id}.${slug}.${ext}`;
-  if (!fileNameTpl) {
-    return name;
-  } else {
-    return `${await supplantTpl(fileNameTpl, node, language)}.${ext}` || name;
-  }
+    const slug: string = kebabCase(node.name);
+    const ext: string = genFileExt(language);
+    const name: string = `${node.id}.${slug}.${ext}`;
+    if (!fileNameTpl) {
+        return name;
+    } else {
+        return `${await supplantTpl(fileNameTpl, node, language)}.${ext}` || name;
+    }
 }
