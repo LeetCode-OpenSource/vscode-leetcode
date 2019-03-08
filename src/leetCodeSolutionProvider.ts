@@ -103,7 +103,7 @@ class LeetCodeSolutionProvider implements Disposable {
             <head>
                 ${styles}
             </head>
-            <body class="vscode-body 'scrollBeyondLastLine' 'wordWrap' 'showEditorSelection'">
+            <body class="vscode-body 'scrollBeyondLastLine' 'wordWrap' 'showEditorSelection'" style="tab-size:4">
                 ${body}
             </body>
             </html>
