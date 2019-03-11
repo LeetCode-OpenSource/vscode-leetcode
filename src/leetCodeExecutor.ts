@@ -89,8 +89,8 @@ class LeetCodeExecutor {
         return filePath;
     }
 
-    public async showSolution(node: IProblem, language: string): Promise<string> {
-        const solution: string = await this.executeCommandWithProgressEx("Fetching top voted solution from discussions...", "node", [await this.getLeetCodeBinaryPath(), "show", node.id, "--solution", "-l", language]);
+    public async showSolution(problemNode: IProblem, language: string): Promise<string> {
+        const solution: string = await this.executeCommandWithProgressEx("Fetching top voted solution from discussions...", "node", [await this.getLeetCodeBinaryPath(), "show", problemNode.id, "--solution", "-l", language]);
         return solution;
     }
 

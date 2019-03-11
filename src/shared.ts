@@ -85,15 +85,6 @@ export const defaultProblem: IProblem = {
     tags: [] as string[],
 };
 
-export class Solution {
-    public title: string = "";
-    public url: string = "";
-    public lang: string = "";
-    public author: string = "";
-    public votes: string = "";
-    public body: string = ""; // Markdown supported
-}
-
 export enum Category {
     Difficulty = "Difficulty",
     Tag = "Tag",

@@ -6,7 +6,7 @@ import * as MarkdownIt from "markdown-it";
 import * as path from "path";
 import * as vscode from "vscode";
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
-import { IProblem, Solution } from "./shared";
+import { IProblem } from "./shared";
 
 class LeetCodeSolutionProvider implements Disposable {
 
@@ -119,6 +119,16 @@ class LeetCodeSolutionProvider implements Disposable {
             </html>
         `;
     }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class Solution {
+    public title: string = "";
+    public url: string = "";
+    public lang: string = "";
+    public author: string = "";
+    public votes: string = "";
+    public body: string = ""; // Markdown supported
 }
 
 export const leetCodeSolutionProvider: LeetCodeSolutionProvider = new LeetCodeSolutionProvider();
