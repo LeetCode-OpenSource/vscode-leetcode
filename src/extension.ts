@@ -35,7 +35,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         leetCodeStatusBarItem,
         leetCodeChannel,
         leetCodeResultProvider,
-        vscode.window.registerTreeDataProvider("leetCodeExplorer", leetCodeTreeDataProvider),
+        vscode.window.createTreeView("leetCodeExplorer", { treeDataProvider: leetCodeTreeDataProvider, showCollapseAll: true }),
         vscode.languages.registerCodeLensProvider({ scheme: "file" }, codeLensProvider),
         vscode.commands.registerCommand("leetcode.deleteCache", () => cache.deleteCache()),
         vscode.commands.registerCommand("leetcode.toggleLeetCodeCn", () => plugin.switchEndpoint()),
