@@ -91,7 +91,3 @@ export enum Category {
     Company = "Company",
     Favorite = "Favorite",
 }
-
-export interface IWebViewMessage {
-    command: string;
-}
