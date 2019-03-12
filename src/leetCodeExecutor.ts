@@ -75,16 +75,20 @@ class LeetCodeExecutor {
         );
     }
 
-    public async showProblem(node: IProblem, language: string, outDir: string): Promise<string> {
-        const fileName: string = genFileName(node, language);
+    public async showProblem(problemNode: IProblem, language: string, outDir: string): Promise<string> {
+        const fileName: string = genFileName(problemNode, language);
         const filePath: string = path.join(outDir, fileName);
 
         if (!await fse.pathExists(filePath)) {
-            const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", "node", [await this.getLeetCodeBinaryPath(), "show", node.id, "-cx", "-l", language]);
+            const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", "node", [await this.getLeetCodeBinaryPath(), "show", problemNode.id, "-cx", "-l", language]);
             await fse.writeFile(filePath, codeTemplate);
         }
 
         return filePath;
+    }
+
+    public async getDescription(problemNode: IProblem): Promise<string> {
+        return await this.executeCommandWithProgressEx("Fetching problem description...", "node", [await this.getLeetCodeBinaryPath(), "show", problemNode.id, "-x"]);
     }
 
     public async listSessions(): Promise<string> {

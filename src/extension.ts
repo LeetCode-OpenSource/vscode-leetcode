@@ -15,6 +15,7 @@ import { LeetCodeTreeDataProvider } from "./explorer/LeetCodeTreeDataProvider";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
 import { leetCodeManager } from "./leetCodeManager";
+import { leetCodePreviewProvider } from "./leetCodePreviewProvider";
 import { leetCodeResultProvider } from "./leetCodeResultProvider";
 import { leetCodeStatusBarItem } from "./leetCodeStatusBarItem";
 
@@ -29,11 +30,13 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     });
 
     const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider(context);
+    leetCodePreviewProvider.initialize(context);
     leetCodeResultProvider.initialize(context);
 
     context.subscriptions.push(
         leetCodeStatusBarItem,
         leetCodeChannel,
+        leetCodePreviewProvider,
         leetCodeResultProvider,
         vscode.window.createTreeView("leetCodeExplorer", { treeDataProvider: leetCodeTreeDataProvider, showCollapseAll: true }),
         vscode.languages.registerCodeLensProvider({ scheme: "file" }, codeLensProvider),
@@ -43,6 +46,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.commands.registerCommand("leetcode.signout", () => leetCodeManager.signOut()),
         vscode.commands.registerCommand("leetcode.selectSessions", () => session.selectSession()),
         vscode.commands.registerCommand("leetcode.createSession", () => session.createSession()),
+        vscode.commands.registerCommand("leetcode.previewProblem", (node: LeetCodeNode) => leetCodePreviewProvider.preview(node)),
         vscode.commands.registerCommand("leetcode.showProblem", (node: LeetCodeNode) => show.showProblem(node)),
         vscode.commands.registerCommand("leetcode.searchProblem", () => show.searchProblem()),
         vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),

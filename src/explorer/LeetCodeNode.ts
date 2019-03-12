@@ -1,6 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
+import { Command } from "vscode";
 import { IProblem, ProblemState } from "../shared";
 
 export class LeetCodeNode {
@@ -48,4 +49,13 @@ export class LeetCodeNode {
     public get parentName(): string {
         return this.parentNodeName;
     }
+
+    public get previewCommand(): Command {
+        return {
+            title: "Preview Problem",
+            command: "leetcode.previewProblem",
+            arguments: [this],
+        };
+    }
+
 }
