@@ -48,12 +48,11 @@ class LeetCodeExecutor {
             }
             return false;
         }
-        for (const plugin of ["company", "solution.discuss"]) {
-            try { // Check plugin
-                await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-e", plugin]);
-            } catch (error) { // Download plugin and activate
-                await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-i", plugin]);
-            }
+        for (const plugin of ["company", "solution.discuss", "leetcode.cn"]) { // Make sure plugin exists
+            await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-i", plugin]);
+        }
+        for (const plugin of ["company", "solution.discuss"]) { // activate plugin
+            await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-e", plugin]);
         }
         return true;
     }

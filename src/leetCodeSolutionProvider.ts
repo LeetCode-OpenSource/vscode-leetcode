@@ -7,6 +7,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
 import { IProblem } from "./shared";
+import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 
 class LeetCodeSolutionProvider implements Disposable {
 
@@ -23,7 +24,7 @@ class LeetCodeSolutionProvider implements Disposable {
             typographer: true,
             highlight: this.codeHighlighter.bind(this),
         });
-        this.markdownPath = path.join(process.env.VSCODE_CWD as string, "resources", "app", "extensions", "markdown-language-features");
+        this.markdownPath = path.join(vscode.env.appRoot, "extensions", "markdown-language-features");
 
         // Override code_block rule for highlighting in solution language
         // tslint:disable-next-line:typedef
@@ -88,8 +89,13 @@ class LeetCodeSolutionProvider implements Disposable {
     }
 
     private getMarkdownStyles(): vscode.Uri[] {
-        const stylePaths: string[] = require(path.join(this.markdownPath, "package.json"))["contributes"]["markdown.previewStyles"];
-        return stylePaths.map((p: string) => vscode.Uri.file(path.join(this.markdownPath, p)).with({ scheme: "vscode-resource" }));
+        try {
+            const stylePaths: string[] = require(path.join(this.markdownPath, "package.json"))["contributes"]["markdown.previewStyles"];
+            return stylePaths.map((p: string) => vscode.Uri.file(path.join(this.markdownPath, p)).with({ scheme: "vscode-resource" }));
+        } catch (error) {
+            promptForOpenOutputChannel("Fail to load built-in markdown style file.", DialogType.error);
+            return [];
+        }
     }
 
     private getWebViewContent(solution: Solution): string {
