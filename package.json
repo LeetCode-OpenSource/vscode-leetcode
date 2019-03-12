@@ -181,6 +181,10 @@
                 {
                     "command": "leetcode.showProblem",
                     "when": "never"
+                },
+                {
+                    "command": "leetcode.previewProblem",
+                    "when": "never"
                 }
             ],
             "explorer/context": [
