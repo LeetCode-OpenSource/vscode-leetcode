@@ -24,7 +24,7 @@ class LeetCodeManager extends EventEmitter {
     public async getLoginStatus(): Promise<void> {
         try {
             const result: string = await leetCodeExecutor.getUserInfo();
-            this.currentUser = result.slice("You are now login as".length).trim();
+            this.currentUser = this.tryParseUserName(result);
             this.userStatus = UserStatus.SignedIn;
         } catch (error) {
             this.currentUser = undefined;
@@ -116,6 +116,19 @@ class LeetCodeManager extends EventEmitter {
 
     public getUser(): string | undefined {
         return this.currentUser;
+    }
+
+    private tryParseUserName(output: string): string {
+        const lines: string[] = output.trim().split(/\r?\n/);
+        if (lines.length === 3) {
+            const reg: RegExp = /^\s*.{1}\s*(.+)\s*https:\/\/leetcode/;
+            const match: RegExpMatchArray | null = lines[2].match(reg);
+            if (match && match.length === 2) {
+                return match[1].trim();
+            }
+        }
+
+        return "Unknown";
     }
 }
 
