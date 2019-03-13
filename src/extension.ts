@@ -17,6 +17,7 @@ import { leetCodeExecutor } from "./leetCodeExecutor";
 import { leetCodeManager } from "./leetCodeManager";
 import { leetCodePreviewProvider } from "./leetCodePreviewProvider";
 import { leetCodeResultProvider } from "./leetCodeResultProvider";
+import { leetCodeSolutionProvider } from "./leetCodeSolutionProvider";
 import { leetCodeStatusBarItem } from "./leetCodeStatusBarItem";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
@@ -32,12 +33,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider(context);
     leetCodePreviewProvider.initialize(context);
     leetCodeResultProvider.initialize(context);
+    leetCodeSolutionProvider.initialize(context);
 
     context.subscriptions.push(
         leetCodeStatusBarItem,
         leetCodeChannel,
         leetCodePreviewProvider,
         leetCodeResultProvider,
+        leetCodeSolutionProvider,
         vscode.window.createTreeView("leetCodeExplorer", { treeDataProvider: leetCodeTreeDataProvider, showCollapseAll: true }),
         vscode.languages.registerCodeLensProvider({ scheme: "file" }, codeLensProvider),
         vscode.commands.registerCommand("leetcode.deleteCache", () => cache.deleteCache()),
@@ -49,6 +52,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.commands.registerCommand("leetcode.previewProblem", (node: LeetCodeNode) => leetCodePreviewProvider.preview(node)),
         vscode.commands.registerCommand("leetcode.showProblem", (node: LeetCodeNode) => show.showProblem(node)),
         vscode.commands.registerCommand("leetcode.searchProblem", () => show.searchProblem()),
+        vscode.commands.registerCommand("leetcode.showSolution", (node: LeetCodeNode) => show.showSolution(node)),
         vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
         vscode.commands.registerCommand("leetcode.testSolution", (uri?: vscode.Uri) => test.testSolution(uri)),
         vscode.commands.registerCommand("leetcode.submitSolution", (uri?: vscode.Uri) => submit.submitSolution(uri)),

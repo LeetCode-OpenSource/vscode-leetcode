@@ -48,10 +48,12 @@ class LeetCodeExecutor {
             }
             return false;
         }
-        try { // Check company plugin
-            await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-e", "company"]);
-        } catch (error) { // Download company plugin and activate
-            await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-i", "company"]);
+        for (const plugin of ["company", "solution.discuss"]) {
+            try { // Check plugin
+                await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-e", plugin]);
+            } catch (error) { // Download plugin and activate
+                await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-i", plugin]);
+            }
         }
         return true;
     }
@@ -85,6 +87,11 @@ class LeetCodeExecutor {
         }
 
         return filePath;
+    }
+
+    public async showSolution(problemNode: IProblem, language: string): Promise<string> {
+        const solution: string = await this.executeCommandWithProgressEx("Fetching top voted solution from discussions...", "node", [await this.getLeetCodeBinaryPath(), "show", problemNode.id, "--solution", "-l", language]);
+        return solution;
     }
 
     public async getDescription(problemNode: IProblem): Promise<string> {
