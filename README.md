@@ -27,7 +27,7 @@
 - [中文文档](https://github.com/jdneo/vscode-leetcode/blob/master/docs/README_zh-CN.md)
 
 ## Requirements
-- [VS Code 1.23.0+](https://code.visualstudio.com/)
+- [VS Code 1.30.1+](https://code.visualstudio.com/)
 - [Node.js 8+](https://nodejs.org)
     > NOTE: Please make sure that `Node` is in your `PATH` environment variable. You can check this by running: `node -v`.
 
