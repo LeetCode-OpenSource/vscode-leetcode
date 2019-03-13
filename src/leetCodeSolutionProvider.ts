@@ -6,8 +6,8 @@ import * as MarkdownIt from "markdown-it";
 import * as path from "path";
 import * as vscode from "vscode";
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
+import { leetCodeChannel } from "./leetCodeChannel";
 import { IProblem } from "./shared";
-import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 
 class LeetCodeSolutionProvider implements Disposable {
 
@@ -93,7 +93,7 @@ class LeetCodeSolutionProvider implements Disposable {
             const stylePaths: string[] = require(path.join(this.markdownPath, "package.json"))["contributes"]["markdown.previewStyles"];
             return stylePaths.map((p: string) => vscode.Uri.file(path.join(this.markdownPath, p)).with({ scheme: "vscode-resource" }));
         } catch (error) {
-            promptForOpenOutputChannel("Fail to load built-in markdown style file.", DialogType.error);
+            leetCodeChannel.appendLine("[Error] Fail to load built-in markdown style file.");
             return [];
         }
     }
