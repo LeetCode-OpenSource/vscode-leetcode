@@ -70,11 +70,20 @@
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="选择题目" />
 </p>
 
-- 在 `LeetCode Explorer` 中**右键**题目并选择 `Show Problem` 进行答题。
+- 在 `LeetCode Explorer` 中**右键**题目并选择 `Preview Problem` 查看题目描述，或者选择 `Show Problem` 直接进行答题。
 
   > 注意：若当前 VS Code 没有已打开的文件夹，则生成的题目文件会存储于 **$HOME/.leetcode/** 目录下。
 
   > 注意：你可以通过 `LeetCode: Switch Default Language` 命令变更答题时默认使用编程语言。
+
+---
+
+### 查看高票解答
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/solution.png" alt="高票解答" />
+</p>
+
+- 选择 `Show Top Voted Solution` 可查看该题目在讨论区内的高票解答。
 
 ---
 
