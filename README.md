@@ -20,6 +20,9 @@
   </a>
 </p>
 
+## Sponsor
+[![coding](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/sponsor_coding.jpg)](https://e.coding.net/?utm_source=leetcode)
+
 - [English Document](#Requirements)
 - [中文文档](https://github.com/jdneo/vscode-leetcode/blob/master/docs/README_zh-CN.md)
 
