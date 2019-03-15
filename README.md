@@ -70,7 +70,8 @@
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="Pick a Problem" />
 </p>
 
-- Right click the problem in the `LeetCode Explorer` and select `Preview Problem` to see the problem description. Or select `Show Problem` to directly open the file with the problem description.
+- Directly click on the problem or right click the problem in the `LeetCode Explorer` and select `Preview Problem` to see the problem description.
+- Select `Show Problem` to directly open the file with the problem description.
 
   > Note: If no folder is opened in VS Code, the extension will save the problem files in **$HOME/.leetcode/**.
 

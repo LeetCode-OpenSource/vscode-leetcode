@@ -70,7 +70,8 @@
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="选择题目" />
 </p>
 
-- 在 `LeetCode Explorer` 中**右键**题目并选择 `Preview Problem` 查看题目描述，或者选择 `Show Problem` 直接进行答题。
+- 直接点击题目或者在 `LeetCode Explorer` 中**右键**题目并选择 `Preview Problem` 可查看题目描述
+- 选择 `Show Problem` 可直接进行答题。
 
   > 注意：若当前 VS Code 没有已打开的文件夹，则生成的题目文件会存储于 **$HOME/.leetcode/** 目录下。
 
