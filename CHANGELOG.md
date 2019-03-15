@@ -3,6 +3,15 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.13.0]
+## Added
+- Preview the problem description [#131](https://github.com/jdneo/vscode-leetcode/issues/131)
+- Show top voted solution [#193](https://github.com/jdneo/vscode-leetcode/pull/193)
+- Add `collapse all` for the explorer [#197](https://github.com/jdneo/vscode-leetcode/pull/197)
+
+## Fixed
+[Bugs fixed](https://github.com/jdneo/vscode-leetcode/issues?q=is%3Aissue+is%3Aclosed+milestone%3A0.13.0+label%3Abug)
+
 ## [0.12.0]
 ## Added
 - Add new command `LeetCode: Switch Default Language` to support switching the default language [#115](https://github.com/jdneo/vscode-leetcode/issues/115)

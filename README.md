@@ -27,7 +27,7 @@
 - [中文文档](https://github.com/jdneo/vscode-leetcode/blob/master/docs/README_zh-CN.md)
 
 ## Requirements
-- [VS Code 1.23.0+](https://code.visualstudio.com/)
+- [VS Code 1.30.1+](https://code.visualstudio.com/)
 - [Node.js 8+](https://nodejs.org)
     > NOTE: Please make sure that `Node` is in your `PATH` environment variable. You can check this by running: `node -v`.
 
@@ -70,11 +70,21 @@
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="Pick a Problem" />
 </p>
 
-- Right click the problem in the `LeetCode Explorer` and select `Show Problem` will generate a new file with the problem description for you.
+- Directly click on the problem or right click the problem in the `LeetCode Explorer` and select `Preview Problem` to see the problem description.
+- Select `Show Problem` to directly open the file with the problem description.
 
   > Note: If no folder is opened in VS Code, the extension will save the problem files in **$HOME/.leetcode/**.
 
   > You can switch the default language by triggering the command: `LeetCode: Switch Default Language`.
+
+---
+
+### Show Top Voted Solution
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/solution.png" alt="Show Top Voted Solution" />
+</p>
+
+- Select `Show Top Voted Solution` will display the top voted solution for you.
 
 ---
 

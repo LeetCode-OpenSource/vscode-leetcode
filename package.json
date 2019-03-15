@@ -2,7 +2,7 @@
     "name": "vscode-leetcode",
     "displayName": "LeetCode",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.12.0",
+    "version": "0.13.0",
     "author": "Sheng Chen",
     "publisher": "shengchen",
     "license": "MIT",
@@ -172,20 +172,19 @@
             ],
             "view/item/context": [
                 {
-                    "command": "leetcode.showProblem",
-                    "when": "view == leetCodeExplorer && viewItem == problem",
-                    "group": "leetcode@1"
-                },
-                {
-
-                    "command": "leetcode.showSolution",
-                    "when": "view == leetCodeExplorer && viewItem == problem",
-                    "group": "leetcode@1"
-                },
-                {
                     "command": "leetcode.previewProblem",
                     "when": "view == leetCodeExplorer && viewItem == problem",
                     "group": "leetcode@1"
+                },
+                {
+                    "command": "leetcode.showProblem",
+                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "group": "leetcode@2"
+                },
+                {
+                    "command": "leetcode.showSolution",
+                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "group": "leetcode@3"
                 }
             ],
             "commandPalette": [
@@ -194,7 +193,6 @@
                     "when": "never"
                 },
                 {
-
                     "command": "leetcode.showSolution",
                     "when": "never"
                 },
