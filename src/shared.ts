@@ -91,3 +91,9 @@ export enum Category {
     Company = "Company",
     Favorite = "Favorite",
 }
+
+export const supportedPlugins: string[] = [
+    "company",
+    "solution.discuss",
+    "leetcode.cn",
+];
