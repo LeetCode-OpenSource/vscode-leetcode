@@ -12,9 +12,7 @@ class LeetCodePreviewProvider implements Disposable {
 
     public async preview(node: IProblem): Promise<void> {
         if (!this.panel) {
-            const panelType: string = "previewProblem";
-            const panelTitle: string = node.name;
-            this.panel = window.createWebviewPanel(panelType, panelTitle, ViewColumn.Active, {
+            this.panel = window.createWebviewPanel("leetcode.preview", "Preview Problem", ViewColumn.Active, {
                 enableScripts: true,
                 enableCommandUris: true,
                 enableFindWidget: true,
@@ -35,6 +33,8 @@ class LeetCodePreviewProvider implements Disposable {
             }
         });
         this.panel.webview.html = await this.provideHtmlContent(node);
+        this.panel.title = node.name;
+        this.panel.reveal();
     }
 
     public dispose(): void {
