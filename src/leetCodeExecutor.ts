@@ -48,7 +48,7 @@ class LeetCodeExecutor {
             }
             return false;
         }
-        for (const plugin of ["company", "solution.discuss"]) {
+        for (const plugin of ["company", "solution.discuss", "leetcode.cn"]) {
             try { // Check plugin
                 await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-e", plugin]);
             } catch (error) { // Download plugin and activate
