@@ -40,7 +40,7 @@ class LeetCodeSolutionProvider implements Disposable {
 
     public async show(solutionString: string, problem: IProblem): Promise<void> {
         if (!this.panel) {
-            this.panel = window.createWebviewPanel("leetCode", "Top voted solution", ViewColumn.Active, {
+            this.panel = window.createWebviewPanel("leetCode.solution", "Top Voted Solution", ViewColumn.Active, {
                 retainContextWhenHidden: true,
                 enableFindWidget: true,
                 localResourceRoots: [vscode.Uri.file(path.join(this.markdownPath, "media"))],
