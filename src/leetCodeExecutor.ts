@@ -6,7 +6,7 @@ import * as fse from "fs-extra";
 import * as path from "path";
 import * as requireFromString from "require-from-string";
 import * as vscode from "vscode";
-import { Endpoint, IProblem } from "./shared";
+import { Endpoint, IProblem, supportedPlugins } from "./shared";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
 import { genFileName } from "./utils/problemUtils";
 import { DialogOptions, openUrl } from "./utils/uiUtils";
@@ -48,7 +48,7 @@ class LeetCodeExecutor {
             }
             return false;
         }
-        for (const plugin of ["company", "solution.discuss"]) {
+        for (const plugin of supportedPlugins) {
             try { // Check plugin
                 await this.executeCommandEx("node", [await this.getLeetCodeBinaryPath(), "plugin", "-e", plugin]);
             } catch (error) { // Download plugin and activate
