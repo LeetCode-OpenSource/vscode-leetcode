@@ -12,3 +12,4 @@ A big thanks to the following individuals for contributing:
 - [@poppinlp](https://github.com/poppinlp) for contributing [#149](https://github.com/jdneo/vscode-leetcode/pull/149), [#171](https://github.com/jdneo/vscode-leetcode/pull/171), [#175](https://github.com/jdneo/vscode-leetcode/pull/175)
 - [@xuzaixian](https://github.com/xuzaixian) for contributing [#186](https://github.com/jdneo/vscode-leetcode/pull/186)
 - [@ZainChen](https://github.com/ZainChen) for contributing [#197](https://github.com/jdneo/vscode-leetcode/pull/197)
+- [@houtianze](https://github.com/houtianze) for contributing [#212](https://github.com/jdneo/vscode-leetcode/pull/212)
