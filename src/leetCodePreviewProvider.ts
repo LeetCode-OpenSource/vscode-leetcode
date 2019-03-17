@@ -4,6 +4,7 @@ import { IProblem } from "./shared";
 class LeetCodePreviewProvider implements Disposable {
 
     private context: ExtensionContext;
+    private node: IProblem;
     private panel: WebviewPanel | undefined;
 
     public initialize(context: ExtensionContext): void {
@@ -11,6 +12,7 @@ class LeetCodePreviewProvider implements Disposable {
     }
 
     public async preview(node: IProblem): Promise<void> {
+        this.node = node;
         if (!this.panel) {
             this.panel = window.createWebviewPanel("leetcode.preview", "Preview Problem", ViewColumn.Active, {
                 enableScripts: true,
@@ -18,20 +20,21 @@ class LeetCodePreviewProvider implements Disposable {
                 enableFindWidget: true,
                 retainContextWhenHidden: true,
             });
+
+            this.panel.webview.onDidReceiveMessage(async (message: IWebViewMessage) => {
+                switch (message.command) {
+                    case "ShowProblem":
+                        await commands.executeCommand("leetcode.showProblem", this.node);
+                        this.dispose();
+                        return;
+                }
+            }, this, this.context.subscriptions);
+
+            this.panel.onDidDispose(() => {
+                this.panel = undefined;
+            }, null, this.context.subscriptions);
         }
 
-        this.panel.onDidDispose(() => {
-            this.panel = undefined;
-        }, null, this.context.subscriptions);
-
-        this.panel.webview.onDidReceiveMessage(async (message: IWebViewMessage) => {
-            switch (message.command) {
-                case "ShowProblem":
-                    await commands.executeCommand("leetcode.showProblem", node);
-                    this.dispose();
-                    return;
-            }
-        });
         this.panel.webview.html = await this.provideHtmlContent(node);
         this.panel.title = node.name;
         this.panel.reveal();
