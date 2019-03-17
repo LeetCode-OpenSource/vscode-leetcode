@@ -5,6 +5,7 @@
     ],
     "jsRules": {},
     "rules": {
+        "forin": false,
         "object-literal-sort-keys": false,
         "indent": [
             true,
