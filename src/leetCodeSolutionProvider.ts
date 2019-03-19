@@ -1,40 +1,26 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import * as hljs from "highlight.js";
-import * as MarkdownIt from "markdown-it";
-import * as path from "path";
-import * as vscode from "vscode";
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
-import { leetCodeChannel } from "./leetCodeChannel";
 import { IProblem } from "./shared";
+import { MarkdownEngine } from "./webview/markdownEngine";
 
 class LeetCodeSolutionProvider implements Disposable {
 
     private context: ExtensionContext;
     private panel: WebviewPanel | undefined;
-    private markdown: MarkdownIt;
-    private markdownPath: string; // path of vscode built-in markdown extension
+    private markdown: MarkdownEngine;
     private solution: Solution;
 
     public initialize(context: ExtensionContext): void {
         this.context = context;
-        this.markdown = new MarkdownIt({
-            linkify: true,
-            typographer: true,
-            highlight: this.codeHighlighter.bind(this),
-        });
-        this.markdownPath = path.join(vscode.env.appRoot, "extensions", "markdown-language-features");
+        this.markdown = new MarkdownEngine();
 
-        // Override code_block rule for highlighting in solution language
+        // The @types typedef of `highlight` is wrong, which should return a string.
         // tslint:disable-next-line:typedef
-        this.markdown.renderer.rules["code_block"] = (tokens, idx, options, _, self) => {
-            const highlight: string = options.highlight(tokens[idx].content, undefined);
-            return [
-                `<pre><code ${self.renderAttrs(tokens[idx])} >`,
-                highlight || this.markdown.utils.escapeHtml(tokens[idx].content),
-                "</code></pre>",
-            ].join("\n");
+        const highlight = this.markdown.options.highlight as (code: string, lang?: string) => string;
+        this.markdown.options.highlight = (code: string, lang?: string): string => {
+            return highlight(code, lang || this.solution.lang);
         };
     }
 
@@ -43,7 +29,7 @@ class LeetCodeSolutionProvider implements Disposable {
             this.panel = window.createWebviewPanel("leetCode.solution", "Top Voted Solution", ViewColumn.Active, {
                 retainContextWhenHidden: true,
                 enableFindWidget: true,
-                localResourceRoots: [vscode.Uri.file(path.join(this.markdownPath, "media"))],
+                localResourceRoots: this.markdown.localResourceRoots,
             });
 
             this.panel.onDidDispose(() => {
@@ -76,32 +62,8 @@ class LeetCodeSolutionProvider implements Disposable {
         return solution;
     }
 
-    private codeHighlighter(code: string, lang: string | undefined): string {
-        if (!lang) {
-            lang = this.solution.lang;
-        }
-        if (hljs.getLanguage(lang)) {
-            try {
-                return hljs.highlight(lang, code, true).value;
-            } catch (error) { /* do not highlight */ }
-        }
-        return ""; // use external default escaping
-    }
-
-    private getMarkdownStyles(): vscode.Uri[] {
-        try {
-            const stylePaths: string[] = require(path.join(this.markdownPath, "package.json"))["contributes"]["markdown.previewStyles"];
-            return stylePaths.map((p: string) => vscode.Uri.file(path.join(this.markdownPath, p)).with({ scheme: "vscode-resource" }));
-        } catch (error) {
-            leetCodeChannel.appendLine("[Error] Fail to load built-in markdown style file.");
-            return [];
-        }
-    }
-
     private getWebViewContent(solution: Solution): string {
-        const styles: string = this.getMarkdownStyles()
-            .map((style: vscode.Uri) => `<link rel="stylesheet" type="text/css" href="${style.toString()}">`)
-            .join("\n");
+        const styles: string = this.markdown.getStylesHTML();
         const { title, url, lang, author, votes } = solution;
         const head: string = this.markdown.render(`# [${title}](${url})`);
         const auth: string = `[${author}](https://leetcode.com/${author}/)`;

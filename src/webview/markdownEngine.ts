@@ -28,8 +28,16 @@ export class MarkdownEngine {
         }
     }
 
+    public get options(): MarkdownIt.Options {
+        return (this.engine as any).options;
+    }
+
     public getStylesHTML(): string {
         return this.styles.map((style: vscode.Uri) => `<link rel="stylesheet" type="text/css" href="${style.toString()}">`).join("\n");
+    }
+
+    public render(md: string, env?: any): string {
+        return this.engine.render(md, env);
     }
 
     private initEngine(): MarkdownIt {
