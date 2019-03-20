@@ -1,5 +1,6 @@
 import * as hljs from "highlight.js";
 import * as MarkdownIt from "markdown-it";
+import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
 import { leetCodeChannel } from "../leetCodeChannel";
@@ -33,7 +34,7 @@ export class MarkdownEngine {
     }
 
     public getStylesHTML(): string {
-        return this.styles.map((style: vscode.Uri) => `<link rel="stylesheet" type="text/css" href="${style.toString()}">`).join("\n");
+        return this.styles.map((style: vscode.Uri) => `<link rel="stylesheet" type="text/css" href="${style.toString()}">`).join(os.EOL);
     }
 
     public render(md: string, env?: any): string {
@@ -45,17 +46,13 @@ export class MarkdownEngine {
             linkify: true,
             typographer: true,
             highlight: (code: string, lang?: string): string => {
-                if (lang && ["tsx", "typescriptreact"].indexOf(lang.toLocaleLowerCase()) >= 0) {
-                    lang = "jsx";
-                }
-                if (lang && lang.toLocaleLowerCase() === "python3") {
-                    lang = "python";
-                }
-                if (lang && lang.toLocaleLowerCase() === "c#") {
-                    lang = "cs";
-                }
-                if (lang && lang.toLocaleLowerCase() === "json5") {
-                    lang = "json";
+                switch (lang && lang.toLowerCase()) {
+                    case "mysql":
+                        lang = "sql"; break;
+                    case "json5":
+                        lang = "json"; break;
+                    case "python3":
+                        lang = "python"; break;
                 }
                 if (lang && hljs.getLanguage(lang)) {
                     try {
@@ -67,25 +64,38 @@ export class MarkdownEngine {
         });
 
         this.addCodeBlockHighlight(md);
+        this.addImageUrlCompletion(md);
         this.addLinkValidator(md);
         return md;
     }
 
     private addCodeBlockHighlight(md: MarkdownIt): void {
-        const origin: MarkdownIt.TokenRender = md.renderer.rules["code_block"];
+        const codeBlock: MarkdownIt.TokenRender = md.renderer.rules["code_block"];
         // tslint:disable-next-line:typedef
         md.renderer.rules["code_block"] = (tokens, idx, options, env, self) => {
             // if any token uses lang-specified code fence, then do not highlight code block
             if (tokens.some((token: any) => token.type === "fence")) {
-                return origin(tokens, idx, options, env, self);
+                return codeBlock(tokens, idx, options, env, self);
             }
-            // otherwise, highlight with undefined lang, which could be handled in outside logic.
-            const highlighted: string = options.highlight(tokens[idx].content, undefined);
+            // otherwise, highlight with default lang in env object.
+            const highlighted: string = options.highlight(tokens[idx].content, env.lang);
             return [
                 `<pre><code ${self.renderAttrs(tokens[idx])} >`,
                 highlighted || md.utils.escapeHtml(tokens[idx].content),
                 "</code></pre>",
-            ].join("\n");
+            ].join(os.EOL);
+        };
+    }
+
+    private addImageUrlCompletion(md: MarkdownIt): void {
+        const image: MarkdownIt.TokenRender = md.renderer.rules["image"];
+        // tslint:disable-next-line:typedef
+        md.renderer.rules["image"] = (tokens, idx, options, env, self) => {
+            const imageSrc: string[] | undefined = tokens[idx].attrs.find((value: string[]) => value[0] === "src");
+            if (env.host && imageSrc && imageSrc[1].startsWith("/")) {
+                imageSrc[1] = `${env.host}${imageSrc[1]}`;
+            }
+            return image(tokens, idx, options, env, self);
         };
     }
 

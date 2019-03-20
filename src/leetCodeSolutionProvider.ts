@@ -1,10 +1,9 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import { TokenRender } from "markdown-it";
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
 import { IProblem } from "./shared";
-import { MarkdownEngine } from "./webview/markdownEngine";
+import { MarkdownEngine } from "./webview/MarkdownEngine";
 
 class LeetCodeSolutionProvider implements Disposable {
 
@@ -16,8 +15,6 @@ class LeetCodeSolutionProvider implements Disposable {
     public initialize(context: ExtensionContext): void {
         this.context = context;
         this.markdown = new MarkdownEngine();
-        this.addMdDefaultHighlight(); // use solution language if highting block lang is undefined
-        this.addMdImageUrlCompletion(); // complete the image path url with leetcode hostname
     }
 
     public async show(solutionString: string, problem: IProblem): Promise<void> {
@@ -45,27 +42,6 @@ class LeetCodeSolutionProvider implements Disposable {
         }
     }
 
-    private addMdDefaultHighlight(): void {
-        // The @types typedef of `highlight` is wrong, which should return a string.
-        // tslint:disable-next-line:typedef
-        const highlight = this.markdown.options.highlight as (code: string, lang?: string) => string;
-        this.markdown.options.highlight = (code: string, lang?: string): string => {
-            return highlight(code, lang || this.solution.lang);
-        };
-    }
-
-    private addMdImageUrlCompletion(): void {
-        const image: TokenRender = this.markdown.engine.renderer.rules["image"];
-        // tslint:disable-next-line:typedef
-        this.markdown.engine.renderer.rules["image"] = (tokens, idx, options, env, self) => {
-            const imageSrc: string[] | undefined = tokens[idx].attrs.find((value: string[]) => value[0] === "src");
-            if (imageSrc && imageSrc[1].startsWith("/")) {
-                imageSrc[1] = `https://discuss.leetcode.com${imageSrc[1]}`;
-            }
-            return image(tokens, idx, options, env, self);
-        };
-    }
-
     private parseSolution(raw: string): Solution {
         const solution: Solution = new Solution();
         // [^] matches everything including \n, yet can be replaced by . in ES2018's `m` flag
@@ -89,7 +65,10 @@ class LeetCodeSolutionProvider implements Disposable {
             `| :------: | :------: | :------: |`,
             `| ${lang}  | ${auth}  | ${votes} |`,
         ].join("\n"));
-        const body: string = this.markdown.render(solution.body);
+        const body: string = this.markdown.render(solution.body, {
+            lang: this.solution.lang,
+            host: "https://discuss.leetcode.com/",
+        });
         return `
             <!DOCTYPE html>
             <html>
