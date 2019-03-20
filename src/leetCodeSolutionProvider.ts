@@ -9,12 +9,12 @@ class LeetCodeSolutionProvider implements Disposable {
 
     private context: ExtensionContext;
     private panel: WebviewPanel | undefined;
-    private markdown: MarkdownEngine;
+    private mdEngine: MarkdownEngine;
     private solution: Solution;
 
     public initialize(context: ExtensionContext): void {
         this.context = context;
-        this.markdown = new MarkdownEngine();
+        this.mdEngine = new MarkdownEngine();
     }
 
     public async show(solutionString: string, problem: IProblem): Promise<void> {
@@ -22,7 +22,7 @@ class LeetCodeSolutionProvider implements Disposable {
             this.panel = window.createWebviewPanel("leetCode.solution", "Top Voted Solution", ViewColumn.Active, {
                 retainContextWhenHidden: true,
                 enableFindWidget: true,
-                localResourceRoots: this.markdown.localResourceRoots,
+                localResourceRoots: this.mdEngine.localResourceRoots,
             });
 
             this.panel.onDidDispose(() => {
@@ -56,16 +56,16 @@ class LeetCodeSolutionProvider implements Disposable {
     }
 
     private getWebViewContent(solution: Solution): string {
-        const styles: string = this.markdown.getStylesHTML();
+        const styles: string = this.mdEngine.getStylesHTML();
         const { title, url, lang, author, votes } = solution;
-        const head: string = this.markdown.render(`# [${title}](${url})`);
+        const head: string = this.mdEngine.render(`# [${title}](${url})`);
         const auth: string = `[${author}](https://leetcode.com/${author}/)`;
-        const info: string = this.markdown.render([
+        const info: string = this.mdEngine.render([
             `| Language |  Author  |  Votes   |`,
             `| :------: | :------: | :------: |`,
             `| ${lang}  | ${auth}  | ${votes} |`,
         ].join("\n"));
-        const body: string = this.markdown.render(solution.body, {
+        const body: string = this.mdEngine.render(solution.body, {
             lang: this.solution.lang,
             host: "https://discuss.leetcode.com/",
         });

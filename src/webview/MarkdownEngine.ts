@@ -7,8 +7,8 @@ import { leetCodeChannel } from "../leetCodeChannel";
 
 export class MarkdownEngine {
 
-    public readonly engine: MarkdownIt;
-    public readonly extRoot: string; // root path of vscode built-in markdown extension
+    private readonly engine: MarkdownIt;
+    private readonly extRoot: string; // root path of vscode built-in markdown extension
 
     public constructor() {
         this.engine = this.initEngine();
@@ -27,10 +27,6 @@ export class MarkdownEngine {
             leetCodeChannel.appendLine("[Error] Fail to load built-in markdown style file.");
             return [];
         }
-    }
-
-    public get options(): MarkdownIt.Options {
-        return (this.engine as any).options;
     }
 
     public getStylesHTML(): string {
