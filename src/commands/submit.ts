@@ -4,9 +4,9 @@
 import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { leetCodeResultProvider } from "../leetCodeResultProvider";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { getActiveFilePath } from "../utils/workspaceUtils";
+import { leetCodeResultProvider } from "../webview/leetCodeResultProvider";
 
 export async function submitSolution(uri?: vscode.Uri): Promise<void> {
     if (!leetCodeManager.getUser()) {
