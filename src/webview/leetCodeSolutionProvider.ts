@@ -2,8 +2,8 @@
 // Licensed under the MIT license.
 
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
-import { IProblem } from "./shared";
-import { MarkdownEngine } from "./webview/MarkdownEngine";
+import { IProblem } from "../shared";
+import { MarkdownEngine } from "./MarkdownEngine";
 
 class LeetCodeSolutionProvider implements Disposable {
 

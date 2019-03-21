@@ -15,10 +15,10 @@ import { LeetCodeTreeDataProvider } from "./explorer/LeetCodeTreeDataProvider";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
 import { leetCodeManager } from "./leetCodeManager";
-import { leetCodePreviewProvider } from "./leetCodePreviewProvider";
-import { leetCodeResultProvider } from "./leetCodeResultProvider";
-import { leetCodeSolutionProvider } from "./leetCodeSolutionProvider";
 import { leetCodeStatusBarItem } from "./leetCodeStatusBarItem";
+import { leetCodePreviewProvider } from "./webview/leetCodePreviewProvider";
+import { leetCodeResultProvider } from "./webview/leetCodeResultProvider";
+import { leetCodeSolutionProvider } from "./webview/leetCodeSolutionProvider";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     if (!await leetCodeExecutor.meetRequirements()) {

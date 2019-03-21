@@ -5,12 +5,12 @@ import * as fse from "fs-extra";
 import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { leetCodeResultProvider } from "../leetCodeResultProvider";
 import { IQuickItemEx, UserStatus } from "../shared";
 import { isWindows, usingCmd } from "../utils/osUtils";
 import { DialogType, promptForOpenOutputChannel, showFileSelectDialog } from "../utils/uiUtils";
 import { getActiveFilePath } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
+import { leetCodeResultProvider } from "../webview/leetCodeResultProvider";
 
 export async function testSolution(uri?: vscode.Uri): Promise<void> {
     try {

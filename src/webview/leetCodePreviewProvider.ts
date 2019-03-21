@@ -1,6 +1,9 @@
+// Copyright (c) jdneo. All rights reserved.
+// Licensed under the MIT license.
+
 import { commands, Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
-import { leetCodeExecutor } from "./leetCodeExecutor";
-import { IProblem } from "./shared";
+import { leetCodeExecutor } from "../leetCodeExecutor";
+import { IProblem } from "../shared";
 class LeetCodePreviewProvider implements Disposable {
 
     private context: ExtensionContext;
