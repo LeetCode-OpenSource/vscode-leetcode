@@ -4,7 +4,7 @@
 import { ConfigurationChangeEvent, Disposable, workspace, WorkspaceConfiguration } from "vscode";
 import { leetCodeManager } from "../leetCodeManager";
 import { UserStatus } from "../shared";
-import { LeetCodeStatusBarItem } from "./leetCodeStatusBarItem";
+import { LeetCodeStatusBarItem } from "./LeetCodeStatusBarItem";
 
 class LeetCodeStatusBarController implements Disposable {
     private statusBar: LeetCodeStatusBarItem | undefined;
