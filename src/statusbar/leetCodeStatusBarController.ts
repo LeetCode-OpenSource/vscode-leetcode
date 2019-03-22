@@ -2,29 +2,20 @@
 // Licensed under the MIT license.
 
 import { ConfigurationChangeEvent, Disposable, workspace, WorkspaceConfiguration } from "vscode";
-import { leetCodeManager } from "../leetCodeManager";
 import { UserStatus } from "../shared";
 import { LeetCodeStatusBarItem } from "./LeetCodeStatusBarItem";
 
 class LeetCodeStatusBarController implements Disposable {
-    private statusBar: LeetCodeStatusBarItem | undefined;
+    private statusBar: LeetCodeStatusBarItem;
     private configurationChangeListener: Disposable;
 
     constructor() {
-        if (this.isStatusBarEnabled()) {
-            this.statusBar = new LeetCodeStatusBarItem();
-        }
+        this.statusBar = new LeetCodeStatusBarItem();
+        this.setStatusBarVisibility();
 
         this.configurationChangeListener = workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
             if (event.affectsConfiguration("leetcode.enableStatusBar")) {
-                const isStatusBarEnabled: boolean = this.isStatusBarEnabled();
-                if (isStatusBarEnabled && this.statusBar === undefined) {
-                    this.statusBar = new LeetCodeStatusBarItem();
-                    this.statusBar.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser());
-                } else if (!isStatusBarEnabled && this.statusBar !== undefined) {
-                    this.statusBar.dispose();
-                    this.statusBar = undefined;
-                }
+                this.setStatusBarVisibility();
             }
         }, this);
     }
@@ -36,10 +27,16 @@ class LeetCodeStatusBarController implements Disposable {
     }
 
     public dispose(): void {
-        if (this.statusBar) {
-            this.statusBar.dispose();
-        }
+        this.statusBar.dispose();
         this.configurationChangeListener.dispose();
+    }
+
+    private setStatusBarVisibility(): void {
+        if (this.isStatusBarEnabled()) {
+            this.statusBar.show();
+        } else {
+            this.statusBar.hide();
+        }
     }
 
     private isStatusBarEnabled(): boolean {

@@ -25,6 +25,14 @@ export class LeetCodeStatusBarItem implements vscode.Disposable {
         }
     }
 
+    public show(): void {
+        this.statusBarItem.show();
+    }
+
+    public hide(): void {
+        this.statusBarItem.hide();
+    }
+
     public dispose(): void {
         this.statusBarItem.dispose();
     }
