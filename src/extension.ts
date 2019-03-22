@@ -15,7 +15,7 @@ import { LeetCodeTreeDataProvider } from "./explorer/LeetCodeTreeDataProvider";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
 import { leetCodeManager } from "./leetCodeManager";
-import { leetCodeStatusBarItem } from "./leetCodeStatusBarItem";
+import { leetCodeStatusBarController } from "./statusbar/leetCodeStatusBarController";
 import { leetCodePreviewProvider } from "./webview/leetCodePreviewProvider";
 import { leetCodeResultProvider } from "./webview/leetCodeResultProvider";
 import { leetCodeSolutionProvider } from "./webview/leetCodeSolutionProvider";
@@ -26,7 +26,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }
 
     leetCodeManager.on("statusChanged", () => {
-        leetCodeStatusBarItem.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser());
+        leetCodeStatusBarController.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser());
         leetCodeTreeDataProvider.refresh();
     });
 
@@ -36,7 +36,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     leetCodeSolutionProvider.initialize(context);
 
     context.subscriptions.push(
-        leetCodeStatusBarItem,
+        leetCodeStatusBarController,
         leetCodeChannel,
         leetCodePreviewProvider,
         leetCodeResultProvider,

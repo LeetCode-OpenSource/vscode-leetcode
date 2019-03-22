@@ -287,6 +287,12 @@
                         "type": "string",
                         "scope": "application",
                         "description": "Specify the relative path to save the problem files."
+                    },
+                    "leetcode.enableStatusBar": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Specify whether the LeetCode status bar will be shown or not."
                     }
                 }
             }
