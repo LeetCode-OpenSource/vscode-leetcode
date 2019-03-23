@@ -1,3 +1,6 @@
+// Copyright (c) jdneo. All rights reserved.
+// Licensed under the MIT license.
+
 import * as hljs from "highlight.js";
 import * as MarkdownIt from "markdown-it";
 import * as os from "os";

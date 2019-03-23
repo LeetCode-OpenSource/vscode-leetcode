@@ -1,3 +1,6 @@
+// Copyright (c) jdneo. All rights reserved.
+// Licensed under the MIT license.
+
 import kebabCase = require("lodash.kebabcase");
 import { IProblem, langExt } from "../shared";
 
