@@ -3,7 +3,6 @@
 
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
 import { leetCodeChannel } from "../leetCodeChannel";
-import { IProblem } from "../shared";
 import { MarkdownEngine } from "./MarkdownEngine";
 
 class LeetCodeResultProvider implements Disposable {
@@ -49,7 +48,7 @@ class LeetCodeResultProvider implements Disposable {
                     [result.status, raw] = raw.split(/  . (.+)([^]+)/).slice(1);
                     [result.passed, raw] = raw.split(/\n  . (.+)([^]+)/).slice(1);
                     [result.runtime, raw] = raw.split(/\n  . (.+)([^]+)/).slice(1);
-                    [result.memory, raw] = raw.split(/\n  . (.+)/).slice(1);
+                    [result.memory] = raw.split(/\n  . (.+)/).slice(1);
                     return result;
                 }
                 case "×": {
@@ -59,7 +58,7 @@ class LeetCodeResultProvider implements Disposable {
                     [result.testcase, raw] = raw.split(/\n  . testcase: '(.+)'([^]+)/).slice(1);
                     [result.answer, raw] = raw.split(/\n  . answer: (.+)([^]+)/).slice(1);
                     [result.expected, raw] = raw.split(/\n  . expected_answer: (.+)([^]+)/).slice(1);
-                    [result.stdout, raw] = raw.split(/\n  . stdout: ([^]+?)\n$/).slice(1);
+                    [result.stdout] = raw.split(/\n  . stdout: ([^]+?)\n$/).slice(1);
                     result.testcase = result.testcase.replace("\\n", "\n");
                     return result;
                 }
