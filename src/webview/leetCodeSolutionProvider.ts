@@ -10,7 +10,6 @@ class LeetCodeSolutionProvider implements Disposable {
     private context: ExtensionContext;
     private panel: WebviewPanel | undefined;
     private mdEngine: MarkdownEngine;
-    private solution: Solution;
 
     public initialize(context: ExtensionContext): void {
         this.context = context;
@@ -30,9 +29,9 @@ class LeetCodeSolutionProvider implements Disposable {
             }, null, this.context.subscriptions);
         }
 
-        this.solution = this.parseSolution(solutionString);
-        this.panel.title = problem.name;
-        this.panel.webview.html = this.getWebViewContent(this.solution);
+        const solution: Solution = this.parseSolution(solutionString);
+        this.panel.title = `${problem.name}: Solution`;
+        this.panel.webview.html = this.getWebViewContent(solution);
         this.panel.reveal(ViewColumn.Active);
     }
 
@@ -66,7 +65,7 @@ class LeetCodeSolutionProvider implements Disposable {
             `| ${lang}  | ${auth}  | ${votes} |`,
         ].join("\n"));
         const body: string = this.mdEngine.render(solution.body, {
-            lang: this.solution.lang,
+            lang: solution.lang,
             host: "https://discuss.leetcode.com/",
         });
         return `

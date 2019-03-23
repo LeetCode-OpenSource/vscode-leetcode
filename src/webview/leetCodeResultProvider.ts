@@ -3,6 +3,7 @@
 
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
 import { leetCodeChannel } from "../leetCodeChannel";
+import { IProblem } from "../shared";
 import { MarkdownEngine } from "./MarkdownEngine";
 
 class LeetCodeResultProvider implements Disposable {
@@ -18,7 +19,7 @@ class LeetCodeResultProvider implements Disposable {
 
     public async show(resultString: string): Promise<void> {
         if (!this.panel) {
-            this.panel = window.createWebviewPanel("leetcode.result", "LeetCode Results", ViewColumn.Two, {
+            this.panel = window.createWebviewPanel("leetcode.result", "Submission Result", ViewColumn.Two, {
                 retainContextWhenHidden: true,
                 enableFindWidget: true,
                 localResourceRoots: this.mdEngine.localResourceRoots,
@@ -30,7 +31,6 @@ class LeetCodeResultProvider implements Disposable {
         }
 
         const result: Result = this.parseResult(resultString);
-        this.panel.title = `${""}: Result`;
         this.panel.webview.html = this.getWebViewContent(result);
         this.panel.reveal(ViewColumn.Two);
     }
