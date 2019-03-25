@@ -3,17 +3,15 @@
 
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
 import { IProblem } from "../shared";
-import { MarkdownEngine } from "./MarkdownEngine";
+import { markdownEngine } from "./markdownEngine";
 
 class LeetCodeSolutionProvider implements Disposable {
 
     private context: ExtensionContext;
     private panel: WebviewPanel | undefined;
-    private mdEngine: MarkdownEngine;
 
     public initialize(context: ExtensionContext): void {
         this.context = context;
-        this.mdEngine = new MarkdownEngine();
     }
 
     public async show(solutionString: string, problem: IProblem): Promise<void> {
@@ -21,7 +19,7 @@ class LeetCodeSolutionProvider implements Disposable {
             this.panel = window.createWebviewPanel("leetCode.solution", "Top Voted Solution", ViewColumn.Active, {
                 retainContextWhenHidden: true,
                 enableFindWidget: true,
-                localResourceRoots: this.mdEngine.localResourceRoots,
+                localResourceRoots: markdownEngine.localResourceRoots,
             });
 
             this.panel.onDidDispose(() => {
@@ -55,16 +53,16 @@ class LeetCodeSolutionProvider implements Disposable {
     }
 
     private getWebViewContent(solution: Solution): string {
-        const styles: string = this.mdEngine.getStylesHTML();
+        const styles: string = markdownEngine.getStylesHTML();
         const { title, url, lang, author, votes } = solution;
-        const head: string = this.mdEngine.render(`# [${title}](${url})`);
+        const head: string = markdownEngine.render(`# [${title}](${url})`);
         const auth: string = `[${author}](https://leetcode.com/${author}/)`;
-        const info: string = this.mdEngine.render([
+        const info: string = markdownEngine.render([
             `| Language |  Author  |  Votes   |`,
             `| :------: | :------: | :------: |`,
             `| ${lang}  | ${auth}  | ${votes} |`,
         ].join("\n"));
-        const body: string = this.mdEngine.render(solution.body, {
+        const body: string = markdownEngine.render(solution.body, {
             lang: solution.lang,
             host: "https://discuss.leetcode.com/",
         });

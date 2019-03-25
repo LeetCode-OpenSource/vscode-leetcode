@@ -3,16 +3,14 @@
 
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
 import { leetCodeChannel } from "../leetCodeChannel";
-import { MarkdownEngine } from "./MarkdownEngine";
+import { markdownEngine } from "./markdownEngine";
 
 class LeetCodeResultProvider implements Disposable {
 
     private context: ExtensionContext;
     private panel: WebviewPanel | undefined;
-    private mdEngine: MarkdownEngine;
 
     public initialize(context: ExtensionContext): void {
-        this.mdEngine = new MarkdownEngine();
         this.context = context;
     }
 
@@ -21,7 +19,7 @@ class LeetCodeResultProvider implements Disposable {
             this.panel = window.createWebviewPanel("leetcode.result", "Submission Result", ViewColumn.Two, {
                 retainContextWhenHidden: true,
                 enableFindWidget: true,
-                localResourceRoots: this.mdEngine.localResourceRoots,
+                localResourceRoots: markdownEngine.localResourceRoots,
             });
 
             this.panel.onDidDispose(() => {
@@ -73,11 +71,11 @@ class LeetCodeResultProvider implements Disposable {
     }
 
     private getWebViewContent(result: Result): string {
-        const styles: string = this.mdEngine.getStylesHTML();
+        const styles: string = markdownEngine.getStylesHTML();
         let body: string;
         if (result instanceof AcceptResult) {
             const accpet: AcceptResult = result as AcceptResult;
-            body = this.mdEngine.render([
+            body = markdownEngine.render([
                 `## ${result.status}`,
                 ``,
                 `* ${result.passed}`,
@@ -86,7 +84,7 @@ class LeetCodeResultProvider implements Disposable {
             ].join("\n"));
         } else {
             const failed: FailedResult = result as FailedResult;
-            body = this.mdEngine.render([
+            body = markdownEngine.render([
                 `## ${result.status}`,
                 `* ${result.passed}`,
                 ``,
