@@ -68,7 +68,7 @@ async function fetchProblemLanguage(): Promise<string | undefined> {
     const language: string | undefined = defaultLanguage || await vscode.window.showQuickPick(languages, { placeHolder: "Select the language you want to use" });
     // fire-and-forget default language query
     (async (): Promise<void> => {
-        if (!defaultLanguage && leetCodeConfig.get<boolean>("showSetDefaultLanguageHint")) {
+        if (language && !defaultLanguage && leetCodeConfig.get<boolean>("showSetDefaultLanguageHint")) {
             const choice: vscode.MessageItem | undefined = await vscode.window.showInformationMessage(
                 `Would you like to set '${language}' as your default language?`,
                 DialogOptions.yes,
