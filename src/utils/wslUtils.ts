@@ -3,10 +3,11 @@
 
 import * as vscode from "vscode";
 import { executeCommand } from "./cpUtils";
+import { isWindows } from "./osUtils";
 
 export function useWsl(): boolean {
     const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-    return process.platform === "win32" && leetCodeConfig.get<boolean>("useWsl") === true;
+    return isWindows() && leetCodeConfig.get<boolean>("useWsl") === true;
 }
 
 export async function toWslPath(path: string): Promise<string> {
