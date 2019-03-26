@@ -1,6 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
+import * as _ from "lodash";
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
 import { markdownEngine } from "./markdownEngine";
 
@@ -50,7 +51,7 @@ class LeetCodeResultProvider implements Disposable {
             }
             const kvMatch: RegExpExecArray | null = regKeyVal.exec(entry[1]);
             if (kvMatch) {
-                const key: string = kvMatch[1].split("_").map((k: string) => `${k[0].toUpperCase()}${k.slice(1)}`).join(" ");
+                const key: string = _.startCase(kvMatch[1]);
                 let value: string = kvMatch[2];
                 if (!result[key]) {
                     result[key] = [];
@@ -95,7 +96,6 @@ class LeetCodeResultProvider implements Disposable {
     }
 }
 
-// tslint:disable-next-line:max-classes-per-file
 interface IResult {
     [key: string]: string[];
     messages: string[];
