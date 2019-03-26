@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
-import { leetCodeChannel } from "../leetCodeChannel";
 import { markdownEngine } from "./markdownEngine";
 
 class LeetCodeResultProvider implements Disposable {
@@ -27,7 +26,7 @@ class LeetCodeResultProvider implements Disposable {
             }, null, this.context.subscriptions);
         }
 
-        const result: Result = this.parseResult(resultString);
+        const result: IResult = this.parseResult(resultString);
         this.panel.webview.html = this.getWebViewContent(result);
         this.panel.reveal(ViewColumn.Two);
     }
@@ -38,66 +37,50 @@ class LeetCodeResultProvider implements Disposable {
         }
     }
 
-    private parseResult(raw: string): Result {
-        try {
-            switch (raw[2]) {
-                case "√": {
-                    const result: AcceptResult = new AcceptResult();
-                    [result.status, raw] = raw.split(/  . (.+)([^]+)/).slice(1);
-                    [result.passed, raw] = raw.split(/\n  . (.+)([^]+)/).slice(1);
-                    [result.runtime, raw] = raw.split(/\n  . (.+)([^]+)/).slice(1);
-                    [result.memory] = raw.split(/\n  . (.+)/).slice(1);
-                    return result;
-                }
-                case "×": {
-                    const result: FailedResult = new FailedResult();
-                    [result.status, raw] = raw.split(/  . (.+)([^]+)/).slice(1);
-                    [result.passed, raw] = raw.split(/\n  . (.+)([^]+)/).slice(1);
-                    [result.testcase, raw] = raw.split(/\n  . testcase: '(.+)'([^]+)/).slice(1);
-                    [result.answer, raw] = raw.split(/\n  . answer: (.+)([^]+)/).slice(1);
-                    [result.expected, raw] = raw.split(/\n  . expected_answer: (.+)([^]+)/).slice(1);
-                    [result.stdout] = raw.split(/\n  . stdout: ([^]+?)\n$/).slice(1);
-                    result.testcase = result.testcase.replace("\\n", "\n");
-                    return result;
-                }
-                default: {
-                    throw new TypeError(raw);
-                }
+    private parseResult(raw: string): IResult {
+        raw = raw.concat("  √ "); // Append a dummy sentinel to the end of raw string
+        const regSplit: RegExp = /  [√×✔✘vx] ([^]+?)\n(?=  [√×✔✘vx] )/g;
+        const regKeyVal: RegExp = /(.+?): ([^]*)/;
+        const result: IResult = { messages: [] };
+        let entry: RegExpExecArray | null;
+        do {
+            entry = regSplit.exec(raw);
+            if (!entry) {
+                continue;
             }
-        } catch (error) {
-            leetCodeChannel.appendLine(`Result parsing failed: ${error.message}`);
-            throw error;
-        }
+            const kvMatch: RegExpExecArray | null = regKeyVal.exec(entry[1]);
+            if (kvMatch) {
+                const key: string = kvMatch[1].split("_").map((k: string) => `${k[0].toUpperCase()}${k.slice(1)}`).join(" ");
+                let value: string = kvMatch[2];
+                if (!result[key]) {
+                    result[key] = [];
+                }
+                if (key === "Testcase") {
+                    value = value.slice(1, -1).replace("\\n", "\n");
+                }
+                result[key].push(value);
+            } else {
+                result.messages.push(entry[1]);
+            }
+        } while (entry);
+        return result;
     }
 
-    private getWebViewContent(result: Result): string {
+    private getWebViewContent(result: IResult): string {
         const styles: string = markdownEngine.getStylesHTML();
-        let body: string;
-        if (result instanceof AcceptResult) {
-            const accpet: AcceptResult = result as AcceptResult;
-            body = markdownEngine.render([
-                `## ${result.status}`,
-                ``,
-                `* ${result.passed}`,
-                `* ${accpet.runtime}`,
-                `* ${accpet.memory}`,
-            ].join("\n"));
-        } else {
-            const failed: FailedResult = result as FailedResult;
-            body = markdownEngine.render([
-                `## ${result.status}`,
-                `* ${result.passed}`,
-                ``,
-                `### Testcase`, // TODO: add command to copy raw testcase
-                `\`\`\`\n${failed.testcase}\n\`\`\``,
-                `### Answer`,
-                `\`\`\`\n${failed.answer}\n\`\`\``,
-                `### Expected`,
-                `\`\`\`\n${failed.expected}\n\`\`\``,
-                `### Stdout`,
-                `\`\`\`\n${failed.stdout}\n\`\`\``,
-            ].join("\n"));
-        }
+        const title: string = `## ${result.messages[0]}`;
+        const messages: string[] = result.messages.slice(1).map((m: string) => `* ${m}`);
+        const sections: string[] = Object.keys(result).filter((k: string) => k !== "messages").map((key: string) => [
+            `### ${key}`,
+            "```",
+            result[key].join("\n\n"),
+            "```",
+        ].join("\n"));
+        const body: string = markdownEngine.render([
+            title,
+            ...messages,
+            ...sections,
+        ].join("\n"));
         return `
             <!DOCTYPE html>
             <html>
@@ -113,23 +96,9 @@ class LeetCodeResultProvider implements Disposable {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-abstract class Result {
-    public status: string;
-    public passed: string;
-}
-
-// tslint:disable-next-line:max-classes-per-file
-class AcceptResult extends Result {
-    public runtime: string;
-    public memory: string;
-}
-
-// tslint:disable-next-line:max-classes-per-file
-class FailedResult extends Result {
-    public testcase: string;
-    public answer: string;
-    public expected: string;
-    public stdout: string;
+interface IResult {
+    [key: string]: string[];
+    messages: string[];
 }
 
 export const leetCodeResultProvider: LeetCodeResultProvider = new LeetCodeResultProvider();
