@@ -111,7 +111,14 @@ class LeetCodeExecutor {
     }
 
     public async submitSolution(filePath: string): Promise<string> {
-        return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "submit", `"${filePath}"`]);
+        try {
+            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", "node", [await this.getLeetCodeBinaryPath(), "submit", `"${filePath}"`]);
+        } catch (error) {
+            if (error.result) {
+                return error.result;
+            }
+            throw error;
+        }
     }
 
     public async testSolution(filePath: string, testString?: string): Promise<string> {
