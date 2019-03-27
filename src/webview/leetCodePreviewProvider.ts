@@ -39,7 +39,7 @@ class LeetCodePreviewProvider implements Disposable {
         }
 
         this.panel.webview.html = await this.provideHtmlContent(node);
-        this.panel.title = node.name;
+        this.panel.title = `${node.name}: Preview`;
         this.panel.reveal();
     }
 

@@ -1,6 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
+import * as _ from "lodash";
 import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
@@ -201,10 +202,10 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     private addProblemToTreeData(problem: IProblem): void {
         this.putProblemToMap(this.treeData.Difficulty, problem.difficulty, problem);
         for (const tag of problem.tags) {
-            this.putProblemToMap(this.treeData.Tag, this.beautifyCategoryName(tag), problem);
+            this.putProblemToMap(this.treeData.Tag, _.startCase(tag), problem);
         }
         for (const company of problem.companies) {
-            this.putProblemToMap(this.treeData.Company, this.beautifyCategoryName(company), problem);
+            this.putProblemToMap(this.treeData.Company, _.startCase(company), problem);
         }
     }
 
@@ -215,10 +216,6 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         } else {
             map.set(key, [problem]);
         }
-    }
-
-    private beautifyCategoryName(name: string): string {
-        return name.split("-").map((c: string) => c[0].toUpperCase() + c.slice(1)).join(" ");
     }
 
     private getSubCategoryNodes(map: Map<string, IProblem[]>, category: Category): LeetCodeNode[] {

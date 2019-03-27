@@ -8,7 +8,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 import { leetCodeChannel } from "../leetCodeChannel";
 
-export class MarkdownEngine {
+class MarkdownEngine {
 
     private readonly engine: MarkdownIt;
     private readonly extRoot: string; // root path of vscode built-in markdown extension
@@ -106,3 +106,5 @@ export class MarkdownEngine {
         };
     }
 }
+
+export const markdownEngine: MarkdownEngine = new MarkdownEngine();
