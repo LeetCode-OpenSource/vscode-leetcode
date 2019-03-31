@@ -5,7 +5,7 @@ import * as cp from "child_process";
 import * as fse from "fs-extra";
 import * as path from "path";
 import * as requireFromString from "require-from-string";
-import * as vscode from "vscode";
+import { ConfigurationChangeEvent, Disposable, MessageItem, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Endpoint, IProblem, supportedPlugins } from "./shared";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
 import { genFileName } from "./utils/problemUtils";
@@ -13,15 +13,21 @@ import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 import { toWslPath, useWsl } from "./utils/wslUtils";
 
-class LeetCodeExecutor {
+class LeetCodeExecutor implements Disposable {
     private leetCodeRootPath: string;
     private leetCodeRootPathInWsl: string;
     private nodeExecutable: string;
+    private configurationChangeListener: Disposable;
 
     constructor() {
         this.leetCodeRootPath = path.join(__dirname, "..", "..", "node_modules", "vsc-leetcode-cli");
         this.leetCodeRootPathInWsl = "";
         this.nodeExecutable = this.getNodePath();
+        this.configurationChangeListener = workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
+            if (event.affectsConfiguration("leetcode.nodePath")) {
+                this.nodeExecutable = this.getNodePath();
+            }
+        }, this);
     }
 
     public async getLeetCodeRootPath(): Promise<string> { // not wrapped by ""
@@ -50,7 +56,7 @@ class LeetCodeExecutor {
         try {
             await this.executeCommandEx(this.nodeExecutable, ["-v"]);
         } catch (error) {
-            const choice: vscode.MessageItem | undefined = await vscode.window.showErrorMessage(
+            const choice: MessageItem | undefined = await window.showErrorMessage(
                 "LeetCode extension needs Node.js installed in environment path",
                 DialogOptions.open,
             );
@@ -164,8 +170,12 @@ class LeetCodeExecutor {
         return this.nodeExecutable;
     }
 
+    public dispose(): void {
+        this.configurationChangeListener.dispose();
+    }
+
     private getNodePath(): string {
-        const extensionConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode", null);
+        const extensionConfig: WorkspaceConfiguration = workspace.getConfiguration("leetcode", null);
         return extensionConfig.get<string>("nodePath", "node" /* default value */);
     }
 
