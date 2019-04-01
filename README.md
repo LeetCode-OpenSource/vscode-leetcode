@@ -29,7 +29,7 @@
 ## Requirements
 - [VS Code 1.30.1+](https://code.visualstudio.com/)
 - [Node.js 8+](https://nodejs.org)
-    > NOTE: Please make sure that `Node` is in your `PATH` environment variable. You can check this by running: `node -v`.
+    > NOTE: Please make sure that `Node` is in your `PATH` environment variable. You can also use the setting `leetcode.nodePath` to specify the location of your `Node.js` executable.
 
 ## Quick Start
 
@@ -138,6 +138,7 @@
 | `leetcode.endpoint` | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn` | `leetcode` |
 | `leetcode.outputFolder`| Specify the relative path to save the problem files. Besides using customized path, there are also several reserved words which can be used here: <ul><li>`${tag}`: Categorize the problem according to their tags.<li>`${language}`: Categorize the problem according to their language.</li><li>`${difficulty}`: Categorize the problem according to their difficulty.</li></ul> | N/A |
 | `leetcode.enableStatusBar` | Specify whether the LeetCode status bar will be shown or not. | `true` |
+| `leetcode.nodePath` | Specify the `Node.js` executable path. | `node` |
 
 ## Troubleshooting
 When you meet any problem, you can check the [Troubleshooting Page](https://github.com/jdneo/vscode-leetcode/wiki/Troubleshooting) first.
