@@ -24,7 +24,7 @@ import { leetCodeSolutionProvider } from "./webview/leetCodeSolutionProvider";
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     try {
         if (!await leetCodeExecutor.meetRequirements()) {
-            throw new Error("The environment doesn't meet requirements");
+            throw new Error("The environment doesn't meet requirements.");
         }
 
         leetCodeManager.on("statusChanged", () => {
@@ -65,7 +65,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         await leetCodeExecutor.switchEndpoint(plugin.getLeetCodeEndpoint());
         leetCodeManager.getLoginStatus();
     } catch (error) {
-        leetCodeChannel.appendLine(error.message);
+        leetCodeChannel.appendLine(error.toString());
         promptForOpenOutputChannel("Extension initialization failed. Please open output channel for details.", DialogType.error);
     }
 }
