@@ -10,6 +10,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## Changed
 - Improve the submission result page
+- Update the activity bar icon, See: [#225](https://github.com/jdneo/vscode-leetcode/pull/225)
 
 ## Fixed
 [Bugs fixed](https://github.com/jdneo/vscode-leetcode/issues?q=is%3Aissue+milestone%3A0.13.2+is%3Aclosed+label%3Abug)
