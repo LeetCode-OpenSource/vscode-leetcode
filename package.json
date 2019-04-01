@@ -271,7 +271,7 @@
                         "type": "boolean",
                         "default": false,
                         "scope": "application",
-                        "description": "Use Node.js inside the Windows Subsystem for Linux."
+                        "description": "Use the Windows Subsystem for Linux."
                     },
                     "leetcode.endpoint": {
                         "type": "string",
@@ -286,13 +286,19 @@
                     "leetcode.outputFolder": {
                         "type": "string",
                         "scope": "application",
-                        "description": "Specify the relative path to save the problem files."
+                        "description": "The relative path to save the problem files."
                     },
                     "leetcode.enableStatusBar": {
                         "type": "boolean",
                         "default": true,
                         "scope": "application",
-                        "description": "Specify whether the LeetCode status bar will be shown or not."
+                        "description": "Show the LeetCode status bar or not."
+                    },
+                    "leetcode.nodePath": {
+                        "type": "string",
+                        "default": "node",
+                        "scope": "application",
+                        "description": "The Node.js executable path."
                     }
                 }
             }

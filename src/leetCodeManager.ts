@@ -42,8 +42,8 @@ class LeetCodeManager extends EventEmitter {
                 const leetCodeBinaryPath: string = await leetCodeExecutor.getLeetCodeBinaryPath();
 
                 const childProc: cp.ChildProcess = wsl.useWsl()
-                    ? cp.spawn("wsl", ["node", leetCodeBinaryPath, "user", "-l"], { shell: true })
-                    : cp.spawn("node", [leetCodeBinaryPath, "user", "-l"], {
+                    ? cp.spawn("wsl", [leetCodeExecutor.node, leetCodeBinaryPath, "user", "-l"], { shell: true })
+                    : cp.spawn(leetCodeExecutor.node, [leetCodeBinaryPath, "user", "-l"], {
                         shell: true,
                         env: createEnvOption(),
                     });

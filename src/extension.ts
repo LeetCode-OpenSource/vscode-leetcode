@@ -41,6 +41,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         leetCodePreviewProvider,
         leetCodeResultProvider,
         leetCodeSolutionProvider,
+        leetCodeExecutor,
         vscode.window.createTreeView("leetCodeExplorer", { treeDataProvider: leetCodeTreeDataProvider, showCollapseAll: true }),
         vscode.languages.registerCodeLensProvider({ scheme: "file" }, codeLensProvider),
         vscode.commands.registerCommand("leetcode.deleteCache", () => cache.deleteCache()),
