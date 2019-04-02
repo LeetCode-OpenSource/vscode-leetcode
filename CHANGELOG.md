@@ -9,7 +9,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add a setting `leetcode.nodePath` to specify the `Node.js` executable path [#227](https://github.com/jdneo/vscode-leetcode/issues/227)
 
 ## Changed
-- Improve the submission result page
 - Update the activity bar icon, See: [#225](https://github.com/jdneo/vscode-leetcode/pull/225)
 
 ## Fixed
