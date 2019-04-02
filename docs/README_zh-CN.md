@@ -29,7 +29,7 @@
 ## 运行条件
 - [VS Code 1.23.0+](https://code.visualstudio.com/)
 - [Node.js 8+](https://nodejs.org)
-    > 注意：请确保`Node`在`PATH`环境变量中，您可以通过执行：`node -v`进行查看。
+    > 注意：请确保`Node`在`PATH`环境变量中。您也可以通过设定 `leetcode.nodePath` 选项来指定 `Node.js` 可执行文件的路径。
 
 ## 快速开始
 
@@ -138,6 +138,7 @@
 | `leetcode.endpoint` | 指定使用的终端，可用终端有：`leetcode`, `leetcode-cn` | `leetcode` |
 | `leetcode.outputFolder` | 指定保存文件时所用的相对文件夹路径。除了用户自定义路径外，也可以使用保留项，包括：<ul><li>`${tag}`: 根据题目的类别进行分类。<li>`${language}`: 根据题目的语言进行分类。</li><li>`${difficulty}`: 根据题目的难度进行分类。</li></ul> | N/A |
 | `leetcode.enableStatusBar` | 指定是否在 VS Code 下方显示插件状态栏。 | `true` |
+| `leetcode.nodePath` | 指定 `Node.js` 可执行文件的路径。 | `node` |
 
 ## 疑难解答
 在遇到任何问题时，可以先查看一下[疑难解答](https://github.com/jdneo/vscode-leetcode/wiki/%E7%96%91%E9%9A%BE%E8%A7%A3%E7%AD%94)文档寻求帮助。
