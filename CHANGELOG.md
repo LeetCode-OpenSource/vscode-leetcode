@@ -3,6 +3,18 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.13.2]
+## Added
+- Add a setting `leetcode.enableStatusBar` to specify whether the LeetCode status bar will be shown or not [#156](https://github.com/jdneo/vscode-leetcode/issues/156)
+- Add a setting `leetcode.nodePath` to specify the `Node.js` executable path [#227](https://github.com/jdneo/vscode-leetcode/issues/227)
+
+## Changed
+- Improve the submission result page
+- Update the activity bar icon, See: [#225](https://github.com/jdneo/vscode-leetcode/pull/225)
+
+## Fixed
+[Bugs fixed](https://github.com/jdneo/vscode-leetcode/issues?q=is%3Aissue+milestone%3A0.13.2+is%3Aclosed+label%3Abug)
+
 ## [0.13.1]
 ## Fixed
 [Bugs fixed](https://github.com/jdneo/vscode-leetcode/issues?q=is%3Aissue+milestone%3A0.13.1+is%3Aclosed+label%3Abug)
