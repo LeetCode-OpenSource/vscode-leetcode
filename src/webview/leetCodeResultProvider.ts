@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
+import { markdownEngine } from "./markdownEngine";
 
 class LeetCodeResultProvider implements Disposable {
 
@@ -17,6 +18,7 @@ class LeetCodeResultProvider implements Disposable {
             this.panel = window.createWebviewPanel("leetcode.result", "LeetCode Results", ViewColumn.Two, {
                 retainContextWhenHidden: true,
                 enableFindWidget: true,
+                localResourceRoots: markdownEngine.localResourceRoots,
             });
 
             this.panel.onDidDispose(() => {
@@ -40,10 +42,10 @@ class LeetCodeResultProvider implements Disposable {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>LeetCode Results</title>
+                ${markdownEngine.getStylesHTML()}
             </head>
             <body>
-                <pre>${result.trim()}</pre>
+                <pre><code>${result.trim()}</code></pre>
             </body>
             </html>`;
     }
