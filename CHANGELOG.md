@@ -3,6 +3,10 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.13.3]
+## Fixed
+- Fix the bug that the extension cannot be activated
+
 ## [0.13.2]
 ## Added
 - Add a setting `leetcode.enableStatusBar` to specify whether the LeetCode status bar will be shown or not [#156](https://github.com/jdneo/vscode-leetcode/issues/156)
