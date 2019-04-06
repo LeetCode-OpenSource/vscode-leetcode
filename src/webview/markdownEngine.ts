@@ -7,6 +7,7 @@ import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
 import { leetCodeChannel } from "../leetCodeChannel";
+import { isWindows } from "../utils/osUtils";
 
 class MarkdownEngine implements vscode.Disposable {
 
@@ -147,10 +148,18 @@ class MarkdownConfiguration {
 
     public constructor() {
         const markdownConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("markdown");
-        this.fontFamily = markdownConfig.get<string | undefined>("preview.fontFamily", undefined);
-        this.fontSize = Math.max(8, +markdownConfig.get<number>("preview.fontSize", NaN));
-        this.lineHeight = Math.max(0.6, +markdownConfig.get<number>("preview.lineHeight", NaN));
         this.extRoot = path.join(vscode.env.appRoot, "extensions", "markdown-language-features");
+        this.lineHeight = Math.max(0.6, +markdownConfig.get<number>("preview.lineHeight", NaN));
+        this.fontSize = Math.max(8, +markdownConfig.get<number>("preview.fontSize", NaN));
+        this.fontFamily = this.resolveFontFamily(markdownConfig);
+    }
+
+    private resolveFontFamily(config: vscode.WorkspaceConfiguration): string | undefined {
+        let fontFamily: string | undefined = config.get<string | undefined>("preview.fontFamily", undefined);
+        if (isWindows() && fontFamily && fontFamily === config.inspect<string>("preview.fontFamily")!.defaultValue) {
+            fontFamily = `${fontFamily}, 'Microsoft Yahei UI'`;
+        }
+        return fontFamily;
     }
 }
 
