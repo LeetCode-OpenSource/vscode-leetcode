@@ -53,7 +53,7 @@ class LeetCodeSolutionProvider implements Disposable {
     }
 
     private getWebViewContent(solution: Solution): string {
-        const styles: string = markdownEngine.getStylesHTML();
+        const styles: string = markdownEngine.getStyles();
         const { title, url, lang, author, votes } = solution;
         const head: string = markdownEngine.render(`# [${title}](${url})`);
         const auth: string = `[${author}](https://leetcode.com/${author}/)`;
