@@ -144,7 +144,7 @@ class MarkdownConfiguration {
     public readonly extRoot: string; // root path of vscode built-in markdown extension
     public readonly lineHeight: number;
     public readonly fontSize: number;
-    public readonly fontFamily: string | undefined;
+    public readonly fontFamily: string;
 
     public constructor() {
         const markdownConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("markdown");
@@ -154,7 +154,7 @@ class MarkdownConfiguration {
         this.fontFamily = this.resolveFontFamily(markdownConfig);
     }
 
-    private resolveFontFamily(config: vscode.WorkspaceConfiguration): string | undefined {
+    private resolveFontFamily(config: vscode.WorkspaceConfiguration): string {
         let fontFamily: string = config.get<string>("preview.fontFamily", "");
         if (isWindows() && fontFamily === config.inspect<string>("preview.fontFamily")!.defaultValue) {
             fontFamily = `${fontFamily}, 'Microsoft Yahei UI'`;
