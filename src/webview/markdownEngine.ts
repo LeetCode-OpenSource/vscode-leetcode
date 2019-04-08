@@ -155,8 +155,8 @@ class MarkdownConfiguration {
     }
 
     private resolveFontFamily(config: vscode.WorkspaceConfiguration): string | undefined {
-        let fontFamily: string | undefined = config.get<string | undefined>("preview.fontFamily", undefined);
-        if (isWindows() && fontFamily && fontFamily === config.inspect<string>("preview.fontFamily")!.defaultValue) {
+        let fontFamily: string = config.get<string>("preview.fontFamily", "");
+        if (isWindows() && fontFamily === config.inspect<string>("preview.fontFamily")!.defaultValue) {
             fontFamily = `${fontFamily}, 'Microsoft Yahei UI'`;
         }
         return fontFamily;
