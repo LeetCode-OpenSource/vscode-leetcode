@@ -86,7 +86,7 @@ class LeetCodePreviewProvider implements Disposable {
     }
 
     private getWebViewContent(desc: IDescription): string {
-        const mdStyles: string = markdownEngine.getStylesHTML();
+        const mdStyles: string = markdownEngine.getStyles();
         const buttonStyle: string = `
             <style>
                 #solve {
