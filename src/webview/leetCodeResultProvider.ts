@@ -42,7 +42,7 @@ class LeetCodeResultProvider implements Disposable {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                ${markdownEngine.getStylesHTML()}
+                ${markdownEngine.getStyles()}
             </head>
             <body>
                 <pre><code>${result.trim()}</code></pre>
