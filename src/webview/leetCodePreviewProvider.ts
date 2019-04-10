@@ -34,9 +34,6 @@ class LeetCodePreviewProvider implements Disposable {
                 switch (message.command) {
                     case "ShowProblem": {
                         await commands.executeCommand("leetcode.showProblem", this.node);
-                        await commands.executeCommand("workbench.action.focusSecondEditorGroup");
-                        commands.executeCommand("workbench.action.toggleSidebarVisibility");
-                        this.panel!.reveal(ViewColumn.Two, true);
                         break;
                     }
                 }
