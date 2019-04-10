@@ -15,6 +15,12 @@ Steps to reproduce the behavior.
 
 A clear and concise description of what you expected to happen.
 
+## Extension Output
+
+Paste here the LeetCode extension log from output channel.
+
+Guidance: Press `Ctrl+Shift+U`, and toggle the channel to `LeetCode`.
+
 ## Your Environment
 
 - *os*:
