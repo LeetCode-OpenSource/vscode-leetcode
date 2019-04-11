@@ -64,8 +64,10 @@ class LeetCodePreviewProvider implements Disposable {
             /* langs */, ,
             category,
             difficulty,
-            accepted,
-            submissions,
+            likes,
+            dislikes,
+            /* accepted */,
+            /* submissions */,
             /* testcase */, ,
             ...body
         ] = descString.split("\n");
@@ -76,8 +78,8 @@ class LeetCodePreviewProvider implements Disposable {
             companies: problem.companies,
             category: category.slice(2),
             difficulty: difficulty.slice(2),
-            accepted: accepted.split(": ")[1],
-            submissions: submissions.split(": ")[1],
+            likes: likes.split(": ")[1].trim(),
+            dislikes: dislikes.split(": ")[1].trim(),
             body: body.join("\n").replace(/<pre>\s*([^]+?)\s*<\/pre>/g, "<pre><code>$1</code></pre>"),
         };
     }
@@ -104,12 +106,12 @@ class LeetCodePreviewProvider implements Disposable {
                 }
             </style>
         `;
-        const { title, url, category, difficulty, accepted, submissions, body } = desc;
+        const { title, url, category, difficulty, likes, dislikes, body } = desc;
         const head: string = markdownEngine.render(`# [${title}](${url})`);
         const info: string = markdownEngine.render([
-            `| Category | Difficulty | Accepted | Submissions |`,
-            `| :------: | :--------: | :------: | :---------: |`,
-            `| ${category} | ${difficulty} | ${accepted} | ${submissions} |`,
+            `| Category | Difficulty | Likes | Dislikes |`,
+            `| :------: | :--------: | :---: | :------: |`,
+            `| ${category} | ${difficulty} | ${likes} | ${dislikes} |`,
         ].join("\n"));
         const tags: string = [
             `<details>`,
@@ -166,8 +168,8 @@ interface IDescription {
     companies: string[];
     category: string;
     difficulty: string;
-    accepted: string;
-    submissions: string;
+    likes: string;
+    dislikes: string;
     body: string;
 }
 
