@@ -1,90 +1,44 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import { commands, Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
+import { commands, ViewColumn } from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { IProblem } from "../shared";
+import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
 
-class LeetCodePreviewProvider implements Disposable {
+class LeetCodePreviewProvider extends LeetCodeWebview {
 
-    private context: ExtensionContext;
     private node: IProblem;
-    private panel: WebviewPanel | undefined;
-
-    public initialize(context: ExtensionContext): void {
-        this.context = context;
-    }
+    private description: IDescription;
 
     public async show(node: IProblem): Promise<void> {
-        // Fetch problem first before creating webview panel
         const descString: string = await leetCodeExecutor.getDescription(node);
-
         this.node = node;
-        if (!this.panel) {
-            this.panel = window.createWebviewPanel("leetcode.preview", "Preview Problem", ViewColumn.One, {
-                enableScripts: true,
-                enableCommandUris: true,
-                enableFindWidget: true,
-                retainContextWhenHidden: true,
-                localResourceRoots: markdownEngine.localResourceRoots,
-            });
+        this.description = this.parseDescription(descString, node);
+        if (this.showWebviewInternal()) {
+            this.panel.webview.html = this.getWebviewContent();
+            this.panel.title = `${node.name}: Preview`;
+            this.panel.reveal(ViewColumn.One);
+        }
+    }
 
-            this.panel.webview.onDidReceiveMessage(async (message: IWebViewMessage) => {
+    protected getWebviewOption(): ILeetCodeWebviewOption {
+        return {
+            viewType: "leetcode.preview",
+            title: "Preview Problem",
+            onDidReceiveMessage: async (message: IWebViewMessage): Promise<void> => {
                 switch (message.command) {
                     case "ShowProblem": {
                         await commands.executeCommand("leetcode.showProblem", this.node);
                         break;
                     }
                 }
-            }, this, this.context.subscriptions);
-
-            this.panel.onDidDispose(() => {
-                this.panel = undefined;
-            }, null, this.context.subscriptions);
-        }
-
-        const description: IDescription = this.parseDescription(descString, node);
-        this.panel.webview.html = this.getWebViewContent(description);
-        this.panel.title = `${node.name}: Preview`;
-        this.panel.reveal(ViewColumn.One);
-    }
-
-    public dispose(): void {
-        if (this.panel) {
-            this.panel.dispose();
-        }
-    }
-
-    private parseDescription(descString: string, problem: IProblem): IDescription {
-        const [
-            /* title */, ,
-            url, ,
-            /* tags */, ,
-            /* langs */, ,
-            category,
-            difficulty,
-            likes,
-            dislikes,
-            /* accepted */,
-            /* submissions */,
-            /* testcase */, ,
-            ...body
-        ] = descString.split("\n");
-        return {
-            title: problem.name,
-            url,
-            tags: problem.tags,
-            companies: problem.companies,
-            category: category.slice(2),
-            difficulty: difficulty.slice(2),
-            likes: likes.split(": ")[1].trim(),
-            dislikes: dislikes.split(": ")[1].trim(),
-            body: body.join("\n").replace(/<pre>\s*([^]+?)\s*<\/pre>/g, "<pre><code>$1</code></pre>"),
+            },
         };
     }
 
-    private getWebViewContent(desc: IDescription): string {
+    protected getWebviewContent(): string {
         const mdStyles: string = markdownEngine.getStyles();
         const buttonStyle: string = `
             <style>
@@ -106,7 +60,7 @@ class LeetCodePreviewProvider implements Disposable {
                 }
             </style>
         `;
-        const { title, url, category, difficulty, likes, dislikes, body } = desc;
+        const { title, url, category, difficulty, likes, dislikes, body } = this.description;
         const head: string = markdownEngine.render(`# [${title}](${url})`);
         const info: string = markdownEngine.render([
             `| Category | Difficulty | Likes | Dislikes |`,
@@ -117,7 +71,7 @@ class LeetCodePreviewProvider implements Disposable {
             `<details>`,
             `<summary><strong>Tags</strong></summary>`,
             markdownEngine.render(
-                desc.tags
+                this.description.tags
                     .map((t: string) => `[\`${t}\`](https://leetcode.com/tag/${t})`)
                     .join(" | "),
             ),
@@ -127,7 +81,7 @@ class LeetCodePreviewProvider implements Disposable {
             `<details>`,
             `<summary><strong>Companies</strong></summary>`,
             markdownEngine.render(
-                desc.companies
+                this.description.companies
                     .map((c: string) => `\`${c}\``)
                     .join(" | "),
             ),
@@ -159,6 +113,33 @@ class LeetCodePreviewProvider implements Disposable {
         `;
     }
 
+    private parseDescription(descString: string, problem: IProblem): IDescription {
+        const [
+            /* title */, ,
+            url, ,
+            /* tags */, ,
+            /* langs */, ,
+            category,
+            difficulty,
+            likes,
+            dislikes,
+            /* accepted */,
+            /* submissions */,
+            /* testcase */, ,
+            ...body
+        ] = descString.split("\n");
+        return {
+            title: problem.name,
+            url,
+            tags: problem.tags,
+            companies: problem.companies,
+            category: category.slice(2),
+            difficulty: difficulty.slice(2),
+            likes: likes.split(": ")[1].trim(),
+            dislikes: dislikes.split(": ")[1].trim(),
+            body: body.join("\n").replace(/<pre>\s*([^]+?)\s*<\/pre>/g, "<pre><code>$1</code></pre>"),
+        };
+    }
 }
 
 interface IDescription {
