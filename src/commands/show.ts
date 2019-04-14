@@ -111,7 +111,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
 
         const originFilePath: string = await leetCodeExecutor.showProblem(node, language, outDir);
         const filePath: string = wsl.useWsl() ? await wsl.toWinPath(originFilePath) : originFilePath;
-        await vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false });
+        await vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false, viewColumn: vscode.ViewColumn.One });
     } catch (error) {
         await promptForOpenOutputChannel("Failed to show the problem. Please open the output channel for details.", DialogType.error);
     }

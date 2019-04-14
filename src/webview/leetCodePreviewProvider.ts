@@ -4,6 +4,8 @@
 import { commands, Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { IProblem } from "../shared";
+import { markdownEngine } from "./markdownEngine";
+
 class LeetCodePreviewProvider implements Disposable {
 
     private context: ExtensionContext;
@@ -14,22 +16,26 @@ class LeetCodePreviewProvider implements Disposable {
         this.context = context;
     }
 
-    public async preview(node: IProblem): Promise<void> {
+    public async show(node: IProblem): Promise<void> {
+        // Fetch problem first before creating webview panel
+        const descString: string = await leetCodeExecutor.getDescription(node);
+
         this.node = node;
         if (!this.panel) {
-            this.panel = window.createWebviewPanel("leetcode.preview", "Preview Problem", ViewColumn.Active, {
+            this.panel = window.createWebviewPanel("leetcode.preview", "Preview Problem", ViewColumn.One, {
                 enableScripts: true,
                 enableCommandUris: true,
                 enableFindWidget: true,
                 retainContextWhenHidden: true,
+                localResourceRoots: markdownEngine.localResourceRoots,
             });
 
             this.panel.webview.onDidReceiveMessage(async (message: IWebViewMessage) => {
                 switch (message.command) {
-                    case "ShowProblem":
+                    case "ShowProblem": {
                         await commands.executeCommand("leetcode.showProblem", this.node);
-                        this.dispose();
-                        return;
+                        break;
+                    }
                 }
             }, this, this.context.subscriptions);
 
@@ -38,9 +44,10 @@ class LeetCodePreviewProvider implements Disposable {
             }, null, this.context.subscriptions);
         }
 
-        this.panel.webview.html = await this.provideHtmlContent(node);
+        const description: IDescription = this.parseDescription(descString, node);
+        this.panel.webview.html = this.getWebViewContent(description);
         this.panel.title = `${node.name}: Preview`;
-        this.panel.reveal();
+        this.panel.reveal(ViewColumn.One);
     }
 
     public dispose(): void {
@@ -49,21 +56,37 @@ class LeetCodePreviewProvider implements Disposable {
         }
     }
 
-    public async provideHtmlContent(node: IProblem): Promise<string> {
-        return await this.renderHTML(node);
+    private parseDescription(descString: string, problem: IProblem): IDescription {
+        const [
+            /* title */, ,
+            url, ,
+            /* tags */, ,
+            /* langs */, ,
+            category,
+            difficulty,
+            likes,
+            dislikes,
+            /* accepted */,
+            /* submissions */,
+            /* testcase */, ,
+            ...body
+        ] = descString.split("\n");
+        return {
+            title: problem.name,
+            url,
+            tags: problem.tags,
+            companies: problem.companies,
+            category: category.slice(2),
+            difficulty: difficulty.slice(2),
+            likes: likes.split(": ")[1].trim(),
+            dislikes: dislikes.split(": ")[1].trim(),
+            body: body.join("\n").replace(/<pre>\s*([^]+?)\s*<\/pre>/g, "<pre><code>$1</code></pre>"),
+        };
     }
 
-    private async renderHTML(node: IProblem): Promise<string> {
-        const description: string = await leetCodeExecutor.getDescription(node);
-        const descriptionHTML: string = description.replace(/\n/g, "<br>");
-        const htmlTemplate: string = `
-        <!DOCTYPE html>
-        <html>
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Preview Problem</title>
-            </head>
+    private getWebViewContent(desc: IDescription): string {
+        const mdStyles: string = markdownEngine.getStyles();
+        const buttonStyle: string = `
             <style>
                 #solve {
                     position: fixed;
@@ -82,31 +105,75 @@ class LeetCodePreviewProvider implements Disposable {
                     border: 0;
                 }
             </style>
+        `;
+        const { title, url, category, difficulty, likes, dislikes, body } = desc;
+        const head: string = markdownEngine.render(`# [${title}](${url})`);
+        const info: string = markdownEngine.render([
+            `| Category | Difficulty | Likes | Dislikes |`,
+            `| :------: | :--------: | :---: | :------: |`,
+            `| ${category} | ${difficulty} | ${likes} | ${dislikes} |`,
+        ].join("\n"));
+        const tags: string = [
+            `<details>`,
+            `<summary><strong>Tags</strong></summary>`,
+            markdownEngine.render(
+                desc.tags
+                    .map((t: string) => `[\`${t}\`](https://leetcode.com/tag/${t})`)
+                    .join(" | "),
+            ),
+            `</details>`,
+        ].join("\n");
+        const companies: string = [
+            `<details>`,
+            `<summary><strong>Companies</strong></summary>`,
+            markdownEngine.render(
+                desc.companies
+                    .map((c: string) => `\`${c}\``)
+                    .join(" | "),
+            ),
+            `</details>`,
+        ].join("\n");
+        return `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                ${mdStyles}
+                ${buttonStyle}
+            </head>
             <body>
-                <div >
-                    ${ descriptionHTML}
-                </div>
+                ${head}
+                ${info}
+                ${tags}
+                ${companies}
+                ${body}
                 <button id="solve">Code Now</button>
                 <script>
-                    (function() {
-                        const vscode = acquireVsCodeApi();
-                        let button = document.getElementById('solve');
-                        button.onclick = solveHandler;
-                        function solveHandler() {
-                            vscode.postMessage({
-                                command: 'ShowProblem',
-                            });
-                        }
-                    }());
+                    const vscode = acquireVsCodeApi();
+                    const button = document.getElementById('solve');
+                    button.onclick = () => vscode.postMessage({
+                        command: 'ShowProblem',
+                    });
                 </script>
             </body>
-        </html>
+            </html>
         `;
-        return htmlTemplate;
     }
 
 }
-export interface IWebViewMessage {
+
+interface IDescription {
+    title: string;
+    url: string;
+    tags: string[];
+    companies: string[];
+    category: string;
+    difficulty: string;
+    likes: string;
+    dislikes: string;
+    body: string;
+}
+
+interface IWebViewMessage {
     command: string;
 }
 
