@@ -11,12 +11,17 @@ export abstract class LeetCodeWebview implements Disposable {
     private listener: Disposable;
 
     public initialize(context: ExtensionContext): void {
+        const { onDidChangeConfiguration } = this.getWebviewOption();
         this.context = context;
-        this.listener = workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
-            if (event.affectsConfiguration("markdown") && this.panel) {
-                this.panel.webview.html = this.getWebviewContent();
-            }
-        }, this);
+        if (onDidChangeConfiguration) {
+            this.listener = workspace.onDidChangeConfiguration(onDidChangeConfiguration, this);
+        } else {
+            this.listener = workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
+                if (event.affectsConfiguration("markdown") && this.panel) {
+                    this.panel.webview.html = this.getWebviewContent();
+                }
+            }, this);
+        }
     }
 
     public dispose(): void {
@@ -28,9 +33,9 @@ export abstract class LeetCodeWebview implements Disposable {
 
     protected showWebviewInternal(): this is { panel: WebviewPanel } {
         if (!this.panel) {
-            const option: ILeetCodeWebviewOption = this.getWebviewOption();
+            const { viewType, title, viewColumn, onDidReceiveMessage } = this.getWebviewOption();
 
-            this.panel = window.createWebviewPanel(option.viewType, option.title, option.viewColumn || ViewColumn.One, {
+            this.panel = window.createWebviewPanel(viewType, title, viewColumn || ViewColumn.One, {
                 enableScripts: true,
                 enableCommandUris: true,
                 enableFindWidget: true,
@@ -42,8 +47,8 @@ export abstract class LeetCodeWebview implements Disposable {
                 this.panel = undefined;
             }, null, this.context.subscriptions);
 
-            if (option.onDidReceiveMessage) {
-                this.panel.webview.onDidReceiveMessage(option.onDidReceiveMessage, this, this.context.subscriptions);
+            if (onDidReceiveMessage) {
+                this.panel.webview.onDidReceiveMessage(onDidReceiveMessage, this, this.context.subscriptions);
             }
         }
 
@@ -61,4 +66,5 @@ export interface ILeetCodeWebviewOption {
     title: string;
     viewColumn?: ViewColumn;
     onDidReceiveMessage?: (message: any) => Promise<void>;
+    onDidChangeConfiguration?: (event: ConfigurationChangeEvent) => Promise<void>;
 }
