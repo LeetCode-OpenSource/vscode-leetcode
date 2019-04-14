@@ -11,17 +11,8 @@ export abstract class LeetCodeWebview implements Disposable {
     private listener: Disposable;
 
     public initialize(context: ExtensionContext): void {
-        const { onDidChangeConfiguration } = this.getWebviewOption();
         this.context = context;
-        if (onDidChangeConfiguration) {
-            this.listener = workspace.onDidChangeConfiguration(onDidChangeConfiguration, this);
-        } else {
-            this.listener = workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
-                if (event.affectsConfiguration("markdown") && this.panel) {
-                    this.panel.webview.html = this.getWebviewContent();
-                }
-            }, this);
-        }
+        this.listener = workspace.onDidChangeConfiguration(this.onDidChangeConfiguration, this);
     }
 
     public dispose(): void {
@@ -33,7 +24,7 @@ export abstract class LeetCodeWebview implements Disposable {
 
     protected showWebviewInternal(): this is { panel: WebviewPanel } {
         if (!this.panel) {
-            const { viewType, title, viewColumn, onDidReceiveMessage } = this.getWebviewOption();
+            const { viewType, title, viewColumn } = this.getWebviewOption();
 
             this.panel = window.createWebviewPanel(viewType, title, viewColumn || ViewColumn.One, {
                 enableScripts: true,
@@ -47,14 +38,20 @@ export abstract class LeetCodeWebview implements Disposable {
                 this.panel = undefined;
             }, null, this.context.subscriptions);
 
-            if (onDidReceiveMessage) {
-                this.panel.webview.onDidReceiveMessage(onDidReceiveMessage, this, this.context.subscriptions);
-            }
+            this.panel.webview.onDidReceiveMessage(this.onDidReceiveMessage, this, this.context.subscriptions);
         }
 
         this.panel.webview.html = this.getWebviewContent();
         return true;
     }
+
+    protected async onDidChangeConfiguration(event: ConfigurationChangeEvent): Promise<void> {
+        if (this.panel && event.affectsConfiguration("markdown")) {
+            this.panel.webview.html = this.getWebviewContent();
+        }
+    }
+
+    protected async onDidReceiveMessage(/* message */_: any): Promise<void> { /* no special rule */ }
 
     protected abstract getWebviewOption(): ILeetCodeWebviewOption;
 
@@ -65,6 +62,4 @@ export interface ILeetCodeWebviewOption {
     viewType: string;
     title: string;
     viewColumn?: ViewColumn;
-    onDidReceiveMessage?: (message: any) => Promise<void>;
-    onDidChangeConfiguration?: (event: ConfigurationChangeEvent) => Promise<void>;
 }

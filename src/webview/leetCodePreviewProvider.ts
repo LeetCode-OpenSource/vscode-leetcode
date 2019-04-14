@@ -13,13 +13,20 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
     private description: IDescription;
 
     public async show(node: IProblem): Promise<void> {
-        const descString: string = await leetCodeExecutor.getDescription(node);
+        this.description = this.parseDescription(await leetCodeExecutor.getDescription(node), node);
         this.node = node;
-        this.description = this.parseDescription(descString, node);
         if (this.showWebviewInternal()) {
-            this.panel.webview.html = this.getWebviewContent();
             this.panel.title = `${node.name}: Preview`;
             this.panel.reveal(ViewColumn.One);
+        }
+    }
+
+    protected async onDidReceiveMessage(message: IWebViewMessage): Promise<void> {
+        switch (message.command) {
+            case "ShowProblem": {
+                await commands.executeCommand("leetcode.showProblem", this.node);
+                break;
+            }
         }
     }
 
@@ -27,14 +34,6 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
         return {
             viewType: "leetcode.preview",
             title: "Preview Problem",
-            onDidReceiveMessage: async (message: IWebViewMessage): Promise<void> => {
-                switch (message.command) {
-                    case "ShowProblem": {
-                        await commands.executeCommand("leetcode.showProblem", this.node);
-                        break;
-                    }
-                }
-            },
         };
     }
 
