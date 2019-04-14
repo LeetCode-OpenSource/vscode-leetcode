@@ -18,8 +18,8 @@ import { leetCodeManager } from "./leetCodeManager";
 import { leetCodeStatusBarController } from "./statusbar/leetCodeStatusBarController";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 import { leetCodePreviewProvider } from "./webview/leetCodePreviewProvider";
-import { leetCodeResultProvider } from "./webview/leetCodeResultProvider";
 import { leetCodeSolutionProvider } from "./webview/leetCodeSolutionProvider";
+import { leetCodeSubmissionProvider } from "./webview/leetCodeSubmissionProvider";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     try {
@@ -34,14 +34,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
         const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider(context);
         leetCodePreviewProvider.initialize(context);
-        leetCodeResultProvider.initialize(context);
         leetCodeSolutionProvider.initialize(context);
+        leetCodeSubmissionProvider.initialize(context);
 
         context.subscriptions.push(
             leetCodeStatusBarController,
             leetCodeChannel,
             leetCodePreviewProvider,
-            leetCodeResultProvider,
+            leetCodeSubmissionProvider,
             leetCodeSolutionProvider,
             leetCodeExecutor,
             vscode.window.createTreeView("leetCodeExplorer", { treeDataProvider: leetCodeTreeDataProvider, showCollapseAll: true }),
