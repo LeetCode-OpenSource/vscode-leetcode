@@ -30,7 +30,7 @@ export abstract class LeetCodeWebview implements Disposable {
         if (!this.panel) {
             const option: ILeetCodeWebviewOption = this.getWebviewOption();
 
-            this.panel = window.createWebviewPanel(option.viewType, option.title, ViewColumn.One, {
+            this.panel = window.createWebviewPanel(option.viewType, option.title, option.viewColumn || ViewColumn.One, {
                 enableScripts: true,
                 enableCommandUris: true,
                 enableFindWidget: true,
@@ -59,5 +59,6 @@ export abstract class LeetCodeWebview implements Disposable {
 export interface ILeetCodeWebviewOption {
     viewType: string;
     title: string;
+    viewColumn?: ViewColumn;
     onDidReceiveMessage?: (message: any) => Promise<void>;
 }

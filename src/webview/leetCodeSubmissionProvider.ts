@@ -16,16 +16,11 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
         }
     }
 
-    public dispose(): void {
-        if (this.panel) {
-            this.panel.dispose();
-        }
-    }
-
     protected getWebviewOption(): ILeetCodeWebviewOption {
         return {
             viewType: "leetcode.submission",
             title: "Submission",
+            viewColumn: ViewColumn.Two,
         };
     }
 
