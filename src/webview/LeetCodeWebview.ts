@@ -8,41 +8,42 @@ export abstract class LeetCodeWebview implements Disposable {
 
     protected panel: WebviewPanel | undefined;
     private context: ExtensionContext;
-    private listener: Disposable;
+    private configListener: Disposable | undefined;
 
     public initialize(context: ExtensionContext): void {
         this.context = context;
-        this.listener = workspace.onDidChangeConfiguration(this.onDidChangeConfiguration, this);
     }
 
     public dispose(): void {
-        this.listener.dispose();
         if (this.panel) {
             this.panel.dispose();
         }
     }
 
     protected showWebviewInternal(): this is { panel: WebviewPanel } {
+        const { viewType, title, viewColumn } = this.getWebviewOption();
         if (!this.panel) {
-            const { viewType, title, viewColumn } = this.getWebviewOption();
-
-            this.panel = window.createWebviewPanel(viewType, title, viewColumn || ViewColumn.One, {
+            this.panel = window.createWebviewPanel(viewType, title, viewColumn || ViewColumn.Active, {
                 enableScripts: true,
                 enableCommandUris: true,
                 enableFindWidget: true,
                 retainContextWhenHidden: true,
                 localResourceRoots: markdownEngine.localResourceRoots,
             });
-
-            this.panel.onDidDispose(() => {
-                this.panel = undefined;
-            }, null, this.context.subscriptions);
-
+            this.panel.onDidDispose(this.onDidDisposeWebview, this, this.context.subscriptions);
             this.panel.webview.onDidReceiveMessage(this.onDidReceiveMessage, this, this.context.subscriptions);
+            this.configListener = workspace.onDidChangeConfiguration(this.onDidChangeConfiguration, this);
         }
-
         this.panel.webview.html = this.getWebviewContent();
         return true;
+    }
+
+    protected onDidDisposeWebview(): void {
+        this.panel = undefined;
+        if (this.configListener) {
+            this.configListener.dispose();
+            this.configListener = undefined;
+        }
     }
 
     protected async onDidChangeConfiguration(event: ConfigurationChangeEvent): Promise<void> {
