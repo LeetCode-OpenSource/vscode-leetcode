@@ -3,7 +3,7 @@
 
 import * as vscode from "vscode";
 
-class CodeLensProvider implements vscode.CodeLensProvider {
+export class CustomCodeLensProvider implements vscode.CodeLensProvider {
 
     private validFileNamePattern: RegExp = /\d+\..*\.(.+)/;
 
@@ -16,13 +16,15 @@ class CodeLensProvider implements vscode.CodeLensProvider {
 
         const range: vscode.Range = new vscode.Range(document.lineCount - 1, 0, document.lineCount - 1, 0);
 
-        const lens: vscode.CodeLens = new vscode.CodeLens(range, {
-            title: "🙏 Submit to LeetCode",
-            command: "leetcode.submitSolution",
-        });
-
-        return [lens];
+        return [
+            new vscode.CodeLens(range, {
+                title: "Submit",
+                command: "leetcode.submitSolution",
+            }),
+            new vscode.CodeLens(range, {
+                title: "Test",
+                command: "leetcode.testSolution",
+            }),
+        ];
     }
 }
-
-export const codeLensProvider: CodeLensProvider = new CodeLensProvider();
