@@ -11,9 +11,7 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
 
     public async show(result: string): Promise<void> {
         this.result = result;
-        if (this.showWebviewInternal()) {
-            this.panel.reveal(ViewColumn.Two);
-        }
+        this.showWebviewInternal();
     }
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
@@ -36,6 +34,11 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
                 <pre><code>${this.result.trim()}</code></pre>
             </body>
             </html>`;
+    }
+
+    protected onDidDisposeWebview(): void {
+        super.onDidDisposeWebview();
+        delete this.result;
     }
 }
 

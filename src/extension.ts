@@ -20,6 +20,7 @@ import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 import { leetCodePreviewProvider } from "./webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "./webview/leetCodeSolutionProvider";
 import { leetCodeSubmissionProvider } from "./webview/leetCodeSubmissionProvider";
+import { markdownEngine } from "./webview/markdownEngine";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     try {
@@ -33,9 +34,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         });
 
         const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider(context);
-        leetCodePreviewProvider.initialize(context);
-        leetCodeSolutionProvider.initialize(context);
-        leetCodeSubmissionProvider.initialize(context);
 
         context.subscriptions.push(
             leetCodeStatusBarController,
@@ -44,6 +42,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             leetCodeSubmissionProvider,
             leetCodeSolutionProvider,
             leetCodeExecutor,
+            markdownEngine,
             vscode.window.createTreeView("leetCodeExplorer", { treeDataProvider: leetCodeTreeDataProvider, showCollapseAll: true }),
             vscode.languages.registerCodeLensProvider({ scheme: "file" }, codeLensProvider),
             vscode.commands.registerCommand("leetcode.deleteCache", () => cache.deleteCache()),

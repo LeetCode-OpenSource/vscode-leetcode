@@ -15,32 +15,25 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
     public async show(node: IProblem): Promise<void> {
         this.description = this.parseDescription(await leetCodeExecutor.getDescription(node), node);
         this.node = node;
-        if (this.showWebviewInternal()) {
-            this.panel.title = `${node.name}: Preview`;
-            this.panel.reveal(ViewColumn.One);
-        }
-    }
-
-    protected async onDidReceiveMessage(message: IWebViewMessage): Promise<void> {
-        switch (message.command) {
-            case "ShowProblem": {
-                await commands.executeCommand("leetcode.showProblem", this.node);
-                break;
-            }
-        }
+        this.showWebviewInternal();
     }
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
         return {
             viewType: "leetcode.preview",
-            title: "Preview Problem",
+            title: `${this.node.name}: Preview`,
+            viewColumn: ViewColumn.One,
         };
     }
 
     protected getWebviewContent(): string {
-        const mdStyles: string = markdownEngine.getStyles();
-        const buttonStyle: string = `
-            <style>
+        const button: { element: string, script: string, style: string } = {
+            element: `<button id="solve">Code Now</button>`,
+            script: `const button = document.getElementById('solve');
+                    button.onclick = () => vscode.postMessage({
+                        command: 'ShowProblem',
+                    });`,
+            style: `<style>
                 #solve {
                     position: fixed;
                     bottom: 1rem;
@@ -57,8 +50,8 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 #solve:active {
                     border: 0;
                 }
-            </style>
-        `;
+                </style>`,
+        };
         const { title, url, category, difficulty, likes, dislikes, body } = this.description;
         const head: string = markdownEngine.render(`# [${title}](${url})`);
         const info: string = markdownEngine.render([
@@ -90,8 +83,8 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
             <!DOCTYPE html>
             <html>
             <head>
-                ${mdStyles}
-                ${buttonStyle}
+                ${markdownEngine.getStyles()}
+                ${button.style}
             </head>
             <body>
                 ${head}
@@ -99,17 +92,29 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 ${tags}
                 ${companies}
                 ${body}
-                <button id="solve">Code Now</button>
+                ${button.element}
                 <script>
                     const vscode = acquireVsCodeApi();
-                    const button = document.getElementById('solve');
-                    button.onclick = () => vscode.postMessage({
-                        command: 'ShowProblem',
-                    });
+                    ${button.script}
                 </script>
             </body>
             </html>
         `;
+    }
+
+    protected onDidDisposeWebview(): void {
+        super.onDidDisposeWebview();
+        delete this.node;
+        delete this.description;
+    }
+
+    protected async onDidReceiveMessage(message: IWebViewMessage): Promise<void> {
+        switch (message.command) {
+            case "ShowProblem": {
+                await commands.executeCommand("leetcode.showProblem", this.node);
+                break;
+            }
+        }
     }
 
     private parseDescription(descString: string, problem: IProblem): IDescription {

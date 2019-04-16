@@ -26,6 +26,10 @@
             "property-declaration",
             "variable-declaration",
             "member-variable-declaration"
+        ],
+        "variable-name": [
+            true,
+            "allow-leading-underscore"
         ]
     },
     "rulesDirectory": []

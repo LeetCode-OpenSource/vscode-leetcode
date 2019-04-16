@@ -11,17 +11,15 @@ class LeetCodeSolutionProvider extends LeetCodeWebview {
     private solution: Solution;
 
     public async show(solutionString: string, problem: IProblem): Promise<void> {
-        this.solution = this.parseSolution(solutionString);
-        if (this.showWebviewInternal()) {
-            this.panel.title = `${problem.name}: Solution`;
-            this.panel.reveal(ViewColumn.Active);
-        }
+        this.solution = this.parseSolution(solutionString, problem);
+        this.showWebviewInternal();
     }
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
         return {
             viewType: "leetcode.solution",
-            title: "Top Voted Solution",
+            title: `${this.solution.problem}: Solution`,
+            viewColumn: ViewColumn.One,
         };
     }
 
@@ -54,7 +52,12 @@ class LeetCodeSolutionProvider extends LeetCodeWebview {
         `;
     }
 
-    private parseSolution(raw: string): Solution {
+    protected onDidDisposeWebview(): void {
+        super.onDidDisposeWebview();
+        delete this.solution;
+    }
+
+    private parseSolution(raw: string, problem: IProblem): Solution {
         const solution: Solution = new Solution();
         // [^] matches everything including \n, yet can be replaced by . in ES2018's `m` flag
         raw = raw.slice(1); // skip first empty line
@@ -64,6 +67,7 @@ class LeetCodeSolutionProvider extends LeetCodeWebview {
         [solution.author, raw] = raw.match(/\* Author:\s+(.+)\n([^]+)/)!.slice(1);
         [solution.votes, raw] = raw.match(/\* Votes:\s+(\d+)\n\n([^]+)/)!.slice(1);
         solution.body = raw;
+        solution.problem = problem.name;
         return solution;
     }
 }
@@ -76,6 +80,7 @@ class Solution {
     public author: string = "";
     public votes: string = "";
     public body: string = ""; // Markdown supported
+    public problem: string = "";
 }
 
 export const leetCodeSolutionProvider: LeetCodeSolutionProvider = new LeetCodeSolutionProvider();

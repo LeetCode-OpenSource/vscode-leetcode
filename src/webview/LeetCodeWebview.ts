@@ -1,18 +1,13 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import { ConfigurationChangeEvent, Disposable, ExtensionContext, ViewColumn, WebviewPanel, window, workspace } from "vscode";
+import { ConfigurationChangeEvent, Disposable, ViewColumn, WebviewPanel, window, workspace } from "vscode";
 import { markdownEngine } from "./markdownEngine";
 
 export abstract class LeetCodeWebview implements Disposable {
 
     protected panel: WebviewPanel | undefined;
-    private context: ExtensionContext;
-    private configListener: Disposable | undefined;
-
-    public initialize(context: ExtensionContext): void {
-        this.context = context;
-    }
+    private listeners: Disposable[] = [];
 
     public dispose(): void {
         if (this.panel) {
@@ -20,30 +15,32 @@ export abstract class LeetCodeWebview implements Disposable {
         }
     }
 
-    protected showWebviewInternal(): this is { panel: WebviewPanel } {
-        const { viewType, title, viewColumn } = this.getWebviewOption();
+    protected showWebviewInternal(): void {
+        const { viewType, title, viewColumn, preserveFocus } = this.getWebviewOption();
         if (!this.panel) {
-            this.panel = window.createWebviewPanel(viewType, title, viewColumn || ViewColumn.Active, {
+            this.panel = window.createWebviewPanel(viewType, title, { viewColumn, preserveFocus }, {
                 enableScripts: true,
                 enableCommandUris: true,
                 enableFindWidget: true,
                 retainContextWhenHidden: true,
                 localResourceRoots: markdownEngine.localResourceRoots,
             });
-            this.panel.onDidDispose(this.onDidDisposeWebview, this, this.context.subscriptions);
-            this.panel.webview.onDidReceiveMessage(this.onDidReceiveMessage, this, this.context.subscriptions);
-            this.configListener = workspace.onDidChangeConfiguration(this.onDidChangeConfiguration, this);
+            this.panel.onDidDispose(this.onDidDisposeWebview, this, this.listeners);
+            this.panel.webview.onDidReceiveMessage(this.onDidReceiveMessage, this, this.listeners);
+            workspace.onDidChangeConfiguration(this.onDidChangeConfiguration, this, this.listeners);
+        } else {
+            this.panel.title = title;
+            this.panel.reveal(viewColumn, preserveFocus);
         }
         this.panel.webview.html = this.getWebviewContent();
-        return true;
     }
 
     protected onDidDisposeWebview(): void {
         this.panel = undefined;
-        if (this.configListener) {
-            this.configListener.dispose();
-            this.configListener = undefined;
+        for (const listener of this.listeners) {
+            listener.dispose();
         }
+        this.listeners = [];
     }
 
     protected async onDidChangeConfiguration(event: ConfigurationChangeEvent): Promise<void> {
@@ -52,7 +49,7 @@ export abstract class LeetCodeWebview implements Disposable {
         }
     }
 
-    protected async onDidReceiveMessage(/* message */_: any): Promise<void> { /* no special rule */ }
+    protected async onDidReceiveMessage(_message: any): Promise<void> { /* no special rule */ }
 
     protected abstract getWebviewOption(): ILeetCodeWebviewOption;
 
@@ -62,5 +59,6 @@ export abstract class LeetCodeWebview implements Disposable {
 export interface ILeetCodeWebviewOption {
     viewType: string;
     title: string;
-    viewColumn?: ViewColumn;
+    viewColumn: ViewColumn;
+    preserveFocus?: boolean;
 }
