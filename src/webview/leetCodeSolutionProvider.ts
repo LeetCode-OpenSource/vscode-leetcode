@@ -1,60 +1,31 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
+import { ViewColumn } from "vscode";
 import { IProblem } from "../shared";
+import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
 
-class LeetCodeSolutionProvider implements Disposable {
+class LeetCodeSolutionProvider extends LeetCodeWebview {
 
-    private context: ExtensionContext;
-    private panel: WebviewPanel | undefined;
-
-    public initialize(context: ExtensionContext): void {
-        this.context = context;
-    }
+    private solution: Solution;
 
     public async show(solutionString: string, problem: IProblem): Promise<void> {
-        if (!this.panel) {
-            this.panel = window.createWebviewPanel("leetCode.solution", "Top Voted Solution", ViewColumn.Active, {
-                retainContextWhenHidden: true,
-                enableFindWidget: true,
-                localResourceRoots: markdownEngine.localResourceRoots,
-            });
-
-            this.panel.onDidDispose(() => {
-                this.panel = undefined;
-            }, null, this.context.subscriptions);
-        }
-
-        const solution: Solution = this.parseSolution(solutionString);
-        this.panel.title = `${problem.name}: Solution`;
-        this.panel.webview.html = this.getWebViewContent(solution);
-        this.panel.reveal(ViewColumn.Active);
+        this.solution = this.parseSolution(solutionString, problem);
+        this.showWebviewInternal();
     }
 
-    public dispose(): void {
-        if (this.panel) {
-            this.panel.dispose();
-        }
+    protected getWebviewOption(): ILeetCodeWebviewOption {
+        return {
+            viewType: "leetcode.solution",
+            title: `${this.solution.problem}: Solution`,
+            viewColumn: ViewColumn.One,
+        };
     }
 
-    private parseSolution(raw: string): Solution {
-        const solution: Solution = new Solution();
-        // [^] matches everything including \n, yet can be replaced by . in ES2018's `m` flag
-        raw = raw.slice(1); // skip first empty line
-        [solution.title, raw] = raw.split(/\n\n([^]+)/); // parse title and skip one line
-        [solution.url, raw] = raw.split(/\n\n([^]+)/); // parse url and skip one line
-        [solution.lang, raw] = raw.match(/\* Lang:\s+(.+)\n([^]+)/)!.slice(1);
-        [solution.author, raw] = raw.match(/\* Author:\s+(.+)\n([^]+)/)!.slice(1);
-        [solution.votes, raw] = raw.match(/\* Votes:\s+(\d+)\n\n([^]+)/)!.slice(1);
-        solution.body = raw;
-        return solution;
-    }
-
-    private getWebViewContent(solution: Solution): string {
+    protected getWebviewContent(): string {
         const styles: string = markdownEngine.getStyles();
-        const { title, url, lang, author, votes } = solution;
+        const { title, url, lang, author, votes } = this.solution;
         const head: string = markdownEngine.render(`# [${title}](${url})`);
         const auth: string = `[${author}](https://leetcode.com/${author}/)`;
         const info: string = markdownEngine.render([
@@ -62,8 +33,8 @@ class LeetCodeSolutionProvider implements Disposable {
             `| :------: | :------: | :------: |`,
             `| ${lang}  | ${auth}  | ${votes} |`,
         ].join("\n"));
-        const body: string = markdownEngine.render(solution.body, {
-            lang: solution.lang,
+        const body: string = markdownEngine.render(this.solution.body, {
+            lang: this.solution.lang,
             host: "https://discuss.leetcode.com/",
         });
         return `
@@ -80,6 +51,25 @@ class LeetCodeSolutionProvider implements Disposable {
             </html>
         `;
     }
+
+    protected onDidDisposeWebview(): void {
+        super.onDidDisposeWebview();
+        delete this.solution;
+    }
+
+    private parseSolution(raw: string, problem: IProblem): Solution {
+        const solution: Solution = new Solution();
+        // [^] matches everything including \n, yet can be replaced by . in ES2018's `m` flag
+        raw = raw.slice(1); // skip first empty line
+        [solution.title, raw] = raw.split(/\n\n([^]+)/); // parse title and skip one line
+        [solution.url, raw] = raw.split(/\n\n([^]+)/); // parse url and skip one line
+        [solution.lang, raw] = raw.match(/\* Lang:\s+(.+)\n([^]+)/)!.slice(1);
+        [solution.author, raw] = raw.match(/\* Author:\s+(.+)\n([^]+)/)!.slice(1);
+        [solution.votes, raw] = raw.match(/\* Votes:\s+(\d+)\n\n([^]+)/)!.slice(1);
+        solution.body = raw;
+        solution.problem = problem.name;
+        return solution;
+    }
 }
 
 // tslint:disable-next-line:max-classes-per-file
@@ -90,6 +80,7 @@ class Solution {
     public author: string = "";
     public votes: string = "";
     public body: string = ""; // Markdown supported
+    public problem: string = "";
 }
 
 export const leetCodeSolutionProvider: LeetCodeSolutionProvider = new LeetCodeSolutionProvider();

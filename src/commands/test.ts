@@ -10,7 +10,7 @@ import { isWindows, usingCmd } from "../utils/osUtils";
 import { DialogType, promptForOpenOutputChannel, showFileSelectDialog } from "../utils/uiUtils";
 import { getActiveFilePath } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
-import { leetCodeResultProvider } from "../webview/leetCodeResultProvider";
+import { leetCodeSubmissionProvider } from "../webview/leetCodeSubmissionProvider";
 
 export async function testSolution(uri?: vscode.Uri): Promise<void> {
     try {
@@ -81,7 +81,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
         if (!result) {
             return;
         }
-        await leetCodeResultProvider.show(result);
+        await leetCodeSubmissionProvider.show(result);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to test the solution. Please open the output channel for details.", DialogType.error);
     }
