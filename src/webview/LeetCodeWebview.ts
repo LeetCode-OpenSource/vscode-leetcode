@@ -1,7 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import { ConfigurationChangeEvent, Disposable, ViewColumn, WebviewPanel, window, workspace } from "vscode";
+import { commands, ConfigurationChangeEvent, Disposable, ViewColumn, WebviewPanel, window, workspace } from "vscode";
 import { markdownEngine } from "./markdownEngine";
 
 export abstract class LeetCodeWebview implements Disposable {
@@ -30,7 +30,14 @@ export abstract class LeetCodeWebview implements Disposable {
             workspace.onDidChangeConfiguration(this.onDidChangeConfiguration, this, this.listeners);
         } else {
             this.panel.title = title;
-            this.panel.reveal(viewColumn, preserveFocus);
+            if (viewColumn === ViewColumn.Two) {
+                // Make sure second group exists. See vscode#71608 issue
+                commands.executeCommand("workbench.action.focusSecondEditorGroup").then(() => {
+                    this.panel!.reveal(viewColumn, preserveFocus);
+                });
+            } else {
+                this.panel.reveal(viewColumn, preserveFocus);
+            }
         }
         this.panel.webview.html = this.getWebviewContent();
     }

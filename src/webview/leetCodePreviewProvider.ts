@@ -11,19 +11,40 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
 
     private node: IProblem;
     private description: IDescription;
+    private sideMode: boolean = false;
 
-    public async show(node: IProblem): Promise<void> {
+    public isSideMode(): boolean {
+        return this.sideMode;
+    }
+
+    public async show(node: IProblem, isSideMode: boolean = false): Promise<void> {
         this.description = this.parseDescription(await leetCodeExecutor.getDescription(node), node);
         this.node = node;
+        this.sideMode = isSideMode;
         this.showWebviewInternal();
+        if (this.sideMode) {
+            // Hide the side bar for better view area
+            commands.executeCommand("workbench.action.focusSideBar").then(() => {
+                commands.executeCommand("workbench.action.toggleSidebarVisibility");
+            });
+        }
     }
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
-        return {
-            viewType: "leetcode.preview",
-            title: `${this.node.name}: Preview`,
-            viewColumn: ViewColumn.One,
-        };
+        if (!this.sideMode) {
+            return {
+                viewType: "leetcode.preview",
+                title: `${this.node.name}: Preview`,
+                viewColumn: ViewColumn.One,
+            };
+        } else {
+            return {
+                viewType: "leetcode.preview",
+                title: "Description",
+                viewColumn: ViewColumn.Two,
+                preserveFocus: true,
+            };
+        }
     }
 
     protected getWebviewContent(): string {
@@ -84,7 +105,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
             <html>
             <head>
                 ${markdownEngine.getStyles()}
-                ${button.style}
+                ${!this.sideMode ? button.style : ""}
             </head>
             <body>
                 ${head}
@@ -92,10 +113,10 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 ${tags}
                 ${companies}
                 ${body}
-                ${button.element}
+                ${!this.sideMode ? button.element : ""}
                 <script>
                     const vscode = acquireVsCodeApi();
-                    ${button.script}
+                    ${!this.sideMode ? button.script : ""}
                 </script>
             </body>
             </html>
@@ -106,6 +127,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
         super.onDidDisposeWebview();
         delete this.node;
         delete this.description;
+        this.sideMode = false;
     }
 
     protected async onDidReceiveMessage(message: IWebViewMessage): Promise<void> {

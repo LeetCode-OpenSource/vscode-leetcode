@@ -3,24 +3,36 @@
 
 import { ViewColumn } from "vscode";
 import { IProblem } from "../shared";
+import { leetCodePreviewProvider } from "./leetCodePreviewProvider";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
 
 class LeetCodeSolutionProvider extends LeetCodeWebview {
 
     private solution: Solution;
+    private sideMode: boolean = false;
 
     public async show(solutionString: string, problem: IProblem): Promise<void> {
         this.solution = this.parseSolution(solutionString, problem);
+        this.sideMode = leetCodePreviewProvider.isSideMode();
         this.showWebviewInternal();
     }
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
-        return {
-            viewType: "leetcode.solution",
-            title: `${this.solution.problem}: Solution`,
-            viewColumn: ViewColumn.One,
-        };
+        if (!this.sideMode) {
+            return {
+                viewType: "leetcode.solution",
+                title: `${this.solution.problem}: Solution`,
+                viewColumn: ViewColumn.One,
+            };
+        } else {
+            return {
+                viewType: "leetcode.solution",
+                title: "Solution",
+                viewColumn: ViewColumn.Two,
+                preserveFocus: true,
+            };
+        }
     }
 
     protected getWebviewContent(): string {
@@ -55,6 +67,7 @@ class LeetCodeSolutionProvider extends LeetCodeWebview {
     protected onDidDisposeWebview(): void {
         super.onDidDisposeWebview();
         delete this.solution;
+        this.sideMode = false;
     }
 
     private parseSolution(raw: string, problem: IProblem): Solution {
