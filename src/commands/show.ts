@@ -51,7 +51,7 @@ export async function showSolution(node?: LeetCodeNode): Promise<void> {
     try {
         let solution: string = await leetCodeExecutor.showSolution(node, language);
         // tslint:disable-next-line: no-eval
-        solution = eval(`"${solution.replace(/\n/g, "\\n")}"`); // decode solution string with escaped characters
+        solution = eval(`"${solution.replace(/\n/g, "\\n").replace(/"/g, '\\"')}"`); // decode solution string with escaped characters
         await leetCodeSolutionProvider.show(solution, node);
     } catch (error) {
         leetCodeChannel.appendLine(error.toString());
