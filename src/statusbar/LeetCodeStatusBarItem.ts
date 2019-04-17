@@ -16,11 +16,10 @@ export class LeetCodeStatusBarItem implements vscode.Disposable {
         switch (status) {
             case UserStatus.SignedIn:
                 this.statusBarItem.text = `LeetCode: ${user}`;
-                this.statusBarItem.show();
                 break;
             case UserStatus.SignedOut:
             default:
-                this.statusBarItem.hide();
+                this.statusBarItem.text = "";
                 break;
         }
     }
