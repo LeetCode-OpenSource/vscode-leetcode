@@ -3,6 +3,7 @@
 
 import * as fse from "fs-extra";
 import * as path from "path";
+import * as unescapeJS from "unescape-js";
 import * as vscode from "vscode";
 import { LeetCodeNode } from "../explorer/LeetCodeNode";
 import { leetCodeChannel } from "../leetCodeChannel";
@@ -49,10 +50,8 @@ export async function showSolution(node?: LeetCodeNode): Promise<void> {
         return;
     }
     try {
-        let solution: string = await leetCodeExecutor.showSolution(node, language);
-        // tslint:disable-next-line: no-eval
-        solution = eval(`"${solution.replace(/\n/g, "\\n").replace(/"/g, '\\"')}"`); // decode solution string with escaped characters
-        await leetCodeSolutionProvider.show(solution, node);
+        const solution: string = await leetCodeExecutor.showSolution(node, language);
+        await leetCodeSolutionProvider.show(unescapeJS(solution), node);
     } catch (error) {
         leetCodeChannel.appendLine(error.toString());
         await promptForOpenOutputChannel("Failed to fetch the top voted solution. Please open the output channel for details.", DialogType.error);
