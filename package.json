@@ -337,6 +337,7 @@
         "lodash": "^4.17.11",
         "markdown-it": "^8.4.2",
         "require-from-string": "^2.0.2",
+        "unescape-js": "^1.1.1",
         "vsc-leetcode-cli": "2.6.3"
     }
 }
