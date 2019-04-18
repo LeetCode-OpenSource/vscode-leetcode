@@ -143,8 +143,11 @@
 | `leetcode.enableShortcuts` | Specify whether the submit and test shortcuts in editor or not. | `true` |
 | `leetcode.nodePath` | Specify the `Node.js` executable path. | `node` |
 
-## Troubleshooting
-When you meet any problem, you can check the [Troubleshooting Page](https://github.com/jdneo/vscode-leetcode/wiki/Troubleshooting) first.
+## Want Help?
+
+When you meet any problem, you can check out the [Troubleshooting](https://github.com/jdneo/vscode-leetcode/wiki/Troubleshooting) and [FAQ](https://github.com/jdneo/vscode-leetcode/wiki/FAQ) first.
+
+If your problem still cannot be addressed, feel free to reach us in the [Gitter Channel](https://gitter.im/vscode-leetcode/Lobby) or [file an issue](https://github.com/jdneo/vscode-leetcode/issues/new/choose).
 
 ## Release Notes
 
