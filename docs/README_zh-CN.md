@@ -93,7 +93,9 @@
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/submit.png" alt="提交答案" />
 </p>
 
-- 通过点击文件最下方的 `🙏 Submit to LeetCode` 可提交答案。 你也可以触发 **LeetCode: Submit to LeetCode** 命令将**当前**文件作为答案进行提交。
+- 通过点击文件最下方的 `Submit` 可提交答案。 你也可以在编辑区内右键并选择 `Submit to LeetCode`，将**当前**文件提交。
+
+> 如果你不希望在编辑器中显示**测试**和**提交**的快捷方式，可以将配置项 `leetcode.enableShortcuts` 设置为 `false`。
 
 ---
 
@@ -102,7 +104,7 @@
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/test.png" alt="测试答案" />
 </p>
 
-- 在编辑区内右键并选择 `Test in LeetCode`，可对**当前**答案进行测试。
+- 通过点击文件最下方的 `Test` 可测试答案。你也可以在编辑区内右键并选择 `Test in LeetCode`，对**当前**文件进行测试。
 
 - 有下列三种测试集来源：
   - **默认测试集**：Test with the default cases
@@ -138,6 +140,7 @@
 | `leetcode.endpoint` | 指定使用的终端，可用终端有：`leetcode`, `leetcode-cn` | `leetcode` |
 | `leetcode.outputFolder` | 指定保存文件时所用的相对文件夹路径。除了用户自定义路径外，也可以使用保留项，包括：<ul><li>`${tag}`: 根据题目的类别进行分类。<li>`${language}`: 根据题目的语言进行分类。</li><li>`${difficulty}`: 根据题目的难度进行分类。</li></ul> | N/A |
 | `leetcode.enableStatusBar` | 指定是否在 VS Code 下方显示插件状态栏。 | `true` |
+| `leetcode.enableShortcuts` | 指定是否在 VS Code 编辑文件下方显示提交和测试的快捷按钮。 | `true` |
 | `leetcode.nodePath` | 指定 `Node.js` 可执行文件的路径。 | `node` |
 
 ## 疑难解答

@@ -93,7 +93,9 @@
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/submit.png" alt="Submit the Answer" />
 </p>
 
-- You can submit the answer by clicking `🙏 Submit to LeetCode` at the bottom of the file. Or you can trigger the command: **LeetCode: Submit to LeetCode** to submit the **active** file as the answer.
+- You can submit the answer by clicking `Submit` at the bottom of the file. Or you can right click in the editor and select `Submit to LeetCode`.
+
+> If you want to hide the shortcuts showing in the editor, just simply set the setting `leetcode.enableShortcuts` to false.
 
 ---
 
@@ -102,7 +104,7 @@
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/test.png" alt="Test the Answer" />
 </p>
 
-- To **test** your answer, right click in the editor and select `Test in LeetCode`.
+- You can test the answer by clicking `Test` at the bottom of the file. Or you can right click in the editor and select `Test in LeetCode`.
 
 - There are 3 ways to test the answer:
   - **Test with the default cases**
@@ -138,6 +140,7 @@
 | `leetcode.endpoint` | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn` | `leetcode` |
 | `leetcode.outputFolder`| Specify the relative path to save the problem files. Besides using customized path, there are also several reserved words which can be used here: <ul><li>`${tag}`: Categorize the problem according to their tags.<li>`${language}`: Categorize the problem according to their language.</li><li>`${difficulty}`: Categorize the problem according to their difficulty.</li></ul> | N/A |
 | `leetcode.enableStatusBar` | Specify whether the LeetCode status bar will be shown or not. | `true` |
+| `leetcode.enableShortcuts` | Specify whether the submit and test shortcuts in editor or not. | `true` |
 | `leetcode.nodePath` | Specify the `Node.js` executable path. | `node` |
 
 ## Troubleshooting

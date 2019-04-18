@@ -295,6 +295,12 @@
                         "scope": "application",
                         "description": "Show the LeetCode status bar or not."
                     },
+                    "leetcode.enableShortcuts": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Show the submit and test shortcuts in editor or not."
+                    },
                     "leetcode.nodePath": {
                         "type": "string",
                         "default": "node",
