@@ -9,6 +9,7 @@ import { markdownEngine } from "./markdownEngine";
 
 class LeetCodePreviewProvider extends LeetCodeWebview {
 
+    protected viewType: string = "leetcode.preview";
     private node: IProblem;
     private description: IDescription;
     private sideMode: boolean = false;
@@ -33,13 +34,11 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
     protected getWebviewOption(): ILeetCodeWebviewOption {
         if (!this.sideMode) {
             return {
-                viewType: "leetcode.preview",
                 title: `${this.node.name}: Preview`,
                 viewColumn: ViewColumn.One,
             };
         } else {
             return {
-                viewType: "leetcode.preview",
                 title: "Description",
                 viewColumn: ViewColumn.Two,
                 preserveFocus: true,

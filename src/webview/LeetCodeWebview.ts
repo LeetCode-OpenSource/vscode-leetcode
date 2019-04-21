@@ -6,6 +6,7 @@ import { markdownEngine } from "./markdownEngine";
 
 export abstract class LeetCodeWebview implements Disposable {
 
+    protected viewType: string = "leetcode.webview";
     protected panel: WebviewPanel | undefined;
     private listeners: Disposable[] = [];
 
@@ -16,9 +17,9 @@ export abstract class LeetCodeWebview implements Disposable {
     }
 
     protected showWebviewInternal(): void {
-        const { viewType, title, viewColumn, preserveFocus } = this.getWebviewOption();
+        const { title, viewColumn, preserveFocus } = this.getWebviewOption();
         if (!this.panel) {
-            this.panel = window.createWebviewPanel(viewType, title, { viewColumn, preserveFocus }, {
+            this.panel = window.createWebviewPanel(this.viewType, title, { viewColumn, preserveFocus }, {
                 enableScripts: true,
                 enableCommandUris: true,
                 enableFindWidget: true,
@@ -64,7 +65,6 @@ export abstract class LeetCodeWebview implements Disposable {
 }
 
 export interface ILeetCodeWebviewOption {
-    viewType: string;
     title: string;
     viewColumn: ViewColumn;
     preserveFocus?: boolean;

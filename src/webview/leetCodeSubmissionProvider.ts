@@ -7,6 +7,7 @@ import { markdownEngine } from "./markdownEngine";
 
 class LeetCodeSubmissionProvider extends LeetCodeWebview {
 
+    protected viewType: string = "leetcode.submission";
     private result: string;
 
     public async show(result: string): Promise<void> {
@@ -16,7 +17,6 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
         return {
-            viewType: "leetcode.submission",
             title: "Submission",
             viewColumn: ViewColumn.Two,
         };

@@ -9,6 +9,7 @@ import { markdownEngine } from "./markdownEngine";
 
 class LeetCodeSolutionProvider extends LeetCodeWebview {
 
+    protected viewType: string = "leetcode.solution";
     private solution: Solution;
     private sideMode: boolean = false;
 
@@ -21,13 +22,11 @@ class LeetCodeSolutionProvider extends LeetCodeWebview {
     protected getWebviewOption(): ILeetCodeWebviewOption {
         if (!this.sideMode) {
             return {
-                viewType: "leetcode.solution",
                 title: `${this.solution.problem}: Solution`,
                 viewColumn: ViewColumn.One,
             };
         } else {
             return {
-                viewType: "leetcode.solution",
                 title: "Solution",
                 viewColumn: ViewColumn.Two,
                 preserveFocus: true,
