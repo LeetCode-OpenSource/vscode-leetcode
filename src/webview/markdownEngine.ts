@@ -147,7 +147,7 @@ class MarkdownConfiguration {
     public readonly fontFamily: string;
 
     public constructor() {
-        const markdownConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("markdown");
+        const markdownConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("markdown", null);
         this.extRoot = path.join(vscode.env.appRoot, "extensions", "markdown-language-features");
         this.lineHeight = Math.max(0.6, +markdownConfig.get<number>("preview.lineHeight", NaN));
         this.fontSize = Math.max(8, +markdownConfig.get<number>("preview.fontSize", NaN));
