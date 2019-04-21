@@ -9,7 +9,7 @@ import { markdownEngine } from "./markdownEngine";
 
 class LeetCodeSolutionProvider extends LeetCodeWebview {
 
-    protected viewType: string = "leetcode.solution";
+    protected readonly viewType: string = "leetcode.solution";
     private solution: Solution;
     private sideMode: boolean = false;
 
