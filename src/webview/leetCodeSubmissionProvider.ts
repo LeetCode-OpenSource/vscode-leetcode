@@ -10,7 +10,7 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
     protected readonly viewType: string = "leetcode.submission";
     private result: string;
 
-    public async show(result: string): Promise<void> {
+    public show(result: string): void {
         this.result = result;
         this.showWebviewInternal();
     }

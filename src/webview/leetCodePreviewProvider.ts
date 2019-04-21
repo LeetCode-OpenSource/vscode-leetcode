@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 import { commands, ViewColumn } from "vscode";
-import { leetCodeExecutor } from "../leetCodeExecutor";
 import { IProblem } from "../shared";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
@@ -18,8 +17,8 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
         return this.sideMode;
     }
 
-    public async show(node: IProblem, isSideMode: boolean = false): Promise<void> {
-        this.description = this.parseDescription(await leetCodeExecutor.getDescription(node), node);
+    public show(descString: string, node: IProblem, isSideMode: boolean = false): void {
+        this.description = this.parseDescription(descString, node);
         this.node = node;
         this.sideMode = isSideMode;
         this.showWebviewInternal();

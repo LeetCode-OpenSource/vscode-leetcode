@@ -17,6 +17,11 @@ import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
 
+export async function previewProblem(node: IProblem, isSideMode: boolean = false): Promise<void> {
+    const descString: string = await leetCodeExecutor.getDescription(node);
+    leetCodePreviewProvider.show(descString, node, isSideMode);
+}
+
 export async function showProblem(node?: LeetCodeNode): Promise<void> {
     if (!node) {
         return;
@@ -52,7 +57,7 @@ export async function showSolution(node?: LeetCodeNode): Promise<void> {
     }
     try {
         const solution: string = await leetCodeExecutor.showSolution(node, language);
-        await leetCodeSolutionProvider.show(unescapeJS(solution), node);
+        leetCodeSolutionProvider.show(unescapeJS(solution), node);
     } catch (error) {
         leetCodeChannel.appendLine(error.toString());
         await promptForOpenOutputChannel("Failed to fetch the top voted solution. Please open the output channel for details.", DialogType.error);
@@ -114,7 +119,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         const filePath: string = wsl.useWsl() ? await wsl.toWinPath(originFilePath) : originFilePath;
         await Promise.all([
             vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false, viewColumn: vscode.ViewColumn.One }),
-            leetCodePreviewProvider.show(node, true),
+            previewProblem(node, true),
         ]);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to show the problem. Please open the output channel for details.", DialogType.error);

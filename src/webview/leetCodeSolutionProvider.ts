@@ -13,7 +13,7 @@ class LeetCodeSolutionProvider extends LeetCodeWebview {
     private solution: Solution;
     private sideMode: boolean = false;
 
-    public async show(solutionString: string, problem: IProblem): Promise<void> {
+    public show(solutionString: string, problem: IProblem): void {
         this.solution = this.parseSolution(solutionString, problem);
         this.sideMode = leetCodePreviewProvider.isSideMode();
         this.showWebviewInternal();
