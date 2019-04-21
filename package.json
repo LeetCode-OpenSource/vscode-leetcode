@@ -301,6 +301,12 @@
                         "scope": "application",
                         "description": "Show the submit and test shortcuts in editor or not."
                     },
+                    "leetcode.enableSideMode": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Determine whether to group all webview pages into Column 2 when solving problems."
+                    },
                     "leetcode.nodePath": {
                         "type": "string",
                         "default": "node",

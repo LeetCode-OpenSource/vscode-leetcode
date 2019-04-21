@@ -101,7 +101,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         // SUGGESTION: group config retriving into one file
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         let outDir: string = await selectWorkspaceFolder();
-        let relativePath: string = (leetCodeConfig.get<string>("outputFolder") || "").trim();
+        let relativePath: string = (leetCodeConfig.get<string>("outputFolder", "")).trim();
         const matchResult: RegExpMatchArray | null = relativePath.match(/\$\{(.*?)\}/);
         if (matchResult) {
             const resolvedPath: string | undefined = await resolveRelativePath(matchResult[1].toLocaleLowerCase(), node, language);
@@ -119,7 +119,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         const filePath: string = wsl.useWsl() ? await wsl.toWinPath(originFilePath) : originFilePath;
         await Promise.all([
             vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false, viewColumn: vscode.ViewColumn.One }),
-            previewProblem(node, true),
+            leetCodeConfig.get<boolean>("enableSideMode", true) ? previewProblem(node, true) : Promise.resolve(),
         ]);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to show the problem. Please open the output channel for details.", DialogType.error);
