@@ -119,10 +119,18 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         const filePath: string = wsl.useWsl() ? await wsl.toWinPath(originFilePath) : originFilePath;
         await Promise.all([
             vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false, viewColumn: vscode.ViewColumn.One }),
-            leetCodeConfig.get<boolean>("enableSideMode", true) ? previewProblem(node, true) : Promise.resolve(),
+            movePreviewAsideIfNeeded(node),
         ]);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to show the problem. Please open the output channel for details.", DialogType.error);
+    }
+}
+
+async function movePreviewAsideIfNeeded(node: IProblem): Promise<void> {
+    if (vscode.workspace.getConfiguration("leetcode").get<boolean>("enableSideMode", true)) {
+        return previewProblem(node, true);
+    } else {
+        return Promise.resolve();
     }
 }
 

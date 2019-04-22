@@ -11,16 +11,14 @@ class LeetCodeSolutionProvider extends LeetCodeWebview {
 
     protected readonly viewType: string = "leetcode.solution";
     private solution: Solution;
-    private sideMode: boolean = false;
 
     public show(solutionString: string, problem: IProblem): void {
         this.solution = this.parseSolution(solutionString, problem);
-        this.sideMode = leetCodePreviewProvider.isSideMode();
         this.showWebviewInternal();
     }
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
-        if (!this.sideMode) {
+        if (!leetCodePreviewProvider.isSideMode()) {
             return {
                 title: `${this.solution.problem}: Solution`,
                 viewColumn: ViewColumn.One,
@@ -66,7 +64,6 @@ class LeetCodeSolutionProvider extends LeetCodeWebview {
     protected onDidDisposeWebview(): void {
         super.onDidDisposeWebview();
         delete this.solution;
-        this.sideMode = false;
     }
 
     private parseSolution(raw: string, problem: IProblem): Solution {
