@@ -23,10 +23,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
         this.sideMode = isSideMode;
         this.showWebviewInternal();
         if (this.sideMode) {
-            // Hide the side bar for better view area
-            commands.executeCommand("workbench.action.focusSideBar").then(() => {
-                commands.executeCommand("workbench.action.toggleSidebarVisibility");
-            });
+            this.hideSideBar(); // For better view area
         }
     }
 
@@ -135,6 +132,11 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 break;
             }
         }
+    }
+
+    private async hideSideBar(): Promise<void> {
+        await commands.executeCommand("workbench.action.focusSideBar");
+        await commands.executeCommand("workbench.action.toggleSidebarVisibility");
     }
 
     private parseDescription(descString: string, problem: IProblem): IDescription {
