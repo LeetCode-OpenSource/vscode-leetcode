@@ -7,16 +7,16 @@ import { markdownEngine } from "./markdownEngine";
 
 class LeetCodeSubmissionProvider extends LeetCodeWebview {
 
+    protected readonly viewType: string = "leetcode.submission";
     private result: string;
 
-    public async show(result: string): Promise<void> {
+    public show(result: string): void {
         this.result = result;
         this.showWebviewInternal();
     }
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
         return {
-            viewType: "leetcode.submission",
             title: "Submission",
             viewColumn: ViewColumn.Two,
         };

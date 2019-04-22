@@ -2,28 +2,44 @@
 // Licensed under the MIT license.
 
 import { commands, ViewColumn } from "vscode";
-import { leetCodeExecutor } from "../leetCodeExecutor";
 import { IProblem } from "../shared";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
 
 class LeetCodePreviewProvider extends LeetCodeWebview {
 
+    protected readonly viewType: string = "leetcode.preview";
     private node: IProblem;
     private description: IDescription;
+    private sideMode: boolean = false;
 
-    public async show(node: IProblem): Promise<void> {
-        this.description = this.parseDescription(await leetCodeExecutor.getDescription(node), node);
+    public isSideMode(): boolean {
+        return this.sideMode;
+    }
+
+    public show(descString: string, node: IProblem, isSideMode: boolean = false): void {
+        this.description = this.parseDescription(descString, node);
         this.node = node;
+        this.sideMode = isSideMode;
         this.showWebviewInternal();
+        if (this.sideMode) {
+            this.hideSideBar(); // For better view area
+        }
     }
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
-        return {
-            viewType: "leetcode.preview",
-            title: `${this.node.name}: Preview`,
-            viewColumn: ViewColumn.One,
-        };
+        if (!this.sideMode) {
+            return {
+                title: `${this.node.name}: Preview`,
+                viewColumn: ViewColumn.One,
+            };
+        } else {
+            return {
+                title: "Description",
+                viewColumn: ViewColumn.Two,
+                preserveFocus: true,
+            };
+        }
     }
 
     protected getWebviewContent(): string {
@@ -84,7 +100,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
             <html>
             <head>
                 ${markdownEngine.getStyles()}
-                ${button.style}
+                ${!this.sideMode ? button.style : ""}
             </head>
             <body>
                 ${head}
@@ -92,10 +108,10 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 ${tags}
                 ${companies}
                 ${body}
-                ${button.element}
+                ${!this.sideMode ? button.element : ""}
                 <script>
                     const vscode = acquireVsCodeApi();
-                    ${button.script}
+                    ${!this.sideMode ? button.script : ""}
                 </script>
             </body>
             </html>
@@ -106,6 +122,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
         super.onDidDisposeWebview();
         delete this.node;
         delete this.description;
+        this.sideMode = false;
     }
 
     protected async onDidReceiveMessage(message: IWebViewMessage): Promise<void> {
@@ -115,6 +132,11 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 break;
             }
         }
+    }
+
+    private async hideSideBar(): Promise<void> {
+        await commands.executeCommand("workbench.action.focusSideBar");
+        await commands.executeCommand("workbench.action.toggleSidebarVisibility");
     }
 
     private parseDescription(descString: string, problem: IProblem): IDescription {

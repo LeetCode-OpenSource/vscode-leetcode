@@ -13,8 +13,14 @@ import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
 import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
+import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
+
+export async function previewProblem(node: IProblem, isSideMode: boolean = false): Promise<void> {
+    const descString: string = await leetCodeExecutor.getDescription(node);
+    leetCodePreviewProvider.show(descString, node, isSideMode);
+}
 
 export async function showProblem(node?: LeetCodeNode): Promise<void> {
     if (!node) {
@@ -51,7 +57,7 @@ export async function showSolution(node?: LeetCodeNode): Promise<void> {
     }
     try {
         const solution: string = await leetCodeExecutor.showSolution(node, language);
-        await leetCodeSolutionProvider.show(unescapeJS(solution), node);
+        leetCodeSolutionProvider.show(unescapeJS(solution), node);
     } catch (error) {
         leetCodeChannel.appendLine(error.toString());
         await promptForOpenOutputChannel("Failed to fetch the top voted solution. Please open the output channel for details.", DialogType.error);
@@ -95,7 +101,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         // SUGGESTION: group config retriving into one file
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         let outDir: string = await selectWorkspaceFolder();
-        let relativePath: string = (leetCodeConfig.get<string>("outputFolder") || "").trim();
+        let relativePath: string = (leetCodeConfig.get<string>("outputFolder", "")).trim();
         const matchResult: RegExpMatchArray | null = relativePath.match(/\$\{(.*?)\}/);
         if (matchResult) {
             const resolvedPath: string | undefined = await resolveRelativePath(matchResult[1].toLocaleLowerCase(), node, language);
@@ -111,9 +117,20 @@ async function showProblemInternal(node: IProblem): Promise<void> {
 
         const originFilePath: string = await leetCodeExecutor.showProblem(node, language, outDir);
         const filePath: string = wsl.useWsl() ? await wsl.toWinPath(originFilePath) : originFilePath;
-        await vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false, viewColumn: vscode.ViewColumn.One });
+        await Promise.all([
+            vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false, viewColumn: vscode.ViewColumn.One }),
+            movePreviewAsideIfNeeded(node),
+        ]);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to show the problem. Please open the output channel for details.", DialogType.error);
+    }
+}
+
+async function movePreviewAsideIfNeeded(node: IProblem): Promise<void> {
+    if (vscode.workspace.getConfiguration("leetcode").get<boolean>("enableSideMode", true)) {
+        return previewProblem(node, true);
+    } else {
+        return Promise.resolve();
     }
 }
 
