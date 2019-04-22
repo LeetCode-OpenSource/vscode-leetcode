@@ -305,7 +305,7 @@
                         "type": "boolean",
                         "default": true,
                         "scope": "application",
-                        "description": "Determine whether to group all webview pages into Column 2 when solving problems."
+                        "description": "Determine whether to group all webview pages into the second editor column when solving problems."
                     },
                     "leetcode.nodePath": {
                         "type": "string",
