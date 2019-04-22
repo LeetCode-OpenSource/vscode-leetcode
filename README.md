@@ -141,6 +141,7 @@
 | `leetcode.outputFolder`| Specify the relative path to save the problem files. Besides using customized path, there are also several reserved words which can be used here: <ul><li>`${tag}`: Categorize the problem according to their tags.<li>`${language}`: Categorize the problem according to their language.</li><li>`${difficulty}`: Categorize the problem according to their difficulty.</li></ul> | N/A |
 | `leetcode.enableStatusBar` | Specify whether the LeetCode status bar will be shown or not. | `true` |
 | `leetcode.enableShortcuts` | Specify whether the submit and test shortcuts in editor or not. | `true` |
+| `leetcode.enableSideMode` | Specify whether `preview`, `solution` and `submission` tab should be grouped into the second editor column when solving a problem. | `true` |
 | `leetcode.nodePath` | Specify the `Node.js` executable path. | `node` |
 
 ## Want Help?

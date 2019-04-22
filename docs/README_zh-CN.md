@@ -141,6 +141,7 @@
 | `leetcode.outputFolder` | 指定保存文件时所用的相对文件夹路径。除了用户自定义路径外，也可以使用保留项，包括：<ul><li>`${tag}`: 根据题目的类别进行分类。<li>`${language}`: 根据题目的语言进行分类。</li><li>`${difficulty}`: 根据题目的难度进行分类。</li></ul> | N/A |
 | `leetcode.enableStatusBar` | 指定是否在 VS Code 下方显示插件状态栏。 | `true` |
 | `leetcode.enableShortcuts` | 指定是否在 VS Code 编辑文件下方显示提交和测试的快捷按钮。 | `true` |
+| `leetcode.enableSideMode` | 指定在解决一道题时，是否将`问题预览`、`高票答案`与`提交结果`窗口集中在编辑器的第二栏。 | `true` |
 | `leetcode.nodePath` | 指定 `Node.js` 可执行文件的路径。 | `node` |
 
 ## 需要帮助？
