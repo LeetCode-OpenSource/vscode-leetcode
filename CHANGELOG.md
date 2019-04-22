@@ -3,6 +3,17 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.14.0]
+## Added
+- Add setting `leetcode.enableShortcuts` to specify whether to show the submit/test shortcuts in editor [#146](https://github.com/jdneo/vscode-leetcode/issues/146)
+- Add `Like` and `Dislike` counts in the problem description [#267](https://github.com/jdneo/vscode-leetcode/issues/267)
+
+## Changed
+- Improve the `Preview`, `Result` and `Solution` views
+
+## Fixed
+[Bugs fixed](https://github.com/jdneo/vscode-leetcode/issues?q=is%3Aissue+label%3Abug+is%3Aclosed+milestone%3A0.14.0)
+
 ## [0.13.3]
 ## Fixed
 - Fix the bug that the extension cannot be activated

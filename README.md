@@ -21,7 +21,7 @@
 </p>
 
 ## Sponsor
-[![coding](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/sponsor_coding.png)](https://e.coding.net/?utm_source=leetcode)
+[![coding](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/sponsor_coding.png)](https://coding.net/?utm_source=leetcode)
 
 - [English Document](#Requirements)
 - [中文文档](https://github.com/jdneo/vscode-leetcode/blob/master/docs/README_zh-CN.md)
@@ -131,18 +131,18 @@
 
 
 ## Settings
-| Setting Name | Description | Default Value |
-|---|---|---|
-| `leetcode.hideSolved` | Specify to hide the solved problems or not | `false` |
-| `leetcode.showLocked` | Specify to show the locked problems or not. Only Premium users could open the locked problems | `false` |
-| `leetcode.defaultLanguage` | Specify the default language used to solve the problem. Supported languages are: `bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `php`, `python`,`python3`,`ruby`,`rust`, `scala`,`swift` | `N/A` |
-| `leetcode.useWsl` | Specify whether to use WSL or not | `false` |
-| `leetcode.endpoint` | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn` | `leetcode` |
-| `leetcode.outputFolder`| Specify the relative path to save the problem files. Besides using customized path, there are also several reserved words which can be used here: <ul><li>`${tag}`: Categorize the problem according to their tags.<li>`${language}`: Categorize the problem according to their language.</li><li>`${difficulty}`: Categorize the problem according to their difficulty.</li></ul> | N/A |
-| `leetcode.enableStatusBar` | Specify whether the LeetCode status bar will be shown or not. | `true` |
-| `leetcode.enableShortcuts` | Specify whether the submit and test shortcuts in editor or not. | `true` |
-| `leetcode.enableSideMode` | Specify whether `preview`, `solution` and `submission` tab should be grouped into the second editor column when solving a problem. | `true` |
-| `leetcode.nodePath` | Specify the `Node.js` executable path. | `node` |
+| Setting Name               | Description                                                                                                                                                                                                                                                                                                                                                                        | Default Value |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `leetcode.hideSolved`      | Specify to hide the solved problems or not                                                                                                                                                                                                                                                                                                                                         | `false`       |
+| `leetcode.showLocked`      | Specify to show the locked problems or not. Only Premium users could open the locked problems                                                                                                                                                                                                                                                                                      | `false`       |
+| `leetcode.defaultLanguage` | Specify the default language used to solve the problem. Supported languages are: `bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `php`, `python`,`python3`,`ruby`,`rust`, `scala`,`swift`                                                                                                                                                         | `N/A`         |
+| `leetcode.useWsl`          | Specify whether to use WSL or not                                                                                                                                                                                                                                                                                                                                                  | `false`       |
+| `leetcode.endpoint`        | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn`                                                                                                                                                                                                                                                                                                    | `leetcode`    |
+| `leetcode.outputFolder`    | Specify the relative path to save the problem files. Besides using customized path, there are also several reserved words which can be used here: <ul><li>`${tag}`: Categorize the problem according to their tags.<li>`${language}`: Categorize the problem according to their language.</li><li>`${difficulty}`: Categorize the problem according to their difficulty.</li></ul> | N/A           |
+| `leetcode.enableStatusBar` | Specify whether the LeetCode status bar will be shown or not.                                                                                                                                                                                                                                                                                                                      | `true`        |
+| `leetcode.enableShortcuts` | Specify whether the submit and test shortcuts in editor or not.                                                                                                                                                                                                                                                                                                                    | `true`        |
+| `leetcode.enableSideMode`  | Specify whether `preview`, `solution` and `submission` tab should be grouped into the second editor column when solving a problem.                                                                                                                                                                                                                                                 | `true`        |
+| `leetcode.nodePath`        | Specify the `Node.js` executable path.                                                                                                                                                                                                                                                                                                                                             | `node`        |
 
 ## Want Help?
 
