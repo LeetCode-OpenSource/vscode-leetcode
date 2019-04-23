@@ -262,6 +262,12 @@
                         "scope": "application",
                         "description": "Default language for solving the problems."
                     },
+                    "leetcode.showCommentDescription": {
+                        "type": "boolean",
+                        "default": false,
+                        "scope": "application",
+                        "description": "Determine whether to generate problem description as comment in code file."
+                    },
                     "leetcode.showSetDefaultLanguageHint": {
                         "type": "boolean",
                         "default": true,
