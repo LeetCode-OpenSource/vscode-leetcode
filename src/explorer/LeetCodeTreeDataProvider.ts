@@ -14,6 +14,8 @@ import { LeetCodeNode } from "./LeetCodeNode";
 
 export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCodeNode> {
 
+    private problemPool: Map<string, IProblem>; // maintains the ownership of all problems.
+
     private treeData: {
         Difficulty: Map<string, IProblem[]>,
         Tag: Map<string, IProblem[]>,
@@ -30,6 +32,10 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     public async refresh(): Promise<void> {
         await this.getProblemData();
         this.onDidChangeTreeDataEvent.fire();
+    }
+
+    public getProblem(id: string): IProblem | undefined {
+        return this.problemPool.get(id);
     }
 
     public getTreeItem(element: LeetCodeNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
@@ -102,6 +108,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
 
     private async getProblemData(): Promise<void> {
         // clear cache
+        this.problemPool = new Map<string, IProblem>();
         this.treeData = {
             Difficulty: new Map<string, IProblem[]>(),
             Tag: new Map<string, IProblem[]>(),
@@ -109,6 +116,8 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             Favorite: [],
         };
         for (const problem of await list.listProblems()) {
+            // Add every problem to problem pool
+            this.problemPool.set(problem.id, problem);
             // Add favorite problem, no matter whether it is solved.
             if (problem.isFavorite) {
                 this.treeData[Category.Favorite].push(problem);
