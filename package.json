@@ -215,12 +215,20 @@
             ],
             "editor/context": [
                 {
-                    "command": "leetcode.testSolution",
+                    "command": "leetcode.previewProblem",
                     "group": "leetcode@1"
                 },
                 {
-                    "command": "leetcode.submitSolution",
+                    "command": "leetcode.showSolution",
                     "group": "leetcode@2"
+                },
+                {
+                    "command": "leetcode.testSolution",
+                    "group": "leetcode@3"
+                },
+                {
+                    "command": "leetcode.submitSolution",
+                    "group": "leetcode@4"
                 }
             ]
         },

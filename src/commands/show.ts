@@ -6,20 +6,57 @@ import * as path from "path";
 import * as unescapeJS from "unescape-js";
 import * as vscode from "vscode";
 import { LeetCodeNode } from "../explorer/LeetCodeNode";
+import { leetCodeTreeDataProvider } from "../explorer/LeetCodeTreeDataProvider";
 import { leetCodeChannel } from "../leetCodeChannel";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
 import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
-import { selectWorkspaceFolder } from "../utils/workspaceUtils";
+import { selectWorkspaceFolder, getActiveFilePath } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
 import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
 
-export async function previewProblem(node: IProblem, isSideMode: boolean = false): Promise<void> {
-    const descString: string = await leetCodeExecutor.getDescription(node);
-    leetCodePreviewProvider.show(descString, node, isSideMode);
+export async function previewProblem(source: IProblem | vscode.Uri | undefined, isSideMode: boolean = false): Promise<void> {
+    try {
+        let problem: IProblem;
+        let descString: string;
+        if (source && "difficulty" in source) {
+            problem = source;
+            descString = await leetCodeExecutor.getDescription(problem.id);
+        } else {
+            const filename: string = (await getActiveFilePath(source))!;
+            const [meta, desc] = splitMetaOutput(await leetCodeExecutor.getDescription(filename));
+            problem = leetCodeTreeDataProvider.getProblem(meta.id)!;
+            descString = desc;
+            isSideMode = true;
+        }
+        leetCodePreviewProvider.show(descString, problem, isSideMode);
+    } catch (error) {
+        leetCodeChannel.appendLine(error.toString());
+        await promptForOpenOutputChannel("Failed to preview the problem. Please open the output channel for details.", DialogType.error);
+    }
+}
+
+export async function showSolution(source: IProblem | vscode.Uri | undefined): Promise<void> {
+    try {
+        let problem: IProblem;
+        let solutionString: string;
+        if (source && "difficulty" in source) {
+            problem = source;
+            solutionString = await leetCodeExecutor.showSolution(problem.id, await fetchProblemLanguage());
+        } else {
+            const filename: string = (await getActiveFilePath(source))!;
+            const [meta] = splitMetaOutput(await leetCodeExecutor.getDescription(filename));
+            problem = leetCodeTreeDataProvider.getProblem(meta.id)!;
+            solutionString = await leetCodeExecutor.showSolution(meta.id, meta.lang);
+        }
+        leetCodeSolutionProvider.show(unescapeJS(solutionString), problem);
+    } catch (error) {
+        leetCodeChannel.appendLine(error.toString());
+        await promptForOpenOutputChannel("Failed to fetch the top voted solution. Please open the output channel for details.", DialogType.error);
+    }
 }
 
 export async function showProblem(node?: LeetCodeNode): Promise<void> {
@@ -45,23 +82,6 @@ export async function searchProblem(): Promise<void> {
         return;
     }
     await showProblemInternal(choice.value);
-}
-
-export async function showSolution(node?: LeetCodeNode): Promise<void> {
-    if (!node) {
-        return;
-    }
-    const language: string | undefined = await fetchProblemLanguage();
-    if (!language) {
-        return;
-    }
-    try {
-        const solution: string = await leetCodeExecutor.showSolution(node, language);
-        leetCodeSolutionProvider.show(unescapeJS(solution), node);
-    } catch (error) {
-        leetCodeChannel.appendLine(error.toString());
-        await promptForOpenOutputChannel("Failed to fetch the top voted solution. Please open the output channel for details.", DialogType.error);
-    }
 }
 
 // SUGGESTION: group config retriving into one file
@@ -144,6 +164,11 @@ async function parseProblemsToPicks(p: Promise<IProblem[]>): Promise<Array<IQuic
         }));
         resolve(picks);
     });
+}
+
+function splitMetaOutput(outputWithMeta: string): [{ id: string, lang: string }, string] {
+    const [metaJSON, output] = outputWithMeta.split(/\n([^]+)/);
+    return [JSON.parse(metaJSON), output];
 }
 
 function parseProblemDecorator(state: ProblemState, locked: boolean): string {

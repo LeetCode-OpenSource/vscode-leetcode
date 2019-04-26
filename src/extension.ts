@@ -15,6 +15,7 @@ import { leetCodeTreeDataProvider } from "./explorer/LeetCodeTreeDataProvider";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
 import { leetCodeManager } from "./leetCodeManager";
+import { IProblem } from "./shared";
 import { leetCodeStatusBarController } from "./statusbar/leetCodeStatusBarController";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 import { leetCodePreviewProvider } from "./webview/leetCodePreviewProvider";
@@ -51,10 +52,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             vscode.commands.registerCommand("leetcode.signout", () => leetCodeManager.signOut()),
             vscode.commands.registerCommand("leetcode.selectSessions", () => session.selectSession()),
             vscode.commands.registerCommand("leetcode.createSession", () => session.createSession()),
-            vscode.commands.registerCommand("leetcode.previewProblem", (node: LeetCodeNode) => show.previewProblem(node)),
+            vscode.commands.registerCommand("leetcode.previewProblem", (source: IProblem | vscode.Uri) => show.previewProblem(source)),
             vscode.commands.registerCommand("leetcode.showProblem", (node: LeetCodeNode) => show.showProblem(node)),
             vscode.commands.registerCommand("leetcode.searchProblem", () => show.searchProblem()),
-            vscode.commands.registerCommand("leetcode.showSolution", (node: LeetCodeNode) => show.showSolution(node)),
+            vscode.commands.registerCommand("leetcode.showSolution", (source: IProblem | vscode.Uri) => show.showSolution(source)),
             vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
             vscode.commands.registerCommand("leetcode.testSolution", (uri?: vscode.Uri) => test.testSolution(uri)),
             vscode.commands.registerCommand("leetcode.submitSolution", (uri?: vscode.Uri) => submit.submitSolution(uri)),
