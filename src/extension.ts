@@ -11,7 +11,7 @@ import * as show from "./commands/show";
 import * as submit from "./commands/submit";
 import * as test from "./commands/test";
 import { LeetCodeNode } from "./explorer/LeetCodeNode";
-import { LeetCodeTreeDataProvider } from "./explorer/LeetCodeTreeDataProvider";
+import { leetCodeTreeDataProvider } from "./explorer/LeetCodeTreeDataProvider";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
 import { leetCodeManager } from "./leetCodeManager";
@@ -28,12 +28,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             throw new Error("The environment doesn't meet requirements.");
         }
 
+        leetCodeTreeDataProvider.initialize(context);
+
         leetCodeManager.on("statusChanged", () => {
             leetCodeStatusBarController.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser());
             leetCodeTreeDataProvider.refresh();
         });
-
-        const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider(context);
 
         context.subscriptions.push(
             leetCodeStatusBarController,

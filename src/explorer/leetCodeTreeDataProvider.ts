@@ -12,8 +12,9 @@ import { Category, defaultProblem, IProblem, ProblemState } from "../shared";
 import { getWorkspaceConfiguration } from "../utils/workspaceUtils";
 import { LeetCodeNode } from "./LeetCodeNode";
 
-export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCodeNode> {
+class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCodeNode> {
 
+    private context: vscode.ExtensionContext;
     private problemPool: Map<string, IProblem>; // maintains the ownership of all problems.
 
     private treeData: {
@@ -27,7 +28,9 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     // tslint:disable-next-line:member-ordering
     public readonly onDidChangeTreeData: vscode.Event<any> = this.onDidChangeTreeDataEvent.event;
 
-    constructor(private context: vscode.ExtensionContext) { }
+    public initialize(context: vscode.ExtensionContext): void {
+        this.context = context;
+    }
 
     public async refresh(): Promise<void> {
         await this.getProblemData();
@@ -274,3 +277,5 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         }
     }
 }
+
+export const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider();
