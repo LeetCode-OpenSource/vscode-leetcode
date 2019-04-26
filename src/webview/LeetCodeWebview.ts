@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import { commands, ConfigurationChangeEvent, Disposable, ViewColumn, WebviewPanel, window, workspace } from "vscode";
+import { promptHintMessage } from "../utils/uiUtils";
 import { markdownEngine } from "./markdownEngine";
 
 export abstract class LeetCodeWebview implements Disposable {
@@ -41,6 +42,7 @@ export abstract class LeetCodeWebview implements Disposable {
             }
         }
         this.panel.webview.html = this.getWebviewContent();
+        this.showMarkdownConfigHint();
     }
 
     protected onDidDisposeWebview(): void {
@@ -62,6 +64,15 @@ export abstract class LeetCodeWebview implements Disposable {
     protected abstract getWebviewOption(): ILeetCodeWebviewOption;
 
     protected abstract getWebviewContent(): string;
+
+    private async showMarkdownConfigHint(): Promise<void> {
+        await promptHintMessage(
+            "configWebviewMarkdown",
+            'You can change the webview appearance ("fontSize", "lineWidth" & "fontFamily") in "markdown.preview" configuration.',
+            "Open configuration",
+            (): Thenable<any> => commands.executeCommand("workbench.action.openSettings", "markdown.preview"),
+        );
+    }
 }
 
 export interface ILeetCodeWebviewOption {

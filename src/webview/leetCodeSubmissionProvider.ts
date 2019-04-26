@@ -1,7 +1,8 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import { ViewColumn } from "vscode";
+import { commands, ViewColumn } from "vscode";
+import { promptHintMessage } from "../utils/uiUtils";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
 
@@ -13,6 +14,7 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
     public show(result: string): void {
         this.result = result;
         this.showWebviewInternal();
+        this.showKeybindingsHint();
     }
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
@@ -39,6 +41,15 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
     protected onDidDisposeWebview(): void {
         super.onDidDisposeWebview();
         delete this.result;
+    }
+
+    private async showKeybindingsHint(): Promise<void> {
+        await promptHintMessage(
+            "commandShortcut",
+            'You can configure custom key bindings with "test", "submit" or any other command in Preferences > Keyboard Shortcuts.',
+            "Open Keybindings",
+            (): Thenable<any> => commands.executeCommand("workbench.action.openGlobalKeybindings", "leetcode solution"),
+        );
     }
 }
 
