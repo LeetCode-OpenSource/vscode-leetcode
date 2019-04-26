@@ -11,7 +11,7 @@ import * as show from "./commands/show";
 import * as submit from "./commands/submit";
 import * as test from "./commands/test";
 import { LeetCodeNode } from "./explorer/LeetCodeNode";
-import { leetCodeTreeDataProvider } from "./explorer/LeetCodeTreeDataProvider";
+import { leetCodeTreeDataProvider } from "./explorer/leetCodeTreeDataProvider";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
 import { leetCodeManager } from "./leetCodeManager";

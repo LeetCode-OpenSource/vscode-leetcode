@@ -6,7 +6,7 @@ import * as path from "path";
 import * as unescapeJS from "unescape-js";
 import * as vscode from "vscode";
 import { LeetCodeNode } from "../explorer/LeetCodeNode";
-import { leetCodeTreeDataProvider } from "../explorer/LeetCodeTreeDataProvider";
+import { leetCodeTreeDataProvider } from "../explorer/leetCodeTreeDataProvider";
 import { leetCodeChannel } from "../leetCodeChannel";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
