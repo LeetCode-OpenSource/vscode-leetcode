@@ -266,7 +266,7 @@
                         "type": "boolean",
                         "default": false,
                         "scope": "application",
-                        "description": "Determine whether to generate problem description as comment in code file."
+                        "description": "Include problem description in comments."
                     },
                     "leetcode.showSetDefaultLanguageHint": {
                         "type": "boolean",

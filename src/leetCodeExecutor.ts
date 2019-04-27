@@ -97,10 +97,10 @@ class LeetCodeExecutor implements Disposable {
     public async showProblem(problemNode: IProblem, language: string, outDir: string, detailed: boolean = false): Promise<string> {
         const fileName: string = genFileName(problemNode, language);
         const filePath: string = path.join(outDir, fileName);
-        const codeType: string = detailed ? "-cx" : "-c";
+        const templateType: string = detailed ? "-cx" : "-c";
 
         if (!await fse.pathExists(filePath)) {
-            const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", problemNode.id, codeType, "-l", language]);
+            const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", problemNode.id, templateType, "-l", language]);
             await fse.writeFile(filePath, codeTemplate);
         }
 
