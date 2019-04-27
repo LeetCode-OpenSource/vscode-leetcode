@@ -75,6 +75,8 @@
 
   > 注意：若当前 VS Code 没有已打开的文件夹，则生成的题目文件会存储于 **$HOME/.leetcode/** 目录下。
 
+  > 注意：你可以通过更新配置项 `leetcode.showCommentDescription` 来指定是否要在注释中包含题目描述。
+
   > 注意：你可以通过 `LeetCode: Switch Default Language` 命令变更答题时默认使用编程语言。
 
 ---
