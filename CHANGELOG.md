@@ -3,6 +3,10 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.14.1]
+## Added
+- Add setting `leetcode.showCommentDescription` to specify whether including the problem description in comments or not [#287](https://github.com/jdneo/vscode-leetcode/issues/287)
+
 ## [0.14.0]
 ## Added
 - Add setting `leetcode.enableShortcuts` to specify whether to show the submit/test shortcuts in editor [#146](https://github.com/jdneo/vscode-leetcode/issues/146)
