@@ -219,16 +219,12 @@
                     "group": "leetcode@1"
                 },
                 {
-                    "command": "leetcode.showSolution",
+                    "command": "leetcode.testSolution",
                     "group": "leetcode@2"
                 },
                 {
-                    "command": "leetcode.testSolution",
-                    "group": "leetcode@3"
-                },
-                {
                     "command": "leetcode.submitSolution",
-                    "group": "leetcode@4"
+                    "group": "leetcode@3"
                 }
             ]
         },
