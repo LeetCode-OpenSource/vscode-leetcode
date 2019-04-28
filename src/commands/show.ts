@@ -120,8 +120,8 @@ async function showProblemInternal(node: IProblem): Promise<void> {
             movePreviewAsideIfNeeded(node),
             promptHintMessage(
                 "hint.commentDescription",
-                'You can generate problem description as comment in the solution code file by enabling "leetcode.showCommentDescription".',
-                "Open configuration",
+                'You can generate the code file with problem description in the comments by enabling "leetcode.showCommentDescription".',
+                "Open settings",
                 (): Promise<any> => openSettingsEditor("leetcode.showCommentDescription"),
             ),
         ]);

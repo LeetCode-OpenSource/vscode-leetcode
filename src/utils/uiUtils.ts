@@ -59,7 +59,7 @@ export async function promptForSignIn(): Promise<void> {
 }
 
 export async function promptHintMessage(config: string, message: string, choiceConfirm: string, onConfirm: () => Promise<any>): Promise<void> {
-    if (getWorkspaceConfiguration().get<boolean>(`${config}`)) {
+    if (getWorkspaceConfiguration().get<boolean>(config)) {
         const choiceNoShowAgain: string = "Don't show again";
         const choice: string | undefined = await vscode.window.showInformationMessage(
             message, choiceConfirm, choiceNoShowAgain,
@@ -67,7 +67,7 @@ export async function promptHintMessage(config: string, message: string, choiceC
         if (choice === choiceConfirm) {
             await onConfirm();
         } else if (choice === choiceNoShowAgain) {
-            await getWorkspaceConfiguration().update(`${config}`, false, true /* UserSetting */);
+            await getWorkspaceConfiguration().update(config, false, true /* UserSetting */);
         }
     }
 }
@@ -79,7 +79,6 @@ export async function openSettingsEditor(query?: string): Promise<void> {
 export async function openKeybindingsEditor(query?: string): Promise<void> {
     await vscode.commands.executeCommand("workbench.action.openGlobalKeybindings", query);
 }
-
 
 export async function showFileSelectDialog(): Promise<vscode.Uri[] | undefined> {
     const defaultUri: vscode.Uri | undefined = vscode.workspace.rootPath ? vscode.Uri.file(vscode.workspace.rootPath) : undefined;

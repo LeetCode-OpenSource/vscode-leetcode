@@ -46,7 +46,7 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
     private async showKeybindingsHint(): Promise<void> {
         await promptHintMessage(
             "hint.commandShortcut",
-            'You can configure custom key bindings with "test", "submit" or any other command in Preferences > Keyboard Shortcuts.',
+            'You can customize shortcut key bindings in File > Preferences > Keyboard Shortcuts with query "leetcode".',
             "Open Keybindings",
             (): Promise<any> => openKeybindingsEditor("leetcode solution"),
         );
