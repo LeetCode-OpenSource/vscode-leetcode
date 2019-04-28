@@ -1,8 +1,8 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import { commands, ViewColumn } from "vscode";
-import { promptHintMessage, openKeybindingsEditor } from "../utils/uiUtils";
+import { ViewColumn } from "vscode";
+import { openKeybindingsEditor, promptHintMessage } from "../utils/uiUtils";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
 
@@ -45,7 +45,7 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
 
     private async showKeybindingsHint(): Promise<void> {
         await promptHintMessage(
-            "commandShortcut",
+            "hint.commandShortcut",
             'You can configure custom key bindings with "test", "submit" or any other command in Preferences > Keyboard Shortcuts.',
             "Open Keybindings",
             (): Promise<any> => openKeybindingsEditor("leetcode solution"),

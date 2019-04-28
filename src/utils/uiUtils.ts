@@ -59,7 +59,7 @@ export async function promptForSignIn(): Promise<void> {
 }
 
 export async function promptHintMessage(config: string, message: string, choiceConfirm: string, onConfirm: () => Promise<any>): Promise<void> {
-    if (getWorkspaceConfiguration().get<boolean>(`hint.${config}`)) {
+    if (getWorkspaceConfiguration().get<boolean>(`${config}`)) {
         const choiceNoShowAgain: string = "Don't show again";
         const choice: string | undefined = await vscode.window.showInformationMessage(
             message, choiceConfirm, choiceNoShowAgain,
@@ -67,7 +67,7 @@ export async function promptHintMessage(config: string, message: string, choiceC
         if (choice === choiceConfirm) {
             await onConfirm();
         } else if (choice === choiceNoShowAgain) {
-            await getWorkspaceConfiguration().update(`hint.${config}`, false, true /* UserSetting */);
+            await getWorkspaceConfiguration().update(`${config}`, false, true /* UserSetting */);
         }
     }
 }

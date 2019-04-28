@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import { commands, ConfigurationChangeEvent, Disposable, ViewColumn, WebviewPanel, window, workspace } from "vscode";
-import { promptHintMessage, openSettingsEditor } from "../utils/uiUtils";
+import { openSettingsEditor, promptHintMessage } from "../utils/uiUtils";
 import { markdownEngine } from "./markdownEngine";
 
 export abstract class LeetCodeWebview implements Disposable {
@@ -67,7 +67,7 @@ export abstract class LeetCodeWebview implements Disposable {
 
     private async showMarkdownConfigHint(): Promise<void> {
         await promptHintMessage(
-            "configWebviewMarkdown",
+            "hint.configWebviewMarkdown",
             'You can change the webview appearance ("fontSize", "lineWidth" & "fontFamily") in "markdown.preview" configuration.',
             "Open configuration",
             (): Promise<any> => openSettingsEditor("markdown.preview"),

@@ -119,7 +119,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
             vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false, viewColumn: vscode.ViewColumn.One }),
             movePreviewAsideIfNeeded(node),
             promptHintMessage(
-                "commentDescription",
+                "hint.commentDescription",
                 'You can generate problem description as comment in the solution code file by enabling "leetcode.showCommentDescription".',
                 "Open configuration",
                 (): Promise<any> => openSettingsEditor("leetcode.showCommentDescription"),
