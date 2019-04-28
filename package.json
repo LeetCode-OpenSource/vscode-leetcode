@@ -2,7 +2,7 @@
     "name": "vscode-leetcode",
     "displayName": "LeetCode",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.14.0",
+    "version": "0.14.1",
     "author": "Sheng Chen",
     "publisher": "shengchen",
     "license": "MIT",
@@ -262,6 +262,12 @@
                         "scope": "application",
                         "description": "Default language for solving the problems."
                     },
+                    "leetcode.showCommentDescription": {
+                        "type": "boolean",
+                        "default": false,
+                        "scope": "application",
+                        "description": "Include problem description in comments."
+                    },
                     "leetcode.hint.setDefaultLanguage": {
                         "type": "boolean",
                         "default": true,
@@ -362,6 +368,6 @@
         "markdown-it": "^8.4.2",
         "require-from-string": "^2.0.2",
         "unescape-js": "^1.1.1",
-        "vsc-leetcode-cli": "2.6.4"
+        "vsc-leetcode-cli": "2.6.5"
     }
 }
