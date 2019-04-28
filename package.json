@@ -268,11 +268,29 @@
                         "scope": "application",
                         "description": "Include problem description in comments."
                     },
-                    "leetcode.showSetDefaultLanguageHint": {
+                    "leetcode.hint.setDefaultLanguage": {
                         "type": "boolean",
                         "default": true,
                         "scope": "application",
                         "description": "Show a hint to set the default language."
+                    },
+                    "leetcode.hint.configWebviewMarkdown": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Show a hint to change webview appearance through markdown config."
+                    },
+                    "leetcode.hint.commentDescription": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Show a hint to enable comment description in solution code file."
+                    },
+                    "leetcode.hint.commandShortcut": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Show a hint to configure commands key binding."
                     },
                     "leetcode.useWsl": {
                         "type": "boolean",

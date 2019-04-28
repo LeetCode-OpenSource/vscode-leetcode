@@ -4,6 +4,7 @@
 import * as vscode from "vscode";
 import { getLeetCodeEndpoint } from "../commands/plugin";
 import { leetCodeChannel } from "../leetCodeChannel";
+import { getWorkspaceConfiguration } from "./workspaceUtils";
 
 export namespace DialogOptions {
     export const open: vscode.MessageItem = { title: "Open" };
@@ -55,6 +56,28 @@ export async function promptForSignIn(): Promise<void> {
         default:
             break;
     }
+}
+
+export async function promptHintMessage(config: string, message: string, choiceConfirm: string, onConfirm: () => Promise<any>): Promise<void> {
+    if (getWorkspaceConfiguration().get<boolean>(config)) {
+        const choiceNoShowAgain: string = "Don't show again";
+        const choice: string | undefined = await vscode.window.showInformationMessage(
+            message, choiceConfirm, choiceNoShowAgain,
+        );
+        if (choice === choiceConfirm) {
+            await onConfirm();
+        } else if (choice === choiceNoShowAgain) {
+            await getWorkspaceConfiguration().update(config, false, true /* UserSetting */);
+        }
+    }
+}
+
+export async function openSettingsEditor(query?: string): Promise<void> {
+    await vscode.commands.executeCommand("workbench.action.openSettings", query);
+}
+
+export async function openKeybindingsEditor(query?: string): Promise<void> {
+    await vscode.commands.executeCommand("workbench.action.openGlobalKeybindings", query);
 }
 
 export async function showFileSelectDialog(): Promise<vscode.Uri[] | undefined> {

@@ -10,7 +10,7 @@ import { leetCodeChannel } from "../leetCodeChannel";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
-import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
+import { DialogOptions, DialogType, openSettingsEditor, promptForOpenOutputChannel, promptForSignIn, promptHintMessage } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
 import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
@@ -64,7 +64,6 @@ export async function showSolution(node?: LeetCodeNode): Promise<void> {
     }
 }
 
-// SUGGESTION: group config retriving into one file
 async function fetchProblemLanguage(): Promise<string | undefined> {
     const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
     let defaultLanguage: string | undefined = leetCodeConfig.get<string>("defaultLanguage");
@@ -74,7 +73,7 @@ async function fetchProblemLanguage(): Promise<string | undefined> {
     const language: string | undefined = defaultLanguage || await vscode.window.showQuickPick(languages, { placeHolder: "Select the language you want to use", ignoreFocusOut: true });
     // fire-and-forget default language query
     (async (): Promise<void> => {
-        if (language && !defaultLanguage && leetCodeConfig.get<boolean>("showSetDefaultLanguageHint")) {
+        if (language && !defaultLanguage && leetCodeConfig.get<boolean>("hint.setDefaultLanguage")) {
             const choice: vscode.MessageItem | undefined = await vscode.window.showInformationMessage(
                 `Would you like to set '${language}' as your default language?`,
                 DialogOptions.yes,
@@ -84,7 +83,7 @@ async function fetchProblemLanguage(): Promise<string | undefined> {
             if (choice === DialogOptions.yes) {
                 leetCodeConfig.update("defaultLanguage", language, true /* UserSetting */);
             } else if (choice === DialogOptions.never) {
-                leetCodeConfig.update("showSetDefaultLanguageHint", false, true /* UserSetting */);
+                leetCodeConfig.update("hint.setDefaultLanguage", false, true /* UserSetting */);
             }
         }
     })();
@@ -98,7 +97,6 @@ async function showProblemInternal(node: IProblem): Promise<void> {
             return;
         }
 
-        // SUGGESTION: group config retriving into one file
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         let outDir: string = await selectWorkspaceFolder();
         let relativePath: string = (leetCodeConfig.get<string>("outputFolder", "")).trim();
@@ -120,6 +118,12 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         await Promise.all([
             vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false, viewColumn: vscode.ViewColumn.One }),
             movePreviewAsideIfNeeded(node),
+            promptHintMessage(
+                "hint.commentDescription",
+                'You can generate the code file with problem description in the comments by enabling "leetcode.showCommentDescription".',
+                "Open settings",
+                (): Promise<any> => openSettingsEditor("leetcode.showCommentDescription"),
+            ),
         ]);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to show the problem. Please open the output channel for details.", DialogType.error);
