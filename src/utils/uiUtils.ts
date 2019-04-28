@@ -58,7 +58,7 @@ export async function promptForSignIn(): Promise<void> {
     }
 }
 
-export async function promptHintMessage(config: string, message: string, choiceConfirm: string, onConfirm: () => Thenable<any>): Promise<void> {
+export async function promptHintMessage(config: string, message: string, choiceConfirm: string, onConfirm: () => Promise<any>): Promise<void> {
     if (getWorkspaceConfiguration().get<boolean>(`hint.${config}`)) {
         const choiceNoShowAgain: string = "Don't show again";
         const choice: string | undefined = await vscode.window.showInformationMessage(
@@ -71,6 +71,15 @@ export async function promptHintMessage(config: string, message: string, choiceC
         }
     }
 }
+
+export async function openSettingsEditor(query?: string): Promise<void> {
+    await vscode.commands.executeCommand("workbench.action.openSettings", query);
+}
+
+export async function openKeybindingsEditor(query?: string): Promise<void> {
+    await vscode.commands.executeCommand("workbench.action.openGlobalKeybindings", query);
+}
+
 
 export async function showFileSelectDialog(): Promise<vscode.Uri[] | undefined> {
     const defaultUri: vscode.Uri | undefined = vscode.workspace.rootPath ? vscode.Uri.file(vscode.workspace.rootPath) : undefined;

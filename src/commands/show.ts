@@ -10,7 +10,7 @@ import { leetCodeChannel } from "../leetCodeChannel";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
-import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn, promptHintMessage } from "../utils/uiUtils";
+import { DialogOptions, DialogType, openSettingsEditor, promptForOpenOutputChannel, promptForSignIn, promptHintMessage } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
 import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
@@ -122,7 +122,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
                 "commentDescription",
                 'You can generate problem description as comment in the solution code file by enabling "leetcode.showCommentDescription".',
                 "Open configuration",
-                (): Thenable<any> => vscode.commands.executeCommand("workbench.action.openSettings", "leetcode.showCommentDescription"),
+                (): Promise<any> => openSettingsEditor("leetcode.showCommentDescription"),
             ),
         ]);
     } catch (error) {
