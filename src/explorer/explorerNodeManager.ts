@@ -1,6 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
+import * as _ from "lodash";
 import { Disposable } from "vscode";
 import * as list from "../commands/list";
 import { Category, defaultProblem } from "../shared";
@@ -70,7 +71,7 @@ class ExplorerNodeManager implements Disposable {
         for (const company of this.companySet.values()) {
             res.push(new LeetCodeNode(Object.assign({}, defaultProblem, {
                 id: `${Category.Company}.${company}`,
-                name: company,
+                name: _.startCase(company),
             }), false));
         }
         this.sortSubCategoryNodes(res, Category.Company);
@@ -82,7 +83,7 @@ class ExplorerNodeManager implements Disposable {
         for (const tag of this.tagSet.values()) {
             res.push(new LeetCodeNode(Object.assign({}, defaultProblem, {
                 id: `${Category.Tag}.${tag}`,
-                name: tag,
+                name: _.startCase(tag),
             }), false));
         }
         this.sortSubCategoryNodes(res, Category.Tag);
