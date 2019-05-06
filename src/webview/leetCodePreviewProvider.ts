@@ -163,7 +163,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
             difficulty: difficulty.slice(2),
             likes: likes.split(": ")[1].trim(),
             dislikes: dislikes.split(": ")[1].trim(),
-            body: body.join("\n").replace(/<pre>\s*([^]+?)\s*<\/pre>/g, "<pre><code>$1</code></pre>"),
+            body: body.join("\n").replace(/<pre>[\r\n]*([^]+?)[\r\n]*<\/pre>/g, "<pre><code>$1</code></pre>"),
         };
     }
 }
