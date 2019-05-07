@@ -5,7 +5,8 @@ import { Command } from "vscode";
 import { IProblem, ProblemState } from "../shared";
 
 export class LeetCodeNode {
-    constructor(private data: IProblem, private parentNodeName: string, private isProblemNode: boolean = true) { }
+
+    constructor(private data: IProblem, private isProblemNode: boolean = true) { }
 
     public get locked(): boolean {
         return this.data.locked;
@@ -44,10 +45,6 @@ export class LeetCodeNode {
 
     public get isProblem(): boolean {
         return this.isProblemNode;
-    }
-
-    public get parentName(): string {
-        return this.parentNodeName;
     }
 
     public get previewCommand(): Command {
