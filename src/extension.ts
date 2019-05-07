@@ -10,6 +10,7 @@ import * as session from "./commands/session";
 import * as show from "./commands/show";
 import * as submit from "./commands/submit";
 import * as test from "./commands/test";
+import { explorerNodeManager } from "./explorer/explorerNodeManager";
 import { LeetCodeNode } from "./explorer/LeetCodeNode";
 import { LeetCodeTreeDataProvider } from "./explorer/LeetCodeTreeDataProvider";
 import { leetCodeChannel } from "./leetCodeChannel";
@@ -44,6 +45,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             leetCodeExecutor,
             markdownEngine,
             codeLensController,
+            explorerNodeManager,
             vscode.window.createTreeView("leetCodeExplorer", { treeDataProvider: leetCodeTreeDataProvider, showCollapseAll: true }),
             vscode.commands.registerCommand("leetcode.deleteCache", () => cache.deleteCache()),
             vscode.commands.registerCommand("leetcode.toggleLeetCodeCn", () => plugin.switchEndpoint()),

@@ -1,25 +1,15 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import * as _ from "lodash";
 import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
-import * as list from "../commands/list";
-import { leetCodeChannel } from "../leetCodeChannel";
 import { leetCodeManager } from "../leetCodeManager";
-import { Category, defaultProblem, IProblem, ProblemState } from "../shared";
-import { getWorkspaceConfiguration } from "../utils/workspaceUtils";
+import { Category, defaultProblem, ProblemState } from "../shared";
+import { explorerNodeManager } from "./explorerNodeManager";
 import { LeetCodeNode } from "./LeetCodeNode";
 
 export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCodeNode> {
-
-    private treeData: {
-        Difficulty: Map<string, IProblem[]>,
-        Tag: Map<string, IProblem[]>,
-        Company: Map<string, IProblem[]>,
-        Favorite: IProblem[],
-    };
 
     private onDidChangeTreeDataEvent: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
     // tslint:disable-next-line:member-ordering
@@ -28,7 +18,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     constructor(private context: vscode.ExtensionContext) { }
 
     public async refresh(): Promise<void> {
-        await this.getProblemData();
+        await explorerNodeManager.refreshCache();
         this.onDidChangeTreeDataEvent.fire();
     }
 
@@ -49,7 +39,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         return {
             label: element.isProblem ? `[${element.id}] ${element.name}` : element.name,
             tooltip: this.getSubCategoryTooltip(element),
-            id: `${idPrefix}.${element.parentName}.${element.id}`,
+            id: `${idPrefix}.${element.id}`,
             collapsibleState: element.isProblem ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
             contextValue: element.isProblem ? "problem" : element.id.toLowerCase(),
             iconPath: this.parseIconPathFromProblemState(element),
@@ -63,91 +53,28 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 new LeetCodeNode(Object.assign({}, defaultProblem, {
                     id: "notSignIn",
                     name: "Sign in to LeetCode",
-                }), "ROOT", false),
+                }), false),
             ];
         }
         if (!element) { // Root view
-            return [
-                new LeetCodeNode(Object.assign({}, defaultProblem, {
-                    id: Category.Difficulty,
-                    name: Category.Difficulty,
-                }), "ROOT", false),
-                new LeetCodeNode(Object.assign({}, defaultProblem, {
-                    id: Category.Tag,
-                    name: Category.Tag,
-                }), "ROOT", false),
-                new LeetCodeNode(Object.assign({}, defaultProblem, {
-                    id: Category.Company,
-                    name: Category.Company,
-                }), "ROOT", false),
-                new LeetCodeNode(Object.assign({}, defaultProblem, {
-                    id: Category.Favorite,
-                    name: Category.Favorite,
-                }), "ROOT", false),
-            ];
+            return explorerNodeManager.getRootNodes();
         } else {
-            switch (element.name) { // First-level
+            switch (element.id) { // First-level
                 case Category.Favorite:
-                    const nodes: IProblem[] = this.treeData[Category.Favorite];
-                    return nodes.map((p: IProblem) => new LeetCodeNode(p, Category.Favorite));
+                    return explorerNodeManager.getFavoriteNodes();
                 case Category.Difficulty:
+                    return explorerNodeManager.getAllDifficultyNodes();
                 case Category.Tag:
+                    return explorerNodeManager.getAllTagNodes();
                 case Category.Company:
-                    return this.composeSubCategoryNodes(element);
-                default: // Second and lower levels
-                    return element.isProblem ? [] : this.composeProblemNodes(element);
+                    return explorerNodeManager.getAllCompanyNodes();
+                default:
+                    if (element.isProblem) {
+                        return [];
+                    }
+                    return explorerNodeManager.getChildrenNodesById(element.id);
             }
         }
-    }
-
-    private async getProblemData(): Promise<void> {
-        // clear cache
-        this.treeData = {
-            Difficulty: new Map<string, IProblem[]>(),
-            Tag: new Map<string, IProblem[]>(),
-            Company: new Map<string, IProblem[]>(),
-            Favorite: [],
-        };
-        for (const problem of await list.listProblems()) {
-            // Add favorite problem, no matter whether it is solved.
-            if (problem.isFavorite) {
-                this.treeData[Category.Favorite].push(problem);
-            }
-            // Hide solved problem in other category.
-            if (problem.state === ProblemState.AC && getWorkspaceConfiguration().get<boolean>("hideSolved")) {
-                continue;
-            }
-
-            this.addProblemToTreeData(problem);
-        }
-    }
-
-    private composeProblemNodes(node: LeetCodeNode): LeetCodeNode[] {
-        const map: Map<string, IProblem[]> | undefined = this.treeData[node.parentName];
-        if (!map) {
-            leetCodeChannel.appendLine(`Category: ${node.parentName} is not available.`);
-            return [];
-        }
-        const problems: IProblem[] = map.get(node.name) || [];
-        const problemNodes: LeetCodeNode[] = [];
-        for (const problem of problems) {
-            problemNodes.push(new LeetCodeNode(problem, node.name));
-        }
-        return problemNodes;
-    }
-
-    private composeSubCategoryNodes(node: LeetCodeNode): LeetCodeNode[] {
-        const category: Category = node.name as Category;
-        if (category === Category.Favorite) {
-            leetCodeChannel.appendLine("No sub-level for Favorite nodes");
-            return [];
-        }
-        const map: Map<string, IProblem[]> | undefined = this.treeData[category];
-        if (!map) {
-            leetCodeChannel.appendLine(`Category: ${category} is not available.`);
-            return [];
-        }
-        return this.getSubCategoryNodes(map, category);
     }
 
     private parseIconPathFromProblemState(element: LeetCodeNode): string {
@@ -171,16 +98,16 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
 
     private getSubCategoryTooltip(element: LeetCodeNode): string {
         // return '' unless it is a sub-category node
-        if (element.isProblem || !this.treeData[element.parentName]) {
+        if (element.isProblem || element.id === "ROOT" || element.id in Category) {
             return "";
         }
 
-        const problems: IProblem[] = this.treeData[element.parentName].get(element.id);
+        const childernNodes: LeetCodeNode[] = explorerNodeManager.getChildrenNodesById(element.id);
 
         let acceptedNum: number = 0;
         let failedNum: number = 0;
-        for (const prob of problems) {
-            switch (prob.state) {
+        for (const node of childernNodes) {
+            switch (node.state) {
                 case ProblemState.AC:
                     acceptedNum++;
                     break;
@@ -195,73 +122,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         return [
             `AC: ${acceptedNum}`,
             `Failed: ${failedNum}`,
-            `Total: ${problems.length}`,
+            `Total: ${childernNodes.length}`,
         ].join(os.EOL);
-    }
-
-    private addProblemToTreeData(problem: IProblem): void {
-        this.putProblemToMap(this.treeData.Difficulty, problem.difficulty, problem);
-        for (const tag of problem.tags) {
-            this.putProblemToMap(this.treeData.Tag, _.startCase(tag), problem);
-        }
-        for (const company of problem.companies) {
-            this.putProblemToMap(this.treeData.Company, _.startCase(company), problem);
-        }
-    }
-
-    private putProblemToMap(map: Map<string, IProblem[]>, key: string, problem: IProblem): void {
-        const problems: IProblem[] | undefined = map.get(key);
-        if (problems) {
-            problems.push(problem);
-        } else {
-            map.set(key, [problem]);
-        }
-    }
-
-    private getSubCategoryNodes(map: Map<string, IProblem[]>, category: Category): LeetCodeNode[] {
-        const subCategoryNodes: LeetCodeNode[] = Array.from(map.keys()).map((subCategory: string) => {
-            return new LeetCodeNode(Object.assign({}, defaultProblem, {
-                id: subCategory,
-                name: subCategory,
-            }), category.toString(), false);
-        });
-        this.sortSubCategoryNodes(subCategoryNodes, category);
-        return subCategoryNodes;
-    }
-
-    private sortSubCategoryNodes(subCategoryNodes: LeetCodeNode[], category: Category): void {
-        switch (category) {
-            case Category.Difficulty:
-                subCategoryNodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => {
-                    function getValue(input: LeetCodeNode): number {
-                        switch (input.name.toLowerCase()) {
-                            case "easy":
-                                return 1;
-                            case "medium":
-                                return 2;
-                            case "hard":
-                                return 3;
-                            default:
-                                return Number.MAX_SAFE_INTEGER;
-                        }
-                    }
-                    return getValue(a) - getValue(b);
-                });
-                break;
-            case Category.Tag:
-            case Category.Company:
-                subCategoryNodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => {
-                    if (a.name === "Unknown") {
-                        return 1;
-                    } else if (b.name === "Unknown") {
-                        return -1;
-                    } else {
-                        return Number(a.name > b.name) - Number(a.name < b.name);
-                    }
-                });
-                break;
-            default:
-                break;
-        }
     }
 }
