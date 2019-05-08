@@ -96,6 +96,11 @@ export async function openUrl(url: string): Promise<void> {
     vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(url));
 }
 
+export async function hideSideBar(): Promise<void> {
+    await vscode.commands.executeCommand("workbench.action.focusSideBar");
+    await vscode.commands.executeCommand("workbench.action.toggleSidebarVisibility");
+}
+
 export enum DialogType {
     info = "info",
     warning = "warning",

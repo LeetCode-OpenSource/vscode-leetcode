@@ -17,9 +17,9 @@ import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
 
-export async function previewProblem(node: IProblem, isSideMode: boolean = false): Promise<void> {
+export async function previewProblem(node: IProblem): Promise<void> {
     const descString: string = await leetCodeExecutor.getDescription(node);
-    leetCodePreviewProvider.show(descString, node, isSideMode);
+    leetCodePreviewProvider.show(descString, node);
 }
 
 export async function showProblem(node?: LeetCodeNode): Promise<void> {
@@ -47,17 +47,24 @@ export async function searchProblem(): Promise<void> {
     await showProblemInternal(choice.value);
 }
 
-export async function showSolution(node?: LeetCodeNode): Promise<void> {
-    if (!node) {
+export async function showSolution(input: LeetCodeNode | vscode.Uri): Promise<void> {
+    let problemInput: string | undefined;
+    if (input instanceof LeetCodeNode) {
+        problemInput = input.id;
+    } else if (input instanceof vscode.Uri) {
+        problemInput = `"${input.fsPath}"`;
+    } else {
+        vscode.window.showErrorMessage("Invalid input to fetch the solution data");
         return;
     }
+
     const language: string | undefined = await fetchProblemLanguage();
     if (!language) {
         return;
     }
     try {
-        const solution: string = await leetCodeExecutor.showSolution(node, language);
-        leetCodeSolutionProvider.show(unescapeJS(solution), node);
+        const solution: string = await leetCodeExecutor.showSolution(problemInput, language);
+        leetCodeSolutionProvider.show(unescapeJS(solution));
     } catch (error) {
         leetCodeChannel.appendLine(error.toString());
         await promptForOpenOutputChannel("Failed to fetch the top voted solution. Please open the output channel for details.", DialogType.error);
@@ -117,7 +124,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         const filePath: string = wsl.useWsl() ? await wsl.toWinPath(originFilePath) : originFilePath;
         await Promise.all([
             vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false, viewColumn: vscode.ViewColumn.One }),
-            movePreviewAsideIfNeeded(node),
+            previewProblem(node),
             promptHintMessage(
                 "hint.commentDescription",
                 'You can generate the code file with problem description in the comments by enabling "leetcode.showCommentDescription".',
@@ -127,14 +134,6 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         ]);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to show the problem. Please open the output channel for details.", DialogType.error);
-    }
-}
-
-async function movePreviewAsideIfNeeded(node: IProblem): Promise<void> {
-    if (vscode.workspace.getConfiguration("leetcode").get<boolean>("enableSideMode", true)) {
-        return previewProblem(node, true);
-    } else {
-        return Promise.resolve();
     }
 }
 

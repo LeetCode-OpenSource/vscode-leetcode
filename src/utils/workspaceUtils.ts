@@ -44,3 +44,7 @@ export async function getActiveFilePath(uri?: vscode.Uri): Promise<string | unde
 export function getWorkspaceConfiguration(): vscode.WorkspaceConfiguration {
     return vscode.workspace.getConfiguration("leetcode");
 }
+
+export function isSideViewEnabled(): boolean {
+    return getWorkspaceConfiguration().get<boolean>("enableSideMode", true);
+}

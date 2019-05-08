@@ -25,6 +25,11 @@ export class CustomCodeLensProvider implements vscode.CodeLensProvider {
                 title: "Test",
                 command: "leetcode.testSolution",
             }),
+            new vscode.CodeLens(range, {
+                title: "Solution",
+                command: "leetcode.showSolution",
+                arguments: [document.uri],
+            }),
         ];
     }
 }
