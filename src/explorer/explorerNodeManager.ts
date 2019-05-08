@@ -28,6 +28,10 @@ class ExplorerNodeManager implements Disposable {
     public getRootNodes(): LeetCodeNode[] {
         return [
             new LeetCodeNode(Object.assign({}, defaultProblem, {
+                id: Category.All,
+                name: Category.All,
+            }), false),
+            new LeetCodeNode(Object.assign({}, defaultProblem, {
                 id: Category.Difficulty,
                 name: Category.Difficulty,
             }), false),
@@ -44,6 +48,10 @@ class ExplorerNodeManager implements Disposable {
                 name: Category.Favorite,
             }), false),
         ];
+    }
+
+    public getAllNodes(): LeetCodeNode[] {
+        return Array.from(this.explorerNodeMap.values());
     }
 
     public getAllDifficultyNodes(): LeetCodeNode[] {
