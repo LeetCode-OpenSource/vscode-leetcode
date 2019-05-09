@@ -18,7 +18,7 @@ class LeetCodeSolutionProvider extends LeetCodeWebview {
     }
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
-        if (!leetCodePreviewProvider.isSideMode()) {
+        if (leetCodePreviewProvider.isSideMode()) {
             return {
                 title: "Solution",
                 viewColumn: ViewColumn.Two,
