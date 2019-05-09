@@ -3,8 +3,6 @@
 
 import { commands, ViewColumn } from "vscode";
 import { IProblem } from "../shared";
-import { hideSideBar } from "../utils/uiUtils";
-import { isSideViewEnabled } from "../utils/workspaceUtils";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
 
@@ -15,13 +13,17 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
     private description: IDescription;
     private sideMode: boolean = false;
 
-    public show(descString: string, node: IProblem): void {
+    public isSideMode(): boolean {
+        return this.sideMode;
+    }
+
+    public show(descString: string, node: IProblem, isSideMode: boolean = false): void {
         this.description = this.parseDescription(descString, node);
         this.node = node;
-        this.sideMode = isSideViewEnabled();
+        this.sideMode = isSideMode;
         this.showWebviewInternal();
         if (this.sideMode) {
-            hideSideBar(); // For better view area
+            this.hideSideBar(); // For better view area
         }
     }
 
@@ -130,6 +132,11 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 break;
             }
         }
+    }
+
+    private async hideSideBar(): Promise<void> {
+        await commands.executeCommand("workbench.action.focusSideBar");
+        await commands.executeCommand("workbench.action.toggleSidebarVisibility");
     }
 
     private parseDescription(descString: string, problem: IProblem): IDescription {

@@ -17,9 +17,9 @@ import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
 
-export async function previewProblem(node: IProblem): Promise<void> {
+export async function previewProblem(node: IProblem, isSideMode: boolean = false): Promise<void> {
     const descString: string = await leetCodeExecutor.getDescription(node);
-    leetCodePreviewProvider.show(descString, node);
+    leetCodePreviewProvider.show(descString, node, isSideMode);
 }
 
 export async function showProblem(node?: LeetCodeNode): Promise<void> {
@@ -124,7 +124,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         const filePath: string = wsl.useWsl() ? await wsl.toWinPath(originFilePath) : originFilePath;
         await Promise.all([
             vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false, viewColumn: vscode.ViewColumn.One }),
-            previewProblem(node),
+            movePreviewAsideIfNeeded(node),
             promptHintMessage(
                 "hint.commentDescription",
                 'You can generate the code file with problem description in the comments by enabling "leetcode.showCommentDescription".',
@@ -134,6 +134,12 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         ]);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to show the problem. Please open the output channel for details.", DialogType.error);
+    }
+}
+
+async function movePreviewAsideIfNeeded(node: IProblem): Promise<void> {
+    if (vscode.workspace.getConfiguration("leetcode").get<boolean>("enableSideMode", true)) {
+        return previewProblem(node, true);
     }
 }
 

@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import { ViewColumn } from "vscode";
-import { isSideViewEnabled } from "../utils/workspaceUtils";
+import { leetCodePreviewProvider } from "./leetCodePreviewProvider";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
 
@@ -18,7 +18,7 @@ class LeetCodeSolutionProvider extends LeetCodeWebview {
     }
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
-        if (isSideViewEnabled()) {
+        if (!leetCodePreviewProvider.isSideMode()) {
             return {
                 title: "Solution",
                 viewColumn: ViewColumn.Two,
