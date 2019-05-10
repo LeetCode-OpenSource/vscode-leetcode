@@ -221,6 +221,10 @@
                 {
                     "command": "leetcode.submitSolution",
                     "group": "leetcode@2"
+                },
+                {
+                    "command": "leetcode.showSolution",
+                    "group": "leetcode@3"
                 }
             ]
         },

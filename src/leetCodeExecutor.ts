@@ -107,8 +107,8 @@ class LeetCodeExecutor implements Disposable {
         return filePath;
     }
 
-    public async showSolution(problemNode: IProblem, language: string): Promise<string> {
-        const solution: string = await this.executeCommandWithProgressEx("Fetching top voted solution from discussions...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", problemNode.id, "--solution", "-l", language]);
+    public async showSolution(input: string, language: string): Promise<string> {
+        const solution: string = await this.executeCommandWithProgressEx("Fetching top voted solution from discussions...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", input, "--solution", "-l", language]);
         return solution;
     }
 

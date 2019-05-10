@@ -47,17 +47,24 @@ export async function searchProblem(): Promise<void> {
     await showProblemInternal(choice.value);
 }
 
-export async function showSolution(node?: LeetCodeNode): Promise<void> {
-    if (!node) {
+export async function showSolution(input: LeetCodeNode | vscode.Uri): Promise<void> {
+    let problemInput: string | undefined;
+    if (input instanceof LeetCodeNode) {
+        problemInput = input.id;
+    } else if (input instanceof vscode.Uri) {
+        problemInput = `"${input.fsPath}"`;
+    } else {
+        vscode.window.showErrorMessage("Invalid input to fetch the solution data");
         return;
     }
+
     const language: string | undefined = await fetchProblemLanguage();
     if (!language) {
         return;
     }
     try {
-        const solution: string = await leetCodeExecutor.showSolution(node, language);
-        leetCodeSolutionProvider.show(unescapeJS(solution), node);
+        const solution: string = await leetCodeExecutor.showSolution(problemInput, language);
+        leetCodeSolutionProvider.show(unescapeJS(solution));
     } catch (error) {
         leetCodeChannel.appendLine(error.toString());
         await promptForOpenOutputChannel("Failed to fetch the top voted solution. Please open the output channel for details.", DialogType.error);
@@ -133,8 +140,6 @@ async function showProblemInternal(node: IProblem): Promise<void> {
 async function movePreviewAsideIfNeeded(node: IProblem): Promise<void> {
     if (vscode.workspace.getConfiguration("leetcode").get<boolean>("enableSideMode", true)) {
         return previewProblem(node, true);
-    } else {
-        return Promise.resolve();
     }
 }
 

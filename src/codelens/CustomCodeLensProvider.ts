@@ -20,10 +20,17 @@ export class CustomCodeLensProvider implements vscode.CodeLensProvider {
             new vscode.CodeLens(range, {
                 title: "Submit",
                 command: "leetcode.submitSolution",
+                arguments: [document.uri],
             }),
             new vscode.CodeLens(range, {
                 title: "Test",
                 command: "leetcode.testSolution",
+                arguments: [document.uri],
+            }),
+            new vscode.CodeLens(range, {
+                title: "Solution",
+                command: "leetcode.showSolution",
+                arguments: [document.uri],
             }),
         ];
     }
