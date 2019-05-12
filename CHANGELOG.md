@@ -3,6 +3,14 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.14.2]
+## Added
+- Add the `All` category in the LeetCode Explorer [#184](https://github.com/jdneo/vscode-leetcode/issues/184)
+- Add shortcuts for `Show top voted solution` [#269](https://github.com/jdneo/vscode-leetcode/issues/269)
+
+## Fixed
+[Fix Bugs](https://github.com/jdneo/vscode-leetcode/issues?q=is%3Aissue+is%3Aclosed+label%3Abug+milestone%3A0.14.2)
+
 ## [0.14.1]
 ## Added
 - Add setting `leetcode.showCommentDescription` to specify whether including the problem description in comments or not [#287](https://github.com/jdneo/vscode-leetcode/issues/287)
