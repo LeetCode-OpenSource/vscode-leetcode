@@ -4,7 +4,7 @@
 import * as vscode from "vscode";
 import { getLeetCodeEndpoint } from "../commands/plugin";
 import { leetCodeChannel } from "../leetCodeChannel";
-import { getWorkspaceConfiguration } from "./workspaceUtils";
+import { getWorkspaceConfiguration } from "./settingUtils";
 
 export namespace DialogOptions {
     export const open: vscode.MessageItem = { title: "Open" };
