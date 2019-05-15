@@ -4,7 +4,8 @@
 import * as _ from "lodash";
 import { Disposable } from "vscode";
 import * as list from "../commands/list";
-import { Category, defaultProblem } from "../shared";
+import { Category, defaultProblem, ProblemState } from "../shared";
+import { shouldHideSolvedProblem } from "../utils/settingUtils";
 import { LeetCodeNode } from "./LeetCodeNode";
 
 class ExplorerNodeManager implements Disposable {
@@ -14,7 +15,11 @@ class ExplorerNodeManager implements Disposable {
 
     public async refreshCache(): Promise<void> {
         this.dispose();
+        const shouldHideSolved: boolean = shouldHideSolvedProblem();
         for (const problem of await list.listProblems()) {
+            if (shouldHideSolved && problem.state === ProblemState.AC) {
+                continue;
+            }
             this.explorerNodeMap.set(problem.id, new LeetCodeNode(problem));
             for (const company of problem.companies) {
                 this.companySet.add(company);
