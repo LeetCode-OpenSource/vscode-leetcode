@@ -170,11 +170,11 @@ async function resolveRelativePath(relativePath: string, node: IProblem, selecte
         if (!tag) {
             return "";
         }
-        relativePath = relativePath.replace(/\$\{tag\}/i, tag);
+        relativePath = relativePath.replace(/\$\{tag\}/ig, tag);
     }
 
-    relativePath = relativePath.replace(/\$\{language\}/i, selectedLanguage);
-    relativePath = relativePath.replace(/\$\{difficulty\}/i, node.difficulty.toLocaleLowerCase());
+    relativePath = relativePath.replace(/\$\{language\}/ig, selectedLanguage);
+    relativePath = relativePath.replace(/\$\{difficulty\}/ig, node.difficulty.toLocaleLowerCase());
 
     // Check if there is any unsupported configuration
     const matchResult: RegExpMatchArray | null = relativePath.match(/\$\{(.*?)\}/);
