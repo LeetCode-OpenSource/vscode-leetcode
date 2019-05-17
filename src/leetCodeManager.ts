@@ -58,8 +58,8 @@ class LeetCodeManager extends EventEmitter {
 
                 childProc.on("error", reject);
                 const name: string | undefined = await vscode.window.showInputBox({
-                    prompt: "Enter user name.",
-                    validateInput: (s: string): string | undefined => s && s.trim() ? undefined : "User name must not be empty",
+                    prompt: "Enter username or E-mail.",
+                    validateInput: (s: string): string | undefined => s && s.trim() ? undefined : "The input must not be empty",
                 });
                 if (!name) {
                     childProc.kill();
