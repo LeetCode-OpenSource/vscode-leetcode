@@ -107,14 +107,12 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         let outDir: string = await selectWorkspaceFolder();
         let relativePath: string = (leetCodeConfig.get<string>("outputFolder", "")).trim();
-        const matchResult: RegExpMatchArray | null = relativePath.match(/\$\{(.*?)\}/);
-        if (matchResult) {
-            const resolvedPath: string | undefined = await resolveRelativePath(matchResult[1].toLocaleLowerCase(), node, language);
-            if (!resolvedPath) {
+        if (relativePath) {
+            relativePath = await resolveRelativePath(relativePath, node, language);
+            if (!relativePath) {
                 leetCodeChannel.appendLine("Showing problem canceled by user.");
                 return;
             }
-            relativePath = resolvedPath;
         }
 
         outDir = path.join(outDir, relativePath);
@@ -166,27 +164,39 @@ function parseProblemDecorator(state: ProblemState, locked: boolean): string {
     }
 }
 
-async function resolveRelativePath(value: string, node: IProblem, selectedLanguage: string): Promise<string | undefined> {
-    switch (value) {
-        case "tag":
-            if (node.tags.length === 1) {
-                return node.tags[0];
-            }
-            return await vscode.window.showQuickPick(
-                node.tags,
-                {
-                    matchOnDetail: true,
-                    placeHolder: "Multiple tags available, please select one",
-                    ignoreFocusOut: true,
-                },
-            );
-        case "language":
-            return selectedLanguage;
-        case "difficulty":
-            return node.difficulty;
-        default:
-            const errorMsg: string = `The config '${value}' is not supported.`;
-            leetCodeChannel.appendLine(errorMsg);
-            throw new Error(errorMsg);
+async function resolveRelativePath(relativePath: string, node: IProblem, selectedLanguage: string): Promise<string> {
+    if (/\$\{tag\}/i.test(relativePath)) {
+        const tag: string | undefined = await resolveTagForProblem(node);
+        if (!tag) {
+            return "";
+        }
+        relativePath = relativePath.replace(/\$\{tag\}/ig, tag);
     }
+
+    relativePath = relativePath.replace(/\$\{language\}/ig, selectedLanguage);
+    relativePath = relativePath.replace(/\$\{difficulty\}/ig, node.difficulty.toLocaleLowerCase());
+
+    // Check if there is any unsupported configuration
+    const matchResult: RegExpMatchArray | null = relativePath.match(/\$\{(.*?)\}/);
+    if (matchResult && matchResult.length >= 1) {
+        const errorMsg: string = `The config '${matchResult[1]}' is not supported.`;
+        leetCodeChannel.appendLine(errorMsg);
+        throw new Error(errorMsg);
+    }
+
+    return relativePath;
+}
+
+async function resolveTagForProblem(problem: IProblem): Promise<string | undefined> {
+    if (problem.tags.length === 1) {
+        return problem.tags[0];
+    }
+    return await vscode.window.showQuickPick(
+        problem.tags,
+        {
+            matchOnDetail: true,
+            placeHolder: "Multiple tags available, please select one",
+            ignoreFocusOut: true,
+        },
+    );
 }
