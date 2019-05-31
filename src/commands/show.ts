@@ -131,7 +131,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
             ),
         ]);
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to show the problem. Please open the output channel for details.", DialogType.error);
+        await promptForOpenOutputChannel(`${error} Please open the output channel for details.`, DialogType.error);
     }
 }
 
