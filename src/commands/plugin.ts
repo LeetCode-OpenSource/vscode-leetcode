@@ -26,7 +26,7 @@ export async function switchEndpoint(): Promise<void> {
         },
     );
     const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(picks);
-    if (!choice) {
+    if (!choice || choice.value === getLeetCodeEndpoint()) {
         return;
     }
     const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
