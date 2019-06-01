@@ -225,6 +225,10 @@
                 {
                     "command": "leetcode.showSolution",
                     "group": "leetcode@3"
+                },
+                {
+                    "command": "leetcode.previewProblem",
+                    "group": "leetcode@4"
                 }
             ]
         },

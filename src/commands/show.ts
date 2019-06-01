@@ -5,11 +5,13 @@ import * as fse from "fs-extra";
 import * as path from "path";
 import * as unescapeJS from "unescape-js";
 import * as vscode from "vscode";
+import { explorerNodeManager } from "../explorer/explorerNodeManager";
 import { LeetCodeNode } from "../explorer/LeetCodeNode";
 import { leetCodeChannel } from "../leetCodeChannel";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
+import { getNodeIdFromFile } from "../utils/problemUtils";
 import { DialogOptions, DialogType, openSettingsEditor, promptForOpenOutputChannel, promptForSignIn, promptHintMessage } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
@@ -17,8 +19,31 @@ import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
 
-export async function previewProblem(node: IProblem, isSideMode: boolean = false): Promise<void> {
-    const descString: string = await leetCodeExecutor.getDescription(node);
+export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: boolean = false): Promise<void> {
+    let node: LeetCodeNode;
+    if (input instanceof LeetCodeNode) {
+        node = input;
+    } else if (input instanceof vscode.Uri) {
+        const activeFilePath: string = input.fsPath;
+        const id: string = await getNodeIdFromFile(activeFilePath);
+        if (!id) {
+            vscode.window.showErrorMessage(`Failed to resolve the problem id from file: ${activeFilePath}.`);
+            return;
+        }
+        const cachedNode: LeetCodeNode | undefined = explorerNodeManager.getNodeById(id);
+        if (!cachedNode) {
+            vscode.window.showErrorMessage(`Failed to resolve the problem with id: ${id}.`);
+            return;
+        }
+        node = cachedNode;
+        // Move the preview page aside if it's triggered from Code Lens
+        isSideMode = true;
+    } else {
+        vscode.window.showErrorMessage("Invalid input to fetch the preview data.");
+        return;
+    }
+
+    const descString: string = await leetCodeExecutor.getDescription(node.id);
     leetCodePreviewProvider.show(descString, node, isSideMode);
 }
 
@@ -54,7 +79,7 @@ export async function showSolution(input: LeetCodeNode | vscode.Uri): Promise<vo
     } else if (input instanceof vscode.Uri) {
         problemInput = `"${input.fsPath}"`;
     } else {
-        vscode.window.showErrorMessage("Invalid input to fetch the solution data");
+        vscode.window.showErrorMessage("Invalid input to fetch the solution data.");
         return;
     }
 
