@@ -32,6 +32,11 @@ export class CustomCodeLensProvider implements vscode.CodeLensProvider {
                 command: "leetcode.showSolution",
                 arguments: [document.uri],
             }),
+            new vscode.CodeLens(range, {
+                title: "Preview",
+                command: "leetcode.previewProblem",
+                arguments: [document.uri],
+            }),
         ];
     }
 }

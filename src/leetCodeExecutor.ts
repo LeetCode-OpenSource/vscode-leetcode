@@ -112,8 +112,8 @@ class LeetCodeExecutor implements Disposable {
         return solution;
     }
 
-    public async getDescription(problemNode: IProblem): Promise<string> {
-        return await this.executeCommandWithProgressEx("Fetching problem description...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", problemNode.id, "-x"]);
+    public async getDescription(problemNodeId: string): Promise<string> {
+        return await this.executeCommandWithProgressEx("Fetching problem description...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", problemNodeId, "-x"]);
     }
 
     public async listSessions(): Promise<string> {
