@@ -22,10 +22,8 @@ export function genFileName(node: IProblem, language: string): string {
 
 export async function getNodeIdFromFile(fsPath: string): Promise<string> {
     const fileContent: string = await fse.readFile(fsPath, "utf8");
-    const line: string = fileContent.split("\n")
-        .find((l: string) => l.indexOf(" @lc ") >= 0) || "";
     let id: string = "";
-    const matchResults: RegExpMatchArray | null = line.match(/id=(.+?) /);
+    const matchResults: RegExpMatchArray | null = fileContent.match(/@lc.+id=(.+?) /);
     if (matchResults && matchResults.length === 2) {
         id = matchResults[1];
     }
