@@ -12,7 +12,7 @@ import * as submit from "./commands/submit";
 import * as test from "./commands/test";
 import { explorerNodeManager } from "./explorer/explorerNodeManager";
 import { LeetCodeNode } from "./explorer/LeetCodeNode";
-import { LeetCodeTreeDataProvider } from "./explorer/LeetCodeTreeDataProvider";
+import { leetCodeTreeDataProvider } from "./explorer/LeetCodeTreeDataProvider";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
 import { leetCodeManager } from "./leetCodeManager";
@@ -34,7 +34,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             leetCodeTreeDataProvider.refresh();
         });
 
-        const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider(context);
+        leetCodeTreeDataProvider.initialize(context);
 
         context.subscriptions.push(
             leetCodeStatusBarController,

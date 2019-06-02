@@ -11,11 +11,15 @@ import { LeetCodeNode } from "./LeetCodeNode";
 
 export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCodeNode> {
 
-    private onDidChangeTreeDataEvent: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
+    private context: vscode.ExtensionContext;
+
+    private onDidChangeTreeDataEvent: vscode.EventEmitter<LeetCodeNode | undefined | null> = new vscode.EventEmitter<LeetCodeNode | undefined | null>();
     // tslint:disable-next-line:member-ordering
     public readonly onDidChangeTreeData: vscode.Event<any> = this.onDidChangeTreeDataEvent.event;
 
-    constructor(private context: vscode.ExtensionContext) { }
+    public initialize(context: vscode.ExtensionContext): void {
+        this.context = context;
+    }
 
     public async refresh(): Promise<void> {
         await explorerNodeManager.refreshCache();
@@ -26,7 +30,6 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         if (element.id === "notSignIn") {
             return {
                 label: element.name,
-                id: element.id,
                 collapsibleState: vscode.TreeItemCollapsibleState.None,
                 command: {
                     command: "leetcode.signin",
@@ -35,11 +38,9 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             };
         }
 
-        const idPrefix: number = Date.now();
         return {
             label: element.isProblem ? `[${element.id}] ${element.name}` : element.name,
             tooltip: this.getSubCategoryTooltip(element),
-            id: `${idPrefix}.${element.id}`,
             collapsibleState: element.isProblem ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
             contextValue: element.isProblem ? "problem" : element.id.toLowerCase(),
             iconPath: this.parseIconPathFromProblemState(element),
@@ -128,3 +129,5 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         ].join(os.EOL);
     }
 }
+
+export const leetCodeTreeDataProvider: LeetCodeTreeDataProvider = new LeetCodeTreeDataProvider();
