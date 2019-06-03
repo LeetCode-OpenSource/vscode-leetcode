@@ -10,3 +10,7 @@ export function getWorkspaceConfiguration(): WorkspaceConfiguration {
 export function shouldHideSolvedProblem(): boolean {
     return getWorkspaceConfiguration().get<boolean>("hideSolved", false);
 }
+
+export function getEditorShortcuts(): string[] {
+    return getWorkspaceConfiguration().get<string[]>("editor.shortcuts", ["submit", "test"]);
+}

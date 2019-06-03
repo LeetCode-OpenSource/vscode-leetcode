@@ -331,7 +331,25 @@
                         "type": "boolean",
                         "default": true,
                         "scope": "application",
-                        "description": "Show the submit and test shortcuts in editor or not."
+                        "description": "[Deprecated] Show the submit and test shortcuts in editor or not."
+                    },
+                    "leetcode.editor.shortcuts": {
+                        "type": "array",
+                        "default": [
+                            "submit",
+                            "test"
+                        ],
+                        "scope": "application",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "submit",
+                                "test",
+                                "solution",
+                                "description"
+                            ]
+                        },
+                        "description": "Customize the shorcuts in editor."
                     },
                     "leetcode.enableSideMode": {
                         "type": "boolean",
