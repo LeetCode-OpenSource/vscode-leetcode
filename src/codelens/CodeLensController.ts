@@ -15,6 +15,8 @@ class CodeLensController implements Disposable {
         this.configurationChangeListener = workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
             if (event.affectsConfiguration("leetcode.enableShortcuts")) {
                 this.setCodeLensVisibility();
+            } else if (event.affectsConfiguration("leetcode.editor.shortcuts")) {
+                this.internalProvider.refresh();
             }
         }, this);
 
