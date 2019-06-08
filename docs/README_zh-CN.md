@@ -81,37 +81,18 @@
 
 ---
 
-### 查看高票解答
+### 编辑器快捷方式
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/solution.png" alt="高票解答" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/shortcuts.png" alt="Editor Shortcuts" />
 </p>
 
-- 选择 `Show Top Voted Solution` 可查看该题目在讨论区内的高票解答。
+- 插件会在编辑区域内支持四种不同的快捷方式（Code Lens）:
+  - `Submit`: 提交你的答案至 LeetCode；
+  - `Test`: 用给定的测试用例测试你的答案；
+  - `Solution`: 显示该问题的高票解答；
+  - `Description`: 显示该问题的题目描述。
 
----
-
-### 提交答案
-<p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/submit.png" alt="提交答案" />
-</p>
-
-- 通过点击文件最下方的 `Submit` 可提交答案。 你也可以在编辑区内右键并选择 `Submit to LeetCode`，将**当前**文件提交。
-
-> 如果你不希望在编辑器中显示**测试**和**提交**的快捷方式，可以将配置项 `leetcode.enableShortcuts` 设置为 `false`。
-
----
-
-### 测试答案
-<p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/test.png" alt="测试答案" />
-</p>
-
-- 通过点击文件最下方的 `Test` 可测试答案。你也可以在编辑区内右键并选择 `Test in LeetCode`，对**当前**文件进行测试。
-
-- 有下列三种测试集来源：
-  - **默认测试集**：Test with the default cases
-  - **在输入框内输入测试集**：Write test cases in input box
-  - **提供自定义测试集文件**：Test with the written cases in file
+  > 注意：你可以通过 `leetcode.editor.shortcuts` 配置项来定制需要激活的快捷方式。默认情况下只有 `Submit` 和 `Test` 会被激活。
 
 ---
 
@@ -142,7 +123,8 @@
 | `leetcode.endpoint`        | 指定使用的终端，可用终端有：`leetcode`, `leetcode-cn`                                                                                                                                                                               | `leetcode` |
 | `leetcode.outputFolder`    | 指定保存文件时所用的相对文件夹路径。除了用户自定义路径外，也可以使用保留项，包括：<ul><li>`${tag}`: 根据题目的类别进行分类。<li>`${language}`: 根据题目的语言进行分类。</li><li>`${difficulty}`: 根据题目的难度进行分类。</li></ul>例如：`problem-${tag}-${difficulty}` | N/A        |
 | `leetcode.enableStatusBar` | 指定是否在 VS Code 下方显示插件状态栏。                                                                                                                                                                                             | `true`     |
-| `leetcode.enableShortcuts` | 指定是否在 VS Code 编辑文件下方显示提交和测试的快捷按钮。                                                                                                                                                                           | `true`     |
+| **(Deprecated)** `leetcode.enableShortcuts` | 指定是否在 VS Code 编辑文件下方显示提交和测试的快捷按钮。                                                                                                                                                                           | `true`     |
+| `leetcode.editor.shortcuts` | 指定在编辑器内所自定义的快捷方式。 | `["submit, test"]` |
 | `leetcode.enableSideMode`  | 指定在解决一道题时，是否将`问题预览`、`高票答案`与`提交结果`窗口集中在编辑器的第二栏。                                                                                                                                              | `true`     |
 | `leetcode.nodePath`        | 指定 `Node.js` 可执行文件的路径。                                                                                                                                                                                                   | `node`     |
 

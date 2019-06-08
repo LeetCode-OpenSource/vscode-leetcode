@@ -2,7 +2,7 @@
     "name": "vscode-leetcode",
     "displayName": "LeetCode",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.14.3",
+    "version": "0.15.0",
     "author": "Sheng Chen",
     "publisher": "shengchen",
     "license": "MIT",
@@ -349,7 +349,7 @@
                                 "description"
                             ]
                         },
-                        "description": "Customize the shorcuts in editor."
+                        "description": "Customize the shorcuts in editors."
                     },
                     "leetcode.enableSideMode": {
                         "type": "boolean",
