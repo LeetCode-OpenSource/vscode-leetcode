@@ -349,7 +349,7 @@
                                 "description"
                             ]
                         },
-                        "description": "Customize the shorcuts in editor."
+                        "description": "Customize the shorcuts in editors."
                     },
                     "leetcode.enableSideMode": {
                         "type": "boolean",

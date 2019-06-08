@@ -81,37 +81,18 @@
 
 ---
 
-### Show Top Voted Solution
+### Editor Shortcuts
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/solution.png" alt="Show Top Voted Solution" />
+  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/shortcuts.png" alt="Editor Shortcuts" />
 </p>
 
-- Select `Show Top Voted Solution` will display the top voted solution for you.
+- The extension supports 4 editor shortcuts (aka Code Lens):
+  - `Submit`: Submit your answer to LeetCode.
+  - `Test`: Test your answer with customized test cases.
+  - `Solution`: Show the top voted solution for the current problem.
+  - `Description`: Show the problem description page.
 
----
-
-### Submit the Answer
-<p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/submit.png" alt="Submit the Answer" />
-</p>
-
-- You can submit the answer by clicking `Submit` at the bottom of the file. Or you can right click in the editor and select `Submit to LeetCode`.
-
-> If you want to hide the shortcuts showing in the editor, just simply set the setting `leetcode.enableShortcuts` to false.
-
----
-
-### Test the Answer
-<p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/test.png" alt="Test the Answer" />
-</p>
-
-- You can test the answer by clicking `Test` at the bottom of the file. Or you can right click in the editor and select `Test in LeetCode`.
-
-- There are 3 ways to test the answer:
-  - **Test with the default cases**
-  - **Write test cases in input box**
-  - **Test with the written cases in file**
+  > Note: You can customize the shortcuts using the setting: `leetcode.editor.shortcuts`. By default, only `Submit` and `Test` shortcuts are enabled.
 
 ---
 
@@ -142,7 +123,8 @@
 | `leetcode.endpoint`        | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn`                                                                                                                                                                                                                                                                                                    | `leetcode`    |
 | `leetcode.outputFolder`    | Specify the relative path to save the problem files. Besides using customized path, there are also several reserved words which can be used here: <ul><li>`${tag}`: Categorize the problem according to their tags.<li>`${language}`: Categorize the problem according to their language.</li><li>`${difficulty}`: Categorize the problem according to their difficulty.</li></ul>For example: `problem-${tag}-${difficulty}` | N/A           |
 | `leetcode.enableStatusBar` | Specify whether the LeetCode status bar will be shown or not.                                                                                                                                                                                                                                                                                                                      | `true`        |
-| `leetcode.enableShortcuts` | Specify whether the submit and test shortcuts in editor or not.                                                                                                                                                                                                                                                                                                                    | `true`        |
+| **(Deprecated)** `leetcode.enableShortcuts` | Specify whether the submit and test shortcuts in editor or not.                                                                                                                                                                                                                                                                                                                    | `true`        |
+| `leetcode.editor.shortcuts` | Specify the customized shorcuts in editors | `["submit, test"]` |
 | `leetcode.enableSideMode`  | Specify whether `preview`, `solution` and `submission` tab should be grouped into the second editor column when solving a problem.                                                                                                                                                                                                                                                 | `true`        |
 | `leetcode.nodePath`        | Specify the `Node.js` executable path.                                                                                                                                                                                                                                                                                                                                             | `node`        |
 
