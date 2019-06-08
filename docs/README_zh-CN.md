@@ -81,7 +81,7 @@
 
 ---
 
-### Editor Shortcuts
+### 编辑器快捷方式
 <p align="center">
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/shortcuts.png" alt="Editor Shortcuts" />
 </p>
