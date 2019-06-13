@@ -22,9 +22,11 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
         this.node = node;
         this.sideMode = isSideMode;
         this.showWebviewInternal();
-        if (this.sideMode) {
-            this.hideSideBar(); // For better view area
-        }
+        // Comment out this operation since it sometimes may cause the webview become empty.
+        // Waiting for the progress of the VS Code side issue: https://github.com/microsoft/vscode/issues/3742
+        // if (this.sideMode) {
+        //     this.hideSideBar(); // For better view area
+        // }
     }
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
@@ -134,10 +136,10 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
         }
     }
 
-    private async hideSideBar(): Promise<void> {
-        await commands.executeCommand("workbench.action.focusSideBar");
-        await commands.executeCommand("workbench.action.toggleSidebarVisibility");
-    }
+    // private async hideSideBar(): Promise<void> {
+    //     await commands.executeCommand("workbench.action.focusSideBar");
+    //     await commands.executeCommand("workbench.action.toggleSidebarVisibility");
+    // }
 
     private parseDescription(descString: string, problem: IProblem): IDescription {
         const [
