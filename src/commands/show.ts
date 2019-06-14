@@ -20,17 +20,15 @@ import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
 
 export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: boolean = false): Promise<void> {
-    let node: LeetCodeNode;
-    if (input instanceof LeetCodeNode) {
-        node = input;
-    } else if (input instanceof vscode.Uri) {
+    let node: IProblem;
+    if (input instanceof vscode.Uri) {
         const activeFilePath: string = input.fsPath;
         const id: string = await getNodeIdFromFile(activeFilePath);
         if (!id) {
             vscode.window.showErrorMessage(`Failed to resolve the problem id from file: ${activeFilePath}.`);
             return;
         }
-        const cachedNode: LeetCodeNode | undefined = explorerNodeManager.getNodeById(id);
+        const cachedNode: IProblem | undefined = explorerNodeManager.getNodeById(id);
         if (!cachedNode) {
             vscode.window.showErrorMessage(`Failed to resolve the problem with id: ${id}.`);
             return;
@@ -39,8 +37,7 @@ export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: b
         // Move the preview page aside if it's triggered from Code Lens
         isSideMode = true;
     } else {
-        vscode.window.showErrorMessage("Invalid input to fetch the preview data.");
-        return;
+        node = input;
     }
 
     const descString: string = await leetCodeExecutor.getDescription(node.id);
