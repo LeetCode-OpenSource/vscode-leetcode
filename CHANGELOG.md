@@ -3,6 +3,10 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.15.1]
+### Fixed
+[Bugs fixed](https://github.com/jdneo/vscode-leetcode/issues?q=is%3Aissue+milestone%3A0.15.1+is%3Aclosed+label%3Abug)
+
 ## [0.15.0]
 ### Added
 - Auto refresh the explorer after submitting [#91](https://github.com/jdneo/vscode-leetcode/issues/91)
