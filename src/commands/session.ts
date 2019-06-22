@@ -33,11 +33,11 @@ export async function getSessionList(): Promise<ISession[]> {
 }
 
 export async function selectSession(): Promise<void> {
-    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(parseSessionsToPicks());
+    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(parseSessionsToPicks(true /* includeOperation */));
     if (!choice || choice.description === "Active") {
         return;
     }
-    if (choice.value === ":createNewSession") {
+    if (choice.value === ":createSession") {
         await vscode.commands.executeCommand("leetcode.createSession");
         return;
     }
@@ -50,7 +50,7 @@ export async function selectSession(): Promise<void> {
     }
 }
 
-async function parseSessionsToPicks(): Promise<Array<IQuickItemEx<string>>> {
+async function parseSessionsToPicks(includeOperations: boolean = false): Promise<Array<IQuickItemEx<string>>> {
     return new Promise(async (resolve: (res: Array<IQuickItemEx<string>>) => void): Promise<void> => {
         try {
             const sessions: ISession[] = await getSessionList();
@@ -60,17 +60,29 @@ async function parseSessionsToPicks(): Promise<Array<IQuickItemEx<string>>> {
                 detail: `AC Questions: ${s.acQuestions}, AC Submits: ${s.acSubmits}`,
                 value: s.id,
             }));
-            picks.push({
-                label: "$(plus) Create a new session",
-                description: "",
-                detail: "Click this item to create a new session",
-                value: ":createNewSession",
-            });
+
+            if (includeOperations) {
+                picks.push(...parseSessionManagementOperations());
+            }
             resolve(picks);
         } catch (error) {
             return await promptForOpenOutputChannel("Failed to list sessions. Please open the output channel for details.", DialogType.error);
         }
     });
+}
+
+function parseSessionManagementOperations(): Array<IQuickItemEx<string>> {
+    return [{
+        label: "$(plus) Create a session",
+        description: "",
+        detail: "Click this item to create a session",
+        value: ":createSession",
+    }, {
+        label: "$(trashcan) Delete a session",
+        description: "",
+        detail: "Click this item to DELETE a session",
+        value: ":deleteSession",
+    }];
 }
 
 export async function createSession(): Promise<void> {
