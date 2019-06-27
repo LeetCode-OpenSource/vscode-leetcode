@@ -29,8 +29,7 @@
         "onCommand:leetcode.toggleLeetCodeCn",
         "onCommand:leetcode.signin",
         "onCommand:leetcode.signout",
-        "onCommand:leetcode.selectSessions",
-        "onCommand:leetcode.createSession",
+        "onCommand:leetcode.manageSessions",
         "onCommand:leetcode.refreshExplorer",
         "onCommand:leetcode.showProblem",
         "onCommand:leetcode.previewProblem",
@@ -72,13 +71,8 @@
                 "category": "LeetCode"
             },
             {
-                "command": "leetcode.selectSessions",
-                "title": "Select Session",
-                "category": "LeetCode"
-            },
-            {
-                "command": "leetcode.createSession",
-                "title": "Create New Session",
+                "command": "leetcode.manageSessions",
+                "title": "Manage Sessions",
                 "category": "LeetCode"
             },
             {
@@ -394,6 +388,6 @@
         "markdown-it": "^8.4.2",
         "require-from-string": "^2.0.2",
         "unescape-js": "^1.1.1",
-        "vsc-leetcode-cli": "2.6.7"
+        "vsc-leetcode-cli": "2.6.8"
     }
 }

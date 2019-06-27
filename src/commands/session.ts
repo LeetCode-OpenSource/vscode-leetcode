@@ -32,17 +32,21 @@ export async function getSessionList(): Promise<ISession[]> {
     return sessions;
 }
 
-export async function selectSession(): Promise<void> {
-    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(parseSessionsToPicks(true /* includeOperation */));
+export async function manageSessions(): Promise<void> {
+    const choice: IQuickItemEx<ISession | string> | undefined = await vscode.window.showQuickPick(parseSessionsToPicks(true /* includeOperation */));
     if (!choice || choice.description === "Active") {
         return;
     }
     if (choice.value === ":createSession") {
-        await vscode.commands.executeCommand("leetcode.createSession");
+        await createSession();
+        return;
+    }
+    if (choice.value === ":deleteSession") {
+        await deleteSession();
         return;
     }
     try {
-        await leetCodeExecutor.enableSession(choice.value);
+        await leetCodeExecutor.enableSession((choice.value as ISession).id);
         vscode.window.showInformationMessage(`Successfully switched to session '${choice.label}'.`);
         await vscode.commands.executeCommand("leetcode.refreshExplorer");
     } catch (error) {
@@ -50,15 +54,15 @@ export async function selectSession(): Promise<void> {
     }
 }
 
-async function parseSessionsToPicks(includeOperations: boolean = false): Promise<Array<IQuickItemEx<string>>> {
-    return new Promise(async (resolve: (res: Array<IQuickItemEx<string>>) => void): Promise<void> => {
+async function parseSessionsToPicks(includeOperations: boolean = false): Promise<Array<IQuickItemEx<ISession | string>>> {
+    return new Promise(async (resolve: (res: Array<IQuickItemEx<ISession | string>>) => void): Promise<void> => {
         try {
             const sessions: ISession[] = await getSessionList();
-            const picks: Array<IQuickItemEx<string>> = sessions.map((s: ISession) => Object.assign({}, {
+            const picks: Array<IQuickItemEx<ISession | string>> = sessions.map((s: ISession) => Object.assign({}, {
                 label: `${s.active ? "$(check) " : ""}${s.name}`,
                 description: s.active ? "Active" : "",
                 detail: `AC Questions: ${s.acQuestions}, AC Submits: ${s.acSubmits}`,
-                value: s.id,
+                value: s,
             }));
 
             if (includeOperations) {
@@ -85,7 +89,7 @@ function parseSessionManagementOperations(): Array<IQuickItemEx<string>> {
     }];
 }
 
-export async function createSession(): Promise<void> {
+async function createSession(): Promise<void> {
     const session: string | undefined = await vscode.window.showInputBox({
         prompt: "Enter the new session name.",
         validateInput: (s: string): string | undefined => s && s.trim() ? undefined : "Session name must not be empty",
@@ -98,6 +102,43 @@ export async function createSession(): Promise<void> {
         vscode.window.showInformationMessage("New session created, you can switch to it by clicking the status bar.");
     } catch (error) {
         await promptForOpenOutputChannel("Failed to create session. Please open the output channel for details.", DialogType.error);
+    }
+}
+
+async function deleteSession(): Promise<void> {
+    const choice: IQuickItemEx<ISession | string> | undefined = await vscode.window.showQuickPick(
+        parseSessionsToPicks(false /* includeOperation */),
+        { placeHolder: "Please select the session you want to delete" },
+    );
+    if (!choice) {
+        return;
+    }
+
+    const selectedSession: ISession = choice.value as ISession;
+    if (selectedSession.active) {
+        vscode.window.showInformationMessage("Cannot delete an active session.");
+        return;
+    }
+
+    const action: string | undefined = await vscode.window.showWarningMessage(`This operation cannot be reverted. Are you sure to delete the session: ${selectedSession.name}?`, "Yes");
+    if (action !== "Yes") {
+        return;
+    }
+
+    const confirm: string | undefined = await vscode.window.showInputBox({
+        prompt: "Enter 'yes' to confirm deleting the session",
+        validateInput: (value: string): string => {
+            if (value === "yes") {
+                return "";
+            } else {
+                return "Enter 'yes' to confirm";
+            }
+        },
+    });
+
+    if (confirm === "yes") {
+        await leetCodeExecutor.deleteSession(selectedSession.id);
+        vscode.window.showInformationMessage("The session has been successfully deleted.");
     }
 }
 
