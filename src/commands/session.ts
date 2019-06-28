@@ -5,7 +5,7 @@ import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IQuickItemEx } from "../shared";
-import { DialogType, promptForOpenOutputChannel, promptForSignIn, DialogOptions } from "../utils/uiUtils";
+import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 
 export async function getSessionList(): Promise<ISession[]> {
     const signInStatus: string | undefined = leetCodeManager.getUser();
