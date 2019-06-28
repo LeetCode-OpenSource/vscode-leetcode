@@ -5,7 +5,7 @@ import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IQuickItemEx } from "../shared";
-import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
+import { DialogType, promptForOpenOutputChannel, promptForSignIn, DialogOptions } from "../utils/uiUtils";
 
 export async function getSessionList(): Promise<ISession[]> {
     const signInStatus: string | undefined = leetCodeManager.getUser();
@@ -120,8 +120,12 @@ async function deleteSession(): Promise<void> {
         return;
     }
 
-    const action: string | undefined = await vscode.window.showWarningMessage(`This operation cannot be reverted. Are you sure to delete the session: ${selectedSession.name}?`, "Yes");
-    if (action !== "Yes") {
+    const action: vscode.MessageItem | undefined = await vscode.window.showWarningMessage(
+        `This operation cannot be reverted. Are you sure to delete the session: ${selectedSession.name}?`,
+        DialogOptions.yes,
+        DialogOptions.no,
+    );
+    if (action !== DialogOptions.yes) {
         return;
     }
 
