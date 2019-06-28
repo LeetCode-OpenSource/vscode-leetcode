@@ -103,6 +103,9 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
             <head>
                 ${markdownEngine.getStyles()}
                 ${!this.sideMode ? button.style : ""}
+                <style>
+                    code { white-space: pre-wrap; }
+                </style>
             </head>
             <body>
                 ${head}
