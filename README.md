@@ -75,8 +75,6 @@
 
   > Note：You can specify the path of the workspace folder to store the problem files by updating the setting `leetcode.workspaceFolder`. The default value is：**$HOME/.leetcode/**.
 
-  > Note: If no folder is opened in VS Code, the extension will save the problem files in **$HOME/.leetcode/**.
-
   > You can specify whether including the problem description in comments or not by updating the setting `leetcode.showCommentDescription`.
 
   > You can switch the default language by triggering the command: `LeetCode: Switch Default Language`.
