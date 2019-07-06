@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import * as os from "os";
+import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
 import { IQuickItemEx } from "../shared";
@@ -41,13 +42,23 @@ export async function selectWorkspaceFolder(): Promise<string> {
             case OpenOption.justOpenFile:
                 return workspaceFolderSetting;
             case OpenOption.openInCurrentWindow:
-                await vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(workspaceFolderSetting), false);
+                await vscode.commands.executeCommand(
+                    "vscode.openFolder",
+                    vscode.Uri.file(workspaceFolderSetting),
+                    false,
+                );
                 return "";
             case OpenOption.openInNewWindow:
-                await vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(workspaceFolderSetting), true);
+                await vscode.commands.executeCommand(
+                    "vscode.openFolder",
+                    vscode.Uri.file(workspaceFolderSetting),
+                    true,
+                );
                 return "";
             case OpenOption.addToWorkspace:
-                vscode.workspace.updateWorkspaceFolders(workspaceFolders.length, 0, { uri: vscode.Uri.file(workspaceFolderSetting) });
+                vscode.workspace.updateWorkspaceFolders(workspaceFolders.length, 0, {
+                    uri: vscode.Uri.file(workspaceFolderSetting),
+                });
                 break;
             default:
                 return "";
@@ -68,7 +79,7 @@ export async function getActiveFilePath(uri?: vscode.Uri): Promise<string | unde
     if (!textEditor) {
         return undefined;
     }
-    if (textEditor.document.isDirty && !await textEditor.document.save()) {
+    if (textEditor.document.isDirty && !(await textEditor.document.save())) {
         vscode.window.showWarningMessage("Please save the solution file first.");
         return undefined;
     }
@@ -97,10 +108,9 @@ async function determineLeetCodeFolder(): Promise<string> {
             value: ":browse",
         },
     );
-    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(
-        picks,
-        { placeHolder: "Select where you would like to save your LeetCode files" },
-    );
+    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(picks, {
+        placeHolder: "Select where you would like to save your LeetCode files",
+    });
     if (!choice) {
         result = "";
     } else if (choice.value === ":browse") {
@@ -124,4 +134,10 @@ enum OpenOption {
     openInCurrentWindow = "Open in current window",
     openInNewWindow = "Open in new window",
     addToWorkspace = "Add to workspace",
+}
+
+export function checkCachePath(globalStoragePath: string): void {
+    if (!fs.existsSync(globalStoragePath)) {
+        fs.mkdirSync(globalStoragePath);
+    }
 }

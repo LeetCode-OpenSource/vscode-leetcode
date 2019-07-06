@@ -14,11 +14,13 @@ import * as test from "./commands/test";
 import { explorerNodeManager } from "./explorer/explorerNodeManager";
 import { LeetCodeNode } from "./explorer/LeetCodeNode";
 import { leetCodeTreeDataProvider } from "./explorer/LeetCodeTreeDataProvider";
+import { extensionState } from "./extensionState";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
 import { leetCodeManager } from "./leetCodeManager";
 import { leetCodeStatusBarController } from "./statusbar/leetCodeStatusBarController";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
+import { checkCachePath } from "./utils/workspaceUtils";
 import { leetCodePreviewProvider } from "./webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "./webview/leetCodeSolutionProvider";
 import { leetCodeSubmissionProvider } from "./webview/leetCodeSubmissionProvider";
@@ -26,6 +28,10 @@ import { markdownEngine } from "./webview/markdownEngine";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     try {
+        extensionState.context = context;
+        extensionState.cachePath = context.globalStoragePath;
+        checkCachePath(extensionState.cachePath);
+
         if (!await leetCodeExecutor.meetRequirements()) {
             throw new Error("The environment doesn't meet requirements.");
         }

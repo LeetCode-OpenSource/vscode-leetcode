@@ -8,6 +8,7 @@ import * as requireFromString from "require-from-string";
 import { ConfigurationChangeEvent, Disposable, MessageItem, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Endpoint, IProblem, supportedPlugins } from "./shared";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
+import { getUnstubedFile } from "./utils/problemUtils";
 import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 import { toWslPath, useWsl } from "./utils/wslUtils";
@@ -36,7 +37,7 @@ class LeetCodeExecutor implements Disposable {
 
     public async meetRequirements(): Promise<boolean> {
         if (this.nodeExecutable !== "node") {
-            if (!await fse.pathExists(this.nodeExecutable)) {
+            if (!(await fse.pathExists(this.nodeExecutable))) {
                 throw new Error(`The Node.js executable does not exist on path ${this.nodeExecutable}`);
             }
             // Wrap the executable with "" to avoid space issue in the path.
@@ -58,10 +59,22 @@ class LeetCodeExecutor implements Disposable {
             return false;
         }
         for (const plugin of supportedPlugins) {
-            try { // Check plugin
-                await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "plugin", "-e", plugin]);
-            } catch (error) { // Download plugin and activate
-                await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "plugin", "-i", plugin]);
+            try {
+                // Check plugin
+                await this.executeCommandEx(this.nodeExecutable, [
+                    await this.getLeetCodeBinaryPath(),
+                    "plugin",
+                    "-e",
+                    plugin,
+                ]);
+            } catch (error) {
+                // Download plugin and activate
+                await this.executeCommandEx(this.nodeExecutable, [
+                    await this.getLeetCodeBinaryPath(),
+                    "plugin",
+                    "-i",
+                    plugin,
+                ]);
             }
         }
         return true;
@@ -76,33 +89,57 @@ class LeetCodeExecutor implements Disposable {
     }
 
     public async signOut(): Promise<string> {
-        return await await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "user", "-L"]);
+        return await await this.executeCommandEx(this.nodeExecutable, [
+            await this.getLeetCodeBinaryPath(),
+            "user",
+            "-L",
+        ]);
     }
 
     public async listProblems(showLocked: boolean): Promise<string> {
-        return await this.executeCommandEx(this.nodeExecutable, showLocked ?
-            [await this.getLeetCodeBinaryPath(), "list"] :
-            [await this.getLeetCodeBinaryPath(), "list", "-q", "L"],
+        return await this.executeCommandEx(
+            this.nodeExecutable,
+            showLocked
+                ? [await this.getLeetCodeBinaryPath(), "list"]
+                : [await this.getLeetCodeBinaryPath(), "list", "-q", "L"],
         );
     }
 
-    public async showProblem(problemNode: IProblem, language: string, filePath: string, showDescriptionInComment: boolean = false): Promise<void> {
+    public async showProblem(
+        problemNode: IProblem,
+        language: string,
+        filePath: string,
+        showDescriptionInComment: boolean = false,
+    ): Promise<void> {
         const templateType: string = showDescriptionInComment ? "-cx" : "-c";
 
-        if (!await fse.pathExists(filePath)) {
+        if (!(await fse.pathExists(filePath))) {
             await fse.createFile(filePath);
-            const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", problemNode.id, templateType, "-l", language]);
+            const codeTemplate: string = await this.executeCommandWithProgressEx(
+                "Fetching problem data...",
+                this.nodeExecutable,
+                [await this.getLeetCodeBinaryPath(), "show", problemNode.id, templateType, "-l", language],
+            );
             await fse.writeFile(filePath, codeTemplate);
         }
     }
 
     public async showSolution(input: string, language: string): Promise<string> {
-        const solution: string = await this.executeCommandWithProgressEx("Fetching top voted solution from discussions...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", input, "--solution", "-l", language]);
+        const solution: string = await this.executeCommandWithProgressEx(
+            "Fetching top voted solution from discussions...",
+            this.nodeExecutable,
+            [await this.getLeetCodeBinaryPath(), "show", input, "--solution", "-l", language],
+        );
         return solution;
     }
 
     public async getDescription(problemNodeId: string): Promise<string> {
-        return await this.executeCommandWithProgressEx("Fetching problem description...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", problemNodeId, "-x"]);
+        return await this.executeCommandWithProgressEx("Fetching problem description...", this.nodeExecutable, [
+            await this.getLeetCodeBinaryPath(),
+            "show",
+            problemNodeId,
+            "-x",
+        ]);
     }
 
     public async listSessions(): Promise<string> {
@@ -110,20 +147,40 @@ class LeetCodeExecutor implements Disposable {
     }
 
     public async enableSession(name: string): Promise<string> {
-        return await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "session", "-e", name]);
+        return await this.executeCommandEx(this.nodeExecutable, [
+            await this.getLeetCodeBinaryPath(),
+            "session",
+            "-e",
+            name,
+        ]);
     }
 
     public async createSession(id: string): Promise<string> {
-        return await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "session", "-c", id]);
+        return await this.executeCommandEx(this.nodeExecutable, [
+            await this.getLeetCodeBinaryPath(),
+            "session",
+            "-c",
+            id,
+        ]);
     }
 
     public async deleteSession(id: string): Promise<string> {
-        return await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "session", "-d", id]);
+        return await this.executeCommandEx(this.nodeExecutable, [
+            await this.getLeetCodeBinaryPath(),
+            "session",
+            "-d",
+            id,
+        ]);
     }
 
     public async submitSolution(filePath: string): Promise<string> {
+        const newPath: string = await getUnstubedFile(filePath);
         try {
-            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "submit", `"${filePath}"`]);
+            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [
+                await this.getLeetCodeBinaryPath(),
+                "submit",
+                `"${newPath}"`,
+            ]);
         } catch (error) {
             if (error.result) {
                 return error.result;
@@ -133,19 +190,40 @@ class LeetCodeExecutor implements Disposable {
     }
 
     public async testSolution(filePath: string, testString?: string): Promise<string> {
+        const newPath: string = await getUnstubedFile(filePath);
         if (testString) {
-            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`, "-t", `${testString}`]);
+            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [
+                await this.getLeetCodeBinaryPath(),
+                "test",
+                `"${newPath}"`,
+                "-t",
+                `${testString}`,
+            ]);
         }
-        return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`]);
+        return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [
+            await this.getLeetCodeBinaryPath(),
+            "test",
+            `"${newPath}"`,
+        ]);
     }
 
     public async switchEndpoint(endpoint: string): Promise<string> {
         switch (endpoint) {
             case Endpoint.LeetCodeCN:
-                return await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "plugin", "-e", "leetcode.cn"]);
+                return await this.executeCommandEx(this.nodeExecutable, [
+                    await this.getLeetCodeBinaryPath(),
+                    "plugin",
+                    "-e",
+                    "leetcode.cn",
+                ]);
             case Endpoint.LeetCode:
             default:
-                return await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "plugin", "-d", "leetcode.cn"]);
+                return await this.executeCommandEx(this.nodeExecutable, [
+                    await this.getLeetCodeBinaryPath(),
+                    "plugin",
+                    "-d",
+                    "leetcode.cn",
+                ]);
         }
     }
 
@@ -157,7 +235,10 @@ class LeetCodeExecutor implements Disposable {
         await this.executeCommandWithProgressEx("Updating the favorite list...", "node", commandParams);
     }
 
-    public async getCompaniesAndTags(): Promise<{ companies: { [key: string]: string[] }, tags: { [key: string]: string[] } }> {
+    public async getCompaniesAndTags(): Promise<{
+        companies: { [key: string]: string[] };
+        tags: { [key: string]: string[] };
+    }> {
         // preprocess the plugin source
         const companiesTagsPath: string = path.join(this.leetCodeRootPath, "lib", "plugins", "company.js");
         const companiesTagsSrc: string = (await fse.readFile(companiesTagsPath, "utf8")).replace(
@@ -181,14 +262,23 @@ class LeetCodeExecutor implements Disposable {
         return extensionConfig.get<string>("nodePath", "node" /* default value */);
     }
 
-    private async executeCommandEx(command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
+    private async executeCommandEx(
+        command: string,
+        args: string[],
+        options: cp.SpawnOptions = { shell: true },
+    ): Promise<string> {
         if (wsl.useWsl()) {
             return await executeCommand("wsl", [command].concat(args), options);
         }
         return await executeCommand(command, args, options);
     }
 
-    private async executeCommandWithProgressEx(message: string, command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
+    private async executeCommandWithProgressEx(
+        message: string,
+        command: string,
+        args: string[],
+        options: cp.SpawnOptions = { shell: true },
+    ): Promise<string> {
         if (wsl.useWsl()) {
             return await executeCommandWithProgress(message, "wsl", [command].concat(args), options);
         }

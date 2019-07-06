@@ -3,6 +3,7 @@
 out/test/**
 test/**
 src/**
+!src/debug/entry/**
 **/*.map
 .gitignore
 .travis.yml
@@ -13,3 +14,4 @@ tslint.json
 ACKNOWLEDGEMENTS.md
 docs
 .github
+__pycache__

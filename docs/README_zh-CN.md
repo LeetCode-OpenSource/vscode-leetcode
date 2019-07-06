@@ -86,6 +86,25 @@
 
 ---
 
+### 调试题目
+![debug](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/gifs/debug.gif)
+
+> 当前vscode-leetcode仅仅支持Python3和Javascript语言，未来我们会支持所有支持vscode debug protocal的语言
+
+> 不是所有的题目都支持（支持大部分免费题目），只有支持的题目才有调试选项
+
+- Python3调试的必要条件
+
+  - 步骤 1. 在系统上安装对应版本的python3 (注意: 系统安装的Python不支持)。
+
+  - Step 2. 安装vscode的Python插件。
+
+- Javasript调试的必要条件
+
+  无
+
+---
+
 ### 编辑器快捷方式
 <p align="center">
   <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/shortcuts.png" alt="Editor Shortcuts" />
@@ -119,20 +138,20 @@
 
 
 ## 插件配置项
-| 配置项名称                                                                         | 描述                                                                                                                                                                                                                                                                                            | 默认值             |
-| ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `leetcode.hideSolved`                                                              | 指定是否要隐藏已解决的问题                                                                                                                                                                                                                                                                      | `false`            |
-| `leetcode.showLocked`                                                              | 指定是否显示付费题目，只有付费账户才可以打开付费题目                                                                                                                                                                                                                                            | `false`            |
-| `leetcode.defaultLanguage`                                                         | 指定答题时使用的默认语言，可选语言有：`bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `php`, `python`,`python3`,`ruby`, `rust`, `scala`,`swift`                                                                                                                | `N/A`              |
-| `leetcode.useWsl`                                                                  | 指定是否启用 WSL                                                                                                                                                                                                                                                                                | `false`            |
-| `leetcode.endpoint`                                                                | 指定使用的终端，可用终端有：`leetcode`, `leetcode-cn`                                                                                                                                                                                                                                           | `leetcode`         |
-| `leetcode.workspaceFolder`                                                         | 指定保存文件的工作区目录                                                                                                                                                                                                                                                                        | `""`               |
-| `leetcode.filePath`                                                                | 指定生成题目文件的相对文件夹路径名和文件名。点击查看[更多详细用法](https://github.com/jdneo/vscode-leetcode/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E9%A2%98%E7%9B%AE%E6%96%87%E4%BB%B6%E7%9A%84%E7%9B%B8%E5%AF%B9%E6%96%87%E4%BB%B6%E5%A4%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E6%96%87%E4%BB%B6%E5%90%8D)。 |                    |
-| `leetcode.enableStatusBar`                                                         | 指定是否在 VS Code 下方显示插件状态栏。                                                                                                                                                                                                                                                         | `true`             |
-| `leetcode.editor.shortcuts`                                                        | 指定在编辑器内所自定义的快捷方式。可用的快捷方式有: `submit`, `test`, `solution`, `description`。                                                                                                                                                                                               | `["submit, test"]` |
-| `leetcode.enableSideMode`                                                          | 指定在解决一道题时，是否将`问题预览`、`高票答案`与`提交结果`窗口集中在编辑器的第二栏。                                                                                                                                                                                                          | `true`             |
-| `leetcode.nodePath`                                                                | 指定 `Node.js` 可执行文件的路径。如：C:\Program Files\nodejs\node.exe                                                                                                                                                                                                                           | `node`             |
-| `leetcode.showCommentDescription`                                                  | 指定是否要在注释中显示题干。                                                                                                                                                                                                                                                                    | `false`            |
+| 配置项名称                        | 描述                                                                                                                                                                                                                                                                                            | 默认值             |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `leetcode.hideSolved`             | 指定是否要隐藏已解决的问题                                                                                                                                                                                                                                                                      | `false`            |
+| `leetcode.showLocked`             | 指定是否显示付费题目，只有付费账户才可以打开付费题目                                                                                                                                                                                                                                            | `false`            |
+| `leetcode.defaultLanguage`        | 指定答题时使用的默认语言，可选语言有：`bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `php`, `python`,`python3`,`ruby`, `rust`, `scala`,`swift`                                                                                                                | `N/A`              |
+| `leetcode.useWsl`                 | 指定是否启用 WSL                                                                                                                                                                                                                                                                                | `false`            |
+| `leetcode.endpoint`               | 指定使用的终端，可用终端有：`leetcode`, `leetcode-cn`                                                                                                                                                                                                                                           | `leetcode`         |
+| `leetcode.workspaceFolder`        | 指定保存文件的工作区目录                                                                                                                                                                                                                                                                        | `""`               |
+| `leetcode.filePath`               | 指定生成题目文件的相对文件夹路径名和文件名。点击查看[更多详细用法](https://github.com/jdneo/vscode-leetcode/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E9%A2%98%E7%9B%AE%E6%96%87%E4%BB%B6%E7%9A%84%E7%9B%B8%E5%AF%B9%E6%96%87%E4%BB%B6%E5%A4%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E6%96%87%E4%BB%B6%E5%90%8D)。 |                    |
+| `leetcode.enableStatusBar`        | 指定是否在 VS Code 下方显示插件状态栏。                                                                                                                                                                                                                                                         | `true`             |
+| `leetcode.editor.shortcuts`       | 指定在编辑器内所自定义的快捷方式。可用的快捷方式有: `submit`, `test`, `solution`, `description`。                                                                                                                                                                                               | `["submit, test"]` |
+| `leetcode.enableSideMode`         | 指定在解决一道题时，是否将`问题预览`、`高票答案`与`提交结果`窗口集中在编辑器的第二栏。                                                                                                                                                                                                          | `true`             |
+| `leetcode.nodePath`               | 指定 `Node.js` 可执行文件的路径。如：C:\Program Files\nodejs\node.exe                                                                                                                                                                                                                           | `node`             |
+| `leetcode.showCommentDescription` | 指定是否要在注释中显示题干。                                                                                                                                                                                                                                                                    | `false`            |
 
 ## 需要帮助？
 在遇到任何问题时，可以先查看一下[疑难解答](https://github.com/jdneo/vscode-leetcode/wiki/%E7%96%91%E9%9A%BE%E8%A7%A3%E7%AD%94)以及[常见问题](https://github.com/jdneo/vscode-leetcode/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)寻求帮助。
