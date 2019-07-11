@@ -361,7 +361,7 @@
                         "type": "string",
                         "default": "node",
                         "scope": "application",
-                        "description": "The Node.js executable path."
+                        "description": "The Node.js executable path. for example, C:\\Program Files\\nodejs\\node.exe"
                     }
                 }
             }

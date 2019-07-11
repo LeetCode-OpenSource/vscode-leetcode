@@ -49,6 +49,8 @@ class LeetCodeExecutor implements Disposable {
             if (!await fse.pathExists(this.nodeExecutable)) {
                 throw new Error(`The Node.js executable does not exist on path ${this.nodeExecutable}`);
             }
+            // Wrap the executable with "" to avoid space issue in the path.
+            this.nodeExecutable = `"${this.nodeExecutable}"`;
             if (useWsl()) {
                 this.nodeExecutable = await toWslPath(this.nodeExecutable);
             }

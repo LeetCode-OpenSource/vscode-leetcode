@@ -64,7 +64,10 @@ export async function getActiveFilePath(uri?: vscode.Uri): Promise<string | unde
 
 function isSubFolder(from: string, to: string): boolean {
     const relative: string = path.relative(from, to);
-    return !!relative && !relative.startsWith("..") && !path.isAbsolute(relative);
+    if (relative === "") {
+        return true;
+    }
+    return !relative.startsWith("..") && !path.isAbsolute(relative);
 }
 
 enum OpenOption {
