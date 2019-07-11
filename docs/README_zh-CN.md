@@ -127,7 +127,7 @@
 | **(Deprecated)** `leetcode.enableShortcuts` | 指定是否在 VS Code 编辑文件下方显示提交和测试的快捷按钮。                                                                                                                                                                           | `true`     |
 | `leetcode.editor.shortcuts` | 指定在编辑器内所自定义的快捷方式。可用的快捷方式有: `submit`, `test`, `solution`, `description`。 | `["submit, test"]` |
 | `leetcode.enableSideMode`  | 指定在解决一道题时，是否将`问题预览`、`高票答案`与`提交结果`窗口集中在编辑器的第二栏。                                                                                                                                              | `true`     |
-| `leetcode.nodePath`        | 指定 `Node.js` 可执行文件的路径。                                                                                                                                                                                                   | `node`     |
+| `leetcode.nodePath`        | 指定 `Node.js` 可执行文件的路径。如：C:\Program Files\nodejs\node.exe                                                                                                                                                                                                   | `node`     |
 
 ## 需要帮助？
 在遇到任何问题时，可以先查看一下[疑难解答](https://github.com/jdneo/vscode-leetcode/wiki/%E7%96%91%E9%9A%BE%E8%A7%A3%E7%AD%94)以及[常见问题](https://github.com/jdneo/vscode-leetcode/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)寻求帮助。
