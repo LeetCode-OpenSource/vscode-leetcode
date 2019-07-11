@@ -310,6 +310,12 @@
                         ],
                         "description": "Endpoint of the user account."
                     },
+                    "leetcode.workspaceFolder": {
+                        "type": "string",
+                        "scope": "application",
+                        "description": "The path of the workspace folder to store the problem files.",
+                        "default": "${home}/.leetcode"
+                    },
                     "leetcode.outputFolder": {
                         "type": "string",
                         "scope": "application",

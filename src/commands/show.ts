@@ -128,6 +128,10 @@ async function showProblemInternal(node: IProblem): Promise<void> {
 
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         let outDir: string = await selectWorkspaceFolder();
+        if (!outDir) {
+            return;
+        }
+
         let relativePath: string = (leetCodeConfig.get<string>("outputFolder", "")).trim();
         if (relativePath) {
             relativePath = await resolveRelativePath(relativePath, node, language);
