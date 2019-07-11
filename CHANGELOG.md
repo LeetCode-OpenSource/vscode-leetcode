@@ -3,6 +3,14 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+##[0.15.2]
+### Added
+- Prompt to open the workspace for LeetCode [#130](https://github.com/jdneo/vscode-leetcode/issues/130)
+- Support deleting sessions [#198](https://github.com/jdneo/vscode-leetcode/issues/130)
+
+### Fixed
+[Bugs fixed](https://github.com/jdneo/vscode-leetcode/issues?q=is%3Aissue+milestone%3A0.15.2+is%3Aclosed+label%3Abug)
+
 ## [0.15.1]
 ### Fixed
 [Bugs fixed](https://github.com/jdneo/vscode-leetcode/issues?q=is%3Aissue+milestone%3A0.15.1+is%3Aclosed+label%3Abug)
