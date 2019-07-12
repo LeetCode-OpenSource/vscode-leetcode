@@ -121,7 +121,7 @@
 | `leetcode.defaultLanguage` | 指定答题时使用的默认语言，可选语言有：`bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `php`, `python`,`python3`,`ruby`, `rust`, `scala`,`swift`                                                    | `N/A`      |
 | `leetcode.useWsl`          | 指定是否启用 WSL                                                                                                                                                                                                                    | `false`    |
 | `leetcode.endpoint`        | 指定使用的终端，可用终端有：`leetcode`, `leetcode-cn`                                                                                                                                                                               | `leetcode` |
-| `leetcode.workspaceFolder` | 指定保存文件的工作区目录 | `${home}/.leetcode` |
+| `leetcode.workspaceFolder` | 指定保存文件的工作区目录 | `""` |
 | `leetcode.outputFolder`    | 指定保存文件时所用的相对文件夹路径。除了用户自定义路径外，也可以使用保留项，包括：<ul><li>`${tag}`: 根据题目的类别进行分类。<li>`${language}`: 根据题目的语言进行分类。</li><li>`${difficulty}`: 根据题目的难度进行分类。</li></ul>例如：`problem-${tag}-${difficulty}` | N/A        |
 | `leetcode.enableStatusBar` | 指定是否在 VS Code 下方显示插件状态栏。                                                                                                                                                                                             | `true`     |
 | **(Deprecated)** `leetcode.enableShortcuts` | 指定是否在 VS Code 编辑文件下方显示提交和测试的快捷按钮。                                                                                                                                                                           | `true`     |

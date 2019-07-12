@@ -1,13 +1,23 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
+import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
-import { getWorkspaceFolder } from "./settingUtils";
+import { IQuickItemEx } from "../shared";
+import { getWorkspaceConfiguration, getWorkspaceFolder } from "./settingUtils";
+import { showDirectorySelectDialog } from "./uiUtils";
 import * as wsl from "./wslUtils";
 
 export async function selectWorkspaceFolder(): Promise<string> {
-    const workspaceFolderSetting: string = getWorkspaceFolder();
+    let workspaceFolderSetting: string = getWorkspaceFolder();
+    if (workspaceFolderSetting.trim() === "") {
+        workspaceFolderSetting = await determineLeetCodeFolder();
+        if (workspaceFolderSetting === "") {
+            // User cancelled
+            return workspaceFolderSetting;
+        }
+    }
     const workspaceFolders: vscode.WorkspaceFolder[] = vscode.workspace.workspaceFolders || [];
     let needAsk: boolean = true;
     for (const folder of workspaceFolders) {
@@ -68,6 +78,42 @@ function isSubFolder(from: string, to: string): boolean {
         return true;
     }
     return !relative.startsWith("..") && !path.isAbsolute(relative);
+}
+
+async function determineLeetCodeFolder(): Promise<string> {
+    let result: string;
+    const picks: Array<IQuickItemEx<string>> = [];
+    picks.push(
+        {
+            label: `Default location`,
+            detail: `${path.join(os.homedir(), ".leetcode")}`,
+            value: `${path.join(os.homedir(), ".leetcode")}`,
+        },
+        {
+            label: "$(file-directory) Browse...",
+            value: ":browse",
+        },
+    );
+    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(
+        picks,
+        { placeHolder: "Select where you would like to save your LeetCode files" },
+    );
+    if (!choice) {
+        result = "";
+    } else if (choice.value === ":browse") {
+        const directory: vscode.Uri[] | undefined = await showDirectorySelectDialog();
+        if (!directory || directory.length < 1) {
+            result = "";
+        } else {
+            result = directory[0].fsPath;
+        }
+    } else {
+        result = choice.value;
+    }
+
+    getWorkspaceConfiguration().update("workspaceFolder", result, vscode.ConfigurationTarget.Global);
+
+    return result;
 }
 
 enum OpenOption {
