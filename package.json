@@ -314,7 +314,7 @@
                         "type": "string",
                         "scope": "application",
                         "description": "The path of the workspace folder to store the problem files.",
-                        "default": "${home}/.leetcode"
+                        "default": ""
                     },
                     "leetcode.outputFolder": {
                         "type": "string",
