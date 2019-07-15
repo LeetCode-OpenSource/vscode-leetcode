@@ -390,7 +390,7 @@
     "dependencies": {
         "fs-extra": "^6.0.1",
         "highlight.js": "^9.15.6",
-        "lodash": "^4.17.11",
+        "lodash": "^4.17.13",
         "markdown-it": "^8.4.2",
         "require-from-string": "^2.0.2",
         "unescape-js": "^1.1.1",
