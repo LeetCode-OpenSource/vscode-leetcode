@@ -1,7 +1,6 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import * as fse from "fs-extra";
 import * as path from "path";
 import * as unescapeJS from "unescape-js";
 import * as vscode from "vscode";
@@ -11,13 +10,14 @@ import { leetCodeChannel } from "../leetCodeChannel";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
-import { getNodeIdFromFile } from "../utils/problemUtils";
+import { getNodeIdFromFile, genFileName, genFileExt } from "../utils/problemUtils";
 import { DialogOptions, DialogType, openSettingsEditor, promptForOpenOutputChannel, promptForSignIn, promptHintMessage } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
 import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
+import * as _ from "lodash";
 
 export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: boolean = false): Promise<void> {
     let node: IProblem;
@@ -132,20 +132,22 @@ async function showProblemInternal(node: IProblem): Promise<void> {
             return;
         }
 
-        let relativePath: string = (leetCodeConfig.get<string>("outputFolder", "")).trim();
-        if (relativePath) {
-            relativePath = await resolveRelativePath(relativePath, node, language);
-            if (!relativePath) {
+        let outputFolder = leetCodeConfig.get<string>("outputFolder", "").trim();
+        let defaultRelativeFilePath = leetCodeConfig.get<string>("relativeFilePath.default", path.join(outputFolder, genFileName(node, language))).trim();
+        let relativeFilePath = leetCodeConfig.get<string>(`relativeFilePath.${language}`, defaultRelativeFilePath).trim();
+
+        if (relativeFilePath) {
+            relativeFilePath = await resolveRelativePath(relativeFilePath, node, language);
+            if (!relativeFilePath) {
                 leetCodeChannel.appendLine("Showing problem canceled by user.");
                 return;
             }
         }
 
-        outDir = path.join(outDir, relativePath);
-        await fse.ensureDir(outDir);
-
-        const originFilePath: string = await leetCodeExecutor.showProblem(node, language, outDir, leetCodeConfig.get<boolean>("showCommentDescription"));
+        const originFilePath = path.join(outDir, relativeFilePath);
         const filePath: string = wsl.useWsl() ? await wsl.toWinPath(originFilePath) : originFilePath;
+
+        await leetCodeExecutor.showProblem(node, language, originFilePath, leetCodeConfig.get<boolean>("showCommentDescription"));
         await Promise.all([
             vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false, viewColumn: vscode.ViewColumn.One }),
             movePreviewAsideIfNeeded(node),
@@ -191,26 +193,47 @@ function parseProblemDecorator(state: ProblemState, locked: boolean): string {
 }
 
 async function resolveRelativePath(relativePath: string, node: IProblem, selectedLanguage: string): Promise<string> {
+    let tag = "";
     if (/\$\{tag\}/i.test(relativePath)) {
-        const tag: string | undefined = await resolveTagForProblem(node);
-        if (!tag) {
-            return "";
+        tag = (await resolveTagForProblem(node)) || "";
+    }
+
+    let company = "";
+    if (/\$\{company\}/i.test(relativePath)) {
+        company = (await resolveCompanyForProblem(node)) || "";
+    }
+
+    return relativePath.replace(/\$\{(.*?)\}/g, (_substring, ...args) => {
+        const placeholder = (args[0] as string).toLowerCase().trim();
+        switch (placeholder) {
+            case "id":
+                return node.id;
+            case "name":
+                return node.name;
+            case "camelcasename":
+                return _.camelCase(node.name);
+            case "pascalcasename":
+                return _.upperFirst(_.camelCase(node.name));
+            case "kebab-case-name":
+                return _.kebabCase(node.name);
+            case "snake_case_name":
+                return _.snakeCase(node.name);
+            case "ext":
+                return genFileExt(selectedLanguage);
+            case "language":
+                return selectedLanguage;
+            case "difficulty":
+                return node.difficulty.toLocaleLowerCase();
+            case "tag":
+                return tag;
+            case "company":
+                return company;
+            default:
+                const errorMsg: string = `The config '${placeholder}' is not supported.`;
+                leetCodeChannel.appendLine(errorMsg);
+                throw new Error(errorMsg);
         }
-        relativePath = relativePath.replace(/\$\{tag\}/ig, tag);
-    }
-
-    relativePath = relativePath.replace(/\$\{language\}/ig, selectedLanguage);
-    relativePath = relativePath.replace(/\$\{difficulty\}/ig, node.difficulty.toLocaleLowerCase());
-
-    // Check if there is any unsupported configuration
-    const matchResult: RegExpMatchArray | null = relativePath.match(/\$\{(.*?)\}/);
-    if (matchResult && matchResult.length >= 1) {
-        const errorMsg: string = `The config '${matchResult[1]}' is not supported.`;
-        leetCodeChannel.appendLine(errorMsg);
-        throw new Error(errorMsg);
-    }
-
-    return relativePath;
+    });
 }
 
 async function resolveTagForProblem(problem: IProblem): Promise<string | undefined> {
@@ -225,4 +248,15 @@ async function resolveTagForProblem(problem: IProblem): Promise<string | undefin
             ignoreFocusOut: true,
         },
     );
+}
+
+async function resolveCompanyForProblem(problem: IProblem): Promise<string | undefined> {
+    if (problem.companies.length === 1) {
+        return problem.companies[0];
+    }
+    return await vscode.window.showQuickPick(problem.companies, {
+        matchOnDetail: true,
+        placeHolder: "Multiple tags available, please select one",
+        ignoreFocusOut: true
+    });
 }

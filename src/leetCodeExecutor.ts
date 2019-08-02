@@ -8,7 +8,6 @@ import * as requireFromString from "require-from-string";
 import { ConfigurationChangeEvent, Disposable, MessageItem, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Endpoint, IProblem, supportedPlugins } from "./shared";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
-import { genFileName } from "./utils/problemUtils";
 import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 import { toWslPath, useWsl } from "./utils/wslUtils";
@@ -96,17 +95,14 @@ class LeetCodeExecutor implements Disposable {
         );
     }
 
-    public async showProblem(problemNode: IProblem, language: string, outDir: string, detailed: boolean = false): Promise<string> {
-        const fileName: string = genFileName(problemNode, language);
-        const filePath: string = path.join(outDir, fileName);
+    public async showProblem(problemNode: IProblem, language: string, filePath: string, detailed: boolean = false): Promise<void> {
         const templateType: string = detailed ? "-cx" : "-c";
 
         if (!await fse.pathExists(filePath)) {
+            await fse.createFile(filePath);
             const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", problemNode.id, templateType, "-l", language]);
             await fse.writeFile(filePath, codeTemplate);
         }
-
-        return filePath;
     }
 
     public async showSolution(input: string, language: string): Promise<string> {
