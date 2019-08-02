@@ -1,6 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
+import * as _ from "lodash";
 import * as path from "path";
 import * as unescapeJS from "unescape-js";
 import * as vscode from "vscode";
@@ -10,14 +11,13 @@ import { leetCodeChannel } from "../leetCodeChannel";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
-import { getNodeIdFromFile, genFileName, genFileExt } from "../utils/problemUtils";
+import { genFileExt, genFileName, getNodeIdFromFile } from "../utils/problemUtils";
 import { DialogOptions, DialogType, openSettingsEditor, promptForOpenOutputChannel, promptForSignIn, promptHintMessage } from "../utils/uiUtils";
 import { selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
 import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
-import * as _ from "lodash";
 
 export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: boolean = false): Promise<void> {
     let node: IProblem;
@@ -127,14 +127,14 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         }
 
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-        let outDir: string = await selectWorkspaceFolder();
+        const outDir: string = await selectWorkspaceFolder();
         if (!outDir) {
             return;
         }
 
-        let outputFolder = leetCodeConfig.get<string>("outputFolder", "").trim();
-        let defaultRelativeFilePath = leetCodeConfig.get<string>("relativeFilePath.default", path.join(outputFolder, genFileName(node, language))).trim();
-        let relativeFilePath = leetCodeConfig.get<string>(`relativeFilePath.${language}`, defaultRelativeFilePath).trim();
+        const outputFolder: string = leetCodeConfig.get<string>("outputFolder", "").trim();
+        const defaultRelativeFilePath: string = leetCodeConfig.get<string>("relativeFilePath.default", path.join(outputFolder, genFileName(node, language))).trim();
+        let relativeFilePath: string = leetCodeConfig.get<string>(`relativeFilePath.${language}`, defaultRelativeFilePath).trim();
 
         if (relativeFilePath) {
             relativeFilePath = await resolveRelativePath(relativeFilePath, node, language);
@@ -144,7 +144,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
             }
         }
 
-        const originFilePath = path.join(outDir, relativeFilePath);
+        const originFilePath: string = path.join(outDir, relativeFilePath);
         const filePath: string = wsl.useWsl() ? await wsl.toWinPath(originFilePath) : originFilePath;
 
         await leetCodeExecutor.showProblem(node, language, originFilePath, leetCodeConfig.get<boolean>("showCommentDescription"));
@@ -193,18 +193,18 @@ function parseProblemDecorator(state: ProblemState, locked: boolean): string {
 }
 
 async function resolveRelativePath(relativePath: string, node: IProblem, selectedLanguage: string): Promise<string> {
-    let tag = "";
+    let tag: string = "";
     if (/\$\{tag\}/i.test(relativePath)) {
         tag = (await resolveTagForProblem(node)) || "";
     }
 
-    let company = "";
+    let company: string = "";
     if (/\$\{company\}/i.test(relativePath)) {
         company = (await resolveCompanyForProblem(node)) || "";
     }
 
-    return relativePath.replace(/\$\{(.*?)\}/g, (_substring, ...args) => {
-        const placeholder = (args[0] as string).toLowerCase().trim();
+    return relativePath.replace(/\$\{(.*?)\}/g, (_substring: string, ...args: string[]) => {
+        const placeholder: string = args[0].toLowerCase().trim();
         switch (placeholder) {
             case "id":
                 return node.id;
@@ -257,6 +257,6 @@ async function resolveCompanyForProblem(problem: IProblem): Promise<string | und
     return await vscode.window.showQuickPick(problem.companies, {
         matchOnDetail: true,
         placeHolder: "Multiple tags available, please select one",
-        ignoreFocusOut: true
+        ignoreFocusOut: true,
     });
 }
