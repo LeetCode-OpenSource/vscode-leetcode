@@ -319,7 +319,73 @@
                     "leetcode.outputFolder": {
                         "type": "string",
                         "scope": "application",
-                        "description": "The relative path to save the problem files."
+                        "description": "[Deprecated] The output folder to save the problem files."
+                    },
+                    "leetcode.relativeFilePath.default": {
+                        "type": "string",
+                        "scope": "application",
+                        "description": "The relative Path to save the problem files.",
+                        "default": "${id}.${camelCaseName}.${ext}"
+                    },
+                    "leetcode.relativeFilePath.bash": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.c": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.cpp": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.csharp": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.golang": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.java": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.javascript": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.kotlin": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.mysql": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.php": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.python": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.python3": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.ruby": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.scala": {
+                        "type": "string",
+                        "scope": "application"
+                    },
+                    "leetcode.relativeFilePath.swift": {
+                        "type": "string",
+                        "scope": "application"
                     },
                     "leetcode.enableStatusBar": {
                         "type": "boolean",
