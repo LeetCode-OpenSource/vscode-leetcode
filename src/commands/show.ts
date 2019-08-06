@@ -127,29 +127,35 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         }
 
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-        const outDir: string = await selectWorkspaceFolder();
-        if (!outDir) {
+        const workspaceFolder: string = await selectWorkspaceFolder();
+        if (!workspaceFolder) {
             return;
         }
 
         const outputFolder: string = leetCodeConfig.get<string>("outputFolder", "").trim();
-        const defaultRelativeFilePath: string = leetCodeConfig.get<string>("relativeFilePath.default", path.join(outputFolder, genFileName(node, language))).trim();
-        let relativeFilePath: string = leetCodeConfig.get<string>(`relativeFilePath.${language}`, defaultRelativeFilePath).trim();
 
-        if (relativeFilePath) {
-            relativeFilePath = await resolveRelativePath(relativeFilePath, node, language);
-            if (!relativeFilePath) {
+        const filePath: string = leetCodeConfig
+            .get<string>(`output.${language}.path`, leetCodeConfig.get<string>(`output.default.path`, outputFolder))
+            .trim();
+        const fileName: string = leetCodeConfig
+            .get<string>(`output.${language}.filename`, leetCodeConfig.get<string>(`output.default.filename`, genFileName(node, language)))
+            .trim();
+
+        let finalPath: string = path.join(workspaceFolder, filePath, fileName);
+
+        if (finalPath) {
+            finalPath = await resolveRelativePath(finalPath, node, language);
+            if (!finalPath) {
                 leetCodeChannel.appendLine("Showing problem canceled by user.");
                 return;
             }
         }
 
-        const originFilePath: string = path.join(outDir, relativeFilePath);
-        const filePath: string = wsl.useWsl() ? await wsl.toWinPath(originFilePath) : originFilePath;
+        finalPath = wsl.useWsl() ? await wsl.toWinPath(finalPath) : finalPath;
 
-        await leetCodeExecutor.showProblem(node, language, originFilePath, leetCodeConfig.get<boolean>("showCommentDescription"));
+        await leetCodeExecutor.showProblem(node, language, finalPath, leetCodeConfig.get<boolean>("showCommentDescription"));
         await Promise.all([
-            vscode.window.showTextDocument(vscode.Uri.file(filePath), { preview: false, viewColumn: vscode.ViewColumn.One }),
+            vscode.window.showTextDocument(vscode.Uri.file(finalPath), { preview: false, viewColumn: vscode.ViewColumn.One }),
             movePreviewAsideIfNeeded(node),
             promptHintMessage(
                 "hint.commentDescription",

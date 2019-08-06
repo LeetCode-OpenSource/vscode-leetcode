@@ -258,6 +258,7 @@
                             "python",
                             "python3",
                             "ruby",
+                            "rust",
                             "scala",
                             "swift"
                         ],
@@ -321,71 +322,246 @@
                         "scope": "application",
                         "description": "[Deprecated] The output folder to save the problem files."
                     },
-                    "leetcode.relativeFilePath.default": {
-                        "type": "string",
+                    "leetcode.output": {
+                        "type": "object",
                         "scope": "application",
-                        "description": "The relative Path to save the problem files.",
-                        "default": "${id}.${camelCaseName}.${ext}"
-                    },
-                    "leetcode.relativeFilePath.bash": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.c": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.cpp": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.csharp": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.golang": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.java": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.javascript": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.kotlin": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.mysql": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.php": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.python": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.python3": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.ruby": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.scala": {
-                        "type": "string",
-                        "scope": "application"
-                    },
-                    "leetcode.relativeFilePath.swift": {
-                        "type": "string",
-                        "scope": "application"
+                        "description": "The output path and filename to save the problem files.",
+                        "properties": {
+                            "default": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string",
+                                        "examples": [
+                                            "src"
+                                        ]
+                                    },
+                                    "filename": {
+                                        "type": "string",
+                                        "examples": [
+                                            "${camelCaseName}.${ext}",
+                                            "${PascalCaseName}.${ext}",
+                                            "${id}-${kebab-case-name}.${ext}",
+                                            "${id}_${snake_case_name}.${ext}"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "path",
+                                    "filename"
+                                ]
+                            },
+                            "bash": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "c": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "cpp": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "csharp": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "golang": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "java": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "javascript": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "kotlin": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "mysql": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "php": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "python": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "python3": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "ruby": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "rust": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "scala": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "swift": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            }
+                        },
+                        "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                                "path": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "default": {
+                            "default": {
+                                "path": "",
+                                "filename": "${id}.${kebab-case-name}.${ext}"
+                            }
+                        }
                     },
                     "leetcode.enableStatusBar": {
                         "type": "boolean",
