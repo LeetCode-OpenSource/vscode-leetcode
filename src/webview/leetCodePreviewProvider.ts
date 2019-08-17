@@ -101,6 +101,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
             <!DOCTYPE html>
             <html>
             <head>
+                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https:; script-src vscode-resource: 'unsafe-inline'; style-src vscode-resource: 'unsafe-inline';"/>
                 ${markdownEngine.getStyles()}
                 ${!this.sideMode ? button.style : ""}
                 <style>
