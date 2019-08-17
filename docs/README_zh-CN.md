@@ -20,11 +20,7 @@
   </a>
 </p>
 
-## 赞助
-[![coding](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/sponsor_coding.png)](https://coding.net/?utm_source=leetcode)
-
-- [English Document](#Requirements)
-- [中文文档](https://github.com/jdneo/vscode-leetcode/blob/master/docs/README_zh-CN.md)
+- [English Document](https://github.com/jdneo/vscode-leetcode#requirements) | 中文文档
 
 ## 运行条件
 - [VS Code 1.23.0+](https://code.visualstudio.com/)
