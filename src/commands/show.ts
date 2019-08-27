@@ -13,7 +13,7 @@ import { leetCodeManager } from "../leetCodeManager";
 import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
 import { getNodeIdFromFile } from "../utils/problemUtils";
 import { DialogOptions, DialogType, openSettingsEditor, promptForOpenOutputChannel, promptForSignIn, promptHintMessage } from "../utils/uiUtils";
-import { selectWorkspaceFolder } from "../utils/workspaceUtils";
+import { getActiveFilePath, selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
 import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
@@ -71,11 +71,15 @@ export async function searchProblem(): Promise<void> {
 
 export async function showSolution(input: LeetCodeNode | vscode.Uri): Promise<void> {
     let problemInput: string | undefined;
-    if (input instanceof LeetCodeNode) {
+    if (input instanceof LeetCodeNode) { // Triggerred from explorer
         problemInput = input.id;
-    } else if (input instanceof vscode.Uri) {
+    } else if (input instanceof vscode.Uri) { // Triggerred from Code Lens/context menu
         problemInput = `"${input.fsPath}"`;
-    } else {
+    } else if (!input) { // Triggerred from command
+        problemInput = await getActiveFilePath();
+    }
+
+    if (!problemInput) {
         vscode.window.showErrorMessage("Invalid input to fetch the solution data.");
         return;
     }
