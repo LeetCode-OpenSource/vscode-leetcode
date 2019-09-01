@@ -31,6 +31,7 @@
         "onCommand:leetcode.signout",
         "onCommand:leetcode.manageSessions",
         "onCommand:leetcode.refreshExplorer",
+        "onCommand:leetcode.pickOne",
         "onCommand:leetcode.showProblem",
         "onCommand:leetcode.previewProblem",
         "onCommand:leetcode.searchProblem",
@@ -83,6 +84,11 @@
                     "light": "resources/light/refresh.svg",
                     "dark": "resources/dark/refresh.svg"
                 }
+            },
+            {
+                "command": "leetcode.pickOne",
+                "title": "Pick One",
+                "category": "LeetCode"
             },
             {
                 "command": "leetcode.showProblem",
@@ -162,6 +168,11 @@
                     "command": "leetcode.refreshExplorer",
                     "when": "view == leetCodeExplorer",
                     "group": "navigation@3"
+                },
+                {
+                    "command": "leetcode.pickOne",
+                    "when": "view == leetCodeExplorer",
+                    "group": "overflow@0"
                 }
             ],
             "view/item/context": [
