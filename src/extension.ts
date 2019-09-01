@@ -8,6 +8,7 @@ import { switchDefaultLanguage } from "./commands/language";
 import * as plugin from "./commands/plugin";
 import * as session from "./commands/session";
 import * as show from "./commands/show";
+import * as star from "./commands/star";
 import * as submit from "./commands/submit";
 import * as test from "./commands/test";
 import { explorerNodeManager } from "./explorer/explorerNodeManager";
@@ -61,6 +62,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             vscode.commands.registerCommand("leetcode.testSolution", (uri?: vscode.Uri) => test.testSolution(uri)),
             vscode.commands.registerCommand("leetcode.submitSolution", (uri?: vscode.Uri) => submit.submitSolution(uri)),
             vscode.commands.registerCommand("leetcode.switchDefaultLanguage", () => switchDefaultLanguage()),
+            vscode.commands.registerCommand("leetcode.addFavorite", (node: LeetCodeNode) => star.addFavorite(node)),
+            vscode.commands.registerCommand("leetcode.removeFavorite", (node: LeetCodeNode) => star.removeFavorite(node)),
         );
 
         await leetCodeExecutor.switchEndpoint(plugin.getLeetCodeEndpoint());

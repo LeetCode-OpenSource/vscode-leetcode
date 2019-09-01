@@ -125,6 +125,24 @@
                 "category": "LeetCode"
             },
             {
+                "command": "leetcode.addFavorite",
+                "title": "Add to Favorite List",
+                "category": "LeetCode",
+                "icon": {
+                    "light": "resources/light/like.png",
+                    "dark": "resources/dark/like.png"
+                }
+            },
+            {
+                "command": "leetcode.removeFavorite",
+                "title": "Remove from Favorite List",
+                "category": "LeetCode",
+                "icon": {
+                    "light": "resources/light/dislike.png",
+                    "dark": "resources/dark/dislike.png"
+                }
+            },
+            {
                 "command": "leetcode.switchDefaultLanguage",
                 "title": "Switch Default Language",
                 "category": "LeetCode"
@@ -178,18 +196,28 @@
             "view/item/context": [
                 {
                     "command": "leetcode.previewProblem",
-                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "when": "view == leetCodeExplorer && viewItem =~ /problem*/",
                     "group": "leetcode@1"
                 },
                 {
                     "command": "leetcode.showProblem",
-                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "when": "view == leetCodeExplorer && viewItem =~ /problem*/",
                     "group": "leetcode@2"
                 },
                 {
                     "command": "leetcode.showSolution",
-                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "when": "view == leetCodeExplorer && viewItem =~ /problem*/",
                     "group": "leetcode@3"
+                },
+                {
+                    "command": "leetcode.addFavorite",
+                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "group": "inline"
+                },
+                {
+                    "command": "leetcode.removeFavorite",
+                    "when": "view == leetCodeExplorer && viewItem == problem-favorite",
+                    "group": "inline"
                 }
             ],
             "commandPalette": [
@@ -203,6 +231,14 @@
                 },
                 {
                     "command": "leetcode.previewProblem",
+                    "when": "never"
+                },
+                {
+                    "command": "leetcode.addFavorite",
+                    "when": "never"
+                },
+                {
+                    "command": "leetcode.removeFavorite",
                     "when": "never"
                 }
             ],

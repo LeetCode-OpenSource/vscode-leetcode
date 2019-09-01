@@ -162,6 +162,14 @@ class LeetCodeExecutor implements Disposable {
         }
     }
 
+    public async toggleFavorite(node: IProblem, addToFavorite: boolean): Promise<void> {
+        const commandParams: string[] = [await this.getLeetCodeBinaryPath(), "star", node.id];
+        if (!addToFavorite) {
+            commandParams.push("-d");
+        }
+        await this.executeCommandWithProgressEx("Updating the favorite list...", "node", commandParams);
+    }
+
     public async getCompaniesAndTags(): Promise<{ companies: { [key: string]: string[] }, tags: { [key: string]: string[] } }> {
         // preprocess the plugin source
         const companiesTagsPath: string = path.join(await leetCodeExecutor.getLeetCodeRootPath(), "lib", "plugins", "company.js");
