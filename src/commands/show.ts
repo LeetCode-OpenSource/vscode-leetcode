@@ -44,6 +44,12 @@ export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: b
     leetCodePreviewProvider.show(descString, node, isSideMode);
 }
 
+export async function pickOne(): Promise<void> {
+    const problems: IProblem[] = await list.listProblems();
+    const randomProblem: IProblem = problems[Math.floor(Math.random() * problems.length)];
+    await showProblemInternal(randomProblem);
+}
+
 export async function showProblem(node?: LeetCodeNode): Promise<void> {
     if (!node) {
         return;

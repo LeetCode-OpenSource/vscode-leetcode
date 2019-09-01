@@ -54,6 +54,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             vscode.commands.registerCommand("leetcode.manageSessions", () => session.manageSessions()),
             vscode.commands.registerCommand("leetcode.previewProblem", (node: LeetCodeNode) => show.previewProblem(node)),
             vscode.commands.registerCommand("leetcode.showProblem", (node: LeetCodeNode) => show.showProblem(node)),
+            vscode.commands.registerCommand("leetcode.pickOne", () => show.pickOne()),
             vscode.commands.registerCommand("leetcode.searchProblem", () => show.searchProblem()),
             vscode.commands.registerCommand("leetcode.showSolution", (input: LeetCodeNode | vscode.Uri) => show.showSolution(input)),
             vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
@@ -63,7 +64,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         );
 
         await leetCodeExecutor.switchEndpoint(plugin.getLeetCodeEndpoint());
-        leetCodeManager.getLoginStatus();
+        await leetCodeManager.getLoginStatus();
     } catch (error) {
         leetCodeChannel.appendLine(error.toString());
         promptForOpenOutputChannel("Extension initialization failed. Please open output channel for details.", DialogType.error);
