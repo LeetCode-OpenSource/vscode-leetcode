@@ -3,6 +3,17 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.15.3]
+### Added
+- Support `Pick One` [#263](https://github.com/jdneo/vscode-leetcode/issues/263)
+- Support toggling the favorite problems [#378](https://github.com/jdneo/vscode-leetcode/issues/378)
+
+### Changed
+- Update the activity bar icon [#395](https://github.com/jdneo/vscode-leetcode/issues/263)
+
+### Fixed
+[Bugs fixed](https://github.com/jdneo/vscode-leetcode/issues?q=is%3Aissue+milestone%3A0.15.3+is%3Aclosed+label%3Abug)
+
 ## [0.15.2]
 ### Added
 - Prompt to open the workspace for LeetCode [#130](https://github.com/jdneo/vscode-leetcode/issues/130)
