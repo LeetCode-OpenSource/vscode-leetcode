@@ -2,7 +2,7 @@
     "name": "vscode-leetcode",
     "displayName": "LeetCode",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.15.2",
+    "version": "0.15.3",
     "author": "Sheng Chen",
     "publisher": "shengchen",
     "license": "MIT",
@@ -31,6 +31,7 @@
         "onCommand:leetcode.signout",
         "onCommand:leetcode.manageSessions",
         "onCommand:leetcode.refreshExplorer",
+        "onCommand:leetcode.pickOne",
         "onCommand:leetcode.showProblem",
         "onCommand:leetcode.previewProblem",
         "onCommand:leetcode.searchProblem",
@@ -85,6 +86,11 @@
                 }
             },
             {
+                "command": "leetcode.pickOne",
+                "title": "Pick One",
+                "category": "LeetCode"
+            },
+            {
                 "command": "leetcode.showProblem",
                 "title": "Show Problem",
                 "category": "LeetCode"
@@ -117,6 +123,24 @@
                 "command": "leetcode.submitSolution",
                 "title": "Submit to LeetCode",
                 "category": "LeetCode"
+            },
+            {
+                "command": "leetcode.addFavorite",
+                "title": "Add to Favorite List",
+                "category": "LeetCode",
+                "icon": {
+                    "light": "resources/light/like.png",
+                    "dark": "resources/dark/like.png"
+                }
+            },
+            {
+                "command": "leetcode.removeFavorite",
+                "title": "Remove from Favorite List",
+                "category": "LeetCode",
+                "icon": {
+                    "light": "resources/light/dislike.png",
+                    "dark": "resources/dark/dislike.png"
+                }
             },
             {
                 "command": "leetcode.switchDefaultLanguage",
@@ -162,23 +186,38 @@
                     "command": "leetcode.refreshExplorer",
                     "when": "view == leetCodeExplorer",
                     "group": "navigation@3"
+                },
+                {
+                    "command": "leetcode.pickOne",
+                    "when": "view == leetCodeExplorer",
+                    "group": "overflow@0"
                 }
             ],
             "view/item/context": [
                 {
                     "command": "leetcode.previewProblem",
-                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "when": "view == leetCodeExplorer && viewItem =~ /problem*/",
                     "group": "leetcode@1"
                 },
                 {
                     "command": "leetcode.showProblem",
-                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "when": "view == leetCodeExplorer && viewItem =~ /problem*/",
                     "group": "leetcode@2"
                 },
                 {
                     "command": "leetcode.showSolution",
-                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "when": "view == leetCodeExplorer && viewItem =~ /problem*/",
                     "group": "leetcode@3"
+                },
+                {
+                    "command": "leetcode.addFavorite",
+                    "when": "view == leetCodeExplorer && viewItem == problem",
+                    "group": "inline"
+                },
+                {
+                    "command": "leetcode.removeFavorite",
+                    "when": "view == leetCodeExplorer && viewItem == problem-favorite",
+                    "group": "inline"
                 }
             ],
             "commandPalette": [
@@ -192,6 +231,14 @@
                 },
                 {
                     "command": "leetcode.previewProblem",
+                    "when": "never"
+                },
+                {
+                    "command": "leetcode.addFavorite",
+                    "when": "never"
+                },
+                {
+                    "command": "leetcode.removeFavorite",
                     "when": "never"
                 }
             ],

@@ -38,13 +38,20 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             };
         }
 
+        let contextValue: string;
+        if (element.isProblem) {
+            contextValue = element.isFavorite ? "problem-favorite" : "problem";
+        } else {
+            contextValue = element.id.toLowerCase();
+        }
+
         return {
             label: element.isProblem ? `[${element.id}] ${element.name}` : element.name,
             tooltip: this.getSubCategoryTooltip(element),
             collapsibleState: element.isProblem ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
-            contextValue: element.isProblem ? "problem" : element.id.toLowerCase(),
             iconPath: this.parseIconPathFromProblemState(element),
             command: element.isProblem ? element.previewCommand : undefined,
+            contextValue,
         };
     }
 
