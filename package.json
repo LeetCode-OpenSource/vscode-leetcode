@@ -369,15 +369,15 @@
                         "scope": "application",
                         "description": "[Deprecated] The output folder to save the problem files."
                     },
-                    "leetcode.output": {
+                    "leetcode.filePath": {
                         "type": "object",
                         "scope": "application",
-                        "description": "The output path and filename to save the problem files.",
+                        "description": "The output folder and filename to save the problem files.",
                         "properties": {
                             "default": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string",
                                         "examples": [
                                             "src"
@@ -394,14 +394,14 @@
                                     }
                                 },
                                 "required": [
-                                    "path",
+                                    "folder",
                                     "filename"
                                 ]
                             },
                             "bash": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -413,7 +413,7 @@
                             "c": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -425,7 +425,7 @@
                             "cpp": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -437,7 +437,7 @@
                             "csharp": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -449,7 +449,7 @@
                             "golang": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -461,7 +461,7 @@
                             "java": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -473,7 +473,7 @@
                             "javascript": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -485,7 +485,7 @@
                             "kotlin": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -497,7 +497,7 @@
                             "mysql": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -509,7 +509,7 @@
                             "php": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -521,7 +521,7 @@
                             "python": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -533,7 +533,7 @@
                             "python3": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -545,7 +545,7 @@
                             "ruby": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -557,7 +557,7 @@
                             "rust": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -569,7 +569,7 @@
                             "scala": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -581,7 +581,7 @@
                             "swift": {
                                 "type": "object",
                                 "properties": {
-                                    "path": {
+                                    "folder": {
                                         "type": "string"
                                     },
                                     "filename": {
@@ -594,7 +594,7 @@
                         "additionalProperties": {
                             "type": "object",
                             "properties": {
-                                "path": {
+                                "folder": {
                                     "type": "string"
                                 },
                                 "filename": {
@@ -605,7 +605,7 @@
                         },
                         "default": {
                             "default": {
-                                "path": "",
+                                "folder": "",
                                 "filename": "${id}.${kebab-case-name}.${ext}"
                             }
                         }

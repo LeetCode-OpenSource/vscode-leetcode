@@ -144,14 +144,17 @@ async function showProblemInternal(node: IProblem): Promise<void> {
 
         const outputFolder: string = leetCodeConfig.get<string>("outputFolder", "").trim();
 
-        const filePath: string = leetCodeConfig
-            .get<string>(`output.${language}.path`, leetCodeConfig.get<string>(`output.default.path`, outputFolder))
+        const fileFolder: string = leetCodeConfig
+            .get<string>(`filePath.${language}.folder`, leetCodeConfig.get<string>(`filePath.default.folder`, outputFolder))
             .trim();
         const fileName: string = leetCodeConfig
-            .get<string>(`output.${language}.filename`, leetCodeConfig.get<string>(`output.default.filename`, genFileName(node, language)))
+            .get<string>(
+                `filePath.${language}.filename`,
+                leetCodeConfig.get<string>(`filePath.default.filename`, genFileName(node, language)),
+            )
             .trim();
 
-        let finalPath: string = path.join(workspaceFolder, filePath, fileName);
+        let finalPath: string = path.join(workspaceFolder, fileFolder, fileName);
 
         if (finalPath) {
             finalPath = await resolveRelativePath(finalPath, node, language);
