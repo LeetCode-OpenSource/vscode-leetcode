@@ -305,6 +305,7 @@
                             "python",
                             "python3",
                             "ruby",
+                            "rust",
                             "scala",
                             "swift"
                         ],
