@@ -15,3 +15,5 @@ A big thanks to the following individuals for contributing:
 - [@xuzaixian](https://github.com/xuzaixian) — [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=xuzaixian)
 - [@ZainChen](https://github.com/ZainChen) — [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=ZainChen)
 - [@houtianze](https://github.com/houtianze) — [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=houtianze)
+- [@magic-akari](https://github.com/magic-akari) - [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=magic-akari)
+- [@SF-Zhou](https://github.com/SF-Zhou) - [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=SF-Zhou)
