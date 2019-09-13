@@ -125,6 +125,7 @@
 | `leetcode.editor.shortcuts` | Specify the customized shorcuts in editors. Supported values are: `submit`, `test`, `solution` and `description`. | `["submit, test"]` |
 | `leetcode.enableSideMode`  | Specify whether `preview`, `solution` and `submission` tab should be grouped into the second editor column when solving a problem.                                                                                                                                                                                                                                                 | `true`        |
 | `leetcode.nodePath`        | Specify the `Node.js` executable path. for example, C:\Program Files\nodejs\node.exe                                                                                                                                                                                                                                                                                                                                            | `node`        |
+| `leetcode.showCommentDescription` | Specify whether to include the problem description in the comments | `false` |
 
 ## Want Help?
 
