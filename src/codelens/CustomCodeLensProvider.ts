@@ -22,8 +22,8 @@ export class CustomCodeLensProvider implements vscode.CodeLensProvider {
             return;
         }
 
-        const fileName: string = document.fileName.trim();
-        const matchResult: RegExpMatchArray | null = fileName.match(/\d+\..*\.(.+)/);
+        const content: string = document.getText();
+        const matchResult: RegExpMatchArray | null = content.match(/@lc app=.* id=.* lang=.*/);
         if (!matchResult) {
             return undefined;
         }
