@@ -23,7 +23,7 @@ export class CustomCodeLensProvider implements vscode.CodeLensProvider {
         }
 
         const content: string = document.getText();
-        const matchResult: RegExpMatchArray | null = content.match(/@lc app=.* id=.* lang=.*/g);
+        const matchResult: RegExpMatchArray | null = content.match(/@lc app=.* id=.* lang=.*/);
         if (!matchResult) {
             return undefined;
         }
