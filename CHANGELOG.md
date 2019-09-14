@@ -3,6 +3,14 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.15.4]
+### Added
+- Add a new setting `leetcode.filePath`. Now users can use this setting to dynamicly specify the relative folder name and file name. [#PR380](https://github.com/jdneo/vscode-leetcode/pull/380)
+
+### Fixed
+- Missing language `Rust` in the supported language list. [#PR412](https://github.com/jdneo/vscode-leetcode/pull/412)
+- Cannot show output when the answer is wrong. [#414](https://github.com/jdneo/vscode-leetcode/issues/414)
+
 ## [0.15.3]
 ### Added
 - Support `Pick One` [#263](https://github.com/jdneo/vscode-leetcode/issues/263)
