@@ -8,7 +8,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add a new setting `leetcode.filePath`. Now users can use this setting to dynamicly specify the relative folder name and file name. [#PR380](https://github.com/jdneo/vscode-leetcode/pull/380)
 
 ### Fixed
-- Fix the missing language `Rust` in the supported language list. [#PR412](https://github.com/jdneo/vscode-leetcode/pull/412)
+- Missing language `Rust` in the supported language list. [#PR412](https://github.com/jdneo/vscode-leetcode/pull/412)
+- Cannot show output when the answer is wrong. [#414](https://github.com/jdneo/vscode-leetcode/issues/414)
 
 ## [0.15.3]
 ### Added
