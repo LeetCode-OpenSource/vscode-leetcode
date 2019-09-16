@@ -73,9 +73,9 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
         const { title, url, category, difficulty, likes, dislikes, body } = this.description;
         const head: string = markdownEngine.render(`# [${title}](${url})`);
         const info: string = markdownEngine.render([
-            `| Category | Difficulty | Likes | Dislikes |`,
-            `| :------: | :--------: | :---: | :------: |`,
-            `| ${category} | ${difficulty} | ${likes} | ${dislikes} |`,
+            `| Category | Difficulty | Likes | Dislikes | [Discuss](${url.replace("/description/", "/discuss/?currentPage=1&orderBy=most_votes&query=")}) |`,
+            `| :------: | :--------: | :---: | :------: | :-----: |`,
+            `| ${category} | ${difficulty} | ${likes} | ${dislikes} | -- |`,
         ].join("\n"));
         const tags: string = [
             `<details>`,
