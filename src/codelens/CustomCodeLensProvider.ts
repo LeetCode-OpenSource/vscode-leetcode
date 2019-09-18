@@ -22,13 +22,29 @@ export class CustomCodeLensProvider implements vscode.CodeLensProvider {
             return;
         }
 
+        const fileName: string = document.fileName.trim();
+        const workspaceFolder: string = vscode.workspace.getConfiguration("leetcode").get("workspaceFolder", "");
+
+        if (fileName.indexOf(workspaceFolder) === -1) {
+            return undefined;
+        }
+
         const content: string = document.getText();
         const matchResult: RegExpMatchArray | null = content.match(/@lc app=.* id=.* lang=.*/);
         if (!matchResult) {
             return undefined;
         }
 
-        const range: vscode.Range = new vscode.Range(document.lineCount - 1, 0, document.lineCount - 1, 0);
+        let codeLensLine: number = content.length - 1;
+
+        for (let i: number = 0; i < content.length; ++i) {
+            if (content[i].indexOf("@lc code=end") >= 0) {
+                codeLensLine = i;
+                break;
+            }
+        }
+
+        const range: vscode.Range = new vscode.Range(codeLensLine, 0, codeLensLine, 0);
         const codeLens: vscode.CodeLens[] = [];
 
         if (shortcuts.indexOf("submit") >= 0) {
