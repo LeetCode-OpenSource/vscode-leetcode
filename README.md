@@ -7,7 +7,7 @@
 </p>
 <p align="center">
   <a href="https://travis-ci.org/jdneo/vscode-leetcode">
-    <img src="https://img.shields.io/travis/jdneo/vscode-leetcode.svg?style=flat-square" alt="">
+    <a href="https://opencollective.com/vscode-leetcode" alt="Financial Contributors on Open Collective"><img src="https://opencollective.com/vscode-leetcode/all/badge.svg?label=financial+contributors" /></a> <img src="https://img.shields.io/travis/jdneo/vscode-leetcode.svg?style=flat-square" alt="">
   </a>
   <a href="https://gitter.im/vscode-leetcode/Lobby">
     <img src="https://img.shields.io/gitter/room/jdneo/vscode-leetcode.svg?style=flat-square" alt="">
@@ -141,3 +141,33 @@ Refer to [CHANGELOG](https://github.com/jdneo/vscode-leetcode/blob/master/CHANGE
 
 - This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcode-cli](https://github.com/skygragon/leetcode-cli) open source project.
 - Special thanks to our [contributors](https://github.com/jdneo/vscode-leetcode/blob/master/ACKNOWLEDGEMENTS.md).
+
+## Contributors
+
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/jdneo/vscode-leetcode/graphs/contributors"><img src="https://opencollective.com/vscode-leetcode/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/vscode-leetcode/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/vscode-leetcode"><img src="https://opencollective.com/vscode-leetcode/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/vscode-leetcode/contribute)]
+
+<a href="https://opencollective.com/vscode-leetcode/organization/0/website"><img src="https://opencollective.com/vscode-leetcode/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/vscode-leetcode/organization/1/website"><img src="https://opencollective.com/vscode-leetcode/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/vscode-leetcode/organization/2/website"><img src="https://opencollective.com/vscode-leetcode/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/vscode-leetcode/organization/3/website"><img src="https://opencollective.com/vscode-leetcode/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/vscode-leetcode/organization/4/website"><img src="https://opencollective.com/vscode-leetcode/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/vscode-leetcode/organization/5/website"><img src="https://opencollective.com/vscode-leetcode/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/vscode-leetcode/organization/6/website"><img src="https://opencollective.com/vscode-leetcode/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/vscode-leetcode/organization/7/website"><img src="https://opencollective.com/vscode-leetcode/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/vscode-leetcode/organization/8/website"><img src="https://opencollective.com/vscode-leetcode/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/vscode-leetcode/organization/9/website"><img src="https://opencollective.com/vscode-leetcode/organization/9/avatar.svg"></a>
