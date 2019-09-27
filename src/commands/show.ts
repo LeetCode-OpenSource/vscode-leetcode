@@ -150,7 +150,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         const fileName: string = leetCodeConfig
             .get<string>(
                 `filePath.${language}.filename`,
-                leetCodeConfig.get<string>(`filePath.default.filename`, genFileName(node, language)),
+                leetCodeConfig.get<string>(`filePath.default.filename`) || genFileName(node, language),
             )
             .trim();
 
