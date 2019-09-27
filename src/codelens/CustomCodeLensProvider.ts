@@ -28,7 +28,16 @@ export class CustomCodeLensProvider implements vscode.CodeLensProvider {
             return undefined;
         }
 
-        const range: vscode.Range = new vscode.Range(document.lineCount - 1, 0, document.lineCount - 1, 0);
+        let codeLensLine: number = document.lineCount - 1;
+        for (let i: number = document.lineCount - 1; i >= 0; i--) {
+            const lineContent: string = document.lineAt(i).text;
+            if (lineContent.indexOf("@lc code=end") >= 0) {
+                codeLensLine = i;
+                break;
+            }
+        }
+
+        const range: vscode.Range = new vscode.Range(codeLensLine, 0, codeLensLine, 0);
         const codeLens: vscode.CodeLens[] = [];
 
         if (shortcuts.indexOf("submit") >= 0) {
