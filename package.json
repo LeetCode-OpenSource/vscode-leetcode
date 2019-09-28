@@ -2,7 +2,7 @@
     "name": "vscode-leetcode",
     "displayName": "LeetCode",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.15.4",
+    "version": "0.15.5",
     "author": "Sheng Chen",
     "publisher": "shengchen",
     "license": "MIT",
@@ -683,6 +683,6 @@
         "markdown-it": "^8.4.2",
         "require-from-string": "^2.0.2",
         "unescape-js": "^1.1.1",
-        "vsc-leetcode-cli": "2.6.11"
+        "vsc-leetcode-cli": "2.6.13"
     }
 }
