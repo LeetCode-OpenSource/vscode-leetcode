@@ -2,6 +2,7 @@
 
 A big thanks to the following individuals for contributing:
 
+- [@JIEJIAN21](https://github.com/JIEJIAN21) - thanks for logo and icon design
 - [@TsFreddie](https://github.com/TsFreddie) — [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=TsFreddie)
 - [@ntt2k](https://github.com/ntt2k) — [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=ntt2k)
 - [@purocean](https://github.com/purocean) — [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=purocean)
@@ -17,4 +18,5 @@ A big thanks to the following individuals for contributing:
 - [@houtianze](https://github.com/houtianze) — [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=houtianze)
 - [@magic-akari](https://github.com/magic-akari) - [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=magic-akari)
 - [@SF-Zhou](https://github.com/SF-Zhou) - [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=SF-Zhou)
-- [@JIEJIAN21](https://github.com/JIEJIAN21) - thanks for logo and icon design
+- [@fuafa](https://github.com/fuafa) - [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=fuafa)
+- [@iFun](https://github.com/iFun) - [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=iFun)
