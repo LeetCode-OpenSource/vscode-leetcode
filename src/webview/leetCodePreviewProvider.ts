@@ -98,11 +98,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
             ),
             `</details>`,
         ].join("\n");
-        const links: string = markdownEngine.render([
-            `---`,
-            `- [Discussion](${this.getDiscussionLink(url)})`,
-            `- [Solution](${this.getSolutionLink(url)})`,
-        ].join("\n"));
+        const links: string = markdownEngine.render(`[Discussion](${this.getDiscussionLink(url)}) | [Solution](${this.getSolutionLink(url)})`);
         return `
             <!DOCTYPE html>
             <html>
@@ -120,6 +116,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 ${tags}
                 ${companies}
                 ${body}
+                <hr />
                 ${links}
                 ${!this.sideMode ? button.element : ""}
                 <script>
