@@ -65,7 +65,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
                 }
                 break;
             case ":file":
-                const testFile: vscode.Uri[] | undefined = await showFileSelectDialog();
+                const testFile: vscode.Uri[] | undefined = await showFileSelectDialog(filePath);
                 if (testFile && testFile.length) {
                     const input: string = (await fse.readFile(testFile[0].fsPath, "utf-8")).trim();
                     if (input) {
