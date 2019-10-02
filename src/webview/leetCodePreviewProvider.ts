@@ -2,7 +2,8 @@
 // Licensed under the MIT license.
 
 import { commands, ViewColumn } from "vscode";
-import { IProblem } from "../shared";
+import { getLeetCodeEndpoint } from "../commands/plugin";
+import { Endpoint, IProblem } from "../shared";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
 
@@ -180,9 +181,10 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
     }
 
     private getDiscussionLink(url: string): string {
-        if (url.includes("leetcode-cn.com")) {
+        const endPoint: string = getLeetCodeEndpoint();
+        if (endPoint === Endpoint.LeetCodeCN) {
             return url.replace("/description/", "/comments/");
-        } else if (url.includes("leetcode.com")) {
+        } else if (endPoint === Endpoint.LeetCode) {
             return url.replace("/description/", "/discuss/?currentPage=1&orderBy=most_votes&query=");
         }
 
@@ -190,11 +192,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
     }
 
     private getSolutionLink(url: string): string {
-        if (url.includes("leetcode-cn.com") || url.includes("leetcode.com")) {
-            return url.replace("/description/", "/solution/");
-        }
-
-        return "https://leetcode.com";
+        return url.replace("/description/", "/solution/");
     }
 }
 
