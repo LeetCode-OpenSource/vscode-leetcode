@@ -80,8 +80,8 @@ export async function openKeybindingsEditor(query?: string): Promise<void> {
     await vscode.commands.executeCommand("workbench.action.openGlobalKeybindings", query);
 }
 
-export async function showFileSelectDialog(): Promise<vscode.Uri[] | undefined> {
-    const defaultUri: vscode.Uri | undefined = vscode.workspace.rootPath ? vscode.Uri.file(vscode.workspace.rootPath) : undefined;
+export async function showFileSelectDialog(fsPath?: string): Promise<vscode.Uri[] | undefined> {
+    const defaultUri: vscode.Uri | undefined = getBelongingWorkspaceFolderUri(fsPath);
     const options: vscode.OpenDialogOptions = {
         defaultUri,
         canSelectFiles: true,
@@ -92,8 +92,19 @@ export async function showFileSelectDialog(): Promise<vscode.Uri[] | undefined> 
     return await vscode.window.showOpenDialog(options);
 }
 
-export async function showDirectorySelectDialog(): Promise<vscode.Uri[] | undefined> {
-    const defaultUri: vscode.Uri | undefined = vscode.workspace.rootPath ? vscode.Uri.file(vscode.workspace.rootPath) : undefined;
+function getBelongingWorkspaceFolderUri(fsPath: string | undefined): vscode.Uri | undefined {
+    let defaultUri: vscode.Uri | undefined;
+    if (fsPath) {
+        const workspaceFolder: vscode.WorkspaceFolder | undefined = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(fsPath));
+        if (workspaceFolder) {
+            defaultUri = workspaceFolder.uri;
+        }
+    }
+    return defaultUri;
+}
+
+export async function showDirectorySelectDialog(fsPath?: string): Promise<vscode.Uri[] | undefined> {
+    const defaultUri: vscode.Uri | undefined = getBelongingWorkspaceFolderUri(fsPath);
     const options: vscode.OpenDialogOptions = {
         defaultUri,
         canSelectFiles: false,
