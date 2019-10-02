@@ -2,7 +2,8 @@
 // Licensed under the MIT license.
 
 import { commands, ViewColumn } from "vscode";
-import { IProblem } from "../shared";
+import { getLeetCodeEndpoint } from "../commands/plugin";
+import { Endpoint, IProblem } from "../shared";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
 
@@ -73,9 +74,9 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
         const { title, url, category, difficulty, likes, dislikes, body } = this.description;
         const head: string = markdownEngine.render(`# [${title}](${url})`);
         const info: string = markdownEngine.render([
-            `| Category | Difficulty | Likes | Dislikes | [Discuss](${url.replace("/description/", "/discuss/?currentPage=1&orderBy=most_votes&query=")}) |`,
-            `| :------: | :--------: | :---: | :------: | :-----: |`,
-            `| ${category} | ${difficulty} | ${likes} | ${dislikes} | -- |`,
+            `| Category | Difficulty | Likes | Dislikes |`,
+            `| :------: | :--------: | :---: | :------: |`,
+            `| ${category} | ${difficulty} | ${likes} | ${dislikes} |`,
         ].join("\n"));
         const tags: string = [
             `<details>`,
@@ -97,6 +98,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
             ),
             `</details>`,
         ].join("\n");
+        const links: string = markdownEngine.render(`[Discussion](${this.getDiscussionLink(url)}) | [Solution](${this.getSolutionLink(url)})`);
         return `
             <!DOCTYPE html>
             <html>
@@ -114,6 +116,8 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 ${tags}
                 ${companies}
                 ${body}
+                <hr />
+                ${links}
                 ${!this.sideMode ? button.element : ""}
                 <script>
                     const vscode = acquireVsCodeApi();
@@ -171,6 +175,21 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
             dislikes: dislikes.split(": ")[1].trim(),
             body: body.join("\n").replace(/<pre>[\r\n]*([^]+?)[\r\n]*<\/pre>/g, "<pre><code>$1</code></pre>"),
         };
+    }
+
+    private getDiscussionLink(url: string): string {
+        const endPoint: string = getLeetCodeEndpoint();
+        if (endPoint === Endpoint.LeetCodeCN) {
+            return url.replace("/description/", "/comments/");
+        } else if (endPoint === Endpoint.LeetCode) {
+            return url.replace("/description/", "/discuss/?currentPage=1&orderBy=most_votes&query=");
+        }
+
+        return "https://leetcode.com";
+    }
+
+    private getSolutionLink(url: string): string {
+        return url.replace("/description/", "/solution/");
     }
 }
 
