@@ -20,8 +20,8 @@ class LeetCodeStatusBarController implements Disposable {
         }, this);
     }
 
-    public updateStatusBar(status: UserStatus, user?: string): void {
-        this.statusBar.updateStatusBar(status, user);
+    public updateStatusBar(status: UserStatus, user?: string, session?: string): void {
+        this.statusBar.updateStatusBar(status, user, session);
     }
 
     public dispose(): void {

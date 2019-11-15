@@ -10,15 +10,21 @@ import { UserStatus } from "./shared";
 import { createEnvOption } from "./utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
+import * as session from "./commands/session";
+
 
 class LeetCodeManager extends EventEmitter {
     private currentUser: string | undefined;
+    private activeSession: string | undefined;
     private userStatus: UserStatus;
+    private sessionTrackTimer: NodeJS.Timer | undefined;
 
     constructor() {
         super();
         this.currentUser = undefined;
+        this.activeSession = undefined;
         this.userStatus = UserStatus.SignedOut;
+        this.sessionTrackTimer = undefined;
     }
 
     public async getLoginStatus(): Promise<void> {
@@ -26,6 +32,7 @@ class LeetCodeManager extends EventEmitter {
             const result: string = await leetCodeExecutor.getUserInfo();
             this.currentUser = this.tryParseUserName(result);
             this.userStatus = UserStatus.SignedIn;
+            await this.trackActiveSession();
         } catch (error) {
             this.currentUser = undefined;
             this.userStatus = UserStatus.SignedOut;
@@ -90,6 +97,7 @@ class LeetCodeManager extends EventEmitter {
                 vscode.window.showInformationMessage("Successfully signed in.");
                 this.currentUser = userName;
                 this.userStatus = UserStatus.SignedIn;
+                this.trackActiveSession();
                 this.emit("statusChanged");
             }
         } catch (error) {
@@ -98,12 +106,42 @@ class LeetCodeManager extends EventEmitter {
 
     }
 
+    async trackActiveSession(): Promise<void> {
+        if (this.sessionTrackTimer === undefined) {
+            this.sessionTrackTimer = setInterval(() => {
+                this.updateActiveSession();
+            }, 10 * 1000);
+            setTimeout(() => {
+                this.updateActiveSession();
+            }, 2000);
+        }
+    }
+
+    async untrackActiveSession(): Promise<void> {
+        if (this.sessionTrackTimer) {
+            clearInterval(this.sessionTrackTimer);
+            this.sessionTrackTimer = undefined;
+        }
+    }
+
+
+
+    async updateActiveSession(): Promise<void> {
+        const activeSessionInfo: session.ISession | void = await session.getActiveSession();
+        if (activeSessionInfo !== undefined) {
+            this.activeSession = activeSessionInfo.name;
+            this.emit("sessionChanged");
+        }
+    }
+
     public async signOut(): Promise<void> {
         try {
             await leetCodeExecutor.signOut();
             vscode.window.showInformationMessage("Successfully signed out.");
             this.currentUser = undefined;
             this.userStatus = UserStatus.SignedOut;
+            this.activeSession = undefined;
+            this.untrackActiveSession();
             this.emit("statusChanged");
         } catch (error) {
             // swallow the error when sign out.
@@ -116,6 +154,10 @@ class LeetCodeManager extends EventEmitter {
 
     public getUser(): string | undefined {
         return this.currentUser;
+    }
+
+    public getActiveSession(): string | undefined {
+        return this.activeSession;
     }
 
     private tryParseUserName(output: string): string {
