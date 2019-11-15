@@ -9,9 +9,9 @@ import { leetCodeExecutor } from "./leetCodeExecutor";
 import { UserStatus } from "./shared";
 import { createEnvOption } from "./utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
-import * as wsl from "./utils/wslUtils";
-import * as session from "./commands/session";
 
+import * as session from "./commands/session";
+import * as wsl from "./utils/wslUtils";
 
 class LeetCodeManager extends EventEmitter {
     private currentUser: string | undefined;
@@ -106,34 +106,6 @@ class LeetCodeManager extends EventEmitter {
 
     }
 
-    async trackActiveSession(): Promise<void> {
-        if (this.sessionTrackTimer === undefined) {
-            this.sessionTrackTimer = setInterval(() => {
-                this.updateActiveSession();
-            }, 10 * 1000);
-            setTimeout(() => {
-                this.updateActiveSession();
-            }, 2000);
-        }
-    }
-
-    async untrackActiveSession(): Promise<void> {
-        if (this.sessionTrackTimer) {
-            clearInterval(this.sessionTrackTimer);
-            this.sessionTrackTimer = undefined;
-        }
-    }
-
-
-
-    async updateActiveSession(): Promise<void> {
-        const activeSessionInfo: session.ISession | void = await session.getActiveSession();
-        if (activeSessionInfo !== undefined) {
-            this.activeSession = activeSessionInfo.name;
-            this.emit("sessionChanged");
-        }
-    }
-
     public async signOut(): Promise<void> {
         try {
             await leetCodeExecutor.signOut();
@@ -168,6 +140,32 @@ class LeetCodeManager extends EventEmitter {
         }
 
         return "Unknown";
+    }
+
+    private async trackActiveSession(): Promise<void> {
+        if (this.sessionTrackTimer === undefined) {
+            this.sessionTrackTimer = setInterval(() => {
+                this.updateActiveSession();
+            }, 10 * 1000);
+            setTimeout(() => {
+                this.updateActiveSession();
+            }, 2000);
+        }
+    }
+
+    private async untrackActiveSession(): Promise<void> {
+        if (this.sessionTrackTimer) {
+            clearInterval(this.sessionTrackTimer);
+            this.sessionTrackTimer = undefined;
+        }
+    }
+
+    private async updateActiveSession(): Promise<void> {
+        const activeSessionInfo: session.ISession | void = await session.getActiveSession();
+        if (activeSessionInfo !== undefined) {
+            this.activeSession = activeSessionInfo.name;
+            this.emit("sessionChanged");
+        }
     }
 }
 

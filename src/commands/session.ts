@@ -57,8 +57,8 @@ export async function manageSessions(): Promise<void> {
 export async function getActiveSession(): Promise<ISession | void> {
     try {
         const sessions: ISession[] = await getSessionList();
-        const activeSession: Array<ISession> = sessions.filter((s: ISession) => s.active);
-        return (activeSession.length == 1) ? activeSession[0] : undefined;
+        const activeSession: ISession[] = sessions.filter((s: ISession) => s.active);
+        return (activeSession.length === 1) ? activeSession[0] : undefined;
     } catch (error) {
         return await promptForOpenOutputChannel("Failed to get active session. Please open the output channel for details.", DialogType.error);
     }
