@@ -40,8 +40,9 @@
 
 - Simply click `Sign in to LeetCode` in the `LeetCode Explorer` will let you **sign in** with your LeetCode account.
 
-- You can also use the following command to sign in/out:
+- You can also use the following command to sign in/cookie in/out:
   - **LeetCode: Sign in**
+  - **LeetCode: Cookie in**
   - **LeetCode: Sign out**
 
 ---

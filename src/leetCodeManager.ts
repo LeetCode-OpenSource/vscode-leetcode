@@ -34,7 +34,11 @@ class LeetCodeManager extends EventEmitter {
         }
     }
 
-    public async signIn(): Promise<void> {
+    public async signIn(isCookieIn = false): Promise<void> {
+        const loginArg = "-l";
+        const cookieInArg = "-c";
+        const commandArg = isCookieIn ? cookieInArg : loginArg;
+        const inMessage = isCookieIn ? "cookie in" : "sign in"
         try {
             const userName: string | undefined = await new Promise(async (resolve: (res: string | undefined) => void, reject: (e: Error) => void): Promise<void> => {
                 let result: string = "";
@@ -42,8 +46,8 @@ class LeetCodeManager extends EventEmitter {
                 const leetCodeBinaryPath: string = await leetCodeExecutor.getLeetCodeBinaryPath();
 
                 const childProc: cp.ChildProcess = wsl.useWsl()
-                    ? cp.spawn("wsl", [leetCodeExecutor.node, leetCodeBinaryPath, "user", "-l"], { shell: true })
-                    : cp.spawn(leetCodeExecutor.node, [leetCodeBinaryPath, "user", "-l"], {
+                    ? cp.spawn("wsl", [leetCodeExecutor.node, leetCodeBinaryPath, "user", commandArg], { shell: true })
+                    : cp.spawn(leetCodeExecutor.node, [leetCodeBinaryPath, "user", commandArg], {
                         shell: true,
                         env: createEnvOption(),
                     });
@@ -67,9 +71,9 @@ class LeetCodeManager extends EventEmitter {
                 }
                 childProc.stdin.write(`${name}\n`);
                 const pwd: string | undefined = await vscode.window.showInputBox({
-                    prompt: "Enter password.",
+                    prompt: isCookieIn ? "Enter cookie" : "Enter password.",
                     password: true,
-                    validateInput: (s: string): string | undefined => s ? undefined : "Password must not be empty",
+                    validateInput: (s: string): string | undefined => s ? undefined : isCookieIn ? "Cookie must not be empty" : "Password must not be empty",
                 });
                 if (!pwd) {
                     childProc.kill();
@@ -78,22 +82,22 @@ class LeetCodeManager extends EventEmitter {
                 childProc.stdin.write(`${pwd}\n`);
                 childProc.stdin.end();
                 childProc.on("close", () => {
-                    const match: RegExpMatchArray | null = result.match(/(?:.*) Successfully login as (.*)/i);
-                    if (match && match[1]) {
-                        resolve(match[1]);
+                    const match: RegExpMatchArray | null = result.match(/(?:.*) Successfully (login|cookie login) as (.*)/i);
+                    if (match && match[2]) {
+                        resolve(match[2]);
                     } else {
-                        reject(new Error("Failed to sign in."));
+                        reject(new Error(`Failed to ${inMessage}.`));
                     }
                 });
             });
             if (userName) {
-                vscode.window.showInformationMessage("Successfully signed in.");
+                vscode.window.showInformationMessage(`Successfully ${inMessage}.`);
                 this.currentUser = userName;
                 this.userStatus = UserStatus.SignedIn;
                 this.emit("statusChanged");
             }
         } catch (error) {
-            promptForOpenOutputChannel("Failed to sign in. Please open the output channel for details", DialogType.error);
+            promptForOpenOutputChannel(`Failed to ${inMessage}. Please open the output channel for details`, DialogType.error);
         }
 
     }
