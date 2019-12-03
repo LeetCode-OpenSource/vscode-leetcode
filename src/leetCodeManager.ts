@@ -38,7 +38,7 @@ class LeetCodeManager extends EventEmitter {
         const loginArg: string = "-l";
         const cookieInArg: string = "-c";
         const commandArg: string = isCookieIn ? cookieInArg : loginArg;
-        const inMessage: string = isCookieIn ? "cookie in" : "sign in"
+        const inMessage: string = isCookieIn ? "cookie in" : "sign in";
         try {
             const userName: string | undefined = await new Promise(async (resolve: (res: string | undefined) => void, reject: (e: Error) => void): Promise<void> => {
                 let result: string = "";
