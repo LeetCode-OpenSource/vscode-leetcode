@@ -42,7 +42,7 @@
 
 - You can also use the following command to sign in/cookie in/out:
   - **LeetCode: Sign in**
-  - **LeetCode: Cookie in**
+  - **LeetCode: Sign in (by cookie)**
   - **LeetCode: Sign out**
 
 ---

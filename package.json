@@ -38,15 +38,15 @@
         "onCommand:leetcode.testSolution",
         "onCommand:leetcode.submitSolution",
         "onCommand:leetcode.switchDefaultLanguage",
-        "onCommand:leetcode.cookieIn",
+        "onCommand:leetcode.signinByCookie",
         "onView:leetCodeExplorer"
     ],
     "main": "./out/src/extension",
     "contributes": {
         "commands": [
             {
-                "command": "leetcode.cookieIn",
-                "title": "Cookie In",
+                "command": "leetcode.signinByCookie",
+                "title": "Sign In By Cookie",
                 "category": "LeetCode"
             },
             {

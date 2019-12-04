@@ -34,11 +34,11 @@ class LeetCodeManager extends EventEmitter {
         }
     }
 
-    public async signIn(isCookieIn: boolean = false): Promise<void> {
+    public async signIn(isByCookie: boolean = false): Promise<void> {
         const loginArg: string = "-l";
-        const cookieInArg: string = "-c";
-        const commandArg: string = isCookieIn ? cookieInArg : loginArg;
-        const inMessage: string = isCookieIn ? "cookie in" : "sign in";
+        const cookieArg: string = "-c";
+        const commandArg: string = isByCookie ? cookieArg : loginArg;
+        const inMessage: string = isByCookie ? "sign in by cookie" : "sign in";
         try {
             const userName: string | undefined = await new Promise(async (resolve: (res: string | undefined) => void, reject: (e: Error) => void): Promise<void> => {
                 let result: string = "";
@@ -71,9 +71,9 @@ class LeetCodeManager extends EventEmitter {
                 }
                 childProc.stdin.write(`${name}\n`);
                 const pwd: string | undefined = await vscode.window.showInputBox({
-                    prompt: isCookieIn ? "Enter cookie" : "Enter password.",
+                    prompt: isByCookie ? "Enter cookie" : "Enter password.",
                     password: true,
-                    validateInput: (s: string): string | undefined => s ? undefined : isCookieIn ? "Cookie must not be empty" : "Password must not be empty",
+                    validateInput: (s: string): string | undefined => s ? undefined : isByCookie ? "Cookie must not be empty" : "Password must not be empty",
                 });
                 if (!pwd) {
                     childProc.kill();
