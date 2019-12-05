@@ -46,7 +46,7 @@
         "commands": [
             {
                 "command": "leetcode.signinByCookie",
-                "title": "Sign In By Cookie",
+                "title": "Sign In by Cookie",
                 "category": "LeetCode"
             },
             {
