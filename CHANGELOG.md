@@ -5,7 +5,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.15.8]
 ### Added
-- Add a new command `Sign In by Cookie` to workaround the issue that [users cannot login to LeetCode](https://github.com/jdneo/vscode-leetcode/issues/478). Please check the [workaround steps]() for more details!
+- Add a new command `Sign In by Cookie` to workaround the issue that [users cannot login to LeetCode](https://github.com/jdneo/vscode-leetcode/issues/478). Please check the [workaround steps](https://github.com/jdneo/vscode-leetcode/tree/master#%EF%B8%8F-attention-%EF%B8%8F--workaround-to-login-to-leetcode-endpoint) for more details!
 
 ### Changed
 - Update the explorer icons to be align with the VS Code design [#460](https://github.com/jdneo/vscode-leetcode/issues/460)
