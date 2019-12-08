@@ -689,6 +689,6 @@
         "markdown-it": "^8.4.2",
         "require-from-string": "^2.0.2",
         "unescape-js": "^1.1.1",
-        "vsc-leetcode-cli": "2.6.18"
+        "vsc-leetcode-cli": "2.6.19"
     }
 }
