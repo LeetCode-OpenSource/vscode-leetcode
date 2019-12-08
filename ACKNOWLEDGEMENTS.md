@@ -20,3 +20,5 @@ A big thanks to the following individuals for contributing:
 - [@SF-Zhou](https://github.com/SF-Zhou) - [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=SF-Zhou)
 - [@fuafa](https://github.com/fuafa) - [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=fuafa)
 - [@iFun](https://github.com/iFun) - [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=iFun)
+- [@hologerry](https://github.com/hologerry) - [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=hologerry)
+- [@yihong0618](https://github.com/yihong0618) - [contributions](https://github.com/jdneo/vscode-leetcode/commits?author=yihong0618)

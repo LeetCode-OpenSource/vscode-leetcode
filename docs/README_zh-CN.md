@@ -22,6 +22,17 @@
 
 - [English Document](https://github.com/jdneo/vscode-leetcode#requirements) | 中文文档
 
+## ❗️ 注意 ❗️- 无法登录 LeetCode 节点的临时解决办法
+> 注意：如果使用的是 `leetcode-cn.com` 账户，可以跳过此段落。
+
+近期我们发现插件出现了[无法登录 leetcode.com 节点的问题](https://github.com/jdneo/vscode-leetcode/issues/478)。原因是因为近期 leetcode.com 改变了登录机制，目前我们暂时没有找到解决该问题的完美解决方案。
+
+感谢 [@yihong0618](https://github.com/yihong0618) 提供了一个通过 cookie 登录的临时解决办法。你可以参考如下步骤实现通过 cookie 登录 `leetcode.com`：
+1. 登出账户
+2. 确保当前激活的节点为 `leetcode.com` （而非 leetcode-cn.com）
+3. 按照这里的方法，[从浏览器中拷贝 cookie](https://github.com/jdneo/vscode-leetcode/issues/478#issuecomment-560395305)
+4. 使用命令 `Sign In by Cookie` 登录。
+
 ## 运行条件
 - [VS Code 1.23.0+](https://code.visualstudio.com/)
 - [Node.js 8+](https://nodejs.org)
