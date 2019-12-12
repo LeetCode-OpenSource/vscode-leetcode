@@ -31,8 +31,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         }
 
         leetCodeManager.on("statusChanged", () => {
-            leetCodeStatusBarController.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser());
+            leetCodeStatusBarController.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser(), leetCodeManager.getActiveSession());
             leetCodeTreeDataProvider.refresh();
+        });
+
+        leetCodeManager.on("sessionChanged", () => {
+            leetCodeStatusBarController.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser(), leetCodeManager.getActiveSession());
         });
 
         leetCodeTreeDataProvider.initialize(context);

@@ -54,6 +54,17 @@ export async function manageSessions(): Promise<void> {
     }
 }
 
+export async function getActiveSession(): Promise<ISession | void> {
+    try {
+        const sessions: ISession[] = await getSessionList();
+        const activeSession: ISession[] = sessions.filter((s: ISession) => s.active);
+        return (activeSession.length === 1) ? activeSession[0] : undefined;
+    } catch (error) {
+        return await promptForOpenOutputChannel("Failed to get active session. Please open the output channel for details.", DialogType.error);
+    }
+
+}
+
 async function parseSessionsToPicks(includeOperations: boolean = false): Promise<Array<IQuickItemEx<ISession | string>>> {
     return new Promise(async (resolve: (res: Array<IQuickItemEx<ISession | string>>) => void): Promise<void> => {
         try {
