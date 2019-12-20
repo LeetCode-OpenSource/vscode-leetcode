@@ -12,7 +12,7 @@ export enum UserStatus {
     SignedOut = 2,
 }
 
-export const LoginCommand: Map<string, string> = new Map([
+export const loginCommand: Map<string, string> = new Map([
     ["Default", "-l"],
     ["GitHub", "-g"],
     ["LinkedIn", "-i"],

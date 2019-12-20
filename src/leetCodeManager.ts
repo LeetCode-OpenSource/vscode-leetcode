@@ -6,7 +6,7 @@ import { EventEmitter } from "events";
 import * as vscode from "vscode";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
-import { UserStatus, LoginCommand } from "./shared";
+import { loginCommand, UserStatus } from "./shared";
 import { createEnvOption } from "./utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
@@ -35,7 +35,7 @@ class LeetCodeManager extends EventEmitter {
     }
 
     public async signIn(isByCookie: boolean = false, thirdParty: string = "Default"): Promise<void> {
-        const loginArg: string | undefined = LoginCommand.get(thirdParty);
+        const loginArg: string | undefined = loginCommand.get(thirdParty);
         if (!loginArg) {
             throw new Error(`The third party "${thirdParty}" is not supported.`);
         }
