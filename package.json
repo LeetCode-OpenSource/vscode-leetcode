@@ -39,16 +39,13 @@
         "onCommand:leetcode.submitSolution",
         "onCommand:leetcode.switchDefaultLanguage",
         "onCommand:leetcode.signinByCookie",
+        "onCommand:leetcode.signinByGitHub",
+        "onCommand:leetcode.signinByLinkedIn",
         "onView:leetCodeExplorer"
     ],
     "main": "./out/src/extension",
     "contributes": {
         "commands": [
-            {
-                "command": "leetcode.signinByCookie",
-                "title": "Sign In by Cookie",
-                "category": "LeetCode"
-            },
             {
                 "command": "leetcode.deleteCache",
                 "title": "Delete Cache",
@@ -71,6 +68,21 @@
                     "light": "resources/light/signin.svg",
                     "dark": "resources/dark/signin.svg"
                 }
+            },
+            {
+                "command": "leetcode.signinByCookie",
+                "title": "Sign In by Cookie",
+                "category": "LeetCode"
+            },
+            {
+                "command": "leetcode.signinByGitHub",
+                "title": "Sign In by GitHub",
+                "category": "LeetCode"
+            },
+            {
+                "command": "leetcode.signinByLinkedIn",
+                "title": "Sign In by LinkedIn",
+                "category": "LeetCode"
             },
             {
                 "command": "leetcode.signout",

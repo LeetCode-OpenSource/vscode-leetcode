@@ -56,6 +56,9 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
   - **LeetCode: Sign in (by cookie)**
   - **LeetCode: Sign out**
 
+- You can also use the following command to sign in by third party:
+  - **LeetCode: Sign in by GitHub**
+  - **LeetCode: Sign in by LinkedIn**
 ---
 
 ### Switch Endpoint

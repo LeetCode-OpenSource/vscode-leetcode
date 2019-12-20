@@ -52,6 +52,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             vscode.commands.registerCommand("leetcode.toggleLeetCodeCn", () => plugin.switchEndpoint()),
             vscode.commands.registerCommand("leetcode.signin", () => leetCodeManager.signIn()),
             vscode.commands.registerCommand("leetcode.signinByCookie", () => leetCodeManager.signIn(true)),
+            vscode.commands.registerCommand("leetcode.signinByGitHub", () => leetCodeManager.signIn(false, "GitHub")),
+            vscode.commands.registerCommand("leetcode.signinByLinkedIn", () => leetCodeManager.signIn(false, "LinkedIn")),
             vscode.commands.registerCommand("leetcode.signout", () => leetCodeManager.signOut()),
             vscode.commands.registerCommand("leetcode.manageSessions", () => session.manageSessions()),
             vscode.commands.registerCommand("leetcode.previewProblem", (node: LeetCodeNode) => show.previewProblem(node)),

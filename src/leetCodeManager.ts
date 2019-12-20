@@ -6,7 +6,7 @@ import { EventEmitter } from "events";
 import * as vscode from "vscode";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
-import { UserStatus } from "./shared";
+import { UserStatus, LoginCommand } from "./shared";
 import { createEnvOption } from "./utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
@@ -34,8 +34,11 @@ class LeetCodeManager extends EventEmitter {
         }
     }
 
-    public async signIn(isByCookie: boolean = false): Promise<void> {
-        const loginArg: string = "-l";
+    public async signIn(isByCookie: boolean = false, thirdParty: string = "Default"): Promise<void> {
+        const loginArg: string | undefined = LoginCommand.get(thirdParty);
+        if (!loginArg) {
+            throw new Error(`The third party "${thirdParty}" is not supported.`);
+        }
         const cookieArg: string = "-c";
         const commandArg: string = isByCookie ? cookieArg : loginArg;
         const inMessage: string = isByCookie ? "sign in by cookie" : "sign in";
@@ -82,7 +85,7 @@ class LeetCodeManager extends EventEmitter {
                 childProc.stdin.write(`${pwd}\n`);
                 childProc.stdin.end();
                 childProc.on("close", () => {
-                    const match: RegExpMatchArray | null = result.match(/(?:.*) Successfully (login|cookie login) as (.*)/i);
+                    const match: RegExpMatchArray | null = result.match(/(?:.*) Successfully (login|cookie login|third party login) as (.*)/i);
                     if (match && match[2]) {
                         resolve(match[2]);
                     } else {
