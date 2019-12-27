@@ -35,12 +35,6 @@ class LeetCodeManager extends EventEmitter {
     }
 
     public async signIn(): Promise<void> {
-        /*
-            LeetCode Account
-            LeetCode Cookie
-            Third-Party: GitHub
-            Third-Party: LinkedIn
-        */
         const picks: Array<IQuickItemEx<string>> = [];
         picks.push(
             {
