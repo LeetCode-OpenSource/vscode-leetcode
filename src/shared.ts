@@ -13,7 +13,8 @@ export enum UserStatus {
 }
 
 export const loginCommand: Map<string, string> = new Map([
-    ["Default", "-l"],
+    ["LeetCode", "-l"],
+    ["Cookie", "-c"],
     ["GitHub", "-g"],
     ["LinkedIn", "-i"],
 ]);

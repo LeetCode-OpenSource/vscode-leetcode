@@ -6,7 +6,7 @@ import { EventEmitter } from "events";
 import * as vscode from "vscode";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
-import { loginCommand, UserStatus } from "./shared";
+import { IQuickItemEx, loginCommand, UserStatus } from "./shared";
 import { createEnvOption } from "./utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
@@ -34,13 +34,50 @@ class LeetCodeManager extends EventEmitter {
         }
     }
 
-    public async signIn(isByCookie: boolean = false, thirdParty: string = "Default"): Promise<void> {
-        const loginArg: string | undefined = loginCommand.get(thirdParty);
-        if (!loginArg) {
-            throw new Error(`The third party "${thirdParty}" is not supported.`);
+    public async signIn(): Promise<void> {
+        /*
+            LeetCode Account
+            LeetCode Cookie
+            Third-Party: GitHub
+            Third-Party: LinkedIn
+        */
+        const picks: Array<IQuickItemEx<string>> = [];
+        picks.push(
+            {
+                label: "LeetCode Account",
+                description: "",
+                detail: "Use LeetCode account to login",
+                value: "LeetCode",
+            },
+            {
+                label: "LeetCode Cookie",
+                description: "",
+                detail: "Use LeetCode cookie that copy from browser to login",
+                value: "Cookie",
+            },
+            {
+                label: "Third-Party: GitHub",
+                description: "",
+                detail: "Use third party GitHub account to login",
+                value: "GitHub",
+            },
+            {
+                label: "Third-Party: LinkedIn",
+                description: "",
+                detail: "Use third party LinkedIn account to login",
+                value: "LinkedIn",
+            },
+        );
+        const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(picks);
+        if (!choice) {
+            return;
         }
-        const cookieArg: string = "-c";
-        const commandArg: string = isByCookie ? cookieArg : loginArg;
+        const loginMethod: string = choice.value;
+        const commandArg: string | undefined = loginCommand.get(loginMethod);
+        if (!commandArg) {
+            throw new Error(`The login method "${loginMethod}" is not supported.`);
+        }
+        const isByCookie: boolean = loginMethod === "Cookie";
         const inMessage: string = isByCookie ? "sign in by cookie" : "sign in";
         try {
             const userName: string | undefined = await new Promise(async (resolve: (res: string | undefined) => void, reject: (e: Error) => void): Promise<void> => {

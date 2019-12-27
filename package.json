@@ -38,9 +38,6 @@
         "onCommand:leetcode.testSolution",
         "onCommand:leetcode.submitSolution",
         "onCommand:leetcode.switchDefaultLanguage",
-        "onCommand:leetcode.signinByCookie",
-        "onCommand:leetcode.signinByGitHub",
-        "onCommand:leetcode.signinByLinkedIn",
         "onView:leetCodeExplorer"
     ],
     "main": "./out/src/extension",
@@ -68,21 +65,6 @@
                     "light": "resources/light/signin.svg",
                     "dark": "resources/dark/signin.svg"
                 }
-            },
-            {
-                "command": "leetcode.signinByCookie",
-                "title": "Sign In by Cookie",
-                "category": "LeetCode"
-            },
-            {
-                "command": "leetcode.signinByGitHub",
-                "title": "Sign In by GitHub",
-                "category": "LeetCode"
-            },
-            {
-                "command": "leetcode.signinByLinkedIn",
-                "title": "Sign In by LinkedIn",
-                "category": "LeetCode"
             },
             {
                 "command": "leetcode.signout",
@@ -701,6 +683,6 @@
         "markdown-it": "^8.4.2",
         "require-from-string": "^2.0.2",
         "unescape-js": "^1.1.1",
-        "vsc-leetcode-cli": "2.6.19"
+        "vsc-leetcode-cli": "2.6.20"
     }
 }
