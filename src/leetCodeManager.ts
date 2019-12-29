@@ -6,7 +6,7 @@ import { EventEmitter } from "events";
 import * as vscode from "vscode";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
-import { IQuickItemEx, loginCommand, UserStatus } from "./shared";
+import { IQuickItemEx, loginArgsMapping, UserStatus } from "./shared";
 import { createEnvOption } from "./utils/cpUtils";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
@@ -39,26 +39,22 @@ class LeetCodeManager extends EventEmitter {
         picks.push(
             {
                 label: "LeetCode Account",
-                description: "",
                 detail: "Use LeetCode account to login",
                 value: "LeetCode",
             },
             {
                 label: "LeetCode Cookie",
-                description: "",
-                detail: "Use LeetCode cookie that copy from browser to login",
+                detail: "Use LeetCode cookie copied from browser to login",
                 value: "Cookie",
             },
             {
                 label: "Third-Party: GitHub",
-                description: "",
-                detail: "Use third party GitHub account to login",
+                detail: "Use GitHub account to login",
                 value: "GitHub",
             },
             {
                 label: "Third-Party: LinkedIn",
-                description: "",
-                detail: "Use third party LinkedIn account to login",
+                detail: "Use LinkedIn account to login",
                 value: "LinkedIn",
             },
         );
@@ -67,7 +63,7 @@ class LeetCodeManager extends EventEmitter {
             return;
         }
         const loginMethod: string = choice.value;
-        const commandArg: string | undefined = loginCommand.get(loginMethod);
+        const commandArg: string | undefined = loginArgsMapping.get(loginMethod);
         if (!commandArg) {
             throw new Error(`The login method "${loginMethod}" is not supported.`);
         }
