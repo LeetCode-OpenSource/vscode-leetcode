@@ -71,7 +71,6 @@ class LeetCodeManager extends EventEmitter {
         const inMessage: string = isByCookie ? "sign in by cookie" : "sign in";
         try {
             const userName: string | undefined = await new Promise(async (resolve: (res: string | undefined) => void, reject: (e: Error) => void): Promise<void> => {
-                let result: string = "";
 
                 const leetCodeBinaryPath: string = await leetCodeExecutor.getLeetCodeBinaryPath();
 
@@ -82,10 +81,27 @@ class LeetCodeManager extends EventEmitter {
                         env: createEnvOption(),
                     });
 
-                childProc.stdout.on("data", (data: string | Buffer) => {
+                childProc.stdout.on("data", async (data: string | Buffer) => {
                     data = data.toString();
-                    result = result.concat(data);
                     leetCodeChannel.append(data);
+                    if (data.includes("twoFactorCode")) {
+                        const twoFactor: string | undefined = await vscode.window.showInputBox({
+                            prompt: "Enter two-factor code.",
+                            validateInput: (s: string): string | undefined => s && s.trim() ? undefined : "The input must not be empty",
+                        });
+                        if (!twoFactor) {
+                            childProc.kill();
+                            return resolve(undefined);
+                        }
+                        childProc.stdin.write(`${twoFactor}\n`);
+                        childProc.stdin.end();
+                    } else {
+                        const match: RegExpMatchArray | null = data.match(/(?:.*)Successfully .*login as (.*)/i);
+                        if (match && match[1]) {
+                            childProc.stdin.end();
+                            return resolve(match[1]);
+                        }
+                    }
                 });
 
                 childProc.stderr.on("data", (data: string | Buffer) => leetCodeChannel.append(data.toString()));
@@ -110,13 +126,9 @@ class LeetCodeManager extends EventEmitter {
                     return resolve(undefined);
                 }
                 childProc.stdin.write(`${pwd}\n`);
-                childProc.stdin.end();
-                childProc.on("close", () => {
-                    const match: RegExpMatchArray | null = result.match(/(?:.*) Successfully (login|cookie login|third party login) as (.*)/i);
-                    if (match && match[2]) {
-                        resolve(match[2]);
-                    } else {
-                        reject(new Error(`Failed to ${inMessage}.`));
+                childProc.on("close", (code: number) => {
+                    if (code !== 0) {
+                        reject(new Error("Failed to login."));
                     }
                 });
             });
