@@ -38,17 +38,11 @@
         "onCommand:leetcode.testSolution",
         "onCommand:leetcode.submitSolution",
         "onCommand:leetcode.switchDefaultLanguage",
-        "onCommand:leetcode.signinByCookie",
         "onView:leetCodeExplorer"
     ],
     "main": "./out/src/extension",
     "contributes": {
         "commands": [
-            {
-                "command": "leetcode.signinByCookie",
-                "title": "Sign In by Cookie",
-                "category": "LeetCode"
-            },
             {
                 "command": "leetcode.deleteCache",
                 "title": "Delete Cache",
@@ -689,6 +683,6 @@
         "markdown-it": "^8.4.2",
         "require-from-string": "^2.0.2",
         "unescape-js": "^1.1.1",
-        "vsc-leetcode-cli": "2.6.19"
+        "vsc-leetcode-cli": "2.6.20"
     }
 }

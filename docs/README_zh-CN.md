@@ -53,9 +53,7 @@
 
 - 你也可以使用下来命令登入或利用cookie登入或登出:
   - **LeetCode: Sign in**
-  - **LeetCode: Sign in (by cookie)**
   - **LeetCode: Sign out**
-
 ---
 
 ### 切换 LeetCode 版本
