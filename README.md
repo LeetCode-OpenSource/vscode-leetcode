@@ -27,11 +27,9 @@
 
 Recently we observed that [the extension cannot login to leetcode.com endpoint anymore](https://github.com/jdneo/vscode-leetcode/issues/478). The root cause of this issue is that leetcode.com changed its login mechanism and so far there is no ideal way to fix that issue.
 
-Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround which can somehow mitigate this by using the cookie to login. Here are the steps about what you should do if you want to login to `leetcode.com` endpoint using cookie:
-1. Logout from the extension
-2. Make sure current active endpoint is `leetcode.com` (Not leetcode-cn.com)
-3. Copy the cookie as mentioned [here](https://github.com/jdneo/vscode-leetcode/issues/478#issuecomment-560395305)
-4. Trigger the command `Sign In by Cookie` to login through the copied cookie.
+Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround which can somehow mitigate this. Now you can simply click the `Sign In` button and then select `Third Party` login or `Cookie` login.
+
+> Note: If you want to use third-party login(**Recommended**), please make sure your account has been connected to the thrid-party. If you want to use `Cookie` login, click [here](https://github.com/jdneo/vscode-leetcode/issues/478#issuecomment-564757098) to see the steps.
 
 ## Requirements
 - [VS Code 1.30.1+](https://code.visualstudio.com/)
