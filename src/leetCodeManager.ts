@@ -14,6 +14,8 @@ import * as wsl from "./utils/wslUtils";
 class LeetCodeManager extends EventEmitter {
     private currentUser: string | undefined;
     private userStatus: UserStatus;
+    private readonly successRegex: RegExp = /(?:.*)Successfully .*login as (.*)/i;
+    private readonly failRegex: RegExp = /.*\[ERROR\].*/i;
 
     constructor() {
         super();
@@ -43,11 +45,6 @@ class LeetCodeManager extends EventEmitter {
                 value: "LeetCode",
             },
             {
-                label: "LeetCode Cookie",
-                detail: "Use LeetCode cookie copied from browser to login",
-                value: "Cookie",
-            },
-            {
                 label: "Third-Party: GitHub",
                 detail: "Use GitHub account to login",
                 value: "GitHub",
@@ -56,6 +53,11 @@ class LeetCodeManager extends EventEmitter {
                 label: "Third-Party: LinkedIn",
                 detail: "Use LinkedIn account to login",
                 value: "LinkedIn",
+            },
+            {
+                label: "LeetCode Cookie",
+                detail: "Use LeetCode cookie copied from browser to login",
+                value: "Cookie",
             },
         );
         const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(picks);
@@ -87,6 +89,7 @@ class LeetCodeManager extends EventEmitter {
                     if (data.includes("twoFactorCode")) {
                         const twoFactor: string | undefined = await vscode.window.showInputBox({
                             prompt: "Enter two-factor code.",
+                            ignoreFocusOut: true,
                             validateInput: (s: string): string | undefined => s && s.trim() ? undefined : "The input must not be empty",
                         });
                         if (!twoFactor) {
@@ -94,13 +97,14 @@ class LeetCodeManager extends EventEmitter {
                             return resolve(undefined);
                         }
                         childProc.stdin.write(`${twoFactor}\n`);
+                    }
+                    const successMatch: RegExpMatchArray | null = data.match(this.successRegex);
+                    if (successMatch && successMatch[1]) {
                         childProc.stdin.end();
-                    } else {
-                        const match: RegExpMatchArray | null = data.match(/(?:.*)Successfully .*login as (.*)/i);
-                        if (match && match[1]) {
-                            childProc.stdin.end();
-                            return resolve(match[1]);
-                        }
+                        return resolve(successMatch[1]);
+                    } else if (data.match(this.failRegex)) {
+                        childProc.stdin.end();
+                        return reject(new Error("Faile to login"));
                     }
                 });
 
@@ -109,6 +113,7 @@ class LeetCodeManager extends EventEmitter {
                 childProc.on("error", reject);
                 const name: string | undefined = await vscode.window.showInputBox({
                     prompt: "Enter username or E-mail.",
+                    ignoreFocusOut: true,
                     validateInput: (s: string): string | undefined => s && s.trim() ? undefined : "The input must not be empty",
                 });
                 if (!name) {
@@ -119,6 +124,7 @@ class LeetCodeManager extends EventEmitter {
                 const pwd: string | undefined = await vscode.window.showInputBox({
                     prompt: isByCookie ? "Enter cookie" : "Enter password.",
                     password: true,
+                    ignoreFocusOut: true,
                     validateInput: (s: string): string | undefined => s ? undefined : isByCookie ? "Cookie must not be empty" : "Password must not be empty",
                 });
                 if (!pwd) {
@@ -126,11 +132,6 @@ class LeetCodeManager extends EventEmitter {
                     return resolve(undefined);
                 }
                 childProc.stdin.write(`${pwd}\n`);
-                childProc.on("close", (code: number) => {
-                    if (code !== 0) {
-                        reject(new Error("Failed to login."));
-                    }
-                });
             });
             if (userName) {
                 vscode.window.showInformationMessage(`Successfully ${inMessage}.`);
