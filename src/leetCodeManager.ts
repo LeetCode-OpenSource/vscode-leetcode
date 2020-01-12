@@ -45,11 +45,6 @@ class LeetCodeManager extends EventEmitter {
                 value: "LeetCode",
             },
             {
-                label: "LeetCode Cookie",
-                detail: "Use LeetCode cookie copied from browser to login",
-                value: "Cookie",
-            },
-            {
                 label: "Third-Party: GitHub",
                 detail: "Use GitHub account to login",
                 value: "GitHub",
@@ -58,6 +53,11 @@ class LeetCodeManager extends EventEmitter {
                 label: "Third-Party: LinkedIn",
                 detail: "Use LinkedIn account to login",
                 value: "LinkedIn",
+            },
+            {
+                label: "LeetCode Cookie",
+                detail: "Use LeetCode cookie copied from browser to login",
+                value: "Cookie",
             },
         );
         const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(picks);
