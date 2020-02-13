@@ -41,7 +41,7 @@ class LeetCodeManager extends EventEmitter {
         picks.push(
             {
                 label: "LeetCode Account",
-                detail: "Use LeetCode account to login",
+                detail: "Use LeetCode account to login (US endpoint is not supported)",
                 value: "LeetCode",
             },
             {
