@@ -29,9 +29,9 @@ class LeetCodeExecutor implements Disposable {
 
     public async getLeetCodeBinaryPath(): Promise<string> {
         if (wsl.useWsl()) {
-            return `${yield wsl.toWslPath(`"${path.join(yield`"${this.leetCodeRootPath}"`, "bin", "leetcode")}"`)}`;
+            return `${await wsl.toWslPath(`"${path.join(this.leetCodeRootPath, "bin", "leetcode")}"`)}`;
         }
-        return `"${path.join(yield`"${this.leetCodeRootPath}"`, "bin", "leetcode")}"`;
+        return `"${path.join(this.leetCodeRootPath, "bin", "leetcode")}"`;
     }
 
     public async meetRequirements(): Promise<boolean> {
@@ -159,7 +159,7 @@ class LeetCodeExecutor implements Disposable {
 
     public async getCompaniesAndTags(): Promise<{ companies: { [key: string]: string[] }, tags: { [key: string]: string[] } }> {
         // preprocess the plugin source
-        const companiesTagsPath: string = path.join(await this.leetCodeRootPath, "lib", "plugins", "company.js");
+        const companiesTagsPath: string = path.join(this.leetCodeRootPath, "lib", "plugins", "company.js");
         const companiesTagsSrc: string = (await fse.readFile(companiesTagsPath, "utf8")).replace(
             "module.exports = plugin",
             "module.exports = { COMPONIES, TAGS }",
