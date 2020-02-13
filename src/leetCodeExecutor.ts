@@ -14,13 +14,11 @@ import { toWslPath, useWsl } from "./utils/wslUtils";
 
 class LeetCodeExecutor implements Disposable {
     private leetCodeRootPath: string;
-    private leetCodeRootPathInWsl: string;
     private nodeExecutable: string;
     private configurationChangeListener: Disposable;
 
     constructor() {
         this.leetCodeRootPath = path.join(__dirname, "..", "..", "node_modules", "vsc-leetcode-cli");
-        this.leetCodeRootPathInWsl = "";
         this.nodeExecutable = this.getNodePath();
         this.configurationChangeListener = workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
             if (event.affectsConfiguration("leetcode.nodePath")) {
@@ -29,18 +27,13 @@ class LeetCodeExecutor implements Disposable {
         }, this);
     }
 
-    public async getLeetCodeRootPath(): Promise<string> { // not wrapped by ""
-        if (wsl.useWsl()) {
-            if (!this.leetCodeRootPathInWsl) {
-                this.leetCodeRootPathInWsl = `${await wsl.toWslPath(this.leetCodeRootPath)}`;
+    getLeetCodeBinaryPath() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (wsl.useWsl()) {
+                return `${yield wsl.toWslPath(`"${path.join(yield `"${this.leetCodeRootPath}"`, "bin", "leetcode")}"`)}`;
             }
-            return `${this.leetCodeRootPathInWsl}`;
-        }
-        return `${this.leetCodeRootPath}`;
-    }
-
-    public async getLeetCodeBinaryPath(): Promise<string> { // wrapped by ""
-        return `"${path.join(await this.getLeetCodeRootPath(), "bin", "leetcode")}"`;
+            return `"${path.join(yield `"${this.leetCodeRootPath}"`, "bin", "leetcode")}"`;
+        });
     }
 
     public async meetRequirements(): Promise<boolean> {
@@ -168,7 +161,7 @@ class LeetCodeExecutor implements Disposable {
 
     public async getCompaniesAndTags(): Promise<{ companies: { [key: string]: string[] }, tags: { [key: string]: string[] } }> {
         // preprocess the plugin source
-        const companiesTagsPath: string = path.join(await leetCodeExecutor.getLeetCodeRootPath(), "lib", "plugins", "company.js");
+        const companiesTagsPath: string = path.join(await this.leetCodeRootPath, "lib", "plugins", "company.js");
         const companiesTagsSrc: string = (await fse.readFile(companiesTagsPath, "utf8")).replace(
             "module.exports = plugin",
             "module.exports = { COMPONIES, TAGS }",
