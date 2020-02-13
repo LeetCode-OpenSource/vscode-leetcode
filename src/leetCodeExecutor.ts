@@ -27,7 +27,7 @@ class LeetCodeExecutor implements Disposable {
         }, this);
     }
 
-    public async getLeetCodeBinaryPath() {
+    public async getLeetCodeBinaryPath(): Promise<string> {
         return __awaiter(this, void 0, void 0, function* () {
             if (wsl.useWsl()) {
                 return `${yield wsl.toWslPath(`"${path.join(yield `"${this.leetCodeRootPath}"`, "bin", "leetcode")}"`)}`;
