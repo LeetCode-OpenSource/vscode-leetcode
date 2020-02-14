@@ -29,14 +29,17 @@ export async function selectWorkspaceFolder(): Promise<string> {
     if (needAsk) {
         const choice: string | undefined = await vscode.window.showQuickPick(
             [
+                OpenOption.justOpenFile,
                 OpenOption.openInCurrentWindow,
                 OpenOption.openInNewWindow,
                 OpenOption.addToWorkspace,
             ],
-            { placeHolder: "Select how you would like to open your workspace folder" },
+            { placeHolder: "The LeetCode workspace folder is not opened in VS Code, would you like to open it?" },
         );
 
         switch (choice) {
+            case OpenOption.justOpenFile:
+                return workspaceFolderSetting;
             case OpenOption.openInCurrentWindow:
                 await vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(workspaceFolderSetting), false);
                 return "";
@@ -117,6 +120,7 @@ async function determineLeetCodeFolder(): Promise<string> {
 }
 
 enum OpenOption {
+    justOpenFile = "Just open the problem file",
     openInCurrentWindow = "Open in current window",
     openInNewWindow = "Open in new window",
     addToWorkspace = "Add to workspace",
