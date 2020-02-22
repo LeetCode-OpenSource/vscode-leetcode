@@ -3,6 +3,13 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.16.1]
+### Added
+- Can show the problem in current workspace even if it's not a LeetCode workspace [#373](https://github.com/jdneo/vscode-leetcode/issues/373)
+
+### Fixed
+[Bugs fixed](https://github.com/jdneo/vscode-leetcode/issues?q=is%3Aissue+milestone%3A0.16.1+is%3Aclosed+label%3Abug)
+
 ## [0.16.0]
 ### Added
 - Support GitHub login and LinkedIn login [PR#496](https://github.com/jdneo/vscode-leetcode/pull/496)
