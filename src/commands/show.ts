@@ -12,6 +12,8 @@ import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
 import { genFileExt, genFileName, getNodeIdFromFile } from "../utils/problemUtils";
+import * as settingUtils from "../utils/settingUtils";
+import { IDescriptionConfiguration } from "../utils/settingUtils";
 import { DialogOptions, DialogType, openSettingsEditor, promptForOpenOutputChannel, promptForSignIn, promptHintMessage } from "../utils/uiUtils";
 import { getActiveFilePath, selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
@@ -166,28 +168,30 @@ async function showProblemInternal(node: IProblem): Promise<void> {
 
         finalPath = wsl.useWsl() ? await wsl.toWinPath(finalPath) : finalPath;
 
-        await leetCodeExecutor.showProblem(node, language, finalPath, leetCodeConfig.get<boolean>("showCommentDescription"));
-        await Promise.all([
+        const descriptionConfig: IDescriptionConfiguration = settingUtils.getDescriptionConfiguration();
+        await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment);
+        const promises: any[] = [
             vscode.window.showTextDocument(vscode.Uri.file(finalPath), { preview: false, viewColumn: vscode.ViewColumn.One }),
-            movePreviewAsideIfNeeded(node),
             promptHintMessage(
                 "hint.commentDescription",
-                'You can generate the code file with problem description in the comments by enabling "leetcode.showCommentDescription".',
+                'You can config how to show the problem description through "leetcode.showDescription".',
                 "Open settings",
-                (): Promise<any> => openSettingsEditor("leetcode.showCommentDescription"),
+                (): Promise<any> => openSettingsEditor("leetcode.showDescription"),
             ),
-        ]);
+        ];
+        if (descriptionConfig.showInWebview) {
+            promises.push(showDescriptionView(node));
+        }
+
+        await Promise.all(promises);
     } catch (error) {
         await promptForOpenOutputChannel(`${error} Please open the output channel for details.`, DialogType.error);
     }
 }
 
-async function movePreviewAsideIfNeeded(node: IProblem): Promise<void> {
-    if (vscode.workspace.getConfiguration("leetcode").get<boolean>("enableSideMode", true)) {
-        return previewProblem(node, true);
-    }
+async function showDescriptionView(node: IProblem): Promise<void> {
+    return previewProblem(node, vscode.workspace.getConfiguration("leetcode").get<boolean>("enableSideMode", true));
 }
-
 async function parseProblemsToPicks(p: Promise<IProblem[]>): Promise<Array<IQuickItemEx<IProblem>>> {
     return new Promise(async (resolve: (res: Array<IQuickItemEx<IProblem>>) => void): Promise<void> => {
         const picks: Array<IQuickItemEx<IProblem>> = (await p).map((problem: IProblem) => Object.assign({}, {

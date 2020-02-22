@@ -86,8 +86,8 @@ class LeetCodeExecutor implements Disposable {
         );
     }
 
-    public async showProblem(problemNode: IProblem, language: string, filePath: string, detailed: boolean = false): Promise<void> {
-        const templateType: string = detailed ? "-cx" : "-c";
+    public async showProblem(problemNode: IProblem, language: string, filePath: string, showDescriptionInComment: boolean = false): Promise<void> {
+        const templateType: string = showDescriptionInComment ? "-cx" : "-c";
 
         if (!await fse.pathExists(filePath)) {
             await fse.createFile(filePath);
