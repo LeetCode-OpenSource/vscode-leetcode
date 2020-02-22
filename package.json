@@ -8,7 +8,7 @@
     "license": "MIT",
     "icon": "resources/LeetCode.png",
     "engines": {
-        "vscode": "^1.30.1"
+        "vscode": "^1.42.0"
     },
     "repository": {
         "type": "git",
@@ -52,19 +52,13 @@
                 "command": "leetcode.toggleLeetCodeCn",
                 "title": "Switch Endpoint",
                 "category": "LeetCode",
-                "icon": {
-                    "light": "resources/light/endpoint.svg",
-                    "dark": "resources/dark/endpoint.svg"
-                }
+                "icon": "$(globe)"
             },
             {
                 "command": "leetcode.signin",
                 "title": "Sign In",
                 "category": "LeetCode",
-                "icon": {
-                    "light": "resources/light/signin.svg",
-                    "dark": "resources/dark/signin.svg"
-                }
+                "icon": "$(sign-in)"
             },
             {
                 "command": "leetcode.signout",
@@ -80,10 +74,7 @@
                 "command": "leetcode.refreshExplorer",
                 "title": "Refresh",
                 "category": "LeetCode",
-                "icon": {
-                    "light": "resources/light/refresh.svg",
-                    "dark": "resources/dark/refresh.svg"
-                }
+                "icon": "$(refresh)"
             },
             {
                 "command": "leetcode.pickOne",
@@ -104,10 +95,7 @@
                 "command": "leetcode.searchProblem",
                 "title": "Search Problem",
                 "category": "LeetCode",
-                "icon": {
-                    "light": "resources/light/search.svg",
-                    "dark": "resources/dark/search.svg"
-                }
+                "icon": "$(search)"
             },
             {
                 "command": "leetcode.showSolution",
@@ -660,8 +648,6 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test",
         "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose"
     },
     "devDependencies": {
@@ -671,10 +657,10 @@
         "@types/markdown-it": "0.0.7",
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
+        "@types/vscode": "1.42.0",
         "@types/require-from-string": "^1.2.0",
         "tslint": "^5.9.1",
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.33"
+        "typescript": "^2.6.1"
     },
     "dependencies": {
         "fs-extra": "^6.0.1",
