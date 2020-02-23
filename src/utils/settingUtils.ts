@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import { workspace, WorkspaceConfiguration } from "vscode";
+import { DescriptionConfiguration } from "../shared";
 
 export function getWorkspaceConfiguration(): WorkspaceConfiguration {
     return workspace.getConfiguration("leetcode");
@@ -17,4 +18,42 @@ export function getWorkspaceFolder(): string {
 
 export function getEditorShortcuts(): string[] {
     return getWorkspaceConfiguration().get<string[]>("editor.shortcuts", ["submit", "test"]);
+}
+
+export function getDescriptionConfiguration(): IDescriptionConfiguration {
+    const setting: string = getWorkspaceConfiguration().get<string>("showDescription", DescriptionConfiguration.InWebView);
+    const config: IDescriptionConfiguration = {
+        showInComment: false,
+        showInWebview: true,
+    };
+    switch (setting) {
+        case DescriptionConfiguration.Both:
+            config.showInComment = true;
+            config.showInWebview = true;
+            break;
+        case DescriptionConfiguration.None:
+            config.showInComment = false;
+            config.showInWebview = false;
+            break;
+        case DescriptionConfiguration.InFileComment:
+            config.showInComment = true;
+            config.showInWebview = false;
+            break;
+        case DescriptionConfiguration.InWebView:
+            config.showInComment = false;
+            config.showInWebview = true;
+            break;
+    }
+
+    // To be compatible with the deprecated setting:
+    if (getWorkspaceConfiguration().get<boolean>("showCommentDescription")) {
+        config.showInComment = true;
+    }
+
+    return config;
+}
+
+export interface IDescriptionConfiguration {
+    showInComment: boolean;
+    showInWebview: boolean;
 }

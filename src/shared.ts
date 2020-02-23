@@ -105,3 +105,10 @@ export const supportedPlugins: string[] = [
     "solution.discuss",
     "leetcode.cn",
 ];
+
+export enum DescriptionConfiguration {
+    InWebView = "In Webview",
+    InFileComment = "In File Comment",
+    Both = "Both",
+    None = "None",
+}

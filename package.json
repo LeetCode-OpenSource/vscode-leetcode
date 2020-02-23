@@ -300,11 +300,28 @@
                         "scope": "application",
                         "description": "Default language for solving the problems."
                     },
+                    "leetcode.showDescription": {
+                        "type": "string",
+                        "default": "In Webview",
+                        "enum": [
+                            "In Webview",
+                            "In File Comment",
+                            "Both",
+                            "None"
+                        ],
+                        "enumDescriptions": [
+                            "Show the problem description in a new webview window",
+                            "Show the problem description in the file's comment"
+                        ],
+                        "scope": "application",
+                        "description": "Specify where to show the description."
+                    },
                     "leetcode.showCommentDescription": {
                         "type": "boolean",
                         "default": false,
                         "scope": "application",
-                        "description": "Include problem description in comments."
+                        "description": "[Deprecated] Include problem description in comments.",
+                        "deprecationMessage": "This setting will be deprecated in 0.17.0, please use 'leetcode.showDescription' instead"
                     },
                     "leetcode.hint.setDefaultLanguage": {
                         "type": "boolean",
