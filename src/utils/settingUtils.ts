@@ -39,9 +39,9 @@ export function getDescriptionConfiguration(): IDescriptionConfiguration {
             config.showInComment = true;
             config.showInWebview = false;
             break;
-        case DescriptionConfiguration.InFileComment:
-            config.showInComment = true;
-            config.showInWebview = false;
+        case DescriptionConfiguration.InWebView:
+            config.showInComment = false;
+            config.showInWebview = true;
             break;
     }
 
