@@ -1,7 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import { ConfigurationChangeEvent, Disposable, languages, workspace, WorkspaceConfiguration } from "vscode";
+import { ConfigurationChangeEvent, Disposable, languages, workspace } from "vscode";
 import { CustomCodeLensProvider } from "./CustomCodeLensProvider";
 
 class CodeLensController implements Disposable {
@@ -13,14 +13,12 @@ class CodeLensController implements Disposable {
         this.internalProvider = new CustomCodeLensProvider();
 
         this.configurationChangeListener = workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
-            if (event.affectsConfiguration("leetcode.enableShortcuts")) {
-                this.setCodeLensVisibility();
-            } else if (event.affectsConfiguration("leetcode.editor.shortcuts")) {
+            if (event.affectsConfiguration("leetcode.editor.shortcuts")) {
                 this.internalProvider.refresh();
             }
         }, this);
 
-        this.setCodeLensVisibility();
+        this.registeredProvider = languages.registerCodeLensProvider({ scheme: "file" }, this.internalProvider);
     }
 
     public dispose(): void {
@@ -28,20 +26,6 @@ class CodeLensController implements Disposable {
             this.registeredProvider.dispose();
         }
         this.configurationChangeListener.dispose();
-    }
-
-    private setCodeLensVisibility(): void {
-        if (this.isShortcutsEnabled() && !this.registeredProvider) {
-            this.registeredProvider = languages.registerCodeLensProvider({ scheme: "file" }, this.internalProvider);
-        } else if (!this.isShortcutsEnabled() && this.registeredProvider) {
-            this.registeredProvider.dispose();
-            this.registeredProvider = undefined;
-        }
-    }
-
-    private isShortcutsEnabled(): boolean {
-        const configuration: WorkspaceConfiguration = workspace.getConfiguration();
-        return configuration.get<boolean>("leetcode.enableShortcuts", true);
     }
 }
 
