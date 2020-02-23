@@ -144,10 +144,8 @@ async function showProblemInternal(node: IProblem): Promise<void> {
             return;
         }
 
-        const outputFolder: string = leetCodeConfig.get<string>("outputFolder", "").trim();
-
         const fileFolder: string = leetCodeConfig
-            .get<string>(`filePath.${language}.folder`, leetCodeConfig.get<string>(`filePath.default.folder`, outputFolder))
+            .get<string>(`filePath.${language}.folder`, leetCodeConfig.get<string>(`filePath.default.folder`, ""))
             .trim();
         const fileName: string = leetCodeConfig
             .get<string>(
