@@ -3,6 +3,15 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.16.2]
+### Added
+- New Category: `Concurrency` [CLI#42](https://github.com/leetcode-tools/leetcode-cli/pull/42)
+- New configuration to better configure how to show the description [#310](https://github.com/jdneo/vscode-leetcode/issues/310)
+
+### Removed
+- Removed the deprecated setting `leetcode.enableShortcuts` [PR#520](https://github.com/jdneo/vscode-leetcode/pull/520)
+- Removed the deprecated setting `leetcode.outputFolder` [PR#521](https://github.com/jdneo/vscode-leetcode/pull/521)
+
 ## [0.16.1]
 ### Added
 - Can show the problem in current workspace even if it's not a LeetCode workspace [#373](https://github.com/jdneo/vscode-leetcode/issues/373)
