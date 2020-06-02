@@ -33,7 +33,7 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 
 ## Requirements
 - [VS Code 1.30.1+](https://code.visualstudio.com/)
-- [Node.js 8+](https://nodejs.org)
+- [Node.js 10+](https://nodejs.org)
     > NOTE: Please make sure that `Node` is in your `PATH` environment variable. You can also use the setting `leetcode.nodePath` to specify the location of your `Node.js` executable.
 
 ## Quick Start
