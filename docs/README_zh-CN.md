@@ -34,7 +34,7 @@
 
 ## 运行条件
 - [VS Code 1.23.0+](https://code.visualstudio.com/)
-- [Node.js 8+](https://nodejs.org)
+- [Node.js 10+](https://nodejs.org)
     > 注意：请确保`Node`在`PATH`环境变量中。您也可以通过设定 `leetcode.nodePath` 选项来指定 `Node.js` 可执行文件的路径。
 
 ## 快速开始
