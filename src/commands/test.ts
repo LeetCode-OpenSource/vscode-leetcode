@@ -46,8 +46,8 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
                 label: "$(refresh) Re- run last...",
                 description: "",
                 detail: "Test with the cases which were last run",
-                value: ":rerun"
-            }
+                value: ":rerun",
+            },
         );
         const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(picks);
         if (!choice) {
@@ -84,8 +84,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
             case ":rerun":
                 if (leetCodeExecutor.lastTestString) {
                     result = await leetCodeExecutor.testSolution(filePath, leetCodeExecutor.lastTestString);
-                }
-                else { // run default cases
+                } else { // run default cases
                     result = await leetCodeExecutor.testSolution(filePath);
                 }
                 break;
