@@ -36,7 +36,7 @@ export const languages: string[] = [
     "rust",
     "scala",
     "swift",
-    "typescript"
+    "typescript",
 ];
 
 export const langExt: Map<string, string> = new Map([
@@ -56,7 +56,7 @@ export const langExt: Map<string, string> = new Map([
     ["rust", "rs"],
     ["scala", "scala"],
     ["swift", "swift"],
-    ["typescript", "ts"]
+    ["typescript", "ts"],
 ]);
 
 export enum ProblemState {
