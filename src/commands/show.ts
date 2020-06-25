@@ -153,8 +153,21 @@ async function showProblemInternal(node: IProblem): Promise<void> {
                 leetCodeConfig.get<string>(`filePath.default.filename`) || genFileName(node, language),
             )
             .trim();
-
-        let finalPath: string = path.join(workspaceFolder, fileFolder, fileName);
+        
+        var i = fileName.indexOf('.');
+        const files: string[] = [fileName.slice(0, i), fileName.slice(i + 1)];
+        let id: string = node["id"];
+        if (id.length == 1) {
+            id = "000" + id;
+        }
+        else if (id.length == 2) {
+            id = "00" + id;
+        }
+        else if (id.length == 3) {
+            id = "0" + id;
+        }
+        const zeroFileName: string = id + "." + files[1]
+        let finalPath: string = path.join(workspaceFolder, fileFolder, zeroFileName);
 
         if (finalPath) {
             finalPath = await resolveRelativePath(finalPath, node, language);
