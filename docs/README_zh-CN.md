@@ -12,8 +12,8 @@
   <a href="https://gitter.im/vscode-leetcode/Lobby">
     <img src="https://img.shields.io/gitter/room/LeetCode-OpenSource/vscode-leetcode.svg?style=flat-square" alt="">
   </a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-leetcode">
-    <img src="https://img.shields.io/visual-studio-marketplace/d/shengchen.vscode-leetcode.svg?style=flat-square" alt="">
+  <a href="https://marketplace.visualstudio.com/items?itemName=LeetCode.vscode-leetcode">
+    <img src="https://img.shields.io/visual-studio-marketplace/d/LeetCode.vscode-leetcode.svg?style=flat-square" alt="">
   </a>
   <a href="https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/LeetCode-OpenSource/vscode-leetcode.svg?style=flat-square" alt="">
