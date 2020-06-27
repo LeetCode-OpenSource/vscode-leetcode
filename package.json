@@ -295,7 +295,8 @@
                             "ruby",
                             "rust",
                             "scala",
-                            "swift"
+                            "swift",
+                            "typescript"
                         ],
                         "scope": "application",
                         "description": "Default language for solving the problems."
@@ -675,6 +676,6 @@
         "markdown-it": "^8.4.2",
         "require-from-string": "^2.0.2",
         "unescape-js": "^1.1.1",
-        "vsc-leetcode-cli": "2.6.23"
+        "vsc-leetcode-cli": "2.7.0"
     }
 }
