@@ -20,16 +20,16 @@
   </a>
 </p>
 
-- English Document | [中文文档](https://github.com/jdneo/vscode-leetcode/blob/master/docs/README_zh-CN.md)
+- English Document | [中文文档](https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/docs/README_zh-CN.md)
 
 ## ❗️ Attention ❗️- Workaround to login to LeetCode endpoint
 > Note: If you are using `leetcode-cn.com`, you can just ignore this section.
 
-Recently we observed that [the extension cannot login to leetcode.com endpoint anymore](https://github.com/jdneo/vscode-leetcode/issues/478). The root cause of this issue is that leetcode.com changed its login mechanism and so far there is no ideal way to fix that issue.
+Recently we observed that [the extension cannot login to leetcode.com endpoint anymore](https://github.com/LeetCode-OpenSource/vscode-leetcode/issues/478). The root cause of this issue is that leetcode.com changed its login mechanism and so far there is no ideal way to fix that issue.
 
 Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround which can somehow mitigate this. Now you can simply click the `Sign In` button and then select `Third Party` login or `Cookie` login.
 
-> Note: If you want to use third-party login(**Recommended**), please make sure your account has been connected to the thrid-party. If you want to use `Cookie` login, click [here](https://github.com/jdneo/vscode-leetcode/issues/478#issuecomment-564757098) to see the steps.
+> Note: If you want to use third-party login(**Recommended**), please make sure your account has been connected to the thrid-party. If you want to use `Cookie` login, click [here](https://github.com/LeetCode-OpenSource/vscode-leetcode/issues/478#issuecomment-564757098) to see the steps.
 
 ## Requirements
 - [VS Code 1.30.1+](https://code.visualstudio.com/)
@@ -38,13 +38,13 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 
 ## Quick Start
 
-![demo](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/gifs/demo.gif)
+![demo](https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/gifs/demo.gif)
 
 ## Features
 
 ### Sign In/Out
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/sign_in.png" alt="Sign in" />
+  <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/sign_in.png" alt="Sign in" />
 </p>
 
 - Simply click `Sign in to LeetCode` in the `LeetCode Explorer` will let you **sign in** with your LeetCode account.
@@ -56,10 +56,10 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 
 ### Switch Endpoint
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/endpoint.png" alt="Switch Endpoint" />
+  <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/endpoint.png" alt="Switch Endpoint" />
 </p>
 
-- By clicking the button ![btn_endpoint](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/btn_endpoint.png) at the **explorer's navigation bar**, you can switch between different endpoints.
+- By clicking the button ![btn_endpoint](https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/btn_endpoint.png) at the **explorer's navigation bar**, you can switch between different endpoints.
 
 - The supported endpoints are:
   - **leetcode.com**
@@ -71,7 +71,7 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 
 ### Pick a Problem
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="Pick a Problem" />
+  <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="Pick a Problem" />
 </p>
 
 - Directly click on the problem or right click the problem in the `LeetCode Explorer` and select `Preview Problem` to see the problem description.
@@ -87,7 +87,7 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 
 ### Editor Shortcuts
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/shortcuts.png" alt="Editor Shortcuts" />
+  <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/shortcuts.png" alt="Editor Shortcuts" />
 </p>
 
 - The extension supports 4 editor shortcuts (aka Code Lens):
@@ -102,16 +102,16 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 
 ### Search problems by Keywords
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/search.png" alt="Search problems by Keywords" />
+  <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/search.png" alt="Search problems by Keywords" />
 </p>
 
-- By clicking the button ![btn_search](https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/btn_search.png) at the **explorer's navigation bar**, you can search the problems by keywords.
+- By clicking the button ![btn_search](https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/btn_search.png) at the **explorer's navigation bar**, you can search the problems by keywords.
 
 ---
 
 ### Manage Session
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jdneo/vscode-leetcode/master/docs/imgs/session.png" alt="Manage Session" />
+  <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/session.png" alt="Manage Session" />
 </p>
 
 - To manage your LeetCode sessions, just clicking the `LeetCode: ***` at the bottom of the status bar. You can **switch** between sessions or **create**, **delete** a session.
@@ -126,7 +126,7 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 | `leetcode.useWsl`                                                                       | Specify whether to use WSL or not                                                                                                                                                                                                                                                                                                                                                                                                 | `false`            |
 | `leetcode.endpoint`                                                                     | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn`                                                                                                                                                                                                                                                                                                                                                   | `leetcode`         |
 | `leetcode.workspaceFolder`                                                              | Specify the path of the workspace folder to store the problem files.                                                                                                                                                                                                                                                                                                                                                              | `""`               |
-| `leetcode.filePath`                                                                     | Specify the relative path under the workspace and the file name to save the problem files. More details can be found [here](https://github.com/jdneo/vscode-leetcode/wiki/Customize-the-Relative-Folder-and-the-File-Name-of-the-Problem-File).                                                                                                                                                                                   |                    |
+| `leetcode.filePath`                                                                     | Specify the relative path under the workspace and the file name to save the problem files. More details can be found [here](https://github.com/LeetCode-OpenSource/vscode-leetcode/wiki/Customize-the-Relative-Folder-and-the-File-Name-of-the-Problem-File).                                                                                                                                                                                   |                    |
 | `leetcode.enableStatusBar`                                                              | Specify whether the LeetCode status bar will be shown or not.                                                                                                                                                                                                                                                                                                                                                                     | `true`             |
 | `leetcode.editor.shortcuts`                                                             | Specify the customized shorcuts in editors. Supported values are: `submit`, `test`, `solution` and `description`.                                                                                                                                                                                                                                                                                                                 | `["submit, test"]` |
 | `leetcode.enableSideMode`                                                               | Specify whether `preview`, `solution` and `submission` tab should be grouped into the second editor column when solving a problem.                                                                                                                                                                                                                                                                                                | `true`             |
@@ -135,15 +135,15 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 
 ## Want Help?
 
-When you meet any problem, you can check out the [Troubleshooting](https://github.com/jdneo/vscode-leetcode/wiki/Troubleshooting) and [FAQ](https://github.com/jdneo/vscode-leetcode/wiki/FAQ) first.
+When you meet any problem, you can check out the [Troubleshooting](https://github.com/LeetCode-OpenSource/vscode-leetcode/wiki/Troubleshooting) and [FAQ](https://github.com/LeetCode-OpenSource/vscode-leetcode/wiki/FAQ) first.
 
-If your problem still cannot be addressed, feel free to reach us in the [Gitter Channel](https://gitter.im/vscode-leetcode/Lobby) or [file an issue](https://github.com/jdneo/vscode-leetcode/issues/new/choose).
+If your problem still cannot be addressed, feel free to reach us in the [Gitter Channel](https://gitter.im/vscode-leetcode/Lobby) or [file an issue](https://github.com/LeetCode-OpenSource/vscode-leetcode/issues/new/choose).
 
 ## Release Notes
 
-Refer to [CHANGELOG](https://github.com/jdneo/vscode-leetcode/blob/master/CHANGELOG.md)
+Refer to [CHANGELOG](https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/CHANGELOG.md)
 
 ## Acknowledgement
 
 - This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcode-cli](https://github.com/skygragon/leetcode-cli) open source project.
-- Special thanks to our [contributors](https://github.com/jdneo/vscode-leetcode/blob/master/ACKNOWLEDGEMENTS.md).
+- Special thanks to our [contributors](https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/ACKNOWLEDGEMENTS.md).

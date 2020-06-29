@@ -12,9 +12,9 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/jdneo/vscode-leetcode"
+        "url": "https://github.com/LeetCode-OpenSource/vscode-leetcode"
     },
-    "homepage": "https://github.com/jdneo/vscode-leetcode/blob/master/README.md",
+    "homepage": "https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/README.md",
     "categories": [
         "Other",
         "Snippets"
