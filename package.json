@@ -621,8 +621,7 @@
                         "type": "array",
                         "default": [
                             "submit",
-                            "test",
-                            "star"
+                            "test"
                         ],
                         "scope": "application",
                         "items": {
@@ -630,6 +629,7 @@
                             "enum": [
                                 "submit",
                                 "test",
+                                "star",
                                 "solution",
                                 "description"
                             ]

@@ -91,9 +91,10 @@
   <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/shortcuts.png" alt="Editor Shortcuts" />
 </p>
 
-- 插件会在编辑区域内支持四种不同的快捷方式（Code Lens）:
+- 插件会在编辑区域内支持五种不同的快捷方式（Code Lens）:
   - `Submit`: 提交你的答案至 LeetCode；
   - `Test`: 用给定的测试用例测试你的答案；
+  - `Star`: 收藏或取消收藏该问题；
   - `Solution`: 显示该问题的高票解答；
   - `Description`: 显示该问题的题目描述。
 
@@ -129,7 +130,7 @@
 | `leetcode.workspaceFolder`                                                         | 指定保存文件的工作区目录                                                                                                                                                                                                                                                                        | `""`               |
 | `leetcode.filePath`                                                                | 指定生成题目文件的相对文件夹路径名和文件名。点击查看[更多详细用法](https://github.com/LeetCode-OpenSource/vscode-leetcode/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E9%A2%98%E7%9B%AE%E6%96%87%E4%BB%B6%E7%9A%84%E7%9B%B8%E5%AF%B9%E6%96%87%E4%BB%B6%E5%A4%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E6%96%87%E4%BB%B6%E5%90%8D)。 |                    |
 | `leetcode.enableStatusBar`                                                         | 指定是否在 VS Code 下方显示插件状态栏。                                                                                                                                                                                                                                                         | `true`             |
-| `leetcode.editor.shortcuts`                                                        | 指定在编辑器内所自定义的快捷方式。可用的快捷方式有: `submit`, `test`, `solution`, `description`。                                                                                                                                                                                               | `["submit, test"]` |
+| `leetcode.editor.shortcuts`                                                        | 指定在编辑器内所自定义的快捷方式。可用的快捷方式有: `submit`, `test`, `star`, `solution`, `description`。                                                                                                                                                                                               | `["submit, test"]` |
 | `leetcode.enableSideMode`                                                          | 指定在解决一道题时，是否将`问题预览`、`高票答案`与`提交结果`窗口集中在编辑器的第二栏。                                                                                                                                                                                                          | `true`             |
 | `leetcode.nodePath`                                                                | 指定 `Node.js` 可执行文件的路径。如：C:\Program Files\nodejs\node.exe                                                                                                                                                                                                                           | `node`             |
 | `leetcode.showCommentDescription`                                                  | 指定是否要在注释中显示题干。                                                                                                                                                                                                                                                                    | `false`            |
