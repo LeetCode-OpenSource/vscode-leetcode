@@ -93,7 +93,7 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 - The extension supports 5 editor shortcuts (aka Code Lens):
   - `Submit`: Submit your answer to LeetCode.
   - `Test`: Test your answer with customized test cases.
-  - `Star/Unstar`: Star or Unstar the current problem.
+  - `Star/Unstar`: Star or unstar the current problem.
   - `Solution`: Show the top voted solution for the current problem.
   - `Description`: Show the problem description page.
 

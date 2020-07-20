@@ -632,6 +632,13 @@
                                 "star",
                                 "solution",
                                 "description"
+                            ],
+                            "enumDescriptions": [
+                                "Submit your answer to LeetCode.",
+                                "Test your answer with customized test cases.",
+                                "Star or unstar the current problem.",
+                                "Show the top voted solution for the current problem.",
+                                "Show the problem description page."
                             ]
                         },
                         "description": "Customize the shorcuts in editors."
