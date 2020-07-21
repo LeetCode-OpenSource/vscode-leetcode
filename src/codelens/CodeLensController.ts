@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import { ConfigurationChangeEvent, Disposable, languages, workspace } from "vscode";
-import { CustomCodeLensProvider } from "./CustomCodeLensProvider";
+import { customCodeLensProvider, CustomCodeLensProvider } from "./CustomCodeLensProvider";
 
 class CodeLensController implements Disposable {
     private internalProvider: CustomCodeLensProvider;
@@ -10,7 +10,7 @@ class CodeLensController implements Disposable {
     private configurationChangeListener: Disposable;
 
     constructor() {
-        this.internalProvider = new CustomCodeLensProvider();
+        this.internalProvider = customCodeLensProvider;
 
         this.configurationChangeListener = workspace.onDidChangeConfiguration((event: ConfigurationChangeEvent) => {
             if (event.affectsConfiguration("leetcode.editor.shortcuts")) {
