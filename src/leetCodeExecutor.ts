@@ -3,10 +3,12 @@
 
 import * as cp from "child_process";
 import * as fse from "fs-extra";
+import * as os from "os";
 import * as path from "path";
 import * as requireFromString from "require-from-string";
+import { ExtensionContext } from "vscode";
 import { ConfigurationChangeEvent, Disposable, MessageItem, window, workspace, WorkspaceConfiguration } from "vscode";
-import { Endpoint, IProblem, supportedPlugins } from "./shared";
+import { Endpoint, globalStateLeetcodeIsUserFresh, IProblem, supportedPlugins } from "./shared";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
 import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
@@ -34,7 +36,11 @@ class LeetCodeExecutor implements Disposable {
         return `"${path.join(this.leetCodeRootPath, "bin", "leetcode")}"`;
     }
 
-    public async meetRequirements(): Promise<boolean> {
+    public async meetRequirements(context: ExtensionContext): Promise<boolean> {
+        const isUserFresh: boolean | undefined = context.globalState.get(globalStateLeetcodeIsUserFresh);
+        if (isUserFresh !== false) {
+            await this.removeOldCache();
+        }
         if (this.nodeExecutable !== "node") {
             if (!await fse.pathExists(this.nodeExecutable)) {
                 throw new Error(`The Node.js executable does not exist on path ${this.nodeExecutable}`);
@@ -61,9 +67,11 @@ class LeetCodeExecutor implements Disposable {
             try { // Check plugin
                 await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "plugin", "-e", plugin]);
             } catch (error) { // Download plugin and activate
+                await this.removeOldCache();
                 await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "plugin", "-i", plugin]);
             }
         }
+        context.globalState.update(globalStateLeetcodeIsUserFresh, false);
         return true;
     }
 
@@ -194,6 +202,14 @@ class LeetCodeExecutor implements Disposable {
         }
         return await executeCommandWithProgress(message, command, args, options);
     }
+
+    private async removeOldCache(): Promise<void> {
+        const oldPath: string = path.join(os.homedir(), ".lc");
+        if (await fse.pathExists(oldPath)) {
+            await fse.remove(oldPath);
+        }
+    }
+
 }
 
 export const leetCodeExecutor: LeetCodeExecutor = new LeetCodeExecutor();
