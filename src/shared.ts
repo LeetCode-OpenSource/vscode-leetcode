@@ -115,4 +115,4 @@ export enum DescriptionConfiguration {
     None = "None",
 }
 
-export const globalStateLeetcodeIsUserFresh: string = "leetcode.isUserFresh";
+export const globalStateLeetcodeHasInited: string = "leetcode.isUserFresh";

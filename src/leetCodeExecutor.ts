@@ -8,7 +8,7 @@ import * as path from "path";
 import * as requireFromString from "require-from-string";
 import { ExtensionContext } from "vscode";
 import { ConfigurationChangeEvent, Disposable, MessageItem, window, workspace, WorkspaceConfiguration } from "vscode";
-import { Endpoint, globalStateLeetcodeIsUserFresh, IProblem, supportedPlugins } from "./shared";
+import { Endpoint, globalStateLeetcodeHasInited, IProblem, supportedPlugins } from "./shared";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
 import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
@@ -37,8 +37,8 @@ class LeetCodeExecutor implements Disposable {
     }
 
     public async meetRequirements(context: ExtensionContext): Promise<boolean> {
-        const isUserFresh: boolean | undefined = context.globalState.get(globalStateLeetcodeIsUserFresh);
-        if (isUserFresh !== false) {
+        const hasInited: boolean | undefined = context.globalState.get(globalStateLeetcodeHasInited);
+        if (!hasInited) {
             await this.removeOldCache();
         }
         if (this.nodeExecutable !== "node") {
@@ -66,12 +66,13 @@ class LeetCodeExecutor implements Disposable {
         for (const plugin of supportedPlugins) {
             try { // Check plugin
                 await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "plugin", "-e", plugin]);
-            } catch (error) { // Download plugin and activate
+            } catch (error) { // Remove old cache that may cause the error download plugin and activate
                 await this.removeOldCache();
                 await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "plugin", "-i", plugin]);
             }
         }
-        context.globalState.update(globalStateLeetcodeIsUserFresh, false);
+        // Set the global state HasInited true to skip delete old cache after init
+        context.globalState.update(globalStateLeetcodeHasInited, true);
         return true;
     }
 
@@ -84,7 +85,7 @@ class LeetCodeExecutor implements Disposable {
     }
 
     public async signOut(): Promise<string> {
-        return await await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "user", "-L"]);
+        return await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "user", "-L"]);
     }
 
     public async listProblems(showLocked: boolean): Promise<string> {
