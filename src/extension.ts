@@ -26,7 +26,7 @@ import { markdownEngine } from "./webview/markdownEngine";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     try {
-        if (!await leetCodeExecutor.meetRequirements()) {
+        if (!await leetCodeExecutor.meetRequirements(context)) {
             throw new Error("The environment doesn't meet requirements.");
         }
 

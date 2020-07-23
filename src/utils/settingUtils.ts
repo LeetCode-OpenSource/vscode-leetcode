@@ -20,6 +20,11 @@ export function getEditorShortcuts(): string[] {
     return getWorkspaceConfiguration().get<string[]>("editor.shortcuts", ["submit", "test"]);
 }
 
+export function hasStarShortcut(): boolean {
+    const shortcuts: string[] = getWorkspaceConfiguration().get<string[]>("editor.shortcuts", ["submit", "test"]);
+    return shortcuts.indexOf("star") >= 0;
+}
+
 export function getDescriptionConfiguration(): IDescriptionConfiguration {
     const setting: string = getWorkspaceConfiguration().get<string>("showDescription", DescriptionConfiguration.InWebView);
     const config: IDescriptionConfiguration = {

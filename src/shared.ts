@@ -36,6 +36,7 @@ export const languages: string[] = [
     "rust",
     "scala",
     "swift",
+    "typescript",
 ];
 
 export const langExt: Map<string, string> = new Map([
@@ -55,6 +56,7 @@ export const langExt: Map<string, string> = new Map([
     ["rust", "rs"],
     ["scala", "scala"],
     ["swift", "swift"],
+    ["typescript", "ts"],
 ]);
 
 export enum ProblemState {
@@ -112,3 +114,5 @@ export enum DescriptionConfiguration {
     Both = "Both",
     None = "None",
 }
+
+export const leetcodeHasInited: string = "leetcode.hasInited";
