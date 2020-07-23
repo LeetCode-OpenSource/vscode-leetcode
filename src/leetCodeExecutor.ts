@@ -8,7 +8,7 @@ import * as path from "path";
 import * as requireFromString from "require-from-string";
 import { ExtensionContext } from "vscode";
 import { ConfigurationChangeEvent, Disposable, MessageItem, window, workspace, WorkspaceConfiguration } from "vscode";
-import { Endpoint, globalStateLeetcodeHasInited, IProblem, supportedPlugins } from "./shared";
+import { Endpoint, IProblem, leetcodeHasInited, supportedPlugins } from "./shared";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
 import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
@@ -37,7 +37,7 @@ class LeetCodeExecutor implements Disposable {
     }
 
     public async meetRequirements(context: ExtensionContext): Promise<boolean> {
-        const hasInited: boolean | undefined = context.globalState.get(globalStateLeetcodeHasInited);
+        const hasInited: boolean | undefined = context.globalState.get(leetcodeHasInited);
         if (!hasInited) {
             await this.removeOldCache();
         }
@@ -72,7 +72,7 @@ class LeetCodeExecutor implements Disposable {
             }
         }
         // Set the global state HasInited true to skip delete old cache after init
-        context.globalState.update(globalStateLeetcodeHasInited, true);
+        context.globalState.update(leetcodeHasInited, true);
         return true;
     }
 
