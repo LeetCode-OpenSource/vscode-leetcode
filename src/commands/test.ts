@@ -43,7 +43,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
                 value: ":file",
             },
             {
-                label: "$(refresh) Re- run last...",
+                label: "$(debug-restart) Re-run last...",
                 description: "",
                 detail: "Test with the cases which were last run",
                 value: ":rerun",
