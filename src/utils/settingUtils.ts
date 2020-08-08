@@ -16,6 +16,10 @@ export function getWorkspaceFolder(): string {
     return getWorkspaceConfiguration().get<string>("workspaceFolder", "");
 }
 
+export function getTestFile(): string {
+    return getWorkspaceConfiguration().get<string>("testFile", "");
+}
+
 export function getEditorShortcuts(): string[] {
     return getWorkspaceConfiguration().get<string[]>("editor.shortcuts", ["submit", "test"]);
 }

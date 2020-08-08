@@ -36,14 +36,14 @@
         "onCommand:leetcode.previewProblem",
         "onCommand:leetcode.searchProblem",
         "onCommand:leetcode.testSolution",
+        "onCommand:leetcode.testSolutionQuickFile",
         "onCommand:leetcode.submitSolution",
         "onCommand:leetcode.switchDefaultLanguage",
         "onView:leetCodeExplorer"
     ],
     "main": "./out/src/extension",
     "contributes": {
-        "commands": [
-            {
+        "commands": [{
                 "command": "leetcode.deleteCache",
                 "title": "Delete Cache",
                 "category": "LeetCode"
@@ -108,6 +108,11 @@
                 "category": "LeetCode"
             },
             {
+                "command": "leetcode.testSolutionQuickFile",
+                "title": "Test in LeetCode with specified file",
+                "category": "LeetCode"
+            },
+            {
                 "command": "leetcode.submitSolution",
                 "title": "Submit to LeetCode",
                 "category": "LeetCode"
@@ -137,25 +142,20 @@
             }
         ],
         "viewsContainers": {
-            "activitybar": [
-                {
-                    "id": "leetcode",
-                    "title": "LeetCode",
-                    "icon": "resources/LeetCode.svg"
-                }
-            ]
+            "activitybar": [{
+                "id": "leetcode",
+                "title": "LeetCode",
+                "icon": "resources/LeetCode.svg"
+            }]
         },
         "views": {
-            "leetcode": [
-                {
-                    "id": "leetCodeExplorer",
-                    "name": "Problems"
-                }
-            ]
+            "leetcode": [{
+                "id": "leetCodeExplorer",
+                "name": "Problems"
+            }]
         },
         "menus": {
-            "view/title": [
-                {
+            "view/title": [{
                     "command": "leetcode.toggleLeetCodeCn",
                     "when": "view == leetCodeExplorer",
                     "group": "navigation@0"
@@ -181,8 +181,7 @@
                     "group": "overflow@0"
                 }
             ],
-            "view/item/context": [
-                {
+            "view/item/context": [{
                     "command": "leetcode.previewProblem",
                     "when": "view == leetCodeExplorer && viewItem =~ /problem*/",
                     "group": "leetcode@1"
@@ -208,8 +207,7 @@
                     "group": "inline"
                 }
             ],
-            "commandPalette": [
-                {
+            "commandPalette": [{
                     "command": "leetcode.showProblem",
                     "when": "never"
                 },
@@ -230,8 +228,7 @@
                     "when": "never"
                 }
             ],
-            "explorer/context": [
-                {
+            "explorer/context": [{
                     "command": "leetcode.testSolution",
                     "when": "explorerResourceIsFolder == false",
                     "group": "leetcode@1"
@@ -242,8 +239,7 @@
                     "group": "leetcode@2"
                 }
             ],
-            "editor/context": [
-                {
+            "editor/context": [{
                     "command": "leetcode.testSolution",
                     "group": "leetcode@1"
                 },
@@ -261,338 +257,150 @@
                 }
             ]
         },
-        "configuration": [
-            {
-                "title": "LeetCode",
-                "properties": {
-                    "leetcode.hideSolved": {
-                        "type": "boolean",
-                        "default": false,
-                        "scope": "application",
-                        "description": "Hide solved problems."
-                    },
-                    "leetcode.showLocked": {
-                        "type": "boolean",
-                        "default": false,
-                        "scope": "application",
-                        "description": "Show locked problems."
-                    },
-                    "leetcode.defaultLanguage": {
-                        "type": "string",
-                        "enum": [
-                            "bash",
-                            "c",
-                            "cpp",
-                            "csharp",
-                            "golang",
-                            "java",
-                            "javascript",
-                            "kotlin",
-                            "mysql",
-                            "php",
-                            "python",
-                            "python3",
-                            "ruby",
-                            "rust",
-                            "scala",
-                            "swift",
-                            "typescript"
-                        ],
-                        "scope": "application",
-                        "description": "Default language for solving the problems."
-                    },
-                    "leetcode.showDescription": {
-                        "type": "string",
-                        "default": "In Webview",
-                        "enum": [
-                            "In Webview",
-                            "In File Comment",
-                            "Both",
-                            "None"
-                        ],
-                        "enumDescriptions": [
-                            "Show the problem description in a new webview window",
-                            "Show the problem description in the file's comment"
-                        ],
-                        "scope": "application",
-                        "description": "Specify where to show the description."
-                    },
-                    "leetcode.showCommentDescription": {
-                        "type": "boolean",
-                        "default": false,
-                        "scope": "application",
-                        "description": "[Deprecated] Include problem description in comments.",
-                        "deprecationMessage": "This setting will be deprecated in 0.17.0, please use 'leetcode.showDescription' instead"
-                    },
-                    "leetcode.hint.setDefaultLanguage": {
-                        "type": "boolean",
-                        "default": true,
-                        "scope": "application",
-                        "description": "Show a hint to set the default language."
-                    },
-                    "leetcode.hint.configWebviewMarkdown": {
-                        "type": "boolean",
-                        "default": true,
-                        "scope": "application",
-                        "description": "Show a hint to change webview appearance through markdown config."
-                    },
-                    "leetcode.hint.commentDescription": {
-                        "type": "boolean",
-                        "default": true,
-                        "scope": "application",
-                        "description": "Show a hint to enable comment description in solution code file."
-                    },
-                    "leetcode.hint.commandShortcut": {
-                        "type": "boolean",
-                        "default": true,
-                        "scope": "application",
-                        "description": "Show a hint to configure commands key binding."
-                    },
-                    "leetcode.useWsl": {
-                        "type": "boolean",
-                        "default": false,
-                        "scope": "application",
-                        "description": "Use the Windows Subsystem for Linux."
-                    },
-                    "leetcode.endpoint": {
-                        "type": "string",
-                        "default": "leetcode",
-                        "scope": "application",
-                        "enum": [
-                            "leetcode",
-                            "leetcode-cn"
-                        ],
-                        "description": "Endpoint of the user account."
-                    },
-                    "leetcode.workspaceFolder": {
-                        "type": "string",
-                        "scope": "application",
-                        "description": "The path of the workspace folder to store the problem files.",
-                        "default": ""
-                    },
-                    "leetcode.filePath": {
-                        "type": "object",
-                        "scope": "application",
-                        "description": "The output folder and filename to save the problem files.",
-                        "properties": {
-                            "default": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string",
-                                        "examples": [
-                                            "src"
-                                        ]
-                                    },
-                                    "filename": {
-                                        "type": "string",
-                                        "examples": [
-                                            "${camelCaseName}.${ext}",
-                                            "${PascalCaseName}.${ext}",
-                                            "${id}-${kebab-case-name}.${ext}",
-                                            "${id}_${snake_case_name}.${ext}"
-                                        ]
-                                    }
+        "configuration": [{
+            "title": "LeetCode",
+            "properties": {
+                "leetcode.hideSolved": {
+                    "type": "boolean",
+                    "default": false,
+                    "scope": "application",
+                    "description": "Hide solved problems."
+                },
+                "leetcode.showLocked": {
+                    "type": "boolean",
+                    "default": false,
+                    "scope": "application",
+                    "description": "Show locked problems."
+                },
+                "leetcode.defaultLanguage": {
+                    "type": "string",
+                    "enum": [
+                        "bash",
+                        "c",
+                        "cpp",
+                        "csharp",
+                        "golang",
+                        "java",
+                        "javascript",
+                        "kotlin",
+                        "mysql",
+                        "php",
+                        "python",
+                        "python3",
+                        "ruby",
+                        "rust",
+                        "scala",
+                        "swift",
+                        "typescript"
+                    ],
+                    "scope": "application",
+                    "description": "Default language for solving the problems."
+                },
+                "leetcode.showDescription": {
+                    "type": "string",
+                    "default": "In Webview",
+                    "enum": [
+                        "In Webview",
+                        "In File Comment",
+                        "Both",
+                        "None"
+                    ],
+                    "enumDescriptions": [
+                        "Show the problem description in a new webview window",
+                        "Show the problem description in the file's comment"
+                    ],
+                    "scope": "application",
+                    "description": "Specify where to show the description."
+                },
+                "leetcode.showCommentDescription": {
+                    "type": "boolean",
+                    "default": false,
+                    "scope": "application",
+                    "description": "[Deprecated] Include problem description in comments.",
+                    "deprecationMessage": "This setting will be deprecated in 0.17.0, please use 'leetcode.showDescription' instead"
+                },
+                "leetcode.hint.setDefaultLanguage": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "application",
+                    "description": "Show a hint to set the default language."
+                },
+                "leetcode.hint.configWebviewMarkdown": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "application",
+                    "description": "Show a hint to change webview appearance through markdown config."
+                },
+                "leetcode.hint.commentDescription": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "application",
+                    "description": "Show a hint to enable comment description in solution code file."
+                },
+                "leetcode.hint.commandShortcut": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "application",
+                    "description": "Show a hint to configure commands key binding."
+                },
+                "leetcode.useWsl": {
+                    "type": "boolean",
+                    "default": false,
+                    "scope": "application",
+                    "description": "Use the Windows Subsystem for Linux."
+                },
+                "leetcode.endpoint": {
+                    "type": "string",
+                    "default": "leetcode",
+                    "scope": "application",
+                    "enum": [
+                        "leetcode",
+                        "leetcode-cn"
+                    ],
+                    "description": "Endpoint of the user account."
+                },
+                "leetcode.workspaceFolder": {
+                    "type": "string",
+                    "scope": "application",
+                    "description": "The path of the workspace folder to store the problem files.",
+                    "default": ""
+                },
+                "leetcode.testFile": {
+                    "type": "string",
+                    "scope": "application",
+                    "description": "The path of the test file relative to the workspace folder.",
+                    "default": ""
+                },
+                "leetcode.filePath": {
+                    "type": "object",
+                    "scope": "application",
+                    "description": "The output folder and filename to save the problem files.",
+                    "properties": {
+                        "default": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string",
+                                    "examples": [
+                                        "src"
+                                    ]
                                 },
-                                "required": [
-                                    "folder",
-                                    "filename"
-                                ]
+                                "filename": {
+                                    "type": "string",
+                                    "examples": [
+                                        "${camelCaseName}.${ext}",
+                                        "${PascalCaseName}.${ext}",
+                                        "${id}-${kebab-case-name}.${ext}",
+                                        "${id}_${snake_case_name}.${ext}"
+                                    ]
+                                }
                             },
-                            "bash": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "c": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "cpp": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "csharp": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "golang": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "java": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "javascript": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "kotlin": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "mysql": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "php": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "python": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "python3": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "ruby": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "rust": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "scala": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            },
-                            "swift": {
-                                "type": "object",
-                                "properties": {
-                                    "folder": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                },
-                                "minProperties": 1
-                            }
+                            "required": [
+                                "folder",
+                                "filename"
+                            ]
                         },
-                        "additionalProperties": {
+                        "bash": {
                             "type": "object",
                             "properties": {
                                 "folder": {
@@ -604,60 +412,252 @@
                             },
                             "minProperties": 1
                         },
-                        "default": {
-                            "default": {
-                                "folder": "",
-                                "filename": "${id}.${kebab-case-name}.${ext}"
-                            }
+                        "c": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "cpp": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "csharp": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "golang": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "java": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "javascript": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "kotlin": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "mysql": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "php": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "python": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "python3": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "ruby": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "rust": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "scala": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
+                        },
+                        "swift": {
+                            "type": "object",
+                            "properties": {
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "filename": {
+                                    "type": "string"
+                                }
+                            },
+                            "minProperties": 1
                         }
                     },
-                    "leetcode.enableStatusBar": {
-                        "type": "boolean",
-                        "default": true,
-                        "scope": "application",
-                        "description": "Show the LeetCode status bar or not."
-                    },
-                    "leetcode.editor.shortcuts": {
-                        "type": "array",
-                        "default": [
-                            "submit",
-                            "test"
-                        ],
-                        "scope": "application",
-                        "items": {
-                            "type": "string",
-                            "enum": [
-                                "submit",
-                                "test",
-                                "star",
-                                "solution",
-                                "description"
-                            ],
-                            "enumDescriptions": [
-                                "Submit your answer to LeetCode.",
-                                "Test your answer with customized test cases.",
-                                "Star or unstar the current problem.",
-                                "Show the top voted solution for the current problem.",
-                                "Show the problem description page."
-                            ]
+                    "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                            "folder": {
+                                "type": "string"
+                            },
+                            "filename": {
+                                "type": "string"
+                            }
                         },
-                        "description": "Customize the shorcuts in editors."
+                        "minProperties": 1
                     },
-                    "leetcode.enableSideMode": {
-                        "type": "boolean",
-                        "default": true,
-                        "scope": "application",
-                        "description": "Determine whether to group all webview pages into the second editor column when solving problems."
-                    },
-                    "leetcode.nodePath": {
-                        "type": "string",
-                        "default": "node",
-                        "scope": "application",
-                        "description": "The Node.js executable path. for example, C:\\Program Files\\nodejs\\node.exe"
+                    "default": {
+                        "default": {
+                            "folder": "",
+                            "filename": "${id}.${kebab-case-name}.${ext}"
+                        }
                     }
+                },
+                "leetcode.enableStatusBar": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "application",
+                    "description": "Show the LeetCode status bar or not."
+                },
+                "leetcode.editor.shortcuts": {
+                    "type": "array",
+                    "default": [
+                        "submit",
+                        "test"
+                    ],
+                    "scope": "application",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "submit",
+                            "test",
+                            "star",
+                            "solution",
+                            "description"
+                        ],
+                        "enumDescriptions": [
+                            "Submit your answer to LeetCode.",
+                            "Test your answer with customized test cases.",
+                            "Star or unstar the current problem.",
+                            "Show the top voted solution for the current problem.",
+                            "Show the problem description page."
+                        ]
+                    },
+                    "description": "Customize the shorcuts in editors."
+                },
+                "leetcode.enableSideMode": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "application",
+                    "description": "Determine whether to group all webview pages into the second editor column when solving problems."
+                },
+                "leetcode.nodePath": {
+                    "type": "string",
+                    "default": "node",
+                    "scope": "application",
+                    "description": "The Node.js executable path. for example, C:\\Program Files\\nodejs\\node.exe"
                 }
             }
-        ]
+        }]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",

@@ -2,11 +2,13 @@
 // Licensed under the MIT license.
 
 import * as fse from "fs-extra";
+import * as path from "path";
 import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IQuickItemEx, UserStatus } from "../shared";
 import { isWindows, usingCmd } from "../utils/osUtils";
+import { getTestFile, getWorkspaceFolder } from "../utils/settingUtils";
 import { DialogType, promptForOpenOutputChannel, showFileSelectDialog } from "../utils/uiUtils";
 import { getActiveFilePath } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
@@ -42,6 +44,12 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
                 detail: "Test with the written cases in file",
                 value: ":file",
             },
+            {
+                label: "$(file-text) Test file...",
+                description: "",
+                detail: "Test with the written cases in file specified in settings",
+                value: ":settings-file",
+            },
         );
         const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(picks);
         if (!choice) {
@@ -68,12 +76,11 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
                 const testFile: vscode.Uri[] | undefined = await showFileSelectDialog(filePath);
                 if (testFile && testFile.length) {
                     const input: string = (await fse.readFile(testFile[0].fsPath, "utf-8")).trim();
-                    if (input) {
-                        result = await leetCodeExecutor.testSolution(filePath, parseTestString(input.replace(/\r?\n/g, "\\n")));
-                    } else {
-                        vscode.window.showErrorMessage("The selected test file must not be empty.");
-                    }
+                    result = await testSelectedFile(input, filePath);
                 }
+                break;
+            case ":settings-file":
+                result = await testSelectedFile((await fse.readFile(path.join(getWorkspaceFolder(), getTestFile()), "utf-8")).trim(), filePath);
                 break;
             default:
                 break;
@@ -85,6 +92,38 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
     } catch (error) {
         await promptForOpenOutputChannel("Failed to test the solution. Please open the output channel for details.", DialogType.error);
     }
+}
+
+export async function testSolutionQuickFile(uri?: vscode.Uri): Promise<void> {
+    try {
+        if (leetCodeManager.getStatus() === UserStatus.SignedOut) {
+            return;
+        }
+
+        const filePath: string | undefined = await getActiveFilePath(uri);
+        if (!filePath) {
+            return;
+        }
+
+        const result: string | undefined = await testSelectedFile((await fse.readFile(path.join(getWorkspaceFolder(), getTestFile()), "utf-8")).trim(), filePath);
+
+        if (!result) {
+            return;
+        }
+        leetCodeSubmissionProvider.show(result);
+    } catch (error) {
+        await promptForOpenOutputChannel("Failed to test the solution. Please open the output channel for details.", DialogType.error);
+    }
+}
+
+async function testSelectedFile(input: string, filePath: string): Promise<string | undefined> {
+    if (input) {
+        return await leetCodeExecutor.testSolution(filePath, parseTestString(input.replace(/\r?\n/g, "\\n")));
+    } else {
+        vscode.window.showErrorMessage("The selected test file must not be empty.");
+    }
+
+    return undefined;
 }
 
 function parseTestString(test: string): string {
