@@ -99,8 +99,8 @@ class LeetCodeExecutor implements Disposable {
         const templateType: string = showDescriptionInComment ? "-cx" : "-c";
 
         if (!await fse.pathExists(filePath)) {
-            await fse.createFile(filePath);
             const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", problemNode.id, templateType, "-l", language]);
+            await fse.createFile(filePath);
             await fse.writeFile(filePath, codeTemplate);
         }
     }
