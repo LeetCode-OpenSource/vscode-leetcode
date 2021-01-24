@@ -105,13 +105,24 @@ export async function showSolution(input: LeetCodeNode | vscode.Uri): Promise<vo
     }
 }
 
-async function fetchProblemLanguage(): Promise<string | undefined> {
+async function fetchProblemLanguage(node?: IProblem): Promise<string | undefined> {
+    let supportLangs: string[] | null = null;
+    if (node) {
+        const problemDescription: string = await leetCodeExecutor.getDescription(node.id);
+        const matchLang: RegExpMatchArray | null = problemDescription.match(/\n(Langs:[\w\s]+)\n/);
+        supportLangs = matchLang && matchLang[1]
+            ? matchLang[1].slice(6).split(/\s+/).filter(Boolean)
+            : null;
+    }
+    if (!supportLangs) {
+        supportLangs = languages.slice();
+    }
     const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
     let defaultLanguage: string | undefined = leetCodeConfig.get<string>("defaultLanguage");
-    if (defaultLanguage && languages.indexOf(defaultLanguage) < 0) {
+    if (defaultLanguage && supportLangs.indexOf(defaultLanguage) < 0) {
         defaultLanguage = undefined;
     }
-    const language: string | undefined = defaultLanguage || await vscode.window.showQuickPick(languages, { placeHolder: "Select the language you want to use", ignoreFocusOut: true });
+    const language: string | undefined = defaultLanguage || await vscode.window.showQuickPick(supportLangs, { placeHolder: "Select the language you want to use", ignoreFocusOut: true });
     // fire-and-forget default language query
     (async (): Promise<void> => {
         if (language && !defaultLanguage && leetCodeConfig.get<boolean>("hint.setDefaultLanguage")) {
@@ -133,7 +144,7 @@ async function fetchProblemLanguage(): Promise<string | undefined> {
 
 async function showProblemInternal(node: IProblem): Promise<void> {
     try {
-        const language: string | undefined = await fetchProblemLanguage();
+        const language: string | undefined = await fetchProblemLanguage(node);
         if (!language) {
             return;
         }

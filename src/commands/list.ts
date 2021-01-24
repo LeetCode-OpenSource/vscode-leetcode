@@ -36,7 +36,7 @@ export async function listProblems(): Promise<IProblem[]> {
                 });
             }
         }
-        return problems.reverse();
+        return problems.sort((p1: IProblem, p2: IProblem) => +p1.id - +p2.id);
     } catch (error) {
         await promptForOpenOutputChannel("Failed to list problems. Please open the output channel for details.", DialogType.error);
         return [];
