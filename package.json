@@ -684,6 +684,6 @@
         "markdown-it": "^8.4.2",
         "require-from-string": "^2.0.2",
         "unescape-js": "^1.1.1",
-        "vsc-leetcode-cli": "2.7.0"
+        "vsc-leetcode-cli": "git+ssh://git@github.com:libaoxi/leetcode-cli.git"
     }
 }
