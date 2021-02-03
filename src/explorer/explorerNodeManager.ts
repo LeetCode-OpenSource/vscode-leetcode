@@ -57,6 +57,35 @@ class ExplorerNodeManager implements Disposable {
 
     public getAllNodes(): LeetCodeNode[] {
         return Array.from(this.explorerNodeMap.values());
+        // const res: LeetCodeNode[] = [];
+        // res.push(
+        //     new LeetCodeNode(Object.assign({}, defaultProblem, {
+        //         id: ``,
+        //         name: "算法",
+        //     }), false),
+        //     new LeetCodeNode(Object.assign({}, defaultProblem, {
+        //         id: ``,
+        //         name: "数据库",
+        //     }), false),
+        //     new LeetCodeNode(Object.assign({}, defaultProblem, {
+        //         id: ``,
+        //         name: "Shell",
+        //     }), false),
+        //     new LeetCodeNode(Object.assign({}, defaultProblem, {
+        //         id: ``,
+        //         name: "多线程",
+        //     }), false),
+        //     new LeetCodeNode(Object.assign({}, defaultProblem, {
+        //         id: ``,
+        //         name: "程序员面试金典",
+        //     }), false),
+        //     new LeetCodeNode(Object.assign({}, defaultProblem, {
+        //         id: ``,
+        //         name: "剑指Offer",
+        //     }), false),
+        // );
+        // this.sortSubCategoryNodes(res, Category.All);
+        // return res;
     }
 
     public getAllDifficultyNodes(): LeetCodeNode[] {
@@ -153,22 +182,41 @@ class ExplorerNodeManager implements Disposable {
 
     private sortSubCategoryNodes(subCategoryNodes: LeetCodeNode[], category: Category): void {
         switch (category) {
-            case Category.Difficulty:
-                subCategoryNodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => {
-                    function getValue(input: LeetCodeNode): number {
-                        switch (input.name.toLowerCase()) {
-                            case "easy":
-                                return 1;
-                            case "medium":
-                                return 2;
-                            case "hard":
-                                return 3;
-                            default:
-                                return Number.MAX_SAFE_INTEGER;
-                        }
+            case Category.All:
+                function getCategoryValue(input: LeetCodeNode): number {
+                    switch (input.category.toLowerCase()) {
+                        case "algorithms":
+                            return 1;
+                        case "database":
+                            return 2;
+                        case "shell":
+                            return 3;
+                        case "concurrency":
+                            return 4;
+                        case "lcci":
+                            return 4;
+                        case "lcof":
+                            return 4;
+                        default:
+                            return Number.MAX_SAFE_INTEGER;
                     }
-                    return getValue(a) - getValue(b);
-                });
+                }
+                subCategoryNodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => getCategoryValue(a) - getCategoryValue(b));
+                break;
+            case Category.Difficulty:
+                function getDifficultyValue(input: LeetCodeNode): number {
+                    switch (input.name.toLowerCase()) {
+                        case "easy":
+                            return 1;
+                        case "medium":
+                            return 2;
+                        case "hard":
+                            return 3;
+                        default:
+                            return Number.MAX_SAFE_INTEGER;
+                    }
+                }
+                subCategoryNodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => getDifficultyValue(a) - getDifficultyValue(b));
                 break;
             case Category.Tag:
             case Category.Company:
