@@ -15,7 +15,7 @@ export async function listProblems(): Promise<IProblem[]> {
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         const showLocked: boolean = !!leetCodeConfig.get<boolean>("showLocked");
         const problems: IProblem[] = [];
-        for (let pc in ProblemCategory) {
+        for (const pc in ProblemCategory) {
             const result: string = await leetCodeExecutor.listProblems(showLocked, ProblemCategory[pc]);
             const lines: string[] = result.split("\n");
             const reg: RegExp = /^(.)\s(.{1,2})\s(.)\s\[(.*)\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;
