@@ -366,7 +366,7 @@
                     },
                     "leetcode.workspaceFolder": {
                         "type": "string",
-                        "scope": "application",
+                        "scope": "machine",
                         "description": "The path of the workspace folder to store the problem files.",
                         "default": ""
                     },
