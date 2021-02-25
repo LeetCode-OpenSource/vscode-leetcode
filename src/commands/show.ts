@@ -77,6 +77,43 @@ export async function searchProblem(): Promise<void> {
     await showProblemInternal(choice.value);
 }
 
+export async function getProblemByIds(): Promise<void> {
+	if (!leetCodeManager.getUser()) {
+		promptForSignIn();
+		return;
+	}
+
+	const ids: string | undefined = await vscode.window.showInputBox({
+		prompt: "Input problem ids ,such as [1,2,3]",
+		ignoreFocusOut: true,
+		validateInput: (s: string): string | undefined => s && s.trim() ? undefined : "The input must not be empty",
+	});
+
+    try {
+        let res:any = JSON.parse(ids||"");
+		if (!Array.isArray(res)) {
+            vscode.window.showErrorMessage("The problem ids should be array");
+            return;
+        }
+		if (res.length === 0)  {
+            vscode.window.showErrorMessage("The problem ids must not be empty");
+            return;
+        }
+		res = res.map(v => String(v));
+        const allProblems: any = await list.listProblems();
+        const problems: any = allProblems.filter(v => res.includes(v.id)||res.includes(v.name));
+        if (!problems.length) {
+            return;
+        }
+        while (problems.length !== 0) {
+            const cur = problems.shift();
+            await showProblemInternal(cur, true);
+        }
+    } catch (error) {
+        vscode.window.showErrorMessage(error)
+    }
+}
+
 export async function showSolution(input: LeetCodeNode | vscode.Uri): Promise<void> {
     let problemInput: string | undefined;
     if (input instanceof LeetCodeNode) { // Triggerred from explorer
@@ -131,7 +168,7 @@ async function fetchProblemLanguage(): Promise<string | undefined> {
     return language;
 }
 
-async function showProblemInternal(node: IProblem): Promise<void> {
+async function showProblemInternal(node: IProblem, muteFlag: boolean = false ): Promise<void> {
     try {
         const language: string | undefined = await fetchProblemLanguage();
         if (!language) {
@@ -168,6 +205,10 @@ async function showProblemInternal(node: IProblem): Promise<void> {
 
         const descriptionConfig: IDescriptionConfiguration = settingUtils.getDescriptionConfiguration();
         await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment);
+        if (muteFlag) {
+			vscode.window.showInformationMessage(`Added ${node.id}.${node.name} !`);
+			return;
+		}
         const promises: any[] = [
             vscode.window.showTextDocument(vscode.Uri.file(finalPath), { preview: false, viewColumn: vscode.ViewColumn.One }),
             promptHintMessage(

@@ -57,6 +57,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             vscode.commands.registerCommand("leetcode.showProblem", (node: LeetCodeNode) => show.showProblem(node)),
             vscode.commands.registerCommand("leetcode.pickOne", () => show.pickOne()),
             vscode.commands.registerCommand("leetcode.searchProblem", () => show.searchProblem()),
+	        vscode.commands.registerCommand("leetcode.getProblemByIds", () => show.getProblemByIds()),
             vscode.commands.registerCommand("leetcode.showSolution", (input: LeetCodeNode | vscode.Uri) => show.showSolution(input)),
             vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
             vscode.commands.registerCommand("leetcode.testSolution", (uri?: vscode.Uri) => test.testSolution(uri)),
