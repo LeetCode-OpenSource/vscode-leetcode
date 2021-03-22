@@ -364,6 +364,11 @@
                         ],
                         "description": "Endpoint of the user account."
                     },
+                    "leetcode.useEndpointTranslation": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": " Use endpoint's translation (if available)"
+                    },
                     "leetcode.workspaceFolder": {
                         "type": "string",
                         "scope": "application",
