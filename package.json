@@ -367,7 +367,7 @@
                     "leetcode.useEndpointTranslation": {
                         "type": "boolean",
                         "default": true,
-                        "description": "Use endpoint's translation (if available) [cache clear REQUIRED]"
+                        "description": "Use endpoint's translation (if available)"
                     },
                     "leetcode.workspaceFolder": {
                         "type": "string",
