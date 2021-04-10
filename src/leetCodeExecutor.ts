@@ -90,8 +90,8 @@ class LeetCodeExecutor implements Disposable {
 
     public async listProblems(showLocked: boolean, category: string): Promise<string> {
         return await this.executeCommandEx(this.nodeExecutable, showLocked ?
-            [await this.getLeetCodeBinaryPath(), "list", "-t", category] :
-            [await this.getLeetCodeBinaryPath(), "list", "-t", category, "-q", "L"],
+            [await this.getLeetCodeBinaryPath(), "list", "-c", category] :
+            [await this.getLeetCodeBinaryPath(), "list", "-c", category, "-q", "L"],
         );
     }
 

@@ -34,7 +34,7 @@ export async function listProblems(): Promise<IProblem[]> {
                         passRate: match[7].trim(),
                         companies: companies[id] || ["Unknown"],
                         tags: tags[id] || ["Unknown"],
-                        category: pc,
+                        category: ProblemCategory[pc],
                     });
                 }
             }

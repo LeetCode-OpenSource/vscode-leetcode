@@ -4,7 +4,7 @@
 import * as _ from "lodash";
 import { Disposable } from "vscode";
 import * as list from "../commands/list";
-import { Category, defaultProblem, ProblemState } from "../shared";
+import { Category, defaultProblem, ProblemCategory, ProblemState } from "../shared";
 import { shouldHideSolvedProblem } from "../utils/settingUtils";
 import { LeetCodeNode } from "./LeetCodeNode";
 
@@ -56,36 +56,36 @@ class ExplorerNodeManager implements Disposable {
     }
 
     public getAllNodes(): LeetCodeNode[] {
-        return Array.from(this.explorerNodeMap.values());
-        // const res: LeetCodeNode[] = [];
-        // res.push(
-        //     new LeetCodeNode(Object.assign({}, defaultProblem, {
-        //         id: ``,
-        //         name: "算法",
-        //     }), false),
-        //     new LeetCodeNode(Object.assign({}, defaultProblem, {
-        //         id: ``,
-        //         name: "数据库",
-        //     }), false),
-        //     new LeetCodeNode(Object.assign({}, defaultProblem, {
-        //         id: ``,
-        //         name: "Shell",
-        //     }), false),
-        //     new LeetCodeNode(Object.assign({}, defaultProblem, {
-        //         id: ``,
-        //         name: "多线程",
-        //     }), false),
-        //     new LeetCodeNode(Object.assign({}, defaultProblem, {
-        //         id: ``,
-        //         name: "程序员面试金典",
-        //     }), false),
-        //     new LeetCodeNode(Object.assign({}, defaultProblem, {
-        //         id: ``,
-        //         name: "剑指Offer",
-        //     }), false),
-        // );
-        // this.sortSubCategoryNodes(res, Category.All);
-        // return res;
+        // return Array.from(this.explorerNodeMap.values());
+        const res: LeetCodeNode[] = [];
+        res.push(
+            new LeetCodeNode(Object.assign({}, defaultProblem, {
+                id: `${Category.All}.${ProblemCategory.ALGORITHMS}`,
+                name: "算法",
+            }), false),
+            new LeetCodeNode(Object.assign({}, defaultProblem, {
+                id: `${Category.All}.${ProblemCategory.DATABASE}`,
+                name: "数据库",
+            }), false),
+            new LeetCodeNode(Object.assign({}, defaultProblem, {
+                id: `${Category.All}.${ProblemCategory.SHELL}`,
+                name: "Shell",
+            }), false),
+            new LeetCodeNode(Object.assign({}, defaultProblem, {
+                id: `${Category.All}.${ProblemCategory.CONCURRENCY}`,
+                name: "多线程",
+            }), false),
+            new LeetCodeNode(Object.assign({}, defaultProblem, {
+                id: `${Category.All}.${ProblemCategory.LCCI}`,
+                name: "程序员面试金典",
+            }), false),
+            new LeetCodeNode(Object.assign({}, defaultProblem, {
+                id: `${Category.All}.${ProblemCategory.LCOF}`,
+                name: "剑指Offer",
+            }), false),
+        );
+        this.sortSubCategoryNodes(res, Category.All);
+        return res;
     }
 
     public getAllDifficultyNodes(): LeetCodeNode[] {
@@ -152,6 +152,11 @@ class ExplorerNodeManager implements Disposable {
         const res: LeetCodeNode[] = [];
         for (const node of this.explorerNodeMap.values()) {
             switch (metaInfo[0]) {
+                case Category.All:
+                    if (node.category === metaInfo[1]) {
+                        res.unshift(node);
+                    }
+                    break;
                 case Category.Company:
                     if (node.companies.indexOf(metaInfo[1]) >= 0) {
                         res.push(node);
@@ -194,9 +199,9 @@ class ExplorerNodeManager implements Disposable {
                         case "concurrency":
                             return 4;
                         case "lcci":
-                            return 4;
+                            return 5;
                         case "lcof":
-                            return 4;
+                            return 6;
                         default:
                             return Number.MAX_SAFE_INTEGER;
                     }
