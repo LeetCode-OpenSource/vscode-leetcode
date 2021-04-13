@@ -367,6 +367,7 @@
                     "leetcode.useEndpointTranslation": {
                         "type": "boolean",
                         "default": true,
+                        "scope": "application",
                         "description": "Use endpoint's translation (if available)"
                     },
                     "leetcode.workspaceFolder": {
