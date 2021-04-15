@@ -115,6 +115,17 @@ class LeetCodeExecutor implements Disposable {
         }
     }
 
+    /**
+     * This function returns solution of a problem identified by input
+     *
+     * @remarks
+     * Even though this function takes the needTranslation flag, it is important to note that as of vsc-leetcode-cli 2.8.0, leetcode-cli doesn't support querying solution on CN endpoint yet. So this flag doesn't have any effect right now.
+     *
+     * @param input - parameter to pass to cli that can identify a problem
+     * @param language - the source code language of the solution desired
+     * @param needTranslation - whether or not to use endPoint translation on solution query
+     * @returns promise of the solution string
+     */
     public async showSolution(input: string, language: string, needTranslation: boolean): Promise<string> {
         // solution don't support translation
         const cmd: string[] = [await this.getLeetCodeBinaryPath(), "show", input, "--solution", "-l", language];
