@@ -641,7 +641,7 @@
                                 "Show the problem description page."
                             ]
                         },
-                        "description": "Customize the shorcuts in editors."
+                        "description": "Customize the shortcuts in editors."
                     },
                     "leetcode.enableSideMode": {
                         "type": "boolean",
