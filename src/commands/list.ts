@@ -5,6 +5,7 @@ import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IProblem, ProblemState, UserStatus } from "../shared";
+import * as settingUtils from "../utils/settingUtils";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
 
 export async function listProblems(): Promise<IProblem[]> {
@@ -14,7 +15,8 @@ export async function listProblems(): Promise<IProblem[]> {
         }
         const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
         const showLocked: boolean = !!leetCodeConfig.get<boolean>("showLocked");
-        const result: string = await leetCodeExecutor.listProblems(showLocked);
+        const useEndpointTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
+        const result: string = await leetCodeExecutor.listProblems(showLocked, useEndpointTranslation);
         const problems: IProblem[] = [];
         const lines: string[] = result.split("\n");
         const reg: RegExp = /^(.)\s(.{1,2})\s(.)\s\[\s*(\d*)\s*\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;

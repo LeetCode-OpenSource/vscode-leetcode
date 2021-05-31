@@ -41,8 +41,8 @@ export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: b
     } else {
         node = input;
     }
-
-    const descString: string = await leetCodeExecutor.getDescription(node.id);
+    const needTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
+    const descString: string = await leetCodeExecutor.getDescription(node.id, needTranslation);
     leetCodePreviewProvider.show(descString, node, isSideMode);
 }
 
@@ -97,7 +97,8 @@ export async function showSolution(input: LeetCodeNode | vscode.Uri): Promise<vo
         return;
     }
     try {
-        const solution: string = await leetCodeExecutor.showSolution(problemInput, language);
+        const needTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
+        const solution: string = await leetCodeExecutor.showSolution(problemInput, language, needTranslation);
         leetCodeSolutionProvider.show(unescapeJS(solution));
     } catch (error) {
         leetCodeChannel.appendLine(error.toString());
@@ -167,7 +168,9 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         finalPath = wsl.useWsl() ? await wsl.toWinPath(finalPath) : finalPath;
 
         const descriptionConfig: IDescriptionConfiguration = settingUtils.getDescriptionConfiguration();
-        await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment);
+        const needTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
+
+        await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment, needTranslation);
         const promises: any[] = [
             vscode.window.showTextDocument(vscode.Uri.file(finalPath), { preview: false, viewColumn: vscode.ViewColumn.One }),
             promptHintMessage(

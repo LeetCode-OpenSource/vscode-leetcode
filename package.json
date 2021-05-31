@@ -364,6 +364,12 @@
                         ],
                         "description": "Endpoint of the user account."
                     },
+                    "leetcode.useEndpointTranslation": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Use endpoint's translation (if available)"
+                    },
                     "leetcode.workspaceFolder": {
                         "type": "string",
                         "scope": "application",
@@ -672,8 +678,8 @@
         "@types/markdown-it": "0.0.7",
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
-        "@types/vscode": "1.42.0",
         "@types/require-from-string": "^1.2.0",
+        "@types/vscode": "1.42.0",
         "tslint": "^5.9.1",
         "typescript": "^2.6.1"
     },
@@ -684,6 +690,6 @@
         "markdown-it": "^8.4.2",
         "require-from-string": "^2.0.2",
         "unescape-js": "^1.1.1",
-        "vsc-leetcode-cli": "2.7.0"
+        "vsc-leetcode-cli": "2.8.0"
     }
 }
