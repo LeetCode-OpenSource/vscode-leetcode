@@ -59,7 +59,6 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
 
     protected onDidDisposeWebview(): void {
         super.onDidDisposeWebview();
-        delete this.result;
     }
 
     private async showKeybindingsHint(): Promise<void> {
