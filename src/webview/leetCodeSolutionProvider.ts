@@ -64,7 +64,6 @@ class LeetCodeSolutionProvider extends LeetCodeWebview {
 
     protected onDidDisposeWebview(): void {
         super.onDidDisposeWebview();
-        delete this.solution;
     }
 
     private parseSolution(raw: string): Solution {

@@ -88,30 +88,62 @@ class LeetCodeExecutor implements Disposable {
         return await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "user", "-L"]);
     }
 
-    public async listProblems(showLocked: boolean): Promise<string> {
-        return await this.executeCommandEx(this.nodeExecutable, showLocked ?
-            [await this.getLeetCodeBinaryPath(), "list"] :
-            [await this.getLeetCodeBinaryPath(), "list", "-q", "L"],
-        );
+    public async listProblems(showLocked: boolean, needTranslation: boolean): Promise<string> {
+        const cmd: string[] = [await this.getLeetCodeBinaryPath(), "list"];
+        if (!needTranslation) {
+            cmd.push("-T"); // use -T to prevent translation
+        }
+        if (!showLocked) {
+            cmd.push("-q");
+            cmd.push("L");
+        }
+        return await this.executeCommandEx(this.nodeExecutable, cmd);
     }
 
-    public async showProblem(problemNode: IProblem, language: string, filePath: string, showDescriptionInComment: boolean = false): Promise<void> {
+    public async showProblem(problemNode: IProblem, language: string, filePath: string, showDescriptionInComment: boolean = false, needTranslation: boolean): Promise<void> {
         const templateType: string = showDescriptionInComment ? "-cx" : "-c";
+        const cmd: string[] = [await this.getLeetCodeBinaryPath(), "show", problemNode.id, templateType, "-l", language];
+
+        if (!needTranslation) {
+            cmd.push("-T"); // use -T to force English version
+        }
 
         if (!await fse.pathExists(filePath)) {
             await fse.createFile(filePath);
-            const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", problemNode.id, templateType, "-l", language]);
+            const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", this.nodeExecutable, cmd);
             await fse.writeFile(filePath, codeTemplate);
         }
     }
 
-    public async showSolution(input: string, language: string): Promise<string> {
-        const solution: string = await this.executeCommandWithProgressEx("Fetching top voted solution from discussions...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", input, "--solution", "-l", language]);
+    /**
+     * This function returns solution of a problem identified by input
+     *
+     * @remarks
+     * Even though this function takes the needTranslation flag, it is important to note
+     * that as of vsc-leetcode-cli 2.8.0, leetcode-cli doesn't support querying solution
+     * on CN endpoint yet. So this flag doesn't have any effect right now.
+     *
+     * @param input - parameter to pass to cli that can identify a problem
+     * @param language - the source code language of the solution desired
+     * @param needTranslation - whether or not to use endPoint translation on solution query
+     * @returns promise of the solution string
+     */
+    public async showSolution(input: string, language: string, needTranslation: boolean): Promise<string> {
+        // solution don't support translation
+        const cmd: string[] = [await this.getLeetCodeBinaryPath(), "show", input, "--solution", "-l", language];
+        if (!needTranslation) {
+            cmd.push("-T");
+        }
+        const solution: string = await this.executeCommandWithProgressEx("Fetching top voted solution from discussions...", this.nodeExecutable, cmd);
         return solution;
     }
 
-    public async getDescription(problemNodeId: string): Promise<string> {
-        return await this.executeCommandWithProgressEx("Fetching problem description...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "show", problemNodeId, "-x"]);
+    public async getDescription(problemNodeId: string, needTranslation: boolean): Promise<string> {
+        const cmd: string[] = [await this.getLeetCodeBinaryPath(), "show", problemNodeId, "-x"];
+        if (!needTranslation) {
+            cmd.push("-T");
+        }
+        return await this.executeCommandWithProgressEx("Fetching problem description...", this.nodeExecutable, cmd);
     }
 
     public async listSessions(): Promise<string> {
