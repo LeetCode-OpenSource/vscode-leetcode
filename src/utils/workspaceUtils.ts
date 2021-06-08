@@ -18,9 +18,8 @@ export async function selectWorkspaceFolder(): Promise<string> {
             return workspaceFolderSetting;
         }
     }
-    const workspaceFolders: vscode.WorkspaceFolder[] = vscode.workspace.workspaceFolders || [];
     let needAsk: boolean = true;
-    for (const folder of workspaceFolders) {
+    for (const folder of vscode.workspace.workspaceFolders || []) {
         if (isSubFolder(folder.uri.fsPath, workspaceFolderSetting)) {
             needAsk = false;
         }
@@ -47,7 +46,7 @@ export async function selectWorkspaceFolder(): Promise<string> {
                 await vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(workspaceFolderSetting), true);
                 return "";
             case OpenOption.addToWorkspace:
-                vscode.workspace.updateWorkspaceFolders(workspaceFolders.length, 0, { uri: vscode.Uri.file(workspaceFolderSetting) });
+                vscode.workspace.updateWorkspaceFolders(vscode.workspace.workspaceFolders?.length ?? 0, 0, { uri: vscode.Uri.file(workspaceFolderSetting) });
                 break;
             default:
                 return "";
