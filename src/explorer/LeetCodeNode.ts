@@ -14,6 +14,12 @@ export class LeetCodeNode {
     public get name(): string {
         return this.data.name;
     }
+    public get name_en(): string {
+        return this.data.name_en;
+    }
+    public set name_en(name_en: string) {
+        this.data.name_en = name_en;
+    }
 
     public get state(): ProblemState {
         return this.data.state;

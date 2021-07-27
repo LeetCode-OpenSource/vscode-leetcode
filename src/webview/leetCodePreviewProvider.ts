@@ -162,6 +162,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
             /* testcase */, ,
             ...body
         ] = descString.split("\n");
+        problem.name_en = url.substring(url.indexOf("problems") + 9, url.indexOf("description") - 1).replace("/", "_");
         return {
             title: problem.name,
             url,

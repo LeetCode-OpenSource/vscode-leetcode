@@ -31,6 +31,7 @@ export async function listProblems(): Promise<IProblem[]> {
                     locked: match[2].trim().length > 0,
                     state: parseProblemState(match[3]),
                     name: match[5].trim(),
+                    name_en: "",
                     difficulty: match[6].trim(),
                     passRate: match[7].trim(),
                     companies: companies[id] || ["Unknown"],
