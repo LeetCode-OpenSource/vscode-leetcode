@@ -14,6 +14,9 @@ export class LeetCodeNode {
     public get name(): string {
         return this.data.name;
     }
+    public get slug(): string {
+        return this.data.slug;
+    }
 
     public get state(): ProblemState {
         return this.data.state;

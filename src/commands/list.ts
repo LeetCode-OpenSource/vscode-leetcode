@@ -19,11 +19,11 @@ export async function listProblems(): Promise<IProblem[]> {
         const result: string = await leetCodeExecutor.listProblems(showLocked, useEndpointTranslation);
         const problems: IProblem[] = [];
         const lines: string[] = result.split("\n");
-        const reg: RegExp = /^(.)\s(.{1,2})\s(.)\s\[\s*(\d*)\s*\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;
+        const reg: RegExp = /^(.)\s(.{1,2})\s(.)\s\[\s*(\d*)\s*\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)\s*(.*)/;
         const { companies, tags } = await leetCodeExecutor.getCompaniesAndTags();
         for (const line of lines) {
             const match: RegExpMatchArray | null = line.match(reg);
-            if (match && match.length === 8) {
+            if (match && match.length === 9) {
                 const id: string = match[4].trim();
                 problems.push({
                     id,
@@ -33,6 +33,7 @@ export async function listProblems(): Promise<IProblem[]> {
                     name: match[5].trim(),
                     difficulty: match[6].trim(),
                     passRate: match[7].trim(),
+                    slug: match[8].trim(),
                     companies: companies[id] || ["Unknown"],
                     tags: tags[id] || ["Unknown"],
                 });
