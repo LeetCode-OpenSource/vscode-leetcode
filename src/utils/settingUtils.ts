@@ -25,6 +25,10 @@ export function hasStarShortcut(): boolean {
     return shortcuts.indexOf("star") >= 0;
 }
 
+export function shouldUseEndpointTranslation(): boolean {
+    return getWorkspaceConfiguration().get<boolean>("useEndpointTranslation", true);
+}
+
 export function getDescriptionConfiguration(): IDescriptionConfiguration {
     const setting: string = getWorkspaceConfiguration().get<string>("showDescription", DescriptionConfiguration.InWebView);
     const config: IDescriptionConfiguration = {

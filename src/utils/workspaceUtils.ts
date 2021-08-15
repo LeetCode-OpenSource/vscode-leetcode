@@ -1,6 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
+import * as fse from "fs-extra";
 import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
@@ -18,9 +19,9 @@ export async function selectWorkspaceFolder(): Promise<string> {
             return workspaceFolderSetting;
         }
     }
-    const workspaceFolders: vscode.WorkspaceFolder[] = vscode.workspace.workspaceFolders || [];
     let needAsk: boolean = true;
-    for (const folder of workspaceFolders) {
+    await fse.ensureDir(workspaceFolderSetting);
+    for (const folder of vscode.workspace.workspaceFolders || []) {
         if (isSubFolder(folder.uri.fsPath, workspaceFolderSetting)) {
             needAsk = false;
         }
@@ -37,6 +38,7 @@ export async function selectWorkspaceFolder(): Promise<string> {
             { placeHolder: "The LeetCode workspace folder is not opened in VS Code, would you like to open it?" },
         );
 
+        // Todo: generate file first
         switch (choice) {
             case OpenOption.justOpenFile:
                 return workspaceFolderSetting;
@@ -47,7 +49,7 @@ export async function selectWorkspaceFolder(): Promise<string> {
                 await vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(workspaceFolderSetting), true);
                 return "";
             case OpenOption.addToWorkspace:
-                vscode.workspace.updateWorkspaceFolders(workspaceFolders.length, 0, { uri: vscode.Uri.file(workspaceFolderSetting) });
+                vscode.workspace.updateWorkspaceFolders(vscode.workspace.workspaceFolders?.length ?? 0, 0, { uri: vscode.Uri.file(workspaceFolderSetting) });
                 break;
             default:
                 return "";
