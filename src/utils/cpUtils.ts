@@ -46,7 +46,7 @@ export async function executeCommandWithProgress(message: string, command: strin
             p.report({ message });
             try {
                 result = await executeCommand(command, args, options);
-                resolve(undefined);
+                resolve();
             } catch (e) {
                 reject(e);
             }

@@ -694,7 +694,7 @@
         "typescript": "^4.3.2"
     },
     "dependencies": {
-        "@baoxi/vsc-leetcode-cli": "^2.8.1",
+        "@baoxi/vsc-leetcode-cli": "file://../leetcode-cli",
         "fs-extra": "^10.0.0",
         "highlight.js": "^10.7.2",
         "lodash": "^4.17.21",
