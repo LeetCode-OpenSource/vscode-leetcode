@@ -78,12 +78,11 @@ export async function switchSortingStrategy(): Promise<void> {
     }
 
     const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-    await leetCodeConfig.update("problems.sort-strategy", choice.value, true);
+    await leetCodeConfig.update("problems.sortStrategy", choice.value, true);
     await leetCodeTreeDataProvider.refresh();
-    vscode.window.showInformationMessage(`Switched the sorting strategy to ${choice.value}`);
 }
 
 export function getSortingStrategy(): SortingStrategy {
     const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-    return leetCodeConfig.get<SortingStrategy>("problems.sort-strategy", SortingStrategy.None);
+    return leetCodeConfig.get<SortingStrategy>("problems.sortStrategy", SortingStrategy.None);
 }
