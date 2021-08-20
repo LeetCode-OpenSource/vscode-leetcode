@@ -674,7 +674,7 @@
                     },
                     "leetcode.colorizeProblems": {
                         "type": "boolean",
-                        "default": false,
+                        "default": true,
                         "scope": "application",
                         "description": "Add difficulty badge and colorize problems files in explorer tree."
                     }
