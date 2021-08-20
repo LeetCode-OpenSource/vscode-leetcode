@@ -1,7 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import { Command } from "vscode";
+import { Command, Uri } from "vscode";
 import { IProblem, ProblemState } from "../shared";
 
 export class LeetCodeNode {
@@ -53,6 +53,15 @@ export class LeetCodeNode {
             command: "leetcode.previewProblem",
             arguments: [this],
         };
+    }
+
+    public get uri(): Uri {
+        return Uri.from({
+            scheme: "leetcode",
+            authority: this.isProblem ? "problems" : "tree-node",
+            path: `/${this.id}`, // path must begin with slash /
+            query: `difficulty=${this.difficulty}`,
+        });
     }
 
 }
