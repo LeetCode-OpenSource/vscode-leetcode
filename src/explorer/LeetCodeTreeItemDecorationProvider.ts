@@ -9,9 +9,9 @@ export class LeetCodeTreeItemDecorationProvider implements FileDecorationProvide
     };
 
     private readonly ITEM_COLOR: { [key: string]: ThemeColor } = {
-        easy: new ThemeColor("problems.difficulty.badge.easy"),
-        medium: new ThemeColor("problems.difficulty.badge.medium"),
-        hard: new ThemeColor("problems.difficulty.badge.hard"),
+        easy: new ThemeColor("charts.green"),
+        medium: new ThemeColor("charts.yellow"),
+        hard: new ThemeColor("charts.red"),
     };
 
     public provideFileDecoration(uri: Uri): ProviderResult<FileDecoration>  {

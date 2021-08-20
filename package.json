@@ -674,35 +674,6 @@
                     }
                 }
             }
-        ],
-        "colors": [
-            {
-                "id": "problems.difficulty.badge.easy",
-                "description": "Color for easy problems badge",
-                "defaults": {
-                    "light": "#00b8a3",
-                    "dark": "#00b8a3",
-                    "highContrast": "#00b8a3"
-                }
-            },
-            {
-                "id": "problems.difficulty.badge.medium",
-                "description": "Color for medium level problems badge",
-                "defaults": {
-                    "light": "#ffc01e",
-                    "dark": "#ffc01e",
-                    "highContrast": "#ffc01e"
-                }
-            },
-            {
-                "id": "problems.difficulty.badge.hard",
-                "description": "Color for hard problems badge",
-                "defaults": {
-                    "light": "#ff375f",
-                    "dark": "#ff375f",
-                    "highContrast": "#ff375f"
-                }
-            }
         ]
     },
     "scripts": {
