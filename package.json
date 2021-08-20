@@ -671,6 +671,12 @@
                         "default": "node",
                         "scope": "application",
                         "description": "The Node.js executable path. for example, C:\\Program Files\\nodejs\\node.exe"
+                    },
+                    "leetcode.colorizeProblems": {
+                        "type": "boolean",
+                        "default": false,
+                        "scope": "application",
+                        "description": "Add difficulty badge and colorize problems files in explorer tree."
                     }
                 }
             }
@@ -689,7 +695,7 @@
         "@types/mocha": "^2.2.42",
         "@types/node": "^14.14.33",
         "@types/require-from-string": "^1.2.0",
-        "@types/vscode": "^1.56.0",
+        "@types/vscode": "1.56.0",
         "tslint": "^5.20.1",
         "typescript": "^4.3.2"
     },
