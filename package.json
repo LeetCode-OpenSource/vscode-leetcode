@@ -38,6 +38,7 @@
         "onCommand:leetcode.testSolution",
         "onCommand:leetcode.submitSolution",
         "onCommand:leetcode.switchDefaultLanguage",
+        "onCommand:leetcode.problems.sort",
         "onView:leetCodeExplorer"
     ],
     "main": "./out/src/extension",
@@ -134,6 +135,12 @@
                 "command": "leetcode.switchDefaultLanguage",
                 "title": "Switch Default Language",
                 "category": "LeetCode"
+            },
+            {
+                "command": "leetcode.problems.sort",
+                "title": "Sort Problems",
+                "category": "LeetCode",
+                "icon": "$(sort-precedence)"
             }
         ],
         "viewsContainers": {
@@ -179,6 +186,11 @@
                     "command": "leetcode.pickOne",
                     "when": "view == leetCodeExplorer",
                     "group": "overflow@0"
+                },
+                {
+                    "command": "leetcode.problems.sort",
+                    "when": "view == leetCodeExplorer",
+                    "group": "overflow@1"
                 }
             ],
             "view/item/context": [
@@ -677,6 +689,17 @@
                         "default": true,
                         "scope": "application",
                         "description": "Add difficulty badge and colorize problems files in explorer tree."
+                    },
+                    "leetcode.problems.sortStrategy": {
+                        "type": "string",
+                        "default": "None",
+                        "scope": "application",
+                        "enum": [
+                            "None",
+                            "Acceptance Rate (Ascending)",
+                            "Acceptance Rate (Descending)"
+                        ],
+                        "description": "Sorting strategy for problems list."
                     }
                 }
             }

@@ -4,7 +4,8 @@
 import * as _ from "lodash";
 import { Disposable } from "vscode";
 import * as list from "../commands/list";
-import { Category, defaultProblem, ProblemState } from "../shared";
+import { getSortingStrategy } from "../commands/plugin";
+import { Category, defaultProblem, ProblemState, SortingStrategy } from "../shared";
 import { shouldHideSolvedProblem } from "../utils/settingUtils";
 import { LeetCodeNode } from "./LeetCodeNode";
 
@@ -56,7 +57,9 @@ class ExplorerNodeManager implements Disposable {
     }
 
     public getAllNodes(): LeetCodeNode[] {
-        return Array.from(this.explorerNodeMap.values());
+        return this.applySortingStrategy(
+            Array.from(this.explorerNodeMap.values()),
+        );
     }
 
     public getAllDifficultyNodes(): LeetCodeNode[] {
@@ -114,7 +117,7 @@ class ExplorerNodeManager implements Disposable {
                 res.push(node);
             }
         }
-        return res;
+        return this.applySortingStrategy(res);
     }
 
     public getChildrenNodesById(id: string): LeetCodeNode[] {
@@ -142,7 +145,7 @@ class ExplorerNodeManager implements Disposable {
                     break;
             }
         }
-        return res;
+        return this.applySortingStrategy(res);
     }
 
     public dispose(): void {
@@ -184,6 +187,15 @@ class ExplorerNodeManager implements Disposable {
                 break;
             default:
                 break;
+        }
+    }
+
+    private applySortingStrategy(nodes: LeetCodeNode[]): LeetCodeNode[] {
+        const strategy: SortingStrategy = getSortingStrategy();
+        switch (strategy) {
+            case SortingStrategy.AcceptanceRateAsc: return nodes.sort((x: LeetCodeNode, y: LeetCodeNode) => Number(x.acceptanceRate) - Number(y.acceptanceRate));
+            case SortingStrategy.AcceptanceRateDesc: return nodes.sort((x: LeetCodeNode, y: LeetCodeNode) => Number(y.acceptanceRate) - Number(x.acceptanceRate));
+            default: return nodes;
         }
     }
 }

@@ -55,6 +55,10 @@ export class LeetCodeNode {
         };
     }
 
+    public get acceptanceRate(): number {
+        return Number(this.passRate.slice(0, -1).trim());
+    }
+
     public get uri(): Uri {
         return Uri.from({
             scheme: "leetcode",

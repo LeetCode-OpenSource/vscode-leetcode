@@ -2,9 +2,10 @@
 // Licensed under the MIT license.
 
 import * as vscode from "vscode";
+import { leetCodeTreeDataProvider } from "../explorer/LeetCodeTreeDataProvider";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { IQuickItemEx } from "../shared";
-import { Endpoint } from "../shared";
+import { Endpoint, SortingStrategy } from "../shared";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { deleteCache } from "./cache";
 
@@ -51,4 +52,37 @@ export async function switchEndpoint(): Promise<void> {
 export function getLeetCodeEndpoint(): string {
     const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
     return leetCodeConfig.get<string>("endpoint", Endpoint.LeetCode);
+}
+
+const SORT_ORDER: SortingStrategy[] = [
+    SortingStrategy.None,
+    SortingStrategy.AcceptanceRateAsc,
+    SortingStrategy.AcceptanceRateDesc,
+];
+
+export async function switchSortingStrategy(): Promise<void> {
+    const currentStrategy: SortingStrategy = getSortingStrategy();
+    const picks: Array<IQuickItemEx<string>> = [];
+    picks.push(
+        ...SORT_ORDER.map((s: SortingStrategy) => {
+            return {
+                label: `${currentStrategy === s ? "$(check)" : "    "} ${s}`,
+                value: s,
+            };
+        }),
+    );
+
+    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(picks);
+    if (!choice || choice.value === currentStrategy) {
+        return;
+    }
+
+    const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+    await leetCodeConfig.update("problems.sortStrategy", choice.value, true);
+    await leetCodeTreeDataProvider.refresh();
+}
+
+export function getSortingStrategy(): SortingStrategy {
+    const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+    return leetCodeConfig.get<SortingStrategy>("problems.sortStrategy", SortingStrategy.None);
 }
