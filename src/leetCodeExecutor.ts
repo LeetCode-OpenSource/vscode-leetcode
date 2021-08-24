@@ -100,6 +100,11 @@ class LeetCodeExecutor implements Disposable {
         return await this.executeCommandEx(this.nodeExecutable, cmd);
     }
 
+    public async problemOfToday(): Promise<string> {
+        const cmd: string[] = [await this.getLeetCodeBinaryPath(), "show", "-d"];
+        return await this.executeCommandWithProgressEx("Loading problem of today...", this.nodeExecutable, cmd);
+    }
+
     public async showProblem(problemNode: IProblem, language: string, filePath: string, showDescriptionInComment: boolean = false, needTranslation: boolean): Promise<void> {
         const templateType: string = showDescriptionInComment ? "-cx" : "-c";
         const cmd: string[] = [await this.getLeetCodeBinaryPath(), "show", problemNode.id, templateType, "-l", language];
