@@ -307,6 +307,7 @@
                             "c",
                             "cpp",
                             "csharp",
+                            "elixir",
                             "golang",
                             "java",
                             "javascript",
@@ -465,6 +466,18 @@
                                 "minProperties": 1
                             },
                             "csharp": {
+                                "type": "object",
+                                "properties": {
+                                    "folder": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "elixir": {
                                 "type": "object",
                                 "properties": {
                                     "folder": {
