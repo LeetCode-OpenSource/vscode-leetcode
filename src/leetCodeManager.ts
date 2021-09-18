@@ -70,7 +70,7 @@ class LeetCodeManager extends EventEmitter {
             throw new Error(`The login method "${loginMethod}" is not supported.`);
         }
         const isByCookie: boolean = loginMethod === "Cookie";
-        const inMessage: string = isByCookie ? "sign in by cookie" : "sign in";
+        const inMessage: string = isByCookie ? "signed in by cookie" : "signed in";
         try {
             const userName: string | undefined = await new Promise(async (resolve: (res: string | undefined) => void, reject: (e: Error) => void): Promise<void> => {
 
