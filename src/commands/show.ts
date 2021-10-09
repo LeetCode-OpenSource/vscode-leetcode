@@ -58,19 +58,24 @@ export async function problemOfToday(): Promise<void> {
         return;
     }
     try {
-        const nodes: LeetCodeNode[] = await explorerNodeManager.getAllNodes()
+        const nodes: LeetCodeNode[] = explorerNodeManager.getAllNodes()
         const problemOfTodayStr: string = await leetCodeExecutor.problemOfToday();
         const lines: string[] = problemOfTodayStr.split("\n");
         const reg: RegExp = /^\[(.+)\]\s.*/
         const match: RegExpMatchArray | null = lines[0].match(reg);
         if (match != null) {
             const id = match[1]
-            const problemOfToday: IProblem = nodes.filter(one => one.id === id)[0];
-            await showProblemInternal(problemOfToday);
+            const problemOfToday: IProblem[] = nodes.filter(one => one.id === id);
+            if (problemOfToday.length != 1) {
+                await promptForOpenOutputChannel("Fail to load problem of today. You may need to refresh the problem list.", DialogType.error);
+            }
+            else {
+                await showProblemInternal(problemOfToday[0]);
+            }
         }
     }
     catch {
-        await promptForOpenOutputChannel("Fail to load problem of today. You may need to refresh the problem list. Open the output channel for details.", DialogType.error);
+        await promptForOpenOutputChannel("Fail to load problem of today. Open the output channel for details.", DialogType.error);
     }
 }
 
