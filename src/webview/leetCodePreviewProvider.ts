@@ -211,5 +211,3 @@ interface IWebViewMessage {
 }
 
 export const leetCodePreviewProvider: LeetCodePreviewProvider = new LeetCodePreviewProvider();
-
-
