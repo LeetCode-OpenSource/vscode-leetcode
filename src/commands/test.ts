@@ -11,6 +11,7 @@ import { DialogType, promptForOpenOutputChannel, showFileSelectDialog } from "..
 import { getActiveFilePath } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
 import { leetCodeSubmissionProvider } from "../webview/leetCodeSubmissionProvider";
+import { quote } from "shell-quote";
 
 export async function testSolution(uri?: vscode.Uri): Promise<void> {
     try {
@@ -89,7 +90,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
 
 function parseTestString(test: string): string {
     if (wsl.useWsl() || !isWindows()) {
-        return `'${test}'`;
+        return quote([`'${test}'`]);
     }
 
     // In windows and not using WSL
