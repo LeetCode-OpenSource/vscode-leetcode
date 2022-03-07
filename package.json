@@ -700,6 +700,24 @@
                             "Acceptance Rate (Descending)"
                         ],
                         "description": "Sorting strategy for problems list."
+                    },
+                    "leetcode.preview.showCompanies": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Show list of companies in problem preview."
+                    },
+                    "leetcode.preview.showTags": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Show list of tags in problem preview."
+                    },
+                    "leetcode.preview.showMetadata": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Show problem metadata (category, difficulty, likes, dislikes) in problem preview."
                     }
                 }
             }
