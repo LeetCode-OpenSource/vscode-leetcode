@@ -726,7 +726,7 @@
         "fs-extra": "^10.0.0",
         "highlight.js": "^10.7.2",
         "lodash": "^4.17.21",
-        "markdown-it": "^8.4.2",
+        "markdown-it": "^12.3.2",
         "require-from-string": "^2.0.2",
         "unescape-js": "^1.1.4",
         "vsc-leetcode-cli": "2.8.1"
