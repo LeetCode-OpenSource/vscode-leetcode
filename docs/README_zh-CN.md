@@ -23,7 +23,7 @@
 - [English Document](https://github.com/LeetCode-OpenSource/vscode-leetcode#requirements) | 中文文档
 
 ## ❗️ 注意 ❗️- 无法登录 LeetCode 节点的临时解决办法
-> 注意：如果使用的是 `leetcode-cn.com` 账户，可以跳过此段落。
+> 注意：如果使用的是 `leetcode.cn` 账户，可以跳过此段落。
 
 近期我们发现插件出现了[无法登录 leetcode.com 节点的问题](https://github.com/LeetCode-OpenSource/vscode-leetcode/issues/478)。原因是因为近期 leetcode.com 改变了登录机制，目前我们暂时没有找到解决该问题的完美解决方案。
 
@@ -64,7 +64,7 @@
 
 - 目前可切换的版本有:
   - **leetcode.com**
-  - **leetcode-cn.com**
+  - **leetcode.cn**
 
   > 注意：两种版本的 LeetCode 账户并**不通用**，请确保当前激活的版本是正确的。插件默认激活的是**英文版**。
 

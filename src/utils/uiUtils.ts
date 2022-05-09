@@ -48,7 +48,7 @@ export async function promptForSignIn(): Promise<void> {
             break;
         case DialogOptions.singUp:
             if (getLeetCodeEndpoint()) {
-                openUrl("https://leetcode-cn.com");
+                openUrl("https://leetcode.cn");
             } else {
                 openUrl("https://leetcode.com");
             }

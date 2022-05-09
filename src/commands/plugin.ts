@@ -21,7 +21,7 @@ export async function switchEndpoint(): Promise<void> {
         },
         {
             label: `${isCnEnabled ? "$(check) " : ""}力扣`,
-            description: "leetcode-cn.com",
+            description: "leetcode.cn",
             detail: `启用中国版 LeetCode`,
             value: Endpoint.LeetCodeCN,
         },
