@@ -38,7 +38,7 @@ export class CustomCodeLensProvider implements vscode.CodeLensProvider {
         let codeLensLine: number = document.lineCount - 1;
         for (let i: number = document.lineCount - 1; i >= 0; i--) {
             const lineContent: string = document.lineAt(i).text;
-            if (lineContent.indexOf("@lc code=end") >= 0) {
+            if (lineContent.indexOf("@lc code=end") == 0) {
                 codeLensLine = i;
                 break;
             }

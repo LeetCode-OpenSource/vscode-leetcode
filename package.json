@@ -684,11 +684,17 @@
                         "scope": "application",
                         "description": "The Node.js executable path. for example, C:\\Program Files\\nodejs\\node.exe"
                     },
-                    "leetcode.colorizeProblems": {
+                    "leetcode.explorerTree.colorize": {
                         "type": "boolean",
                         "default": true,
                         "scope": "application",
-                        "description": "Add difficulty badge and colorize problems files in explorer tree."
+                        "description": "Colorize problems based on difficulty."
+                    },
+                    "leetcode.explorerTree.showDifficultyBadge": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Show difficulty badge next to problem name."
                     },
                     "leetcode.problems.sortStrategy": {
                         "type": "string",
@@ -700,6 +706,24 @@
                             "Acceptance Rate (Descending)"
                         ],
                         "description": "Sorting strategy for problems list."
+                    },
+                    "leetcode.preview.showCompanies": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Show list of companies in problem preview."
+                    },
+                    "leetcode.preview.showTags": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Show list of tags in problem preview."
+                    },
+                    "leetcode.preview.showMetadata": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Show problem metadata (category, difficulty, likes, dislikes) in problem preview."
                     }
                 }
             }

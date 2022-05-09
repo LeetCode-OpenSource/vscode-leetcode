@@ -6,6 +6,7 @@ import { getLeetCodeEndpoint } from "../commands/plugin";
 import { Endpoint, IProblem } from "../shared";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
+import * as settingUtils from "../utils/settingUtils";
 
 class LeetCodePreviewProvider extends LeetCodeWebview {
 
@@ -13,6 +14,9 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
     private node: IProblem;
     private description: IDescription;
     private sideMode: boolean = false;
+    private shouldShowCompanies = settingUtils.shouldShowCompaniesInProblemPreview();
+    private shouldShowTags = settingUtils.shouldShowTagsInProblemPreview();
+    private shouldShowMetadata = settingUtils.shouldShowMetadataInProblemPreview();
 
     public isSideMode(): boolean {
         return this.sideMode;
@@ -72,8 +76,9 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 </style>`,
         };
         const { title, url, category, difficulty, likes, dislikes, body } = this.description;
-        const head: string = markdownEngine.render(`# [${title}](${url})`);
-        const info: string = markdownEngine.render([
+        const id = this.node.id;
+        const head: string = markdownEngine.render(`# [${id}. ${title}](${url})`);
+        const metadata: string = markdownEngine.render([
             `| Category | Difficulty | Likes | Dislikes |`,
             `| :------: | :--------: | :---: | :------: |`,
             `| ${category} | ${difficulty} | ${likes} | ${dislikes} |`,
@@ -112,9 +117,9 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
             </head>
             <body>
                 ${head}
-                ${info}
-                ${tags}
-                ${companies}
+                ${this.shouldShowMetadata ? metadata : ""}
+                ${this.shouldShowTags ? tags : ""}
+                ${this.shouldShowCompanies ? companies : ""}
                 ${body}
                 <hr />
                 ${links}

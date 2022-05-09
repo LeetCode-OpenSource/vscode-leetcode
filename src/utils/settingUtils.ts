@@ -29,6 +29,18 @@ export function shouldUseEndpointTranslation(): boolean {
     return getWorkspaceConfiguration().get<boolean>("useEndpointTranslation", true);
 }
 
+export function shouldShowCompaniesInProblemPreview(): boolean {
+    return getWorkspaceConfiguration().get<boolean>("preview.showCompanies", true);
+}
+
+export function shouldShowTagsInProblemPreview(): boolean {
+    return getWorkspaceConfiguration().get<boolean>("preview.showTags", true);
+}
+
+export function shouldShowMetadataInProblemPreview(): boolean {
+    return getWorkspaceConfiguration().get<boolean>("preview.showMetadata", true);
+}
+
 export function getDescriptionConfiguration(): IDescriptionConfiguration {
     const setting: string = getWorkspaceConfiguration().get<string>("showDescription", DescriptionConfiguration.InWebView);
     const config: IDescriptionConfiguration = {

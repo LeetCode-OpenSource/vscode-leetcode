@@ -14,10 +14,7 @@ export class LeetCodeTreeItemDecorationProvider implements FileDecorationProvide
         hard: new ThemeColor("charts.red"),
     };
 
-    public provideFileDecoration(uri: Uri): ProviderResult<FileDecoration>  {
-        if (!this.isDifficultyBadgeEnabled()) {
-            return;
-        }
+    public provideFileDecoration(uri: Uri): ProviderResult<FileDecoration> {
 
         if (uri.scheme !== "leetcode" && uri.authority !== "problems") {
             return;
@@ -25,15 +22,26 @@ export class LeetCodeTreeItemDecorationProvider implements FileDecorationProvide
 
         const params: URLSearchParams = new URLSearchParams(uri.query);
         const difficulty: string = params.get("difficulty")!.toLowerCase();
-        return {
-            badge: this.DIFFICULTY_BADGE_LABEL[difficulty],
-            color: this.ITEM_COLOR[difficulty],
-        };
+
+        var decoration = {}
+        if (this.isDifficultyColorizationEnabled()) {
+            decoration["color"] = this.ITEM_COLOR[difficulty]
+        }
+        if (this.isDifficultyBadgeEnabled()) {
+            decoration["badge"] = this.DIFFICULTY_BADGE_LABEL[difficulty]
+        }
+
+        return decoration;
+    }
+
+    private isDifficultyColorizationEnabled(): boolean {
+        const configuration: WorkspaceConfiguration = workspace.getConfiguration();
+        return configuration.get<boolean>("leetcode.explorerTree.colorize", false);
     }
 
     private isDifficultyBadgeEnabled(): boolean {
         const configuration: WorkspaceConfiguration = workspace.getConfiguration();
-        return configuration.get<boolean>("leetcode.colorizeProblems", false);
+        return configuration.get<boolean>("leetcode.explorerTree.showDifficultyBadge", false);
     }
 }
 
