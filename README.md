@@ -23,7 +23,7 @@
 - English Document | [中文文档](https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/docs/README_zh-CN.md)
 
 ## ❗️ Attention ❗️- Workaround to login to LeetCode endpoint
-> Note: If you are using `leetcode-cn.com`, you can just ignore this section.
+> Note: If you are using `leetcode.cn`, you can just ignore this section.
 
 Recently we observed that [the extension cannot login to leetcode.com endpoint anymore](https://github.com/LeetCode-OpenSource/vscode-leetcode/issues/478). The root cause of this issue is that leetcode.com changed its login mechanism and so far there is no ideal way to fix that issue.
 
@@ -63,7 +63,7 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 
 - The supported endpoints are:
   - **leetcode.com**
-  - **leetcode-cn.com**
+  - **leetcode.cn**
 
   > Note: The accounts of different endpoints are **not** shared. Please make sure you are using the right endpoint. The extension will use `leetcode.com` by default.
 
