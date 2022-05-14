@@ -56,7 +56,7 @@ class LeetCodeManager extends EventEmitter {
             },
             {
                 label: "LeetCode Cookie",
-                detail: "Use LeetCode cookie copied from browser to login",
+                detail: "Use LeetCode cookie copied from browser to login (semicolon separated name=value pairs)",
                 value: "Cookie",
             },
         );
