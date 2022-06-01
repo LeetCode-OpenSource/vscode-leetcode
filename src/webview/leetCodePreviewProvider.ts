@@ -147,34 +147,37 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
     //     await commands.executeCommand("workbench.action.toggleSidebarVisibility");
     // }
 
-    private parseDescription(descString: string, problem: IProblem): IDescription {
-        const [
-            /* title */, ,
-            url, ,
-            /* tags */, ,
-            /* langs */, ,
-            category,
-            difficulty,
-            likes,
-            dislikes,
-            /* accepted */,
-            /* submissions */,
-            /* testcase */, ,
-            ...body
-        ] = descString.split("\n");
-        return {
-            title: problem.name,
-            url,
-            tags: problem.tags,
-            companies: problem.companies,
-            category: category.slice(2),
-            difficulty: difficulty.slice(2),
-            likes: likes.split(": ")[1].trim(),
-            dislikes: dislikes.split(": ")[1].trim(),
-            body: body.join("\n").replace(/<pre>[\r\n]*([^]+?)[\r\n]*<\/pre>/g, "<pre><code>$1</code></pre>"),
-        };
-    }
+    private parseDescription(descString, problem) {
+        // Parse body by looking for the first html tag
+        const bodyStartIdx = descString.search(/<.*>/);
+        const bodyRaw = descString.substring(bodyStartIdx);
 
+        const { name: title, tags, companies } = problem;
+        return {
+          title,
+          tags,
+          companies,
+          url: descString.match(/https:.*leetcode.*/)?.[0] || "??",
+          // Category is the first element in list
+          category: descString.match(/\*.*/)?.[0]?.slice(2) || "??",
+          // Difficulty is the first element in list with a percentage sign
+          difficulty: descString.match(/.*\%.*/)?.[0]?.slice(2) || "??",
+          likes:
+            descString
+              .match(/Likes.*?\n/)?.[0]
+              ?.split(": ")[1]
+              ?.trim() || "0",
+          dislikes:
+            descString
+              .match(/Dislikes.*?\n/)?.[0]
+              ?.split(": ")[1]
+              ?.trim() || "0",
+          body: bodyRaw.replace(
+            /<pre>[\r\n]*([^]+?)[\r\n]*<\/pre>/g,
+            "<pre><code>$1</code></pre>"
+          ),
+        };
+      }
     private getDiscussionLink(url: string): string {
         const endPoint: string = getLeetCodeEndpoint();
         if (endPoint === Endpoint.LeetCodeCN) {
