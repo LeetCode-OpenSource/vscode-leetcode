@@ -46,7 +46,55 @@ export class CustomCodeLensProvider implements vscode.CodeLensProvider {
 
         const range: vscode.Range = new vscode.Range(codeLensLine, 0, codeLensLine, 0);
         const codeLens: vscode.CodeLens[] = [];
+        // support customized shortcut order
+        for (let i: number = 0; i < shortcuts.length; i++) {
+            let title, command, args;
+            let willPush = true;
+            switch(shortcuts[i]){
+                case "submit":
+                    title = "Submit";
+                    command = "leetcode.submitSolution";
+                    args = [document.uri];
+                    break;
+                case "test":
+                    title = "Test";
+                    command = "leetcode.testSolution";
+                    args = [document.uri];
+                    break;
+                case "star":
+                    if(!node){
+                        willPush = false;
+                        break;
+                    }
+                    title = node.isFavorite ? "Unstar" : "Star";
+                    command = node.isFavorite ? "leetcode.removeFavorite" : "leetcode.addFavorite";
+                    args = [node];
+                    break;
+                case "solution":
+                    title = "Solution";
+                    command = "leetcode.showSolution";
+                    args = [document.uri];
+                    break;
+                case "description":
+                    title = "Description";
+                    command = "leetcode.previewProblem";
+                    args = [document.uri];
+                    break;
+                default:
+                    willPush = false;
+                    break;
+            }
+            if(!willPush){
+                continue;
+            }
+            codeLens.push(new vscode.CodeLens(range, {
+                    title: title,
+                    command: command,
+                    arguments: args,
+                }));
+        }
 
+        /*
         if (shortcuts.indexOf("submit") >= 0) {
             codeLens.push(new vscode.CodeLens(range, {
                 title: "Submit",
@@ -86,6 +134,7 @@ export class CustomCodeLensProvider implements vscode.CodeLensProvider {
                 arguments: [document.uri],
             }));
         }
+        */
 
         return codeLens;
     }
