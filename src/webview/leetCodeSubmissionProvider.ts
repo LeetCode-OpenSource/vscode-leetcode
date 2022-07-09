@@ -26,6 +26,7 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
 
     protected getWebviewContent(): string {
         const styles: string = markdownEngine.getStyles();
+        // window.showInformationMessage(this.result.messages.join('\n'));
         const title: string = `## ${this.result.messages[0]}`;
         const messages: string[] = this.result.messages.slice(1).map((m: string) => `* ${m}`);
         const sections: string[] = Object.keys(this.result)
@@ -36,10 +37,26 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
                 this.result[key].join("\n"),
                 "```",
             ].join("\n"));
+
+        const indicatorPat: RegExp = /[ \(/]{1}([\d.]+( ms| %| MB)?)/gm;
+        let orderedindIcators: string = "";
+        if (this.result.messages[0] == 'Accepted') {
+            let indicators: string[] = []
+            const msgs: string = messages.join('\n');
+            let indicator: RegExpExecArray | null = indicatorPat.exec(msgs);
+            while (indicator != null) {
+                indicators.push(indicator[1].replace(' ', ''));
+                indicator = indicatorPat.exec(msgs);
+            }
+            orderedindIcators = '* ' + [indicators[0] + ': ', indicators[3] + `(${indicators[2]})`, indicators[4] + `(${indicators[5]})`,].join(' ') + '; ';
+        }
+        orderedindIcators += '\n';
+
         const body: string = markdownEngine.render([
             title,
             ...messages,
             ...sections,
+            orderedindIcators
         ].join("\n"));
         return `
             <!DOCTYPE html>

@@ -1,10 +1,10 @@
 {
-    "name": "vscode-leetcode",
-    "displayName": "LeetCode",
+    "name": "leetcode-hum",
+    "displayName": "LeetCodeHum",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.18.1",
-    "author": "Sheng Chen",
-    "publisher": "LeetCode",
+    "version": "0.18.2",
+    "author": "hummingg",
+    "publisher": "hummingg",
     "license": "MIT",
     "icon": "resources/LeetCode.png",
     "engines": {
@@ -12,9 +12,9 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/LeetCode-OpenSource/vscode-leetcode"
+        "url": "https://github.com/hummingg/vscode-leetcode"
     },
-    "homepage": "https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/README.md",
+    "homepage": "https://github.com/hummingg/vscode-leetcode/blob/master/README.md",
     "categories": [
         "Other",
         "Snippets"
@@ -32,6 +32,7 @@
         "onCommand:leetcode.manageSessions",
         "onCommand:leetcode.refreshExplorer",
         "onCommand:leetcode.pickOne",
+        "onCommand:leetcode.problemOfToday",
         "onCommand:leetcode.showProblem",
         "onCommand:leetcode.previewProblem",
         "onCommand:leetcode.searchProblem",
@@ -81,6 +82,12 @@
                 "command": "leetcode.pickOne",
                 "title": "Pick One",
                 "category": "LeetCode"
+            },
+            {
+                "command": "leetcode.problemOfToday",
+                "title": "Problem Of Today",
+                "category": "LeetCode",
+                "icon": "$(calendar)"
             },
             {
                 "command": "leetcode.showProblem",
@@ -181,6 +188,11 @@
                     "command": "leetcode.refreshExplorer",
                     "when": "view == leetCodeExplorer",
                     "group": "navigation@3"
+                },
+                {
+                    "command": "leetcode.problemOfToday",
+                    "when": "view == leetCodeExplorer",
+                    "group": "navigation@4"
                 },
                 {
                     "command": "leetcode.pickOne",
@@ -700,6 +712,12 @@
                             "Acceptance Rate (Descending)"
                         ],
                         "description": "Sorting strategy for problems list."
+                    },
+                    "leetcode.prompt.confirmSubmit": {
+                        "type": "string",
+                        "default": "",
+                        "scope": "application",
+                        "description": "The prompt of confirm submit"
                     }
                 }
             }
@@ -728,7 +746,6 @@
         "lodash": "^4.17.21",
         "markdown-it": "^8.4.2",
         "require-from-string": "^2.0.2",
-        "unescape-js": "^1.1.4",
-        "vsc-leetcode-cli": "2.8.1"
+        "unescape-js": "^1.1.4"
     }
 }
