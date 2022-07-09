@@ -20,7 +20,7 @@
   </a>
 </p>
 
-- English Document | [中文文档](https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/docs/README_zh-CN.md)
+- English Document | [中文文档](https://github.com/hummingg/vscode-leetcode/blob/master/docs/README_zh-CN.md)
 
 ## ❗️ Attention ❗️- Workaround to login to LeetCode endpoint
 > Note: If you are using `leetcode.cn`, you can just ignore this section.
