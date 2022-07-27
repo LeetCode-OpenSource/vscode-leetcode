@@ -52,6 +52,34 @@ export async function pickOne(): Promise<void> {
     await showProblemInternal(randomProblem);
 }
 
+export async function problemOfToday(): Promise<void> {
+    if (!leetCodeManager.getUser()) {
+        promptForSignIn();
+        return;
+    }
+    try {
+        const nodes: LeetCodeNode[] = explorerNodeManager.getAllNodes()
+        const problemOfTodayStr: string = await leetCodeExecutor.problemOfToday();
+        const lines: string[] = problemOfTodayStr.split("\n");
+        const reg: RegExp = /^\[(.+)\]\s.*/
+        const match: RegExpMatchArray | null = lines[0].match(reg);
+        if (match != null) {
+            const id = match[1]
+            // vscode.window.showInformationMessage(`MyDebug: problemid ${id}`);
+            const problemOfToday: IProblem[] = nodes.filter(one => one.id === id);
+            if (problemOfToday.length != 1) {
+                explorerNodeManager.getNodeById(id);
+                await promptForOpenOutputChannel("Fail to load problem of today. You may need to refresh the problem list.", DialogType.error);
+            }
+            else {
+                await showProblemInternal(problemOfToday[0]);
+            }
+        }
+    }
+    catch {
+        await promptForOpenOutputChannel("Fail to load problem of today. Open the output channel for details.", DialogType.error);
+    }
+}
 export async function showProblem(node?: LeetCodeNode): Promise<void> {
     if (!node) {
         return;

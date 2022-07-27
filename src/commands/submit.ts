@@ -5,8 +5,9 @@ import * as vscode from "vscode";
 import { leetCodeTreeDataProvider } from "../explorer/LeetCodeTreeDataProvider";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
+import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { getActiveFilePath } from "../utils/workspaceUtils";
+import { getConfirmSubmitPrompt } from "../utils/settingUtils";
 import { leetCodeSubmissionProvider } from "../webview/leetCodeSubmissionProvider";
 
 export async function submitSolution(uri?: vscode.Uri): Promise<void> {
@@ -15,6 +16,15 @@ export async function submitSolution(uri?: vscode.Uri): Promise<void> {
         return;
     }
 
+    const prompt: string = getConfirmSubmitPrompt();
+    if (prompt) {
+        // const choice = await vscode.window.showInformationMessage("humming, 确定一定以及肯定要提交吗？", DialogOptions.yes, DialogOptions.no);
+        const choice = await vscode.window.showInformationMessage(prompt, DialogOptions.yes, DialogOptions.no);
+        if (choice != DialogOptions.yes) {
+            return;
+        }
+
+    }
     const filePath: string | undefined = await getActiveFilePath(uri);
     if (!filePath) {
         return;

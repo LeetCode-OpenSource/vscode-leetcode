@@ -20,7 +20,7 @@
   </a>
 </p>
 
-- English Document | [中文文档](https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/docs/README_zh-CN.md)
+- English Document | [中文文档](https://github.com/hummingg/vscode-leetcode/blob/master/docs/README_zh-CN.md)
 
 ## ❗️ Attention ❗️- Workaround to login to LeetCode endpoint
 > Note: If you are using `leetcode.cn`, you can just ignore this section.
@@ -130,13 +130,14 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 | `leetcode.workspaceFolder`        | Specify the path of the workspace folder to store the problem files.                                                                                                                                                                                          | `""`               |
 | `leetcode.filePath`               | Specify the relative path under the workspace and the file name to save the problem files. More details can be found [here](https://github.com/LeetCode-OpenSource/vscode-leetcode/wiki/Customize-the-Relative-Folder-and-the-File-Name-of-the-Problem-File). |                    |
 | `leetcode.enableStatusBar`        | Specify whether the LeetCode status bar will be shown or not.                                                                                                                                                                                                 | `true`             |
-| `leetcode.editor.shortcuts`       | Specify the customized shortcuts in editors. Supported values are: `submit`, `test`, `star`, `solution` and `description`.                                                                                                                                    | `["submit, test"]` |
+| `leetcode.editor.shortcuts`       | Specify the customized shortcuts in editors, both number and order. Supported values are: `submit`, `test`, `star`, `solution` and `description`.                                                                                                                                    | `["submit, test"]` |
 | `leetcode.enableSideMode`         | Specify whether `preview`, `solution` and `submission` tab should be grouped into the second editor column when solving a problem.                                                                                                                            | `true`             |
 | `leetcode.nodePath`               | Specify the `Node.js` executable path. for example, C:\Program Files\nodejs\node.exe                                                                                                                                                                          | `node`             |
 | `leetcode.showCommentDescription` | Specify whether to include the problem description in the comments                                                                                                                                                                                            | `false`            |
 | `leetcode.useEndpointTranslation` | Use endpoint's translation (if available)                                                                                                                                                                                                                     | `true`             |
 | `leetcode.colorizeProblems`       | Add difficulty badge and colorize problems files in explorer tree                                                                                                                                                                                             | `true`             |
 | `leetcode.problems.sortStrategy`  | Specify sorting strategy for problems list                                                                                                                                                                                                                    | `None`             |
+| `leetcode.prompt.confirmSubmit`  | Specify the prompt message when confirm your submit. Shouldn't confirm when `""`.                                                                                                                                                                                                                     | `""`             |
 
 ## Want Help?
 

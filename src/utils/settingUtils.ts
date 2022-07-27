@@ -66,3 +66,7 @@ export interface IDescriptionConfiguration {
     showInComment: boolean;
     showInWebview: boolean;
 }
+
+export function getConfirmSubmitPrompt(): string {
+    return getWorkspaceConfiguration().get<string>("prompt.confirmSubmit", "");
+}
