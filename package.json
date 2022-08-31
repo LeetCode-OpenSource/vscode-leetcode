@@ -116,7 +116,7 @@
             },
             {
                 "command": "leetcode.resetSolution",
-                "title": "Reset the default code of LeetCode",
+                "title": "Reset to default code definition",
                 "category": "LeetCode"
             },
             {
@@ -682,7 +682,7 @@
                             "enumDescriptions": [
                                 "Submit your answer to LeetCode.",
                                 "Test your answer with customized test cases.",
-                                "Reset the default code of template.",
+                                "Reset to default code definition.",
                                 "Star or unstar the current problem.",
                                 "Show the top voted solution for the current problem.",
                                 "Show the problem description page."

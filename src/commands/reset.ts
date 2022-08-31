@@ -10,7 +10,7 @@ const resetBtn = 'Reset';
 
 export async function resetSolution(uri?: vscode.Uri): Promise<void> {
     try {
-        const selection = await vscode.window.showInformationMessage("Are you sure to reset the default code", {
+        const selection = await vscode.window.showInformationMessage("Are you sure to reset to default code definition", {
             'detail': 'If reset, your current code will be lost',
             modal: true
         } as vscode.MessageOptions, resetBtn)
