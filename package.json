@@ -37,6 +37,7 @@
         "onCommand:leetcode.searchProblem",
         "onCommand:leetcode.testSolution",
         "onCommand:leetcode.submitSolution",
+        "onCommand:leetcode.resetSolution",
         "onCommand:leetcode.switchDefaultLanguage",
         "onCommand:leetcode.problems.sort",
         "onView:leetCodeExplorer"
@@ -111,6 +112,11 @@
             {
                 "command": "leetcode.submitSolution",
                 "title": "Submit to LeetCode",
+                "category": "LeetCode"
+            },
+            {
+                "command": "leetcode.resetSolution",
+                "title": "Reset the default code of LeetCode",
                 "category": "LeetCode"
             },
             {
@@ -252,6 +258,11 @@
                     "command": "leetcode.submitSolution",
                     "when": "explorerResourceIsFolder == false",
                     "group": "leetcode@2"
+                },
+                {
+                    "command": "leetcode.resetSolution",
+                    "when": "explorerResourceIsFolder == false",
+                    "group": "leetcode@3"
                 }
             ],
             "editor/context": [
@@ -269,12 +280,16 @@
                     "group": "leetcode@2"
                 },
                 {
-                    "command": "leetcode.showSolution",
+                    "command": "leetcode.resetSolution",
                     "group": "leetcode@3"
                 },
                 {
-                    "command": "leetcode.previewProblem",
+                    "command": "leetcode.showSolution",
                     "group": "leetcode@4"
+                },
+                {
+                    "command": "leetcode.previewProblem",
+                    "group": "leetcode@5"
                 }
             ]
         },
@@ -650,7 +665,8 @@
                         "type": "array",
                         "default": [
                             "submit",
-                            "test"
+                            "test",
+                            "reset"
                         ],
                         "scope": "application",
                         "items": {
@@ -658,6 +674,7 @@
                             "enum": [
                                 "submit",
                                 "test",
+                                "reset",
                                 "star",
                                 "solution",
                                 "description"
@@ -665,6 +682,7 @@
                             "enumDescriptions": [
                                 "Submit your answer to LeetCode.",
                                 "Test your answer with customized test cases.",
+                                "Reset the default code of template.",
                                 "Star or unstar the current problem.",
                                 "Show the top voted solution for the current problem.",
                                 "Show the problem description page."

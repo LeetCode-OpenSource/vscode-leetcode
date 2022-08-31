@@ -63,6 +63,15 @@ export class CustomCodeLensProvider implements vscode.CodeLensProvider {
             }));
         }
 
+        if (shortcuts.indexOf("reset") >= 0) {
+            codeLens.push(new vscode.CodeLens(range, {
+                title: "Reset",
+                command: "leetcode.resetSolution",
+                arguments: [document.uri],
+            }));
+        }
+
+
         if (shortcuts.indexOf("star") >= 0 && node) {
             codeLens.push(new vscode.CodeLens(range, {
                 title: node.isFavorite ? "Unstar" : "Star",
