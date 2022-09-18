@@ -25,11 +25,6 @@ export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: b
     let node: IProblem;
      // I dont know why I use this command, it not work,maybe theproblem of "input"?
     // 不知道为什么,当我直接使用这个命令,他并不会正常工作,也许input的问题
-
-    //if (input instanceof vscode.Uri) {
-    // const activeFilePath: string = input.fsPath;
-    // const id: string = await getNodeIdFromFile(activeFilePath);
-
     let id = "";
 
     // * We can read file throught editor.document not fs
@@ -63,9 +58,7 @@ export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: b
     node = cachedNode;
     // Move the preview page aside if it's triggered from Code Lens
     isSideMode = true;
-    // } else {
-    //     node = input;
-    // }
+
     const needTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
     const descString: string = await leetCodeExecutor.getDescription(node.id, needTranslation);
     leetCodePreviewProvider.show(descString, node, isSideMode);
