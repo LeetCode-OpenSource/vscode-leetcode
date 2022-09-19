@@ -300,6 +300,16 @@
                         "scope": "application",
                         "description": "Show locked problems."
                     },
+                    "leetcode.languageList": {
+                        "type": "array",
+                        "default": [],
+                        "description": "同时生成多语言版本代码"
+                    },
+                    "leetcode.showMD": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "同时生成markdown介绍"
+                    },
                     "leetcode.defaultLanguage": {
                         "type": "string",
                         "enum": [
@@ -725,6 +735,7 @@
     "dependencies": {
         "fs-extra": "^10.0.0",
         "highlight.js": "^10.7.2",
+        "html-to-md": "^0.6.0",
         "lodash": "^4.17.21",
         "markdown-it": "^8.4.2",
         "require-from-string": "^2.0.2",
