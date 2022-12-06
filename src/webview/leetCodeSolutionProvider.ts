@@ -77,8 +77,21 @@ class LeetCodeSolutionProvider extends LeetCodeWebview {
         [solution.author, raw] = raw.match(/\* Author:\s+(.+)\n([^]+)/)!.slice(1);
         [solution.votes, raw] = raw.match(/\* Votes:\s+(\d+)\n\n([^]+)/)!.slice(1);
         solution.body = raw;
+        
+        solution.url = replaceUrlDiscussWithSolution(solution.url);
+
         return solution;
     }
+}
+
+function replaceUrlDiscussWithSolution(url: string): string {
+    // This is due to the update of leetcode.com on 2022 Dec
+    // "vsc-leetcode-cli": "2.8.1" is still using "discuss" instead of "solutions" in URL
+    // this will have the vsc-leetcode-cli updating URL to "solutions"
+    return url.replace(
+    /https:\/\/leetcode.com\/problems\/(.+)\/discuss\/(\d+)/,
+    "https://discuss.leetcode.com/problem/$1/solutions/$2"
+    );
 }
 
 // tslint:disable-next-line:max-classes-per-file
