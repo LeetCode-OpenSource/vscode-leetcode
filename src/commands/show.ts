@@ -244,6 +244,8 @@ async function resolveRelativePath(relativePath: string, node: IProblem, selecte
             case "snakecasename":
             case "snake_case_name":
                 return _.snakeCase(node.name);
+            case "snake_case_name_en":
+                return _.snakeCase(node.enName);
             case "ext":
                 return genFileExt(selectedLanguage);
             case "language":
