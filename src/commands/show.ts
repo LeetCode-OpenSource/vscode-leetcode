@@ -132,45 +132,61 @@ async function fetchProblemLanguage(): Promise<string | undefined> {
     return language;
 }
 
+async function createPath(language:string,node:IProblem):Promise<string>{
+    const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+    const workspaceFolder: string = await selectWorkspaceFolder();
+    if (!workspaceFolder) {
+        Promise.reject("No workspace is opened.");
+    }
+
+    const fileFolder: string = leetCodeConfig
+        .get<string>(`filePath.${language}.folder`, leetCodeConfig.get<string>(`filePath.default.folder`, ""))
+        .trim();
+    const fileName: string = leetCodeConfig
+        .get<string>(
+            `filePath.${language}.filename`,
+            leetCodeConfig.get<string>(`filePath.default.filename`) || genFileName(node, language),
+        )
+        .trim();
+
+    let finalPath: string = path.join(workspaceFolder, fileFolder, fileName);
+
+    if (finalPath) {
+        finalPath = await resolveRelativePath(finalPath, node, language);
+        if (!finalPath) {
+            leetCodeChannel.appendLine("Showing problem canceled by user.");
+            Promise.reject("Showing problem canceled by user.");
+        }
+    }
+
+    finalPath = wsl.useWsl() ? await wsl.toWinPath(finalPath) : finalPath;
+    return finalPath;
+}
+
 async function showProblemInternal(node: IProblem): Promise<void> {
     try {
-        const language: string | undefined = await fetchProblemLanguage();
+        let language: string | undefined = await fetchProblemLanguage();
         if (!language) {
             return;
         }
-
-        const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-        const workspaceFolder: string = await selectWorkspaceFolder();
-        if (!workspaceFolder) {
-            return;
-        }
-
-        const fileFolder: string = leetCodeConfig
-            .get<string>(`filePath.${language}.folder`, leetCodeConfig.get<string>(`filePath.default.folder`, ""))
-            .trim();
-        const fileName: string = leetCodeConfig
-            .get<string>(
-                `filePath.${language}.filename`,
-                leetCodeConfig.get<string>(`filePath.default.filename`) || genFileName(node, language),
-            )
-            .trim();
-
-        let finalPath: string = path.join(workspaceFolder, fileFolder, fileName);
-
-        if (finalPath) {
-            finalPath = await resolveRelativePath(finalPath, node, language);
-            if (!finalPath) {
-                leetCodeChannel.appendLine("Showing problem canceled by user.");
-                return;
-            }
-        }
-
-        finalPath = wsl.useWsl() ? await wsl.toWinPath(finalPath) : finalPath;
+        let finalPath: string = await createPath(language,node);
 
         const descriptionConfig: IDescriptionConfiguration = settingUtils.getDescriptionConfiguration();
         const needTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
+        try {
+            await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment, needTranslation);
+        } catch (e) {
+            if (e instanceof Error) {
+                //this shows all languages, not just the ones, which are supported for this specific problem
+                language = await vscode.window.showQuickPick(languages, { placeHolder: "This problem is not supporting your default language, please choose another", ignoreFocusOut: true });
+                if (language === undefined) { throw e; }
 
-        await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment, needTranslation);
+                finalPath = await createPath(language,node);
+                await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment, needTranslation);
+            } else {
+                throw e;
+            }
+        }
         const promises: any[] = [
             vscode.window.showTextDocument(vscode.Uri.file(finalPath), { preview: false, viewColumn: vscode.ViewColumn.One }),
             promptHintMessage(
