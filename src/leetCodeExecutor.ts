@@ -107,10 +107,12 @@ class LeetCodeExecutor implements Disposable {
         if (!needTranslation) {
             cmd.push("-T"); // use -T to force English version
         }
-
+        const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", this.nodeExecutable, cmd)
+        if(codeTemplate === undefined) {
+           throw new Error("language not supported");
+        }
         if (!await fse.pathExists(filePath)) {
             await fse.createFile(filePath);
-            const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", this.nodeExecutable, cmd);
             await fse.writeFile(filePath, codeTemplate);
         }
     }
