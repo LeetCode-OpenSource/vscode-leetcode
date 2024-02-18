@@ -11,8 +11,13 @@ export class LeetCodeNode {
     public get locked(): boolean {
         return this.data.locked;
     }
+
     public get name(): string {
         return this.data.name;
+    }
+
+    public get enName(): string {
+        return this.data.enName;
     }
 
     public get state(): ProblemState {

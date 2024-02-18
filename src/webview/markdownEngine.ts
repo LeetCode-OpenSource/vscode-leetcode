@@ -84,9 +84,9 @@ class MarkdownEngine implements vscode.Disposable {
                     case "python3":
                         lang = "python"; break;
                 }
-                if (lang && hljs.getLanguage(lang)) {
+                if (lang && hljs.default.getLanguage(lang)) {
                     try {
-                        return hljs.highlight(lang, code, true).value;
+                        return hljs.default.highlight(lang, code, true).value;
                     } catch (error) { /* do not highlight */ }
                 }
                 return ""; // use external default escaping

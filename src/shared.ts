@@ -76,6 +76,7 @@ export interface IProblem {
     state: ProblemState;
     id: string;
     name: string;
+    enName: string;
     difficulty: string;
     passRate: string;
     companies: string[];
@@ -88,6 +89,7 @@ export const defaultProblem: IProblem = {
     state: ProblemState.Unknown,
     id: "",
     name: "",
+    enName: "",
     difficulty: "",
     passRate: "",
     companies: [] as string[],
