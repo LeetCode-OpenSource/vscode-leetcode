@@ -23,6 +23,7 @@
 - English Document | [中文文档](https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/docs/README_zh-CN.md)
 
 ## ❗️ Attention ❗️- Workaround to login to LeetCode endpoint
+
 > Note: If you are using `leetcode.cn`, you can just ignore this section.
 
 Recently we observed that [the extension cannot login to leetcode.com endpoint anymore](https://github.com/LeetCode-OpenSource/vscode-leetcode/issues/478). The root cause of this issue is that leetcode.com changed its login mechanism and so far there is no ideal way to fix that issue.
@@ -32,9 +33,10 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 > Note: If you want to use third-party login(**Recommended**), please make sure your account has been connected to the third-party. If you want to use `Cookie` login, click [here](https://github.com/LeetCode-OpenSource/vscode-leetcode/issues/478#issuecomment-564757098) to see the steps.
 
 ## Requirements
+
 - [VS Code 1.30.1+](https://code.visualstudio.com/)
 - [Node.js 10+](https://nodejs.org)
-    > NOTE: Please make sure that `Node` is in your `PATH` environment variable. You can also use the setting `leetcode.nodePath` to specify the location of your `Node.js` executable.
+  > NOTE: Please make sure that `Node` is in your `PATH` environment variable. You can also use the setting `leetcode.nodePath` to specify the location of your `Node.js` executable.
 
 ## Quick Start
 
@@ -43,6 +45,7 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 ## Features
 
 ### Sign In/Out
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/sign_in.png" alt="Sign in" />
 </p>
@@ -52,9 +55,11 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 - You can also use the following command to sign in/out:
   - **LeetCode: Sign in**
   - **LeetCode: Sign out**
+
 ---
 
 ### Switch Endpoint
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/endpoint.png" alt="Switch Endpoint" />
 </p>
@@ -62,6 +67,7 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 - By clicking the button ![btn_endpoint](https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/btn_endpoint.png) at the **explorer's navigation bar**, you can switch between different endpoints.
 
 - The supported endpoints are:
+
   - **leetcode.com**
   - **leetcode.cn**
 
@@ -70,6 +76,7 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 ---
 
 ### Pick a Problem
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="Pick a Problem" />
 </p>
@@ -86,11 +93,13 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 ---
 
 ### Editor Shortcuts
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/shortcuts.png" alt="Editor Shortcuts" />
 </p>
 
 - The extension supports 5 editor shortcuts (aka Code Lens):
+
   - `Submit`: Submit your answer to LeetCode.
   - `Test`: Test your answer with customized test cases.
   - `Star/Unstar`: Star or unstar the current problem.
@@ -102,6 +111,7 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 ---
 
 ### Search problems by Keywords
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/search.png" alt="Search problems by Keywords" />
 </p>
@@ -111,19 +121,18 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 ---
 
 ### Manage Session
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/session.png" alt="Manage Session" />
 </p>
 
 - To manage your LeetCode sessions, just clicking the `LeetCode: ***` at the bottom of the status bar. You can **switch** between sessions or **create**, **delete** a session.
 
-
 ## Settings
 
 | Setting Name                      | Description                                                                                                                                                                                                                                                   | Default Value      |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
 | `leetcode.hideSolved`             | Specify to hide the solved problems or not                                                                                                                                                                                                                    | `false`            |
-| `leetcode.showLocked`             | Specify to show the locked problems or not. Only Premium users could open the locked problems                                                                                                                                                                 | `false`            |
 | `leetcode.defaultLanguage`        | Specify the default language used to solve the problem. Supported languages are: `bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `php`, `python`,`python3`,`ruby`,`rust`, `scala`, `swift`, `typescript`                     | `N/A`              |
 | `leetcode.useWsl`                 | Specify whether to use WSL or not                                                                                                                                                                                                                             | `false`            |
 | `leetcode.endpoint`               | Specify the active endpoint. Supported endpoints are: `leetcode`, `leetcode-cn`                                                                                                                                                                               | `leetcode`         |
@@ -137,6 +146,7 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 | `leetcode.useEndpointTranslation` | Use endpoint's translation (if available)                                                                                                                                                                                                                     | `true`             |
 | `leetcode.colorizeProblems`       | Add difficulty badge and colorize problems files in explorer tree                                                                                                                                                                                             | `true`             |
 | `leetcode.problems.sortStrategy`  | Specify sorting strategy for problems list                                                                                                                                                                                                                    | `None`             |
+| `leetcode.allowReportData`        | Allow LeetCode to report anonymous usage data to improve the product. list                                                                                                                                                                                    | `true`             |
 
 ## Want Help?
 

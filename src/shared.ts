@@ -124,3 +124,6 @@ export enum SortingStrategy {
     FrequencyAsc = "Frequency (Ascending)",
     FrequencyDesc = "Frequency (Descending)",
 }
+
+export const PREMIUM_URL_CN = "https://leetcode.cn/premium-payment/?source=vscode";
+export const PREMIUM_URL_GLOBAL = "https://leetcode.com/subscribe/?ref=lp_pl&source=vscode";
