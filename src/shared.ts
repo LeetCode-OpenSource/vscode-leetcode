@@ -63,6 +63,7 @@ export enum ProblemState {
     AC = 1,
     NotAC = 2,
     Unknown = 3,
+    Locked = 4,
 }
 
 export enum Endpoint {
@@ -102,11 +103,7 @@ export enum Category {
     Favorite = "Favorite",
 }
 
-export const supportedPlugins: string[] = [
-    "company",
-    "solution.discuss",
-    "leetcode.cn",
-];
+export const supportedPlugins: string[] = ["company", "solution.discuss", "leetcode.cn"];
 
 export enum DescriptionConfiguration {
     InWebView = "In Webview",
@@ -124,3 +121,36 @@ export enum SortingStrategy {
     FrequencyAsc = "Frequency (Ascending)",
     FrequencyDesc = "Frequency (Descending)",
 }
+
+export const PREMIUM_URL_CN = "https://leetcode.cn/premium-payment/?source=vscode";
+export const PREMIUM_URL_GLOBAL = "https://leetcode.com/subscribe/?ref=lp_pl&source=vscode";
+
+export const urls = {
+    // base urls
+    base: "https://leetcode.com",
+    graphql: "https://leetcode.com/graphql",
+    userGraphql: "https://leetcode.com/graphql",
+    login: "https://leetcode.com/accounts/login/",
+    authLoginUrl: "https://leetcode.com/authorize-login/vscode/?path=leetcode.vscode-leetcode",
+};
+
+export const urlsCn = {
+    // base urls
+    base: "https://leetcode.cn",
+    graphql: "https://leetcode.cn/graphql",
+    userGraphql: "https://leetcode.cn/graphql/noj-go/",
+    login: "https://leetcode.cn/accounts/login/",
+    authLoginUrl: "https://leetcode.cn/authorize-login/vscode/?path=leetcode.vscode-leetcode",
+};
+
+export const getUrl = (key: string) => {
+    const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+    const point = leetCodeConfig.get<string>("endpoint", Endpoint.LeetCode);
+    switch (point) {
+        case Endpoint.LeetCodeCN:
+            return urlsCn[key];
+        case Endpoint.LeetCode:
+        default:
+            return urls[key];
+    }
+};

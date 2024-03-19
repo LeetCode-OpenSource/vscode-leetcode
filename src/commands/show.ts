@@ -10,19 +10,30 @@ import { LeetCodeNode } from "../explorer/LeetCodeNode";
 import { leetCodeChannel } from "../leetCodeChannel";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { IProblem, IQuickItemEx, languages, ProblemState } from "../shared";
+import { Endpoint, IProblem, IQuickItemEx, languages, PREMIUM_URL_CN, PREMIUM_URL_GLOBAL, ProblemState } from "../shared";
 import { genFileExt, genFileName, getNodeIdFromFile } from "../utils/problemUtils";
 import * as settingUtils from "../utils/settingUtils";
 import { IDescriptionConfiguration } from "../utils/settingUtils";
-import { DialogOptions, DialogType, openSettingsEditor, promptForOpenOutputChannel, promptForSignIn, promptHintMessage } from "../utils/uiUtils";
+import {
+    DialogOptions,
+    DialogType,
+    openSettingsEditor,
+    openUrl,
+    promptForOpenOutputChannel,
+    promptForSignIn,
+    promptHintMessage,
+} from "../utils/uiUtils";
 import { getActiveFilePath, selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
 import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
+import { getLeetCodeEndpoint } from "./plugin";
+import { globalState } from "../globalState";
 
 export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: boolean = false): Promise<void> {
     let node: IProblem;
+
     if (input instanceof vscode.Uri) {
         const activeFilePath: string = input.fsPath;
         const id: string = await getNodeIdFromFile(activeFilePath);
@@ -40,7 +51,14 @@ export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: b
         isSideMode = true;
     } else {
         node = input;
+        const { isPremium } = globalState.getUserStatus() ?? {};
+        if (input.locked && !isPremium) {
+            const url = getLeetCodeEndpoint() === Endpoint.LeetCode ? PREMIUM_URL_GLOBAL : PREMIUM_URL_CN;
+            openUrl(url);
+            return;
+        }
     }
+
     const needTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
     const descString: string = await leetCodeExecutor.getDescription(node.id, needTranslation);
     leetCodePreviewProvider.show(descString, node, isSideMode);
@@ -64,13 +82,10 @@ export async function searchProblem(): Promise<void> {
         promptForSignIn();
         return;
     }
-    const choice: IQuickItemEx<IProblem> | undefined = await vscode.window.showQuickPick(
-        parseProblemsToPicks(list.listProblems()),
-        {
-            matchOnDetail: true,
-            placeHolder: "Select one problem",
-        },
-    );
+    const choice: IQuickItemEx<IProblem> | undefined = await vscode.window.showQuickPick(parseProblemsToPicks(list.listProblems()), {
+        matchOnDetail: true,
+        placeHolder: "Select one problem",
+    });
     if (!choice) {
         return;
     }
@@ -79,11 +94,14 @@ export async function searchProblem(): Promise<void> {
 
 export async function showSolution(input: LeetCodeNode | vscode.Uri): Promise<void> {
     let problemInput: string | undefined;
-    if (input instanceof LeetCodeNode) { // Triggerred from explorer
+    if (input instanceof LeetCodeNode) {
+        // Triggerred from explorer
         problemInput = input.id;
-    } else if (input instanceof vscode.Uri) { // Triggerred from Code Lens/context menu
+    } else if (input instanceof vscode.Uri) {
+        // Triggerred from Code Lens/context menu
         problemInput = `"${input.fsPath}"`;
-    } else if (!input) { // Triggerred from command
+    } else if (!input) {
+        // Triggerred from command
         problemInput = await getActiveFilePath();
     }
 
@@ -112,7 +130,12 @@ async function fetchProblemLanguage(): Promise<string | undefined> {
     if (defaultLanguage && languages.indexOf(defaultLanguage) < 0) {
         defaultLanguage = undefined;
     }
-    const language: string | undefined = defaultLanguage || await vscode.window.showQuickPick(languages, { placeHolder: "Select the language you want to use", ignoreFocusOut: true });
+    const language: string | undefined =
+        defaultLanguage ||
+        (await vscode.window.showQuickPick(languages, {
+            placeHolder: "Select the language you want to use",
+            ignoreFocusOut: true,
+        }));
     // fire-and-forget default language query
     (async (): Promise<void> => {
         if (language && !defaultLanguage && leetCodeConfig.get<boolean>("hint.setDefaultLanguage")) {
@@ -120,7 +143,7 @@ async function fetchProblemLanguage(): Promise<string | undefined> {
                 `Would you like to set '${language}' as your default language?`,
                 DialogOptions.yes,
                 DialogOptions.no,
-                DialogOptions.never,
+                DialogOptions.never
             );
             if (choice === DialogOptions.yes) {
                 leetCodeConfig.update("defaultLanguage", language, true /* UserSetting */);
@@ -149,10 +172,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
             .get<string>(`filePath.${language}.folder`, leetCodeConfig.get<string>(`filePath.default.folder`, ""))
             .trim();
         const fileName: string = leetCodeConfig
-            .get<string>(
-                `filePath.${language}.filename`,
-                leetCodeConfig.get<string>(`filePath.default.filename`) || genFileName(node, language),
-            )
+            .get<string>(`filePath.${language}.filename`, leetCodeConfig.get<string>(`filePath.default.filename`) || genFileName(node, language))
             .trim();
 
         let finalPath: string = path.join(workspaceFolder, fileFolder, fileName);
@@ -172,12 +192,15 @@ async function showProblemInternal(node: IProblem): Promise<void> {
 
         await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment, needTranslation);
         const promises: any[] = [
-            vscode.window.showTextDocument(vscode.Uri.file(finalPath), { preview: false, viewColumn: vscode.ViewColumn.One }),
+            vscode.window.showTextDocument(vscode.Uri.file(finalPath), {
+                preview: false,
+                viewColumn: vscode.ViewColumn.One,
+            }),
             promptHintMessage(
                 "hint.commentDescription",
                 'You can config how to show the problem description through "leetcode.showDescription".',
                 "Open settings",
-                (): Promise<any> => openSettingsEditor("leetcode.showDescription"),
+                (): Promise<any> => openSettingsEditor("leetcode.showDescription")
             ),
         ];
         if (descriptionConfig.showInWebview) {
@@ -195,12 +218,17 @@ async function showDescriptionView(node: IProblem): Promise<void> {
 }
 async function parseProblemsToPicks(p: Promise<IProblem[]>): Promise<Array<IQuickItemEx<IProblem>>> {
     return new Promise(async (resolve: (res: Array<IQuickItemEx<IProblem>>) => void): Promise<void> => {
-        const picks: Array<IQuickItemEx<IProblem>> = (await p).map((problem: IProblem) => Object.assign({}, {
-            label: `${parseProblemDecorator(problem.state, problem.locked)}${problem.id}.${problem.name}`,
-            description: "",
-            detail: `AC rate: ${problem.passRate}, Difficulty: ${problem.difficulty}`,
-            value: problem,
-        }));
+        const picks: Array<IQuickItemEx<IProblem>> = (await p).map((problem: IProblem) =>
+            Object.assign(
+                {},
+                {
+                    label: `${parseProblemDecorator(problem.state, problem.locked)}${problem.id}.${problem.name}`,
+                    description: "",
+                    detail: `AC rate: ${problem.passRate}, Difficulty: ${problem.difficulty}`,
+                    value: problem,
+                }
+            )
+        );
         resolve(picks);
     });
 }
@@ -266,14 +294,11 @@ async function resolveTagForProblem(problem: IProblem): Promise<string | undefin
     if (problem.tags.length === 1) {
         return problem.tags[0];
     }
-    return await vscode.window.showQuickPick(
-        problem.tags,
-        {
-            matchOnDetail: true,
-            placeHolder: "Multiple tags available, please select one",
-            ignoreFocusOut: true,
-        },
-    );
+    return await vscode.window.showQuickPick(problem.tags, {
+        matchOnDetail: true,
+        placeHolder: "Multiple tags available, please select one",
+        ignoreFocusOut: true,
+    });
 }
 
 async function resolveCompanyForProblem(problem: IProblem): Promise<string | undefined> {

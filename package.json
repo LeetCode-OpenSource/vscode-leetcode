@@ -2,8 +2,8 @@
     "name": "vscode-leetcode",
     "displayName": "LeetCode",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.18.1",
-    "author": "Sheng Chen",
+    "version": "0.18.2",
+    "author": "LeetCode",
     "publisher": "LeetCode",
     "license": "MIT",
     "icon": "resources/LeetCode.png",
@@ -183,14 +183,19 @@
                     "group": "navigation@3"
                 },
                 {
+                    "command": "leetcode.signout",
+                    "when": "view == leetCodeExplorer",
+                    "group": "overflow@1"
+                },
+                {
                     "command": "leetcode.pickOne",
                     "when": "view == leetCodeExplorer",
-                    "group": "overflow@0"
+                    "group": "overflow@2"
                 },
                 {
                     "command": "leetcode.problems.sort",
                     "when": "view == leetCodeExplorer",
-                    "group": "overflow@1"
+                    "group": "overflow@3"
                 }
             ],
             "view/item/context": [
@@ -293,12 +298,6 @@
                         "default": false,
                         "scope": "application",
                         "description": "Hide solved problems."
-                    },
-                    "leetcode.showLocked": {
-                        "type": "boolean",
-                        "default": false,
-                        "scope": "application",
-                        "description": "Show locked problems."
                     },
                     "leetcode.defaultLanguage": {
                         "type": "string",
@@ -700,6 +699,12 @@
                             "Acceptance Rate (Descending)"
                         ],
                         "description": "Sorting strategy for problems list."
+                    },
+                    "leetcode.allowReportData": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "Allow LeetCode to report anonymous usage data to improve the product."
                     }
                 }
             }
@@ -723,6 +728,7 @@
         "typescript": "^4.3.2"
     },
     "dependencies": {
+        "axios": "^1.6.8",
         "fs-extra": "^10.0.0",
         "highlight.js": "^10.7.2",
         "lodash": "^4.17.21",

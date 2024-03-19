@@ -8,12 +8,14 @@ import { leetCodeManager } from "../leetCodeManager";
 import { Category, defaultProblem, ProblemState } from "../shared";
 import { explorerNodeManager } from "./explorerNodeManager";
 import { LeetCodeNode } from "./LeetCodeNode";
+import { globalState } from "../globalState";
 
 export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCodeNode> {
-
     private context: vscode.ExtensionContext;
 
-    private onDidChangeTreeDataEvent: vscode.EventEmitter<LeetCodeNode | undefined | null> = new vscode.EventEmitter<LeetCodeNode | undefined | null>();
+    private onDidChangeTreeDataEvent: vscode.EventEmitter<LeetCodeNode | undefined | null> = new vscode.EventEmitter<
+        LeetCodeNode | undefined | null
+    >();
     // tslint:disable-next-line:member-ordering
     public readonly onDidChangeTreeData: vscode.Event<any> = this.onDidChangeTreeDataEvent.event;
 
@@ -46,7 +48,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         }
 
         return {
-            label: element.isProblem ? `[${element.id}] ${element.name}` : element.name,
+            label: element.isProblem ? `[${element.id}] ${element.name}` + this.parsePremiumUnLockIconPath(element) : element.name,
             tooltip: this.getSubCategoryTooltip(element),
             collapsibleState: element.isProblem ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
             iconPath: this.parseIconPathFromProblemState(element),
@@ -59,16 +61,20 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
     public getChildren(element?: LeetCodeNode | undefined): vscode.ProviderResult<LeetCodeNode[]> {
         if (!leetCodeManager.getUser()) {
             return [
-                new LeetCodeNode(Object.assign({}, defaultProblem, {
-                    id: "notSignIn",
-                    name: "Sign in to LeetCode",
-                }), false),
+                new LeetCodeNode(
+                    Object.assign({}, defaultProblem, {
+                        id: "notSignIn",
+                        name: "Sign in to LeetCode",
+                    }),
+                    false
+                ),
             ];
         }
-        if (!element) { // Root view
+        if (!element) {
+            // Root view
             return explorerNodeManager.getRootNodes();
         } else {
-            switch (element.id) { // First-level
+            switch (element.id) {
                 case Category.All:
                     return explorerNodeManager.getAllNodes();
                 case Category.Favorite:
@@ -92,19 +98,28 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         if (!element.isProblem) {
             return "";
         }
+        const { isPremium } = globalState.getUserStatus() ?? {};
         switch (element.state) {
             case ProblemState.AC:
                 return this.context.asAbsolutePath(path.join("resources", "check.png"));
             case ProblemState.NotAC:
                 return this.context.asAbsolutePath(path.join("resources", "x.png"));
             case ProblemState.Unknown:
-                if (element.locked) {
+                if (element.locked && !isPremium) {
                     return this.context.asAbsolutePath(path.join("resources", "lock.png"));
                 }
                 return this.context.asAbsolutePath(path.join("resources", "blank.png"));
             default:
                 return "";
         }
+    }
+
+    private parsePremiumUnLockIconPath(element: LeetCodeNode): string {
+        const { isPremium } = globalState.getUserStatus() ?? {};
+        if (isPremium && element.locked) {
+            return "  🔓";
+        }
+        return "";
     }
 
     private getSubCategoryTooltip(element: LeetCodeNode): string {
@@ -130,11 +145,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             }
         }
 
-        return [
-            `AC: ${acceptedNum}`,
-            `Failed: ${failedNum}`,
-            `Total: ${childernNodes.length}`,
-        ].join(os.EOL);
+        return [`AC: ${acceptedNum}`, `Failed: ${failedNum}`, `Total: ${childernNodes.length}`].join(os.EOL);
     }
 }
 
