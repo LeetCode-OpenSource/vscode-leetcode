@@ -6,10 +6,14 @@ import { EventEmitter } from "events";
 import * as vscode from "vscode";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
-import { IQuickItemEx, loginArgsMapping, UserStatus } from "./shared";
+import { Endpoint, loginArgsMapping, urls, urlsCn, UserStatus } from "./shared";
 import { createEnvOption } from "./utils/cpUtils";
-import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
+import { DialogType, openUrl, promptForOpenOutputChannel } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
+import { getLeetCodeEndpoint } from "./commands/plugin";
+import { globalState } from "./globalState";
+import { queryUserData } from "./request/query-user-data";
+import { parseQuery, sleep } from "./utils/toolUtils";
 
 class LeetCodeManager extends EventEmitter {
     private currentUser: string | undefined;
@@ -21,6 +25,7 @@ class LeetCodeManager extends EventEmitter {
         super();
         this.currentUser = undefined;
         this.userStatus = UserStatus.SignedOut;
+        this.handleUriSignIn = this.handleUriSignIn.bind(this);
     }
 
     public async getLoginStatus(): Promise<void> {
@@ -31,118 +36,40 @@ class LeetCodeManager extends EventEmitter {
         } catch (error) {
             this.currentUser = undefined;
             this.userStatus = UserStatus.SignedOut;
+            globalState.removeAll();
         } finally {
             this.emit("statusChanged");
         }
     }
 
-    public async signIn(): Promise<void> {
-        const picks: Array<IQuickItemEx<string>> = [];
-        picks.push(
-            {
-                label: "LeetCode Account",
-                detail: "Use LeetCode account to login (US endpoint is not supported)",
-                value: "LeetCode",
-            },
-            {
-                label: "Third-Party: GitHub",
-                detail: "Use GitHub account to login",
-                value: "GitHub",
-            },
-            {
-                label: "Third-Party: LinkedIn",
-                detail: "Use LinkedIn account to login",
-                value: "LinkedIn",
-            },
-            {
-                label: "LeetCode Cookie",
-                detail: "Use LeetCode cookie copied from browser to login",
-                value: "Cookie",
-            },
-        );
-        const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(picks);
-        if (!choice) {
-            return;
-        }
-        const loginMethod: string = choice.value;
-        const commandArg: string | undefined = loginArgsMapping.get(loginMethod);
-        if (!commandArg) {
-            throw new Error(`The login method "${loginMethod}" is not supported.`);
-        }
-        const isByCookie: boolean = loginMethod === "Cookie";
-        const inMessage: string = isByCookie ? "sign in by cookie" : "sign in";
+    public async handleUriSignIn(uri: vscode.Uri): Promise<void> {
         try {
-            const userName: string | undefined = await new Promise(async (resolve: (res: string | undefined) => void, reject: (e: Error) => void): Promise<void> => {
-
-                const leetCodeBinaryPath: string = await leetCodeExecutor.getLeetCodeBinaryPath();
-
-                const childProc: cp.ChildProcess = wsl.useWsl()
-                    ? cp.spawn("wsl", [leetCodeExecutor.node, leetCodeBinaryPath, "user", commandArg], { shell: true })
-                    : cp.spawn(leetCodeExecutor.node, [leetCodeBinaryPath, "user", commandArg], {
-                        shell: true,
-                        env: createEnvOption(),
-                    });
-
-                childProc.stdout?.on("data", async (data: string | Buffer) => {
-                    data = data.toString();
-                    leetCodeChannel.append(data);
-                    if (data.includes("twoFactorCode")) {
-                        const twoFactor: string | undefined = await vscode.window.showInputBox({
-                            prompt: "Enter two-factor code.",
-                            ignoreFocusOut: true,
-                            validateInput: (s: string): string | undefined => s && s.trim() ? undefined : "The input must not be empty",
-                        });
-                        if (!twoFactor) {
-                            childProc.kill();
-                            return resolve(undefined);
-                        }
-                        childProc.stdin?.write(`${twoFactor}\n`);
-                    }
-                    const successMatch: RegExpMatchArray | null = data.match(this.successRegex);
-                    if (successMatch && successMatch[1]) {
-                        childProc.stdin?.end();
-                        return resolve(successMatch[1]);
-                    } else if (data.match(this.failRegex)) {
-                        childProc.stdin?.end();
-                        return reject(new Error("Faile to login"));
-                    }
-                });
-
-                childProc.stderr?.on("data", (data: string | Buffer) => leetCodeChannel.append(data.toString()));
-
-                childProc.on("error", reject);
-                const name: string | undefined = await vscode.window.showInputBox({
-                    prompt: "Enter username or E-mail.",
-                    ignoreFocusOut: true,
-                    validateInput: (s: string): string | undefined => s && s.trim() ? undefined : "The input must not be empty",
-                });
-                if (!name) {
-                    childProc.kill();
-                    return resolve(undefined);
+            await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification }, async (progress: vscode.Progress<{}>) => {
+                progress.report({ message: "Fetching user data..." });
+                const queryParams = parseQuery(uri.query);
+                const cookie = queryParams["cookie"];
+                if (!cookie) {
+                    promptForOpenOutputChannel(`Failed to get cookie. Please log in again`, DialogType.error);
+                    return;
                 }
-                childProc.stdin?.write(`${name}\n`);
-                const pwd: string | undefined = await vscode.window.showInputBox({
-                    prompt: isByCookie ? "Enter cookie" : "Enter password.",
-                    password: true,
-                    ignoreFocusOut: true,
-                    validateInput: (s: string): string | undefined => s ? undefined : isByCookie ? "Cookie must not be empty" : "Password must not be empty",
-                });
-                if (!pwd) {
-                    childProc.kill();
-                    return resolve(undefined);
+                globalState.setCookie(cookie);
+                const data = await queryUserData();
+                globalState.setUserStatus(data);
+                await this.setCookieToCli(cookie, data.username);
+                if (data.username) {
+                    vscode.window.showInformationMessage(`Successfully ${data.username}.`);
+                    this.currentUser = data.username;
+                    this.userStatus = UserStatus.SignedIn;
+                    this.emit("statusChanged");
                 }
-                childProc.stdin?.write(`${pwd}\n`);
             });
-            if (userName) {
-                vscode.window.showInformationMessage(`Successfully ${inMessage}.`);
-                this.currentUser = userName;
-                this.userStatus = UserStatus.SignedIn;
-                this.emit("statusChanged");
-            }
         } catch (error) {
-            promptForOpenOutputChannel(`Failed to ${inMessage}. Please open the output channel for details`, DialogType.error);
+            promptForOpenOutputChannel(`Failed to log in. Please open the output channel for details`, DialogType.error);
         }
+    }
 
+    public async signIn(): Promise<void> {
+        openUrl(this.getAuthLoginUrl());
     }
 
     public async signOut(): Promise<void> {
@@ -151,6 +78,7 @@ class LeetCodeManager extends EventEmitter {
             vscode.window.showInformationMessage("Successfully signed out.");
             this.currentUser = undefined;
             this.userStatus = UserStatus.SignedOut;
+            globalState.removeAll();
             this.emit("statusChanged");
         } catch (error) {
             // swallow the error when sign out.
@@ -173,6 +101,51 @@ class LeetCodeManager extends EventEmitter {
         }
 
         return "Unknown";
+    }
+
+    public getAuthLoginUrl(): string {
+        switch (getLeetCodeEndpoint()) {
+            case Endpoint.LeetCodeCN:
+                return urlsCn.authLoginUrl;
+            case Endpoint.LeetCode:
+            default:
+                return urls.authLoginUrl;
+        }
+    }
+
+    public setCookieToCli(cookie: string, name: string): Promise<void> {
+        return new Promise(async (resolve: (res: void) => void, reject: (e: Error) => void) => {
+            const leetCodeBinaryPath: string = await leetCodeExecutor.getLeetCodeBinaryPath();
+
+            const childProc: cp.ChildProcess = wsl.useWsl()
+                ? cp.spawn("wsl", [leetCodeExecutor.node, leetCodeBinaryPath, "user", loginArgsMapping.get("Cookie") ?? ""], {
+                      shell: true,
+                  })
+                : cp.spawn(leetCodeExecutor.node, [leetCodeBinaryPath, "user", loginArgsMapping.get("Cookie") ?? ""], {
+                      shell: true,
+                      env: createEnvOption(),
+                  });
+
+            childProc.stdout?.on("data", async (data: string | Buffer) => {
+                data = data.toString();
+                leetCodeChannel.append(data);
+                const successMatch: RegExpMatchArray | null = data.match(this.successRegex);
+                if (successMatch && successMatch[1]) {
+                    childProc.stdin?.end();
+                    return resolve();
+                } else if (data.match(this.failRegex)) {
+                    childProc.stdin?.end();
+                    return reject(new Error("Faile to login"));
+                }
+            });
+
+            childProc.stderr?.on("data", (data: string | Buffer) => leetCodeChannel.append(data.toString()));
+
+            childProc.on("error", reject);
+            childProc.stdin?.write(`${name}\n`);
+            await sleep(800);
+            childProc.stdin?.write(`${cookie}\n`);
+        });
     }
 }
 

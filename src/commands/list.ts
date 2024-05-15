@@ -1,7 +1,6 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IProblem, ProblemState, UserStatus } from "../shared";
@@ -13,10 +12,9 @@ export async function listProblems(): Promise<IProblem[]> {
         if (leetCodeManager.getStatus() === UserStatus.SignedOut) {
             return [];
         }
-        const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-        const showLocked: boolean = !!leetCodeConfig.get<boolean>("showLocked");
+
         const useEndpointTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
-        const result: string = await leetCodeExecutor.listProblems(showLocked, useEndpointTranslation);
+        const result: string = await leetCodeExecutor.listProblems(true, useEndpointTranslation);
         const problems: IProblem[] = [];
         const lines: string[] = result.split("\n");
         const reg: RegExp = /^(.)\s(.{1,2})\s(.)\s\[\s*(\d*)\s*\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;

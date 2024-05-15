@@ -8,7 +8,6 @@ import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
 
 class LeetCodePreviewProvider extends LeetCodeWebview {
-
     protected readonly viewType: string = "leetcode.preview";
     private node: IProblem;
     private description: IDescription;
@@ -23,11 +22,6 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
         this.node = node;
         this.sideMode = isSideMode;
         this.showWebviewInternal();
-        // Comment out this operation since it sometimes may cause the webview become empty.
-        // Waiting for the progress of the VS Code side issue: https://github.com/microsoft/vscode/issues/3742
-        // if (this.sideMode) {
-        //     this.hideSideBar(); // For better view area
-        // }
     }
 
     protected getWebviewOption(): ILeetCodeWebviewOption {
@@ -46,7 +40,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
     }
 
     protected getWebviewContent(): string {
-        const button: { element: string, script: string, style: string } = {
+        const button: { element: string; script: string; style: string } = {
             element: `<button id="solve">Code Now</button>`,
             script: `const button = document.getElementById('solve');
                     button.onclick = () => vscode.postMessage({
@@ -73,32 +67,26 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
         };
         const { title, url, category, difficulty, likes, dislikes, body } = this.description;
         const head: string = markdownEngine.render(`# [${title}](${url})`);
-        const info: string = markdownEngine.render([
-            `| Category | Difficulty | Likes | Dislikes |`,
-            `| :------: | :--------: | :---: | :------: |`,
-            `| ${category} | ${difficulty} | ${likes} | ${dislikes} |`,
-        ].join("\n"));
+        const info: string = markdownEngine.render(
+            [
+                `| Category | Difficulty | Likes | Dislikes |`,
+                `| :------: | :--------: | :---: | :------: |`,
+                `| ${category} | ${difficulty} | ${likes} | ${dislikes} |`,
+            ].join("\n")
+        );
         const tags: string = [
             `<details>`,
             `<summary><strong>Tags</strong></summary>`,
-            markdownEngine.render(
-                this.description.tags
-                    .map((t: string) => `[\`${t}\`](https://leetcode.com/tag/${t})`)
-                    .join(" | "),
-            ),
+            markdownEngine.render(this.description.tags.map((t: string) => `[\`${t}\`](${this.getTagLink(t)})`).join(" | ")),
             `</details>`,
         ].join("\n");
         const companies: string = [
             `<details>`,
             `<summary><strong>Companies</strong></summary>`,
-            markdownEngine.render(
-                this.description.companies
-                    .map((c: string) => `\`${c}\``)
-                    .join(" | "),
-            ),
+            markdownEngine.render(this.description.companies.map((c: string) => `\`${c}\``).join(" | ")),
             `</details>`,
         ].join("\n");
-        const links: string = markdownEngine.render(`[Discussion](${this.getDiscussionLink(url)}) | [Solution](${this.getSolutionLink(url)})`);
+        const links: string = markdownEngine.render(`[Submissions](${this.getSubmissionsLink(url)}) | [Solution](${this.getSolutionsLink(url)})`);
         return `
             <!DOCTYPE html>
             <html>
@@ -149,18 +137,23 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
 
     private parseDescription(descString: string, problem: IProblem): IDescription {
         const [
-            /* title */, ,
-            url, ,
-            /* tags */, ,
-            /* langs */, ,
-            category,
+            ,
+            ,
+            /* title */ url,
+            ,
+            ,
+            ,
+            ,
+            ,
+            /* tags */ /* langs */ category,
             difficulty,
             likes,
             dislikes,
-            /* accepted */,
-            /* submissions */,
-            /* testcase */, ,
-            ...body
+            ,
+            ,
+            ,
+            ,
+            /* accepted */ /* submissions */ /* testcase */ ...body
         ] = descString.split("\n");
         return {
             title: problem.name,
@@ -175,19 +168,22 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
         };
     }
 
-    private getDiscussionLink(url: string): string {
+    private getTagLink(tag: string): string {
         const endPoint: string = getLeetCodeEndpoint();
         if (endPoint === Endpoint.LeetCodeCN) {
-            return url.replace("/description/", "/comments/");
+            return `https://leetcode.cn/tag/${tag}?source=vscode`;
         } else if (endPoint === Endpoint.LeetCode) {
-            return url.replace("/description/", "/discuss/?currentPage=1&orderBy=most_votes&query=");
+            return `https://leetcode.com/tag/${tag}?source=vscode`;
         }
 
-        return "https://leetcode.com";
+        return "https://leetcode.com?source=vscode";
     }
 
-    private getSolutionLink(url: string): string {
-        return url.replace("/description/", "/solution/");
+    private getSolutionsLink(url: string): string {
+        return url.replace("/description/", "/solutions/") + "?source=vscode";
+    }
+    private getSubmissionsLink(url: string): string {
+        return url.replace("/description/", "/submissions/") + "?source=vscode";
     }
 }
 
