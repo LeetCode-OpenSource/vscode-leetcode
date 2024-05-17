@@ -3,6 +3,8 @@
 
 import { workspace, WorkspaceConfiguration } from "vscode";
 import { DescriptionConfiguration } from "../shared";
+import { sep } from "path";
+
 
 export function getWorkspaceConfiguration(): WorkspaceConfiguration {
     return workspace.getConfiguration("leetcode");
@@ -13,7 +15,7 @@ export function shouldHideSolvedProblem(): boolean {
 }
 
 export function getWorkspaceFolder(): string {
-    return getWorkspaceConfiguration().get<string>("workspaceFolder", "");
+    return substitute(getWorkspaceConfiguration().get<string>("workspaceFolder", ""));
 }
 
 export function getEditorShortcuts(): string[] {
@@ -65,4 +67,30 @@ export function getDescriptionConfiguration(): IDescriptionConfiguration {
 export interface IDescriptionConfiguration {
     showInComment: boolean;
     showInWebview: boolean;
+}
+
+function substitute<T>(val: T): T {
+    if (typeof val == 'string') {
+        val = val.replace(/\$\{(.*?)\}/g, (match, name) => {
+            const rep = replace(name);
+            return (rep === null) ? match : rep;
+        }) as unknown as T;
+    }
+    return val;
+}
+
+function replace(name: string): string | null {
+    if (name == 'pathSeparator') {
+        return sep as string;
+    }
+    const envPrefix = 'env:';
+    if (name.startsWith(envPrefix))
+        return process.env[name.substring(envPrefix.length)] || '';
+    const configPrefix = 'config:';
+    if (name.startsWith(configPrefix)) {
+        const config = workspace.getConfiguration().get(
+            name.substring(configPrefix.length));
+        return (typeof config == 'string') ? config : null;
+    }
+    return null;
 }
