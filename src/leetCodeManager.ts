@@ -11,7 +11,7 @@ import { createEnvOption } from "./utils/cpUtils";
 import { DialogType, openUrl, promptForOpenOutputChannel } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 import { getLeetCodeEndpoint } from "./commands/plugin";
-import { globalState } from "./globalState";
+import { globalState, UserDataType } from "./globalState";
 import { queryUserData } from "./request/query-user-data";
 import { parseQuery, sleep } from "./utils/toolUtils";
 
@@ -31,8 +31,16 @@ class LeetCodeManager extends EventEmitter {
     public async getLoginStatus(): Promise<void> {
         try {
             const result: string = await leetCodeExecutor.getUserInfo();
-            this.currentUser = this.tryParseUserName(result);
+            const userInfo = this.tryParseUserInfo(result);
             this.userStatus = UserStatus.SignedIn;
+            this.currentUser = userInfo.username;
+            const data: UserDataType | undefined = globalState.getUserStatus();
+            if (data) {
+                globalState.setUserStatus({
+                    ...data,
+                    isPremium: userInfo.isPremium,
+                } as UserDataType);
+            }
         } catch (error) {
             this.currentUser = undefined;
             this.userStatus = UserStatus.SignedOut;
@@ -93,14 +101,16 @@ class LeetCodeManager extends EventEmitter {
         return this.currentUser;
     }
 
-    private tryParseUserName(output: string): string {
-        const reg: RegExp = /^\s*.\s*(.+?)\s*https:\/\/leetcode/m;
+    private tryParseUserInfo(output: string): { username: string, isPremium: boolean } {
+        const reg: RegExp = /^\s*([✔✘]?)\s+(.+?)\s*https:\/\/leetcode/m;
         const match: RegExpMatchArray | null = output.match(reg);
-        if (match && match.length === 2) {
-            return match[1].trim();
+        if (match && match.length === 3) {
+            const isPremium = match[1] === '✔';
+            const username = match[2].trim();
+            return { username, isPremium };
         }
 
-        return "Unknown";
+        return { username: "Unknown", isPremium: false };
     }
 
     public getAuthLoginUrl(): string {
