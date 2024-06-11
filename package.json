@@ -296,7 +296,6 @@
                     "leetcode.hideSolved": {
                         "type": "boolean",
                         "default": false,
-                        "scope": "application",
                         "description": "Hide solved problems."
                     },
                     "leetcode.defaultLanguage": {
@@ -320,7 +319,6 @@
                             "swift",
                             "typescript"
                         ],
-                        "scope": "application",
                         "description": "Default language for solving the problems."
                     },
                     "leetcode.showDescription": {
@@ -336,50 +334,42 @@
                             "Show the problem description in a new webview window",
                             "Show the problem description in the file's comment"
                         ],
-                        "scope": "application",
                         "description": "Specify where to show the description."
                     },
                     "leetcode.showCommentDescription": {
                         "type": "boolean",
                         "default": false,
-                        "scope": "application",
                         "description": "[Deprecated] Include problem description in comments.",
                         "deprecationMessage": "This setting will be deprecated in 0.17.0, please use 'leetcode.showDescription' instead"
                     },
                     "leetcode.hint.setDefaultLanguage": {
                         "type": "boolean",
                         "default": true,
-                        "scope": "application",
                         "description": "Show a hint to set the default language."
                     },
                     "leetcode.hint.configWebviewMarkdown": {
                         "type": "boolean",
                         "default": true,
-                        "scope": "application",
                         "description": "Show a hint to change webview appearance through markdown config."
                     },
                     "leetcode.hint.commentDescription": {
                         "type": "boolean",
                         "default": true,
-                        "scope": "application",
                         "description": "Show a hint to enable comment description in solution code file."
                     },
                     "leetcode.hint.commandShortcut": {
                         "type": "boolean",
                         "default": true,
-                        "scope": "application",
                         "description": "Show a hint to configure commands key binding."
                     },
                     "leetcode.useWsl": {
                         "type": "boolean",
                         "default": false,
-                        "scope": "application",
                         "description": "Use the Windows Subsystem for Linux."
                     },
                     "leetcode.endpoint": {
                         "type": "string",
                         "default": "leetcode",
-                        "scope": "application",
                         "enum": [
                             "leetcode",
                             "leetcode-cn"
@@ -389,18 +379,15 @@
                     "leetcode.useEndpointTranslation": {
                         "type": "boolean",
                         "default": true,
-                        "scope": "application",
                         "description": "Use endpoint's translation (if available)"
                     },
                     "leetcode.workspaceFolder": {
                         "type": "string",
-                        "scope": "application",
                         "description": "The path of the workspace folder to store the problem files.",
                         "default": ""
                     },
                     "leetcode.filePath": {
                         "type": "object",
-                        "scope": "application",
                         "description": "The output folder and filename to save the problem files.",
                         "properties": {
                             "default": {
@@ -642,7 +629,6 @@
                     "leetcode.enableStatusBar": {
                         "type": "boolean",
                         "default": true,
-                        "scope": "application",
                         "description": "Show the LeetCode status bar or not."
                     },
                     "leetcode.editor.shortcuts": {
@@ -651,7 +637,6 @@
                             "submit",
                             "test"
                         ],
-                        "scope": "application",
                         "items": {
                             "type": "string",
                             "enum": [
@@ -674,25 +659,21 @@
                     "leetcode.enableSideMode": {
                         "type": "boolean",
                         "default": true,
-                        "scope": "application",
                         "description": "Determine whether to group all webview pages into the second editor column when solving problems."
                     },
                     "leetcode.nodePath": {
                         "type": "string",
                         "default": "node",
-                        "scope": "application",
                         "description": "The Node.js executable path. for example, C:\\Program Files\\nodejs\\node.exe"
                     },
                     "leetcode.colorizeProblems": {
                         "type": "boolean",
                         "default": true,
-                        "scope": "application",
                         "description": "Add difficulty badge and colorize problems files in explorer tree."
                     },
                     "leetcode.problems.sortStrategy": {
                         "type": "string",
                         "default": "None",
-                        "scope": "application",
                         "enum": [
                             "None",
                             "Acceptance Rate (Ascending)",
@@ -703,7 +684,6 @@
                     "leetcode.allowReportData": {
                         "type": "boolean",
                         "default": true,
-                        "scope": "application",
                         "description": "Allow LeetCode to report anonymous usage data to improve the product."
                     }
                 }
