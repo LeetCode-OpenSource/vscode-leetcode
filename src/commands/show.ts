@@ -260,6 +260,10 @@ async function resolveRelativePath(relativePath: string, node: IProblem, selecte
         switch (placeholder) {
             case "id":
                 return node.id;
+            case "zfillid":
+            case "zerofillid":
+                let pad = "0000";
+                return pad.substring(0, 4 - node.id.length) + node.id;
             case "name":
                 return node.name;
             case "camelcasename":
