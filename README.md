@@ -1,5 +1,7 @@
 # LeetCode
 
+## remove "scope": "application",
+
 > Solve LeetCode problems in VS Code
 
 <p align="center">
@@ -20,7 +22,7 @@
   </a>
 </p>
 
-- English Document | [中文文档](https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/docs/README_zh-CN.md)
+-   English Document | [中文文档](https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/docs/README_zh-CN.md)
 
 ## ❗️ Attention ❗️- Workaround to login to LeetCode endpoint
 
@@ -34,9 +36,9 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
 
 ## Requirements
 
-- [VS Code 1.30.1+](https://code.visualstudio.com/)
-- [Node.js 10+](https://nodejs.org)
-  > NOTE: Please make sure that `Node` is in your `PATH` environment variable. You can also use the setting `leetcode.nodePath` to specify the location of your `Node.js` executable.
+-   [VS Code 1.30.1+](https://code.visualstudio.com/)
+-   [Node.js 10+](https://nodejs.org)
+    > NOTE: Please make sure that `Node` is in your `PATH` environment variable. You can also use the setting `leetcode.nodePath` to specify the location of your `Node.js` executable.
 
 ## Quick Start
 
@@ -50,11 +52,11 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
   <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/sign_in.png" alt="Sign in" />
 </p>
 
-- Simply click `Sign in to LeetCode` in the `LeetCode Explorer` will let you **sign in** with your LeetCode account.
+-   Simply click `Sign in to LeetCode` in the `LeetCode Explorer` will let you **sign in** with your LeetCode account.
 
-- You can also use the following command to sign in/out:
-  - **LeetCode: Sign in**
-  - **LeetCode: Sign out**
+-   You can also use the following command to sign in/out:
+    -   **LeetCode: Sign in**
+    -   **LeetCode: Sign out**
 
 ---
 
@@ -64,14 +66,14 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
   <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/endpoint.png" alt="Switch Endpoint" />
 </p>
 
-- By clicking the button ![btn_endpoint](https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/btn_endpoint.png) at the **explorer's navigation bar**, you can switch between different endpoints.
+-   By clicking the button ![btn_endpoint](https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/btn_endpoint.png) at the **explorer's navigation bar**, you can switch between different endpoints.
 
-- The supported endpoints are:
+-   The supported endpoints are:
 
-  - **leetcode.com**
-  - **leetcode.cn**
+    -   **leetcode.com**
+    -   **leetcode.cn**
 
-  > Note: The accounts of different endpoints are **not** shared. Please make sure you are using the right endpoint. The extension will use `leetcode.com` by default.
+    > Note: The accounts of different endpoints are **not** shared. Please make sure you are using the right endpoint. The extension will use `leetcode.com` by default.
 
 ---
 
@@ -81,14 +83,14 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
   <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/pick_problem.png" alt="Pick a Problem" />
 </p>
 
-- Directly click on the problem or right click the problem in the `LeetCode Explorer` and select `Preview Problem` to see the problem description.
-- Select `Show Problem` to directly open the file with the problem description.
+-   Directly click on the problem or right click the problem in the `LeetCode Explorer` and select `Preview Problem` to see the problem description.
+-   Select `Show Problem` to directly open the file with the problem description.
 
-  > Note：You can specify the path of the workspace folder to store the problem files by updating the setting `leetcode.workspaceFolder`. The default value is：**$HOME/.leetcode/**.
+    > Note：You can specify the path of the workspace folder to store the problem files by updating the setting `leetcode.workspaceFolder`. The default value is：**$HOME/.leetcode/**.
 
-  > You can specify whether including the problem description in comments or not by updating the setting `leetcode.showCommentDescription`.
+    > You can specify whether including the problem description in comments or not by updating the setting `leetcode.showCommentDescription`.
 
-  > You can switch the default language by triggering the command: `LeetCode: Switch Default Language`.
+    > You can switch the default language by triggering the command: `LeetCode: Switch Default Language`.
 
 ---
 
@@ -98,15 +100,15 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
   <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/shortcuts.png" alt="Editor Shortcuts" />
 </p>
 
-- The extension supports 5 editor shortcuts (aka Code Lens):
+-   The extension supports 5 editor shortcuts (aka Code Lens):
 
-  - `Submit`: Submit your answer to LeetCode.
-  - `Test`: Test your answer with customized test cases.
-  - `Star/Unstar`: Star or unstar the current problem.
-  - `Solution`: Show the top voted solution for the current problem.
-  - `Description`: Show the problem description page.
+    -   `Submit`: Submit your answer to LeetCode.
+    -   `Test`: Test your answer with customized test cases.
+    -   `Star/Unstar`: Star or unstar the current problem.
+    -   `Solution`: Show the top voted solution for the current problem.
+    -   `Description`: Show the problem description page.
 
-  > Note: You can customize the shortcuts using the setting: `leetcode.editor.shortcuts`. By default, only `Submit` and `Test` shortcuts are enabled.
+    > Note: You can customize the shortcuts using the setting: `leetcode.editor.shortcuts`. By default, only `Submit` and `Test` shortcuts are enabled.
 
 ---
 
@@ -116,7 +118,7 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
   <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/search.png" alt="Search problems by Keywords" />
 </p>
 
-- By clicking the button ![btn_search](https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/btn_search.png) at the **explorer's navigation bar**, you can search the problems by keywords.
+-   By clicking the button ![btn_search](https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/btn_search.png) at the **explorer's navigation bar**, you can search the problems by keywords.
 
 ---
 
@@ -126,7 +128,7 @@ Thanks for [@yihong0618](https://github.com/yihong0618) provided a workaround wh
   <img src="https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/imgs/session.png" alt="Manage Session" />
 </p>
 
-- To manage your LeetCode sessions, just clicking the `LeetCode: ***` at the bottom of the status bar. You can **switch** between sessions or **create**, **delete** a session.
+-   To manage your LeetCode sessions, just clicking the `LeetCode: ***` at the bottom of the status bar. You can **switch** between sessions or **create**, **delete** a session.
 
 ## Settings
 
@@ -160,5 +162,5 @@ Refer to [CHANGELOG](https://github.com/LeetCode-OpenSource/vscode-leetcode/blob
 
 ## Acknowledgement
 
-- This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcode-cli](https://github.com/skygragon/leetcode-cli) open source project.
-- Special thanks to our [contributors](https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/ACKNOWLEDGEMENTS.md).
+-   This extension is based on [@skygragon](https://github.com/skygragon)'s [leetcode-cli](https://github.com/skygragon/leetcode-cli) open source project.
+-   Special thanks to our [contributors](https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/ACKNOWLEDGEMENTS.md).

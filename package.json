@@ -1,10 +1,10 @@
 {
-    "name": "vscode-leetcode",
-    "displayName": "LeetCode",
+    "name": "vscode-leetcode-no-scope",
+    "displayName": "vscode-leetcode-no-scope",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.18.2",
+    "version": "0.19.0",
     "author": "LeetCode",
-    "publisher": "LeetCode",
+    "publisher": "baicie",
     "license": "MIT",
     "icon": "resources/LeetCode.png",
     "engines": {
