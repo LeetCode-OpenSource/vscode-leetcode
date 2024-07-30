@@ -186,9 +186,9 @@ class LeetCodeManager extends EventEmitter {
                 } else if (data.match(this.failRegex)) {
                     childProc.stdin?.end();
                     return reject(new Error("Faile to login"));
-                } else if (data.match(/login: /)){
+                } else if (data.match(/login: /)) {
                     childProc.stdin?.write(`${name}\n`);
-                } else if (data.match(/cookie: /)){
+                } else if (data.match(/cookie: /)) {
                     childProc.stdin?.write(`${cookie}\n`);
                 }
             });
