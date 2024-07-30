@@ -9,7 +9,7 @@ export function parseQuery(query: string): { [key: string]: string } {
         return queryObject;
     }
 
-    let keyValuePairs = query.split("&");
+    const keyValuePairs = query.split("&");
     keyValuePairs.forEach((pair) => {
         const firstEqualsIndex = pair.indexOf("=");
         if (firstEqualsIndex !== -1) {

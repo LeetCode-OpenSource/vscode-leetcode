@@ -16,7 +16,7 @@ export function LcAxios<T = any>(path: string, settings?: AxiosRequestConfig): A
     }
     return axios(path, {
         headers: {
-            referer: referer,
+            referer,
             "content-type": "application/json",
             cookie,
             ...(settings && settings.headers),

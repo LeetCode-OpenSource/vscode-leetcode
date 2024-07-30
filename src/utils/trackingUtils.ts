@@ -90,7 +90,7 @@ class TrackData implements ITrackData {
         if (!Array.isArray(reportItems)) {
             reportItems = [reportItems];
         }
-        let randomId = getRandomString(60);
+        const randomId = getRandomString(60);
         reportItems.forEach((item) => {
             this.reportCache.push({
                 ...item,
