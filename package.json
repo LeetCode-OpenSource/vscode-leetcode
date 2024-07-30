@@ -2,7 +2,7 @@
     "name": "vscode-leetcode",
     "displayName": "LeetCode",
     "description": "Solve LeetCode problems in VS Code",
-    "version": "0.18.2",
+    "version": "0.18.3",
     "author": "LeetCode",
     "publisher": "LeetCode",
     "license": "MIT",
@@ -714,7 +714,9 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose"
+        "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose",
+        "build": "vsce package",
+        "vs-publish": "vsce publish"
     },
     "devDependencies": {
         "@types/fs-extra": "^9.0.11",
