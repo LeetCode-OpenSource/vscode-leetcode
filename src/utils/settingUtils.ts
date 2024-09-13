@@ -3,6 +3,7 @@
 
 import { workspace, WorkspaceConfiguration } from "vscode";
 import { DescriptionConfiguration } from "../shared";
+import * as fse from 'fs-extra';
 
 export function getWorkspaceConfiguration(): WorkspaceConfiguration {
     return workspace.getConfiguration("leetcode");
@@ -13,7 +14,15 @@ export function shouldHideSolvedProblem(): boolean {
 }
 
 export function getWorkspaceFolder(): string {
-    return getWorkspaceConfiguration().get<string>("workspaceFolder", "");
+    const workspaceFolder = getWorkspaceConfiguration().get<string>('workspaceFolder', '');
+    const workspaceFolderList = workspaceFolder.split(',');
+    for (let i = 0; i < workspaceFolderList.length; i++) {
+        const path = workspaceFolderList[i];
+        if (fse.pathExistsSync(path)) {
+            return path;
+        }
+    }
+    return workspaceFolder;
 }
 
 export function getEditorShortcuts(): string[] {
