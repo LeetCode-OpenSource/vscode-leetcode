@@ -140,7 +140,7 @@ export const urlsCn = {
     // base urls
     base: "https://leetcode.cn",
     graphql: "https://leetcode.cn/graphql",
-    userGraphql: "https://leetcode.cn/graphql/noj-go/",
+    userGraphql: "https://leetcode.cn/graphql/",
     login: "https://leetcode.cn/accounts/login/",
     authLoginUrl: `https://leetcode.cn/authorize-login/${protocol}/?path=leetcode.vscode-leetcode`,
 };
