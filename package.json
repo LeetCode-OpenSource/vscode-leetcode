@@ -323,6 +323,11 @@
                         "scope": "application",
                         "description": "Default language for solving the problems."
                     },
+                    "leetcode.language.preamble": {
+                        "type": "object",
+                        "scope": "application",
+                        "description": "A little preamble adding to each language's solution files"
+                    },
                     "leetcode.showDescription": {
                         "type": "string",
                         "default": "In Webview",
