@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import * as vscode from "vscode";
+import { AxiosResponse } from "axios";
 
 export interface IQuickItemEx<T> extends vscode.QuickPickItem {
     value: T;
@@ -156,3 +157,47 @@ export const getUrl = (key: string) => {
             return urls[key];
     }
 };
+
+export const dailyQueryStr = `
+    query questionOfToday {
+        activeDailyCodingChallengeQuestion {
+            question {
+                frontendQuestionId: questionFrontendId
+            }
+        }
+    }
+`;
+
+export const dailyQueryStrCn = `
+    query questionOfToday {
+        todayRecord {
+            question {
+                frontendQuestionId: questionFrontendId
+            }
+        }
+    }
+`;
+
+export const getDailyQueryStr = () => {
+    const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+    const point = leetCodeConfig.get<string>("endpoint", Endpoint.LeetCode);
+    switch (point) {
+        case Endpoint.LeetCodeCN:
+            return dailyQueryStrCn;
+        case Endpoint.LeetCode:
+        default:
+            return dailyQueryStr;
+    }
+};
+
+export const getDailyProblemID = (res : AxiosResponse<any, any>) => {
+    const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+    const point = leetCodeConfig.get<string>("endpoint", Endpoint.LeetCode);
+    switch (point) {
+        case Endpoint.LeetCodeCN:
+            return res.data.data.todayRecord[0].question.frontendQuestionId;
+        case Endpoint.LeetCode:
+        default:
+            return res.data.data.activeDailyCodingChallengeQuestion.question.frontendQuestionId;
+    }
+}

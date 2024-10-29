@@ -32,6 +32,7 @@
         "onCommand:leetcode.manageSessions",
         "onCommand:leetcode.refreshExplorer",
         "onCommand:leetcode.pickOne",
+        "onCommand:leetcode.pickDaily",
         "onCommand:leetcode.showProblem",
         "onCommand:leetcode.previewProblem",
         "onCommand:leetcode.searchProblem",
@@ -80,6 +81,11 @@
             {
                 "command": "leetcode.pickOne",
                 "title": "Pick One",
+                "category": "LeetCode"
+            },
+            {
+                "command": "leetcode.pickDaily",
+                "title": "Pick Daily Problem",
                 "category": "LeetCode"
             },
             {
@@ -193,9 +199,14 @@
                     "group": "overflow@2"
                 },
                 {
-                    "command": "leetcode.problems.sort",
+                    "command": "leetcode.pickDaily",
                     "when": "view == leetCodeExplorer",
                     "group": "overflow@3"
+                },
+                {
+                    "command": "leetcode.problems.sort",
+                    "when": "view == leetCodeExplorer",
+                    "group": "overflow@4"
                 }
             ],
             "view/item/context": [

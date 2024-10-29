@@ -30,6 +30,7 @@ import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
 import { getLeetCodeEndpoint } from "./plugin";
 import { globalState } from "../globalState";
+import { queryDailyProblem } from "../request/query-daily-problem";
 
 export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: boolean = false): Promise<void> {
     let node: IProblem;
@@ -68,6 +69,16 @@ export async function pickOne(): Promise<void> {
     const problems: IProblem[] = await list.listProblems();
     const randomProblem: IProblem = problems[Math.floor(Math.random() * problems.length)];
     await showProblemInternal(randomProblem);
+}
+
+export async function pickDaily(): Promise<void> {
+    const dailyProblemID: string = await queryDailyProblem();
+    const node: IProblem | undefined = explorerNodeManager.getNodeById(dailyProblemID);
+    if (!node) {
+        vscode.window.showErrorMessage(`Failed to resolve the problem with id: ${dailyProblemID}.`);
+        return;
+    }
+    await showProblemInternal(node);
 }
 
 export async function showProblem(node?: LeetCodeNode): Promise<void> {
