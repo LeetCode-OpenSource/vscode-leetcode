@@ -101,6 +101,7 @@ export enum Category {
     Tag = "Tag",
     Company = "Company",
     Favorite = "Favorite",
+    Daily = "Daily Challenge"
 }
 
 export const supportedPlugins: string[] = ["company", "solution.discuss", "leetcode.cn"];
@@ -146,8 +147,7 @@ export const urlsCn = {
 };
 
 export const getUrl = (key: string) => {
-    const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-    const point = leetCodeConfig.get<string>("endpoint", Endpoint.LeetCode);
+    const point = getEndpoint();
     switch (point) {
         case Endpoint.LeetCodeCN:
             return urlsCn[key];
@@ -156,3 +156,8 @@ export const getUrl = (key: string) => {
             return urls[key];
     }
 };
+
+export const getEndpoint = (): string => {
+    const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+    return leetCodeConfig.get<string>("endpoint", Endpoint.LeetCode);
+}

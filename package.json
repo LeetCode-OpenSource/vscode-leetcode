@@ -141,6 +141,11 @@
                 "title": "Sort Problems",
                 "category": "LeetCode",
                 "icon": "$(sort-precedence)"
+            },
+            {
+                "command": "leetcode.pickDaily",
+                "title": "Pick Daily Chanllenge",
+                "category": "LeetCode"
             }
         ],
         "viewsContainers": {
@@ -223,6 +228,11 @@
                     "command": "leetcode.removeFavorite",
                     "when": "view == leetCodeExplorer && viewItem == problem-favorite",
                     "group": "inline"
+                },
+                {
+                    "command": "leetcode.pickDaily",
+                    "when": "view == leetCodeExplorer",
+                    "group": "leetcode@4"
                 }
             ],
             "commandPalette": [
@@ -705,6 +715,12 @@
                         "default": true,
                         "scope": "application",
                         "description": "Allow LeetCode to report anonymous usage data to improve the product."
+                    },
+                    "leetcode.codeSnippets": {
+                        "type": "string",
+                        "default": "",
+                        "scope": "application",
+                        "description": "Custom code snippets for LeetCode problems."
                     }
                 }
             }

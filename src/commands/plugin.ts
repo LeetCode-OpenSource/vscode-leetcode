@@ -4,7 +4,7 @@
 import * as vscode from "vscode";
 import { leetCodeTreeDataProvider } from "../explorer/LeetCodeTreeDataProvider";
 import { leetCodeExecutor } from "../leetCodeExecutor";
-import { IQuickItemEx } from "../shared";
+import { getEndpoint, IQuickItemEx } from "../shared";
 import { Endpoint, SortingStrategy } from "../shared";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { deleteCache } from "./cache";
@@ -50,8 +50,7 @@ export async function switchEndpoint(): Promise<void> {
 }
 
 export function getLeetCodeEndpoint(): string {
-    const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-    return leetCodeConfig.get<string>("endpoint", Endpoint.LeetCode);
+    return getEndpoint();
 }
 
 const SORT_ORDER: SortingStrategy[] = [

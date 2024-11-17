@@ -30,6 +30,7 @@ import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
 import { getLeetCodeEndpoint } from "./plugin";
 import { globalState } from "../globalState";
+import { queryDailyChallenge } from "../request/query-daily-challange";
 
 export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: boolean = false): Promise<void> {
     let node: IProblem;
@@ -68,6 +69,16 @@ export async function pickOne(): Promise<void> {
     const problems: IProblem[] = await list.listProblems();
     const randomProblem: IProblem = problems[Math.floor(Math.random() * problems.length)];
     await showProblemInternal(randomProblem);
+}
+
+export async function pickDailyChallenge(): Promise<void> {
+    const dailyChallengeID: string = await queryDailyChallenge();
+    const node: IProblem | undefined = explorerNodeManager.getNodeById(dailyChallengeID);
+    if (!node) {
+        vscode.window.showErrorMessage(`No daily challenge found for today.`);
+        return;
+    }
+    await showProblemInternal(node);
 }
 
 export async function showProblem(node?: LeetCodeNode): Promise<void> {

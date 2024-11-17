@@ -1,6 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
+import * as vscode from "vscode";
 import * as cp from "child_process";
 import * as fse from "fs-extra";
 import * as os from "os";
@@ -110,7 +111,19 @@ class LeetCodeExecutor implements Disposable {
 
         if (!await fse.pathExists(filePath)) {
             await fse.createFile(filePath);
-            const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", this.nodeExecutable, cmd);
+            let codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", this.nodeExecutable, cmd);
+            const lines = codeTemplate.split(/\r?\n/);
+            const targetIndex = lines.findIndex(line => line.includes('// @lc code=start'));
+            const codeSnippet: string = vscode.workspace.getConfiguration('leetcode').get<string>('codeSnippets', '');
+            if (targetIndex !== -1 && codeSnippet.trim() !== '') {
+                let insertIndex = targetIndex;
+                while (insertIndex - 1 >= 0 && lines[insertIndex - 1].trim() === '') {
+                    lines.splice(insertIndex - 1, 1);
+                    insertIndex--;
+                }
+                lines.splice(insertIndex, 0, codeSnippet);
+            }
+            codeTemplate = lines.join('\n');
             await fse.writeFile(filePath, codeTemplate);
         }
     }

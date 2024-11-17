@@ -8,6 +8,7 @@ import { getSortingStrategy } from "../commands/plugin";
 import { Category, defaultProblem, ProblemState, SortingStrategy } from "../shared";
 import { shouldHideSolvedProblem } from "../utils/settingUtils";
 import { LeetCodeNode } from "./LeetCodeNode";
+import { queryDailyChallenge } from "../request/query-daily-challange";
 
 class ExplorerNodeManager implements Disposable {
     private explorerNodeMap: Map<string, LeetCodeNode> = new Map<string, LeetCodeNode>();
@@ -53,6 +54,10 @@ class ExplorerNodeManager implements Disposable {
                 id: Category.Favorite,
                 name: Category.Favorite,
             }), false),
+            new LeetCodeNode(Object.assign({}, defaultProblem, {
+                id: Category.Daily,
+                name: Category.Daily,
+            }), false)
         ];
     }
 
@@ -146,6 +151,11 @@ class ExplorerNodeManager implements Disposable {
             }
         }
         return this.applySortingStrategy(res);
+    }
+
+    public async getDailyChallengeNode(): Promise<LeetCodeNode[]> {
+        const dailyChallengeID: string = await queryDailyChallenge();
+        return this.getNodeById(dailyChallengeID) ? [this.getNodeById(dailyChallengeID)!] : [];
     }
 
     public dispose(): void {
