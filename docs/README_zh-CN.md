@@ -20,7 +20,7 @@
   </a>
 </p>
 
-- [English Document](https://github.com/LeetCode-OpenSource/vscode-leetcode#requirements) | 中文文档
+- [English Document](https://github.com/LeetCode-OpenSource/vscode-leetcode#leetcode) | 中文文档
 
 ## ❗️ 注意 ❗️- 无法登录 LeetCode 节点的临时解决办法
 
