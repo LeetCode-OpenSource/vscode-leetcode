@@ -125,7 +125,29 @@ export enum SortingStrategy {
 export const PREMIUM_URL_CN = "https://leetcode.cn/premium-payment/?source=vscode";
 export const PREMIUM_URL_GLOBAL = "https://leetcode.com/subscribe/?ref=lp_pl&source=vscode";
 
-const protocol = vscode.env.appName.includes('Insiders') ? "vscode-insiders" : "vscode"
+// 检测当前编辑器环境并返回对应的协议和扩展标识
+const getEditorInfo = () => {
+    const appName = vscode.env.appName;
+    if (appName.includes('Cursor')) {
+        return {
+            protocol: "cursor",
+            extensionId: "leetcode.vscode-leetcode" // Cursor 兼容 VSCode 扩展标识
+        };
+    } else if (appName.includes('Insiders')) {
+        return {
+            protocol: "vscode-insiders",
+            extensionId: "leetcode.vscode-leetcode"
+        };
+    } else {
+        return {
+            protocol: "vscode",
+            extensionId: "leetcode.vscode-leetcode"
+        };
+    }
+};
+
+const editorInfo = getEditorInfo();
+const protocol = editorInfo.protocol;
 
 export const urls = {
     // base urls
@@ -133,7 +155,7 @@ export const urls = {
     graphql: "https://leetcode.com/graphql",
     userGraphql: "https://leetcode.com/graphql",
     login: "https://leetcode.com/accounts/login/",
-    authLoginUrl: `https://leetcode.com/authorize-login/${protocol}/?path=leetcode.vscode-leetcode`,
+    authLoginUrl: `https://leetcode.com/authorize-login/${protocol}/?path=${editorInfo.extensionId}`,
 };
 
 export const urlsCn = {
@@ -142,7 +164,7 @@ export const urlsCn = {
     graphql: "https://leetcode.cn/graphql",
     userGraphql: "https://leetcode.cn/graphql/",
     login: "https://leetcode.cn/accounts/login/",
-    authLoginUrl: `https://leetcode.cn/authorize-login/${protocol}/?path=leetcode.vscode-leetcode`,
+    authLoginUrl: `https://leetcode.cn/authorize-login/${protocol}/?path=${editorInfo.extensionId}`,
 };
 
 export const getUrl = (key: string) => {
