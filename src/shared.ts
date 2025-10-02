@@ -1,4 +1,5 @@
-// Copyright (c) jdneo. All rights reserved.
+// Copyright (c) mt. All rights reserved.
+// Based on original work by jdneo.
 // Licensed under the MIT license.
 
 import * as vscode from "vscode";
@@ -81,6 +82,7 @@ export interface IProblem {
     passRate: string;
     companies: string[];
     tags: string[];
+    titleSlug?: string; // Добавляем titleSlug для Daily Challenges
 }
 
 export const defaultProblem: IProblem = {
@@ -101,9 +103,10 @@ export enum Category {
     Tag = "Tag",
     Company = "Company",
     Favorite = "Favorite",
+    Daily = "Daily",
 }
 
-export const supportedPlugins: string[] = ["company", "solution.discuss", "leetcode.cn"];
+export const supportedPlugins: string[] = []; // Отключено для избежания конфликтов с оригинальным расширением
 
 export enum DescriptionConfiguration {
     InWebView = "In Webview",

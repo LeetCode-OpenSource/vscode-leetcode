@@ -1,4 +1,5 @@
-// Copyright (c) jdneo. All rights reserved.
+// Copyright (c) mt. All rights reserved.
+// Based on original work by jdneo.
 // Licensed under the MIT license.
 
 import * as _ from "lodash";
@@ -13,6 +14,8 @@ class ExplorerNodeManager implements Disposable {
     private explorerNodeMap: Map<string, LeetCodeNode> = new Map<string, LeetCodeNode>();
     private companySet: Set<string> = new Set<string>();
     private tagSet: Set<string> = new Set<string>();
+    private dailyChallengesCache: LeetCodeNode[] | null = null;
+    private dailyCacheTimestamp: number | null = null;
 
     public async refreshCache(): Promise<void> {
         this.dispose();
@@ -29,10 +32,17 @@ class ExplorerNodeManager implements Disposable {
                 this.tagSet.add(tag);
             }
         }
+        // Сбрасываем кеш daily challenges, чтобы получить обновленные статусы
+        this.dailyChallengesCache = null;
+        this.dailyCacheTimestamp = null;
     }
 
     public getRootNodes(): LeetCodeNode[] {
         return [
+            new LeetCodeNode(Object.assign({}, defaultProblem, {
+                id: Category.Daily,
+                name: "📅 Daily Challenges",
+            }), false),
             new LeetCodeNode(Object.assign({}, defaultProblem, {
                 id: Category.All,
                 name: Category.All,
@@ -80,6 +90,79 @@ class ExplorerNodeManager implements Disposable {
         );
         this.sortSubCategoryNodes(res, Category.Difficulty);
         return res;
+    }
+
+    public async getDailyNodes(): Promise<LeetCodeNode[]> {
+        // Проверяем кеш (обновляем каждые 30 минут)
+        const now = Date.now();
+        const cacheTimeout = 30 * 60 * 1000; // 30 минут
+
+        if (this.dailyChallengesCache && this.dailyCacheTimestamp &&
+            (now - this.dailyCacheTimestamp) < cacheTimeout) {
+            return this.dailyChallengesCache;
+        }
+
+        const { leetCodeExecutor } = require("../leetCodeExecutor");
+        const settingUtils = require("../utils/settingUtils");
+        const needTranslation = settingUtils.shouldUseEndpointTranslation();
+
+        try {
+            const dailyChallenges = await leetCodeExecutor.getTodayProblem(needTranslation);
+            if (dailyChallenges && dailyChallenges.length > 0) {
+                const nodes = dailyChallenges.map((challenge: any) => {
+                    const challengeData = Object.assign({}, challenge);
+
+                    // Получаем актуальный статус задачи из локального кеша
+                    const localProblem = this.explorerNodeMap.get(challenge.id);
+                    if (localProblem) {
+                        // Используем локальный статус (решена/не решена)
+                        challengeData.state = localProblem.state;
+                        challengeData.isFavorite = localProblem.isFavorite;
+                        // Обновляем другие поля, если они есть в локальных данных
+                        if (localProblem.passRate) {
+                            challengeData.passRate = localProblem.passRate;
+                        }
+                        if (localProblem.companies && localProblem.companies.length > 0) {
+                            challengeData.companies = localProblem.companies;
+                        }
+                        if (localProblem.tags && localProblem.tags.length > 0) {
+                            challengeData.tags = localProblem.tags;
+                        }
+                    }
+
+                    // Форматируем название с датой
+                    const challengeDate = new Date(challenge.date);
+                    const today = new Date();
+                    const isCurrentDay = challengeDate.toDateString() === today.toDateString();
+
+                    let dateLabel: string;
+                    if (isCurrentDay) {
+                        dateLabel = "Today";
+                    } else {
+                        const diffTime = today.getTime() - challengeDate.getTime();
+                        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                        if (diffDays === 1) {
+                            dateLabel = "Yesterday";
+                        } else {
+                            dateLabel = `${diffDays} days ago`;
+                        }
+                    }
+
+                    challengeData.name = `${isCurrentDay ? '🔥 ' : ''}[${challengeData.id}] ${challengeData.name} (${dateLabel})`;
+
+                    return new LeetCodeNode(challengeData, true);
+                });
+
+                // Кешируем результат
+                this.dailyChallengesCache = nodes;
+                this.dailyCacheTimestamp = now;
+
+                return nodes;
+            }
+        } catch (error) {
+            console.error("Failed to fetch daily challenges:", error);
+        }
+        return [];
     }
 
     public getAllCompanyNodes(): LeetCodeNode[] {
@@ -152,6 +235,9 @@ class ExplorerNodeManager implements Disposable {
         this.explorerNodeMap.clear();
         this.companySet.clear();
         this.tagSet.clear();
+        // Очищаем кеш daily challenges при dispose
+        this.dailyChallengesCache = null;
+        this.dailyCacheTimestamp = null;
     }
 
     private sortSubCategoryNodes(subCategoryNodes: LeetCodeNode[], category: Category): void {

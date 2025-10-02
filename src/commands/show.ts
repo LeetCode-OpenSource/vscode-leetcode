@@ -1,4 +1,5 @@
-// Copyright (c) jdneo. All rights reserved.
+// Copyright (c) mt. All rights reserved.
+// Based on original work by jdneo.
 // Licensed under the MIT license.
 
 import * as _ from "lodash";
@@ -190,7 +191,10 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         const descriptionConfig: IDescriptionConfiguration = settingUtils.getDescriptionConfiguration();
         const needTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
 
-        await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment, needTranslation);
+        // Check if we should add C++ headers (by default enabled for C/C++)
+        const shouldAddHeaders = (language === "cpp" || language === "c");
+
+        await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment, needTranslation, shouldAddHeaders);
         const promises: any[] = [
             vscode.window.showTextDocument(vscode.Uri.file(finalPath), {
                 preview: false,

@@ -29,18 +29,25 @@ import { globalState } from "./globalState";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     try {
+        console.log("LeetCode extension: Starting activation...");
+
         if (!(await leetCodeExecutor.meetRequirements(context))) {
+            console.error("LeetCode extension: Environment doesn't meet requirements");
             throw new Error("The environment doesn't meet requirements.");
         }
+
+        console.log("LeetCode extension: Requirements met, setting up event handlers...");
 
         leetCodeManager.on("statusChanged", () => {
             leetCodeStatusBarController.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser());
             leetCodeTreeDataProvider.refresh();
         });
 
+        console.log("LeetCode extension: Initializing providers...");
         leetCodeTreeDataProvider.initialize(context);
         globalState.initialize(context);
 
+        console.log("LeetCode extension: Registering commands and providers...");
         context.subscriptions.push(
             leetCodeStatusBarController,
             leetCodeChannel,
@@ -100,10 +107,19 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             vscode.commands.registerCommand("leetcode.problems.sort", () => plugin.switchSortingStrategy())
         );
 
-        await leetCodeExecutor.switchEndpoint(plugin.getLeetCodeEndpoint());
+        console.log("LeetCode extension: All commands registered successfully");
+        console.log("LeetCode extension: Switching endpoint...");
+        // await leetCodeExecutor.switchEndpoint(plugin.getLeetCodeEndpoint()); // Отключено для избежания конфликтов
+
+        console.log("LeetCode extension: Getting login status...");
         await leetCodeManager.getLoginStatus();
+
+        console.log("LeetCode extension: Registering URI handler...");
         vscode.window.registerUriHandler({ handleUri: leetCodeManager.handleUriSignIn });
+
+        console.log("LeetCode extension: Activation completed successfully!");
     } catch (error) {
+        console.error("LeetCode extension activation failed:", error);
         leetCodeChannel.appendLine(error.toString());
         promptForOpenOutputChannel("Extension initialization failed. Please open output channel for details.", DialogType.error);
     }

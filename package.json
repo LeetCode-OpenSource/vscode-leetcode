@@ -1,10 +1,10 @@
 {
     "name": "vscode-leetcode",
-    "displayName": "LeetCode",
-    "description": "Solve LeetCode problems in VS Code",
-    "version": "0.18.4",
-    "author": "LeetCode",
-    "publisher": "LeetCode",
+    "displayName": "LeetCode Enhanced Fork",
+    "description": "Enhanced fork of LeetCode VS Code extension with Daily Challenges and improved functionality",
+    "version": "0.18.5",
+    "author": "su-mt",
+    "publisher": "leetcode",
     "license": "MIT",
     "icon": "resources/LeetCode.png",
     "engines": {
@@ -12,17 +12,19 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/LeetCode-OpenSource/vscode-leetcode"
+        "url": "https://github.com/su-mt/vscode-leetcode"
     },
-    "homepage": "https://github.com/LeetCode-OpenSource/vscode-leetcode/blob/master/README.md",
+    "homepage": "https://github.com/su-mt/vscode-leetcode/blob/feature/daily-challenges/README.md",
     "categories": [
-        "Other",
-        "Snippets"
+        "Education",
+        "Other"
     ],
     "keywords": [
-        "leetcode",
+        "leetcode-enhanced",
+        "coding-practice",
         "algorithm",
-        "interview"
+        "interview",
+        "daily-challenges"
     ],
     "preview": true,
     "activationEvents": [
@@ -719,9 +721,11 @@
         "vs-publish": "vsce publish"
     },
     "devDependencies": {
+        "@types/cheerio": "^0.22.35",
         "@types/fs-extra": "^9.0.11",
+        "@types/linkify-it": "^5.0.0",
         "@types/lodash": "^4.14.170",
-        "@types/markdown-it": "0.0.7",
+        "@types/markdown-it": "^0.0.7",
         "@types/mocha": "^2.2.42",
         "@types/node": "^14.14.33",
         "@types/require-from-string": "^1.2.0",
@@ -731,6 +735,7 @@
     },
     "dependencies": {
         "axios": "^1.6.8",
+        "cheerio": "^1.1.0",
         "fs-extra": "^10.0.0",
         "highlight.js": "^10.7.2",
         "lodash": "^4.17.21",
@@ -738,5 +743,10 @@
         "require-from-string": "^2.0.2",
         "unescape-js": "^1.1.4",
         "vsc-leetcode-cli": "2.8.1"
-    }
+    },
+    "extensionDependencies": [],
+    "extensionPack": [
+        "ms-vscode.cpptools",
+        "ms-python.python"
+    ]
 }

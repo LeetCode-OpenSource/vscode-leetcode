@@ -64,3 +64,6 @@ out
 
 # Mac
 .DS_Store
+
+
+test*

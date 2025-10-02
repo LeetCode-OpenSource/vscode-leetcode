@@ -12,3 +12,4 @@ tslint.json
 ACKNOWLEDGEMENTS.md
 docs
 .github
+test*
