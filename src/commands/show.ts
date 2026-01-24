@@ -189,12 +189,14 @@ async function showProblemInternal(node: IProblem): Promise<void> {
 
         const descriptionConfig: IDescriptionConfiguration = settingUtils.getDescriptionConfiguration();
         const needTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
+        const editorSplit: string = leetCodeConfig.get<string>("editorSideBySideSplit", "problem-left");
+        const problemViewColumn = editorSplit === "problem-left" ? vscode.ViewColumn.One : vscode.ViewColumn.Two;
 
         await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment, needTranslation);
         const promises: any[] = [
             vscode.window.showTextDocument(vscode.Uri.file(finalPath), {
                 preview: false,
-                viewColumn: vscode.ViewColumn.One,
+                viewColumn: problemViewColumn,
             }),
             promptHintMessage(
                 "hint.commentDescription",

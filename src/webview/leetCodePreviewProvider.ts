@@ -1,7 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import { commands, ViewColumn } from "vscode";
+import { commands, ViewColumn, workspace } from "vscode";
 import { getLeetCodeEndpoint } from "../commands/plugin";
 import { Endpoint, IProblem } from "../shared";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
@@ -31,9 +31,12 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 viewColumn: ViewColumn.One,
             };
         } else {
+            const editorSplit: string = workspace.getConfiguration("leetcode").get<string>("editorSideBySideSplit", "problem-left");
+            const previewViewColumn = editorSplit === "problem-left" ? ViewColumn.Two : ViewColumn.One;
+
             return {
                 title: "Description",
-                viewColumn: ViewColumn.Two,
+                viewColumn: previewViewColumn,
                 preserveFocus: true,
             };
         }
