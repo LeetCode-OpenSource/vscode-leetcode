@@ -677,6 +677,20 @@
                         "scope": "application",
                         "description": "Determine whether to group all webview pages into the second editor column when solving problems."
                     },
+                    "leetcode.editorSideBySideSplit": {
+                        "type": "string",
+                        "default": "problem-left",
+                        "scope": "application",
+                        "enum": [
+                            "problem-left",
+                            "problem-right"
+                        ],
+                        "enumDescriptions": [
+                            "Problem file on the left, preview on the right",
+                            "Preview on the left, problem file on the right"
+                        ],
+                        "description": "Determine the side-by-side split layout when opening a problem file."
+                    },
                     "leetcode.nodePath": {
                         "type": "string",
                         "default": "node",
