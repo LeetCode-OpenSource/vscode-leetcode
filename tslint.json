@@ -1,0 +1,28 @@
+{
+    "defaultSeverity": "error",
+    "extends": ["tslint:recommended"],
+    "jsRules": {},
+    "rules": {
+        "object-literal-sort-keys": false,
+        "ordered-imports": [false],
+        "indent": [true, "spaces"],
+        "no-string-literal": false,
+        "no-namespace": false,
+        "max-line-length": [false, 120],
+        "typedef": false,
+        "no-implicit-dependencies": [true, ["vscode"]],
+        "trailing-comma": false,
+        "no-any": false,
+        "object-literal-key-quotes": [true, "consistent-as-needed"],
+        "prefer-object-spread": false,
+        "no-unnecessary-await": false,
+        "semicolon": [false],
+        "quotemark": [false],
+        "member-ordering": [false],
+        "variable-name": [false],
+        "curly": false,
+        "interface-over-type-literal": [false],
+        "no-unused-expression": false
+    },
+    "rulesDirectory": []
+}
