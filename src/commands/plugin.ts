@@ -8,6 +8,7 @@ import { IQuickItemEx } from "../shared";
 import { Endpoint, SortingStrategy } from "../shared";
 import { DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
 import { deleteCache } from "./cache";
+import { Language, getCurrentLanguage, t } from "../i18n";
 
 export async function switchEndpoint(): Promise<void> {
     const isCnEnabled: boolean = getLeetCodeEndpoint() === Endpoint.LeetCodeCN;
@@ -16,13 +17,13 @@ export async function switchEndpoint(): Promise<void> {
         {
             label: `${isCnEnabled ? "" : "$(check) "}LeetCode`,
             description: "leetcode.com",
-            detail: `Enable LeetCode US`,
+            detail: t("enable_leetcode_us"),
             value: Endpoint.LeetCode,
         },
         {
             label: `${isCnEnabled ? "$(check) " : ""}力扣`,
             description: "leetcode.cn",
-            detail: `启用中国版 LeetCode`,
+            detail: t("enable_leetcode_cn"),
             value: Endpoint.LeetCodeCN,
         },
     );
@@ -35,9 +36,9 @@ export async function switchEndpoint(): Promise<void> {
         const endpoint: string = choice.value;
         await leetCodeExecutor.switchEndpoint(endpoint);
         await leetCodeConfig.update("endpoint", endpoint, true /* UserSetting */);
-        vscode.window.showInformationMessage(`Switched the endpoint to ${endpoint}`);
+        vscode.window.showInformationMessage(t("switched_endpoint", endpoint));
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to switch endpoint. Please open the output channel for details.", DialogType.error);
+        await promptForOpenOutputChannel(t("failed_to_switch_endpoint"), DialogType.error);
     }
 
     try {
@@ -45,7 +46,7 @@ export async function switchEndpoint(): Promise<void> {
         await deleteCache();
         await promptForSignIn();
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to sign in. Please open the output channel for details.", DialogType.error);
+        await promptForOpenOutputChannel(t("failed_to_sign_in_after_switch"), DialogType.error);
     }
 }
 
@@ -85,4 +86,32 @@ export async function switchSortingStrategy(): Promise<void> {
 export function getSortingStrategy(): SortingStrategy {
     const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
     return leetCodeConfig.get<SortingStrategy>("problems.sortStrategy", SortingStrategy.None);
+}
+
+export async function toggleLanguage(): Promise<void> {
+    const current: Language = getCurrentLanguage();
+    const picks: Array<IQuickItemEx<string>> = [
+        {
+            label: `${current === Language.English ? "$(check) " : ""}${t("language_english")}`,
+            value: "en",
+        },
+        {
+            label: `${current === Language.Chinese ? "$(check) " : ""}${t("language_chinese")}`,
+            value: "zh-CN",
+        },
+        {
+            label: `${current !== Language.English && current !== Language.Chinese ? "$(check) " : ""}${t("language_auto")}`,
+            value: "auto",
+        },
+    ];
+    const choice: IQuickItemEx<string> | undefined = await vscode.window.showQuickPick(picks, {
+        placeHolder: t("select_ui_language"),
+    });
+    if (!choice) {
+        return;
+    }
+    const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+    await leetCodeConfig.update("language", choice.value, true /* UserSetting */);
+    vscode.window.showInformationMessage(t("switched_language", choice.value === "zh-CN" ? t("language_chinese") : choice.value === "en" ? t("language_english") : t("language_auto")));
+    leetCodeTreeDataProvider.refresh();
 }

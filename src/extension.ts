@@ -6,6 +6,7 @@ import { codeLensController } from "./codelens/CodeLensController";
 import * as cache from "./commands/cache";
 import { switchDefaultLanguage } from "./commands/language";
 import * as plugin from "./commands/plugin";
+import { toggleLanguage } from "./commands/plugin";
 import * as session from "./commands/session";
 import * as show from "./commands/show";
 import * as star from "./commands/star";
@@ -26,11 +27,12 @@ import { leetCodeSubmissionProvider } from "./webview/leetCodeSubmissionProvider
 import { markdownEngine } from "./webview/markdownEngine";
 import TrackData from "./utils/trackingUtils";
 import { globalState } from "./globalState";
+import { t } from "./i18n";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     try {
         if (!(await leetCodeExecutor.meetRequirements(context))) {
-            throw new Error("The environment doesn't meet requirements.");
+            throw new Error(t("environment_not_met"));
         }
 
         leetCodeManager.on("statusChanged", () => {
@@ -97,7 +99,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             vscode.commands.registerCommand("leetcode.switchDefaultLanguage", () => switchDefaultLanguage()),
             vscode.commands.registerCommand("leetcode.addFavorite", (node: LeetCodeNode) => star.addFavorite(node)),
             vscode.commands.registerCommand("leetcode.removeFavorite", (node: LeetCodeNode) => star.removeFavorite(node)),
-            vscode.commands.registerCommand("leetcode.problems.sort", () => plugin.switchSortingStrategy())
+            vscode.commands.registerCommand("leetcode.problems.sort", () => plugin.switchSortingStrategy()),
+            vscode.commands.registerCommand("leetcode.toggleLanguage", () => toggleLanguage())
         );
 
         await leetCodeExecutor.switchEndpoint(plugin.getLeetCodeEndpoint());
@@ -105,7 +108,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         vscode.window.registerUriHandler({ handleUri: leetCodeManager.handleUriSignIn });
     } catch (error) {
         leetCodeChannel.appendLine(error.toString());
-        promptForOpenOutputChannel("Extension initialization failed. Please open output channel for details.", DialogType.error);
+        promptForOpenOutputChannel(t("extension_init_failed"), DialogType.error);
     }
 }
 

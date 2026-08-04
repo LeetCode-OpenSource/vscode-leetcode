@@ -2,25 +2,32 @@
 // Licensed under the MIT license.
 
 import * as _ from "lodash";
-import { Disposable } from "vscode";
+import { Disposable, workspace } from "vscode";
 import * as list from "../commands/list";
 import { getSortingStrategy } from "../commands/plugin";
-import { Category, defaultProblem, ProblemState, SortingStrategy } from "../shared";
+import { fetchStudyPlanProblemIds } from "../commands/studyPlan";
+import { Category, defaultProblem, Endpoint, IStudyPlanItem, ProblemState, SortingStrategy } from "../shared";
+import { getLeetCodeEndpoint } from "../commands/plugin";
 import { shouldHideSolvedProblem } from "../utils/settingUtils";
+import { t } from "../i18n";
 import { LeetCodeNode } from "./LeetCodeNode";
 
 class ExplorerNodeManager implements Disposable {
     private explorerNodeMap: Map<string, LeetCodeNode> = new Map<string, LeetCodeNode>();
     private companySet: Set<string> = new Set<string>();
     private tagSet: Set<string> = new Set<string>();
+    private studyPlanProblemIdsCache: Map<string, string[]> = new Map<string, string[]>();
+
+    private studyPlans: IStudyPlanItem[] = [
+        { slug: "top-100-liked", name: "Hot 100" },
+        { slug: "sql-free-50", name: "SQL 50" },
+    ];
 
     public async refreshCache(): Promise<void> {
         this.dispose();
-        const shouldHideSolved: boolean = shouldHideSolvedProblem();
+        // Store all problems (including solved) so study plan can access them.
+        // The hide-solved filter is applied at display time, not cache time.
         for (const problem of await list.listProblems()) {
-            if (shouldHideSolved && problem.state === ProblemState.AC) {
-                continue;
-            }
             this.explorerNodeMap.set(problem.id, new LeetCodeNode(problem));
             for (const company of problem.companies) {
                 this.companySet.add(company);
@@ -32,33 +39,43 @@ class ExplorerNodeManager implements Disposable {
     }
 
     public getRootNodes(): LeetCodeNode[] {
-        return [
+        const nodes: LeetCodeNode[] = [
             new LeetCodeNode(Object.assign({}, defaultProblem, {
                 id: Category.All,
-                name: Category.All,
+                name: t("category_all"),
             }), false),
             new LeetCodeNode(Object.assign({}, defaultProblem, {
                 id: Category.Difficulty,
-                name: Category.Difficulty,
+                name: t("category_difficulty"),
             }), false),
             new LeetCodeNode(Object.assign({}, defaultProblem, {
                 id: Category.Tag,
-                name: Category.Tag,
+                name: t("category_tag"),
             }), false),
             new LeetCodeNode(Object.assign({}, defaultProblem, {
                 id: Category.Company,
-                name: Category.Company,
+                name: t("category_company"),
             }), false),
             new LeetCodeNode(Object.assign({}, defaultProblem, {
                 id: Category.Favorite,
-                name: Category.Favorite,
+                name: t("category_favorite"),
             }), false),
         ];
+
+        // Study plan is only available on leetcode.cn
+        if (getLeetCodeEndpoint() === Endpoint.LeetCodeCN) {
+            nodes.push(new LeetCodeNode(Object.assign({}, defaultProblem, {
+                id: Category.StudyPlan,
+                name: t("category_study_plan"),
+            }), false));
+        }
+
+        return nodes;
     }
 
     public getAllNodes(): LeetCodeNode[] {
         return this.applySortingStrategy(
-            Array.from(this.explorerNodeMap.values()),
+            this.filterSolvedNodes(Array.from(this.explorerNodeMap.values())),
         );
     }
 
@@ -117,7 +134,46 @@ class ExplorerNodeManager implements Disposable {
                 res.push(node);
             }
         }
-        return this.applySortingStrategy(res);
+        return this.applySortingStrategy(this.filterSolvedNodes(res));
+    }
+
+    public getStudyPlanNodes(): LeetCodeNode[] {
+        // Start with built-in plans
+        const plans: IStudyPlanItem[] = [...this.studyPlans];
+
+        // Merge user-configured custom study plan slugs
+        const customSlugs: string[] = workspace.getConfiguration("leetcode").get<string[]>("studyPlans", []);
+        for (const slug of customSlugs) {
+            if (!plans.find((p: IStudyPlanItem) => p.slug === slug)) {
+                plans.push({ slug, name: slug });
+            }
+        }
+
+        return plans.map((plan: IStudyPlanItem) =>
+            new LeetCodeNode(Object.assign({}, defaultProblem, {
+                id: `studyplan:${plan.slug}`,
+                name: plan.name,
+            }), false),
+        );
+    }
+
+    public async getStudyPlanProblemNodes(planSlug: string): Promise<LeetCodeNode[]> {
+        let problemIds: string[];
+        if (this.studyPlanProblemIdsCache.has(planSlug)) {
+            problemIds = this.studyPlanProblemIdsCache.get(planSlug)!;
+        } else {
+            problemIds = await fetchStudyPlanProblemIds(planSlug);
+            this.studyPlanProblemIdsCache.set(planSlug, problemIds);
+        }
+
+        const res: LeetCodeNode[] = [];
+        for (const id of problemIds) {
+            const node: LeetCodeNode | undefined = this.explorerNodeMap.get(id);
+            if (node) {
+                res.push(node);
+            }
+        }
+        return res;
     }
 
     public getChildrenNodesById(id: string): LeetCodeNode[] {
@@ -145,13 +201,14 @@ class ExplorerNodeManager implements Disposable {
                     break;
             }
         }
-        return this.applySortingStrategy(res);
+        return this.applySortingStrategy(this.filterSolvedNodes(res));
     }
 
     public dispose(): void {
         this.explorerNodeMap.clear();
         this.companySet.clear();
         this.tagSet.clear();
+        this.studyPlanProblemIdsCache.clear();
     }
 
     private sortSubCategoryNodes(subCategoryNodes: LeetCodeNode[], category: Category): void {
@@ -197,6 +254,13 @@ class ExplorerNodeManager implements Disposable {
             case SortingStrategy.AcceptanceRateDesc: return nodes.sort((x: LeetCodeNode, y: LeetCodeNode) => Number(y.acceptanceRate) - Number(x.acceptanceRate));
             default: return nodes;
         }
+    }
+
+    private filterSolvedNodes(nodes: LeetCodeNode[]): LeetCodeNode[] {
+        if (!shouldHideSolvedProblem()) {
+            return nodes;
+        }
+        return nodes.filter((node: LeetCodeNode) => node.state !== ProblemState.AC);
     }
 }
 

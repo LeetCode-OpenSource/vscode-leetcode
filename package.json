@@ -39,6 +39,7 @@
         "onCommand:leetcode.submitSolution",
         "onCommand:leetcode.switchDefaultLanguage",
         "onCommand:leetcode.problems.sort",
+        "onCommand:leetcode.toggleLanguage",
         "onView:leetCodeExplorer"
     ],
     "main": "./out/src/extension",
@@ -141,6 +142,12 @@
                 "title": "Sort Problems",
                 "category": "LeetCode",
                 "icon": "$(sort-precedence)"
+            },
+            {
+                "command": "leetcode.toggleLanguage",
+                "title": "Switch UI Language",
+                "category": "LeetCode",
+                "icon": "$(languages)"
             }
         ],
         "viewsContainers": {
@@ -196,6 +203,11 @@
                     "command": "leetcode.problems.sort",
                     "when": "view == leetCodeExplorer",
                     "group": "overflow@3"
+                },
+                {
+                    "command": "leetcode.toggleLanguage",
+                    "when": "view == leetCodeExplorer",
+                    "group": "overflow@4"
                 }
             ],
             "view/item/context": [
@@ -677,6 +689,12 @@
                         "scope": "application",
                         "description": "Determine whether to group all webview pages into the second editor column when solving problems."
                     },
+                    "leetcode.editor.previewOnLeft": {
+                        "type": "boolean",
+                        "default": true,
+                        "scope": "application",
+                        "description": "When side mode is enabled, place the problem preview on the left and the code editor on the right. Set to false for the original layout (code left, preview right)."
+                    },
                     "leetcode.nodePath": {
                         "type": "string",
                         "default": "node",
@@ -705,6 +723,31 @@
                         "default": true,
                         "scope": "application",
                         "description": "Allow LeetCode to report anonymous usage data to improve the product."
+                    },
+                    "leetcode.language": {
+                        "type": "string",
+                        "default": "auto",
+                        "scope": "application",
+                        "enum": [
+                            "auto",
+                            "en",
+                            "zh-CN"
+                        ],
+                        "enumDescriptions": [
+                            "Follow VS Code's display language",
+                            "English",
+                            "Chinese (Simplified)"
+                        ],
+                        "description": "UI language for the LeetCode extension."
+                    },
+                    "leetcode.studyPlans": {
+                        "type": "array",
+                        "default": [],
+                        "scope": "application",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Additional study plan slugs to show in the explorer (e.g. \"sql-free-50\"). See https://leetcode.cn/studyplan/ for available plans."
                     }
                 }
             }

@@ -14,6 +14,7 @@ import { getLeetCodeEndpoint } from "./commands/plugin";
 import { globalState } from "./globalState";
 import { queryUserData } from "./request/query-user-data";
 import { parseQuery } from "./utils/toolUtils";
+import { t } from "./i18n";
 
 class LeetCodeManager extends EventEmitter {
     private currentUser: string | undefined;
@@ -70,7 +71,7 @@ class LeetCodeManager extends EventEmitter {
 
             });
         } catch (error) {
-            promptForOpenOutputChannel(`Failed to log in. Please open the output channel for details`, DialogType.error);
+            promptForOpenOutputChannel(t("failed_to_login"), DialogType.error);
         }
     }
 

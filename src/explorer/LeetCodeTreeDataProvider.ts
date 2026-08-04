@@ -9,6 +9,7 @@ import { Category, defaultProblem, ProblemState } from "../shared";
 import { explorerNodeManager } from "./explorerNodeManager";
 import { LeetCodeNode } from "./LeetCodeNode";
 import { globalState } from "../globalState";
+import { t } from "../i18n";
 
 export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCodeNode> {
     private context: vscode.ExtensionContext;
@@ -35,7 +36,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 collapsibleState: vscode.TreeItemCollapsibleState.None,
                 command: {
                     command: "leetcode.signin",
-                    title: "Sign in to LeetCode",
+                    title: t("sign_in_to_leetcode"),
                 },
             };
         }
@@ -64,7 +65,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
                 new LeetCodeNode(
                     Object.assign({}, defaultProblem, {
                         id: "notSignIn",
-                        name: "Sign in to LeetCode",
+                        name: t("sign_in_to_leetcode"),
                     }),
                     false
                 ),
@@ -73,6 +74,11 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         if (!element) {
             // Root view
             return explorerNodeManager.getRootNodes();
+        } else if (element.id === Category.StudyPlan) {
+            return explorerNodeManager.getStudyPlanNodes();
+        } else if (element.id.startsWith("studyplan:")) {
+            const planSlug: string = element.id.substring("studyplan:".length);
+            return explorerNodeManager.getStudyPlanProblemNodes(planSlug);
         } else {
             switch (element.id) {
                 case Category.All:
@@ -145,7 +151,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
             }
         }
 
-        return [`AC: ${acceptedNum}`, `Failed: ${failedNum}`, `Total: ${childernNodes.length}`].join(os.EOL);
+        return [t("ac_label", acceptedNum), t("failed_label", failedNum), t("total_label", childernNodes.length)].join(os.EOL);
     }
 }
 

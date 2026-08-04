@@ -101,6 +101,12 @@ export enum Category {
     Tag = "Tag",
     Company = "Company",
     Favorite = "Favorite",
+    StudyPlan = "StudyPlan",
+}
+
+export interface IStudyPlanItem {
+    slug: string;
+    name: string;
 }
 
 export const supportedPlugins: string[] = ["company", "solution.discuss", "leetcode.cn"];

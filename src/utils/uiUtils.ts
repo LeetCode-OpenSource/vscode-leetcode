@@ -5,13 +5,16 @@ import * as vscode from "vscode";
 import { getLeetCodeEndpoint } from "../commands/plugin";
 import { leetCodeChannel } from "../leetCodeChannel";
 import { getWorkspaceConfiguration } from "./settingUtils";
+import { t } from "../i18n";
+import { Endpoint } from "../shared";
 
 export namespace DialogOptions {
-    export const open: vscode.MessageItem = { title: "Open" };
-    export const yes: vscode.MessageItem = { title: "Yes" };
-    export const no: vscode.MessageItem = { title: "No", isCloseAffordance: true };
-    export const never: vscode.MessageItem = { title: "Never" };
-    export const singUp: vscode.MessageItem = { title: "Sign up" };
+    // Use getters so that language changes take effect without reload
+    export const open: vscode.MessageItem = { get title() { return t("open"); } };
+    export const yes: vscode.MessageItem = { get title() { return t("yes"); } };
+    export const no: vscode.MessageItem = { get title() { return t("no"); }, isCloseAffordance: true } as vscode.MessageItem;
+    export const never: vscode.MessageItem = { get title() { return t("never"); } };
+    export const singUp: vscode.MessageItem = { get title() { return t("sign_up"); } };
 }
 
 export async function promptForOpenOutputChannel(message: string, type: DialogType): Promise<void> {
@@ -37,7 +40,7 @@ export async function promptForOpenOutputChannel(message: string, type: DialogTy
 
 export async function promptForSignIn(): Promise<void> {
     const choice: vscode.MessageItem | undefined = await vscode.window.showInformationMessage(
-        "Please sign in to LeetCode.",
+        t("please_sign_in"),
         DialogOptions.yes,
         DialogOptions.no,
         DialogOptions.singUp,
@@ -47,7 +50,7 @@ export async function promptForSignIn(): Promise<void> {
             await vscode.commands.executeCommand("leetcode.signin");
             break;
         case DialogOptions.singUp:
-            if (getLeetCodeEndpoint()) {
+            if (getLeetCodeEndpoint() === Endpoint.LeetCodeCN) {
                 openUrl("https://leetcode.cn");
             } else {
                 openUrl("https://leetcode.com");
@@ -60,7 +63,7 @@ export async function promptForSignIn(): Promise<void> {
 
 export async function promptHintMessage(config: string, message: string, choiceConfirm: string, onConfirm: () => Promise<any>): Promise<void> {
     if (getWorkspaceConfiguration().get<boolean>(config)) {
-        const choiceNoShowAgain: string = "Don't show again";
+        const choiceNoShowAgain: string = t("dont_show_again");
         const choice: string | undefined = await vscode.window.showInformationMessage(
             message, choiceConfirm, choiceNoShowAgain,
         );
@@ -87,7 +90,7 @@ export async function showFileSelectDialog(fsPath?: string): Promise<vscode.Uri[
         canSelectFiles: true,
         canSelectFolders: false,
         canSelectMany: false,
-        openLabel: "Select",
+        openLabel: t("select"),
     };
     return await vscode.window.showOpenDialog(options);
 }
@@ -110,7 +113,7 @@ export async function showDirectorySelectDialog(fsPath?: string): Promise<vscode
         canSelectFiles: false,
         canSelectFolders: true,
         canSelectMany: false,
-        openLabel: "Select",
+        openLabel: t("select"),
     };
     return await vscode.window.showOpenDialog(options);
 }

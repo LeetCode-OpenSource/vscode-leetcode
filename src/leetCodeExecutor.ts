@@ -13,6 +13,7 @@ import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
 import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
 import { toWslPath, useWsl } from "./utils/wslUtils";
+import { t } from "./i18n";
 
 class LeetCodeExecutor implements Disposable {
     private leetCodeRootPath: string;
@@ -134,7 +135,7 @@ class LeetCodeExecutor implements Disposable {
         if (!needTranslation) {
             cmd.push("-T");
         }
-        const solution: string = await this.executeCommandWithProgressEx("Fetching top voted solution from discussions...", this.nodeExecutable, cmd);
+        const solution: string = await this.executeCommandWithProgressEx(t("fetching_solution"), this.nodeExecutable, cmd);
         return solution;
     }
 
@@ -143,7 +144,7 @@ class LeetCodeExecutor implements Disposable {
         if (!needTranslation) {
             cmd.push("-T");
         }
-        return await this.executeCommandWithProgressEx("Fetching problem description...", this.nodeExecutable, cmd);
+        return await this.executeCommandWithProgressEx(t("fetching_description"), this.nodeExecutable, cmd);
     }
 
     public async listSessions(): Promise<string> {
@@ -175,9 +176,9 @@ class LeetCodeExecutor implements Disposable {
 
     public async testSolution(filePath: string, testString?: string): Promise<string> {
         if (testString) {
-            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`, "-t", `${testString}`]);
+            return await this.executeCommandWithProgressEx(t("submitting_to_leetcode"), this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`, "-t", `${testString}`]);
         }
-        return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`]);
+        return await this.executeCommandWithProgressEx(t("submitting_to_leetcode"), this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`]);
     }
 
     public async switchEndpoint(endpoint: string): Promise<string> {
@@ -195,7 +196,7 @@ class LeetCodeExecutor implements Disposable {
         if (!addToFavorite) {
             commandParams.push("-d");
         }
-        await this.executeCommandWithProgressEx("Updating the favorite list...", "node", commandParams);
+        await this.executeCommandWithProgressEx(t("updating_favorite"), "node", commandParams);
     }
 
     public async getCompaniesAndTags(): Promise<{ companies: { [key: string]: string[] }, tags: { [key: string]: string[] } }> {

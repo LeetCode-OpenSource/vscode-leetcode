@@ -30,6 +30,7 @@ import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
 import { getLeetCodeEndpoint } from "./plugin";
 import { globalState } from "../globalState";
+import { t } from "../i18n";
 
 export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: boolean = false): Promise<void> {
     let node: IProblem;
@@ -133,7 +134,7 @@ async function fetchProblemLanguage(): Promise<string | undefined> {
     const language: string | undefined =
         defaultLanguage ||
         (await vscode.window.showQuickPick(languages, {
-            placeHolder: "Select the language you want to use",
+            placeHolder: t("select_language"),
             ignoreFocusOut: true,
         }));
     // fire-and-forget default language query
@@ -191,23 +192,37 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         const needTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
 
         await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment, needTranslation);
-        const promises: any[] = [
-            vscode.window.showTextDocument(vscode.Uri.file(finalPath), {
-                preview: false,
-                viewColumn: vscode.ViewColumn.One,
-            }),
-            promptHintMessage(
-                "hint.commentDescription",
-                'You can config how to show the problem description through "leetcode.showDescription".',
-                "Open settings",
-                (): Promise<any> => openSettingsEditor("leetcode.showDescription")
-            ),
-        ];
-        if (descriptionConfig.showInWebview) {
-            promises.push(showDescriptionView(node));
-        }
 
-        await Promise.all(promises);
+        // Determine editor layout: preview on left, code on right (default)
+        const previewOnLeft: boolean = vscode.workspace.getConfiguration("leetcode").get<boolean>("editor.previewOnLeft", true);
+        const codeColumn: vscode.ViewColumn = previewOnLeft ? vscode.ViewColumn.Two : vscode.ViewColumn.One;
+
+        // When previewOnLeft, open preview first (left) then code (right split)
+        // to ensure proper editor group layout
+        if (descriptionConfig.showInWebview && previewOnLeft) {
+            await showDescriptionView(node);
+            await vscode.window.showTextDocument(vscode.Uri.file(finalPath), {
+                preview: false,
+                viewColumn: codeColumn,
+            });
+        } else {
+            const promises: any[] = [
+                vscode.window.showTextDocument(vscode.Uri.file(finalPath), {
+                    preview: false,
+                    viewColumn: codeColumn,
+                }),
+                promptHintMessage(
+                    "hint.commentDescription",
+                    'You can config how to show the problem description through "leetcode.showDescription".',
+                    "Open settings",
+                    (): Promise<any> => openSettingsEditor("leetcode.showDescription")
+                ),
+            ];
+            if (descriptionConfig.showInWebview) {
+                promises.push(showDescriptionView(node));
+            }
+            await Promise.all(promises);
+        }
     } catch (error) {
         await promptForOpenOutputChannel(`${error} Please open the output channel for details.`, DialogType.error);
     }

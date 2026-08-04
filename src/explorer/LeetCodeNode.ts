@@ -3,6 +3,7 @@
 
 import { Command, Uri } from "vscode";
 import { IProblem, ProblemState } from "../shared";
+import { t } from "../i18n";
 
 export class LeetCodeNode {
 
@@ -49,7 +50,7 @@ export class LeetCodeNode {
 
     public get previewCommand(): Command {
         return {
-            title: "Preview Problem",
+            title: t("preview_problem"),
             command: "leetcode.previewProblem",
             arguments: [this],
         };

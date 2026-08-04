@@ -1,7 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import { commands, ViewColumn } from "vscode";
+import { commands, ViewColumn, workspace } from "vscode";
 import { getLeetCodeEndpoint } from "../commands/plugin";
 import { Endpoint, IProblem } from "../shared";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
@@ -31,9 +31,11 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 viewColumn: ViewColumn.One,
             };
         } else {
+            // When sideMode, check layout setting: preview on left (default) or right
+            const previewOnLeft: boolean = workspace.getConfiguration("leetcode").get<boolean>("editor.previewOnLeft", true);
             return {
                 title: "Description",
-                viewColumn: ViewColumn.Two,
+                viewColumn: previewOnLeft ? ViewColumn.One : ViewColumn.Two,
                 preserveFocus: true,
             };
         }

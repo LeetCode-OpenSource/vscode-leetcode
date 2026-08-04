@@ -6,6 +6,7 @@ import { leetCodeManager } from "../leetCodeManager";
 import { IProblem, ProblemState, UserStatus } from "../shared";
 import * as settingUtils from "../utils/settingUtils";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
+import { t } from "../i18n";
 
 export async function listProblems(): Promise<IProblem[]> {
     try {
@@ -38,7 +39,7 @@ export async function listProblems(): Promise<IProblem[]> {
         }
         return problems.reverse();
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to list problems. Please open the output channel for details.", DialogType.error);
+        await promptForOpenOutputChannel(t("failed_to_list_problems"), DialogType.error);
         return [];
     }
 }
