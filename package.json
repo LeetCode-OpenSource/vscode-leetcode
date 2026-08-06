@@ -311,6 +311,7 @@
                             "javascript",
                             "kotlin",
                             "mysql",
+                            "postgresql",
                             "php",
                             "python",
                             "python3",
@@ -524,6 +525,18 @@
                                 "minProperties": 1
                             },
                             "mysql": {
+                                "type": "object",
+                                "properties": {
+                                    "folder": {
+                                        "type": "string"
+                                    },
+                                    "filename": {
+                                        "type": "string"
+                                    }
+                                },
+                                "minProperties": 1
+                            },
+                            "postgresql": {
                                 "type": "object",
                                 "properties": {
                                     "folder": {

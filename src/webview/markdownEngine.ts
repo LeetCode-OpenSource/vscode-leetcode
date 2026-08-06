@@ -78,11 +78,15 @@ class MarkdownEngine implements vscode.Disposable {
             highlight: (code: string, lang?: string): string => {
                 switch (lang && lang.toLowerCase()) {
                     case "mysql":
-                        lang = "sql"; break;
+                    case "postgresql":
+                        lang = "sql";
+                        break;
                     case "json5":
-                        lang = "json"; break;
+                        lang = "json";
+                        break;
                     case "python3":
-                        lang = "python"; break;
+                        lang = "python";
+                        break;
                 }
                 if (lang && hljs.getLanguage(lang)) {
                     try {
