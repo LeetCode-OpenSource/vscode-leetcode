@@ -10,7 +10,7 @@ import { LeetCodeNode } from "../explorer/LeetCodeNode";
 import { leetCodeChannel } from "../leetCodeChannel";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { Endpoint, IProblem, IQuickItemEx, languages, PREMIUM_URL_CN, PREMIUM_URL_GLOBAL, ProblemState } from "../shared";
+import { IProblem, IQuickItemEx, languages, PREMIUM_URL_CN, ProblemState } from "../shared";
 import { genFileExt, genFileName, getNodeIdFromFile } from "../utils/problemUtils";
 import * as settingUtils from "../utils/settingUtils";
 import { IDescriptionConfiguration } from "../utils/settingUtils";
@@ -28,7 +28,6 @@ import * as wsl from "../utils/wslUtils";
 import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
-import { getLeetCodeEndpoint } from "./plugin";
 import { globalState } from "../globalState";
 
 export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: boolean = false): Promise<void> {
@@ -53,7 +52,7 @@ export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: b
         node = input;
         const { isPremium } = globalState.getUserStatus() ?? {};
         if (input.locked && !isPremium) {
-            const url = getLeetCodeEndpoint() === Endpoint.LeetCode ? PREMIUM_URL_GLOBAL : PREMIUM_URL_CN;
+            const url = PREMIUM_URL_CN;
             openUrl(url);
             return;
         }

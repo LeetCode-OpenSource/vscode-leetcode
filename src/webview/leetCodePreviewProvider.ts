@@ -2,8 +2,7 @@
 // Licensed under the MIT license.
 
 import { commands, ViewColumn } from "vscode";
-import { getLeetCodeEndpoint } from "../commands/plugin";
-import { Endpoint, IProblem } from "../shared";
+import { IProblem } from "../shared";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
 
@@ -169,14 +168,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
     }
 
     private getTagLink(tag: string): string {
-        const endPoint: string = getLeetCodeEndpoint();
-        if (endPoint === Endpoint.LeetCodeCN) {
-            return `https://leetcode.cn/tag/${tag}?source=vscode`;
-        } else if (endPoint === Endpoint.LeetCode) {
-            return `https://leetcode.com/tag/${tag}?source=vscode`;
-        }
-
-        return "https://leetcode.com?source=vscode";
+        return `https://leetcode.cn/tag/${tag}?source=vscode`;
     }
 
     private getSolutionsLink(url: string): string {

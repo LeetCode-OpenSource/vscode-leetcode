@@ -99,7 +99,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             vscode.commands.registerCommand("leetcode.problems.sort", () => plugin.switchSortingStrategy())
         );
 
-        await leetCodeExecutor.switchEndpoint(plugin.getLeetCodeEndpoint());
+        await leetCodeExecutor.enableCnEndpoint();
         await leetCodeManager.getLoginStatus();
         vscode.window.registerUriHandler({ handleUri: leetCodeManager.handleUriSignIn });
     } catch (error) {

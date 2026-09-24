@@ -8,7 +8,7 @@ import * as path from "path";
 import * as requireFromString from "require-from-string";
 import { ExtensionContext } from "vscode";
 import { ConfigurationChangeEvent, Disposable, MessageItem, window, workspace, WorkspaceConfiguration } from "vscode";
-import { Endpoint, IProblem, leetcodeHasInited, supportedPlugins } from "./shared";
+import { IProblem, leetcodeHasInited, supportedPlugins } from "./shared";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
 import { DialogOptions, openUrl } from "./utils/uiUtils";
@@ -199,14 +199,9 @@ class LeetCodeExecutor implements Disposable {
         return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "test", filePath]);
     }
 
-    public async switchEndpoint(endpoint: string): Promise<string> {
-        switch (endpoint) {
-            case Endpoint.LeetCodeCN:
-                return await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "plugin", "-e", "leetcode.cn"]);
-            case Endpoint.LeetCode:
-            default:
-                return await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "plugin", "-d", "leetcode.cn"]);
-        }
+    /** This build targets leetcode.cn, so the CN plugin is always enabled. */
+    public async enableCnEndpoint(): Promise<string> {
+        return await this.executeCommandEx(this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "plugin", "-e", "leetcode.cn"]);
     }
 
     public async toggleFavorite(node: IProblem, addToFavorite: boolean): Promise<void> {

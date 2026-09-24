@@ -6,11 +6,10 @@ import { EventEmitter } from "events";
 import * as vscode from "vscode";
 import { leetCodeChannel } from "./leetCodeChannel";
 import { leetCodeExecutor } from "./leetCodeExecutor";
-import { Endpoint, IQuickItemEx, loginArgsMapping, urls, urlsCn, UserStatus } from "./shared";
+import { IQuickItemEx, loginArgsMapping, urlsCn, UserStatus } from "./shared";
 import { createEnvOption } from "./utils/cpUtils";
 import { DialogType, openUrl, promptForOpenOutputChannel } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
-import { getLeetCodeEndpoint } from "./commands/plugin";
 import { globalState } from "./globalState";
 import { queryUserData } from "./request/query-user-data";
 import { parseQuery } from "./utils/toolUtils";
@@ -20,6 +19,29 @@ import { tryParseUserName } from "./utils/parseUtils";
 const LOGIN_TIMEOUT_MS: number = 30 * 1000;
 /** A prompt repeating past this means the CLI is rejecting our input in a loop. */
 const MAX_PROMPT_REPEATS: number = 3;
+
+/**
+ * Picks the most useful line out of CLI output for an error message. The raw
+ * tail is usually a stack trace, which tells the user nothing.
+ */
+function summariseCliOutput(output: string): string {
+    const text: string = (output || "").trim();
+    if (!text) {
+        return "";
+    }
+    const lines: string[] = text.split("\n").map((l: string) => l.trim()).filter((l: string) => l.length > 0);
+
+    const tagged: string | undefined = lines.find((l: string) => l.indexOf("[ERROR]") >= 0);
+    if (tagged) {
+        return ` ${tagged}`;
+    }
+    const thrown: string | undefined = lines.find((l: string) => /^[A-Za-z]*Error: /.test(l));
+    if (thrown) {
+        return ` The CLI crashed: ${thrown}`;
+    }
+    const meaningful: string | undefined = lines.filter((l: string) => !l.startsWith("at ")).pop();
+    return meaningful ? ` ${meaningful.slice(0, 200)}` : "";
+}
 
 class LeetCodeManager extends EventEmitter {
     private currentUser: string | undefined;
@@ -177,13 +199,7 @@ class LeetCodeManager extends EventEmitter {
     }
 
     public getAuthLoginUrl(): string {
-        switch (getLeetCodeEndpoint()) {
-            case Endpoint.LeetCodeCN:
-                return urlsCn.authLoginUrl;
-            case Endpoint.LeetCode:
-            default:
-                return urls.authLoginUrl;
-        }
+        return urlsCn.authLoginUrl;
     }
 
     public setCookieToCli(cookie: string, name: string): Promise<void> {
@@ -224,7 +240,7 @@ class LeetCodeManager extends EventEmitter {
                 }
 
                 function failWith(reason: string): void {
-                    finish(() => reject(new Error(`${reason}${buffered.trim() ? ` CLI output: ${buffered.trim().slice(-500)}` : ""}`)));
+                    finish(() => reject(new Error(`${reason}${summariseCliOutput(buffered)}`)));
                 }
 
                 childProc.stdout?.setEncoding("utf8");

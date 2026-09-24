@@ -122,18 +122,8 @@ export enum SortingStrategy {
 }
 
 export const PREMIUM_URL_CN = "https://leetcode.cn/premium-payment/?source=vscode";
-export const PREMIUM_URL_GLOBAL = "https://leetcode.com/subscribe/?ref=lp_pl&source=vscode";
 
 const protocol = vscode.env.appName.includes('Insiders') ? "vscode-insiders" : "vscode"
-
-export const urls = {
-    // base urls
-    base: "https://leetcode.com",
-    graphql: "https://leetcode.com/graphql",
-    userGraphql: "https://leetcode.com/graphql",
-    login: "https://leetcode.com/accounts/login/",
-    authLoginUrl: `https://leetcode.com/authorize-login/${protocol}/?path=leetcode.vscode-leetcode`,
-};
 
 export const urlsCn = {
     // base urls
