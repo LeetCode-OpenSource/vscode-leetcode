@@ -102,16 +102,36 @@ class LeetCodeExecutor implements Disposable {
 
     public async showProblem(problemNode: IProblem, language: string, filePath: string, showDescriptionInComment: boolean = false, needTranslation: boolean): Promise<void> {
         const templateType: string = showDescriptionInComment ? "-cx" : "-c";
-        const cmd: string[] = [await this.getLeetCodeBinaryPath(), "show", problemNode.id, templateType, "-l", language];
+        // Quote the id: leetcode.cn issues ids containing a space, such as
+        // "LCP 82", and every spawn here runs through a shell.
+        const cmd: string[] = [await this.getLeetCodeBinaryPath(), "show", `"${problemNode.id}"`, templateType, "-l", language];
 
         if (!needTranslation) {
             cmd.push("-T"); // use -T to force English version
         }
 
-        if (!await fse.pathExists(filePath)) {
-            await fse.createFile(filePath);
-            const codeTemplate: string = await this.executeCommandWithProgressEx("Fetching problem data...", this.nodeExecutable, cmd);
-            await fse.writeFile(filePath, codeTemplate);
+        // A zero-byte file left behind by a previous failure must not count as
+        // "already fetched", or the problem can never be opened again.
+        const alreadyUsable: boolean = await fse.pathExists(filePath)
+            && (await fse.stat(filePath)).size > 0;
+
+        if (!alreadyUsable) {
+            let codeTemplate: string;
+            try {
+                codeTemplate = await this.executeCommandWithProgressEx("Fetching problem data...", this.nodeExecutable, cmd);
+            } catch (error) {
+                // Do not leave a half-created file on disk; the old code created
+                // the file first and never cleaned it up when the fetch failed.
+                if (await fse.pathExists(filePath) && (await fse.stat(filePath)).size === 0) {
+                    await fse.remove(filePath);
+                }
+                throw error;
+            }
+            if (!codeTemplate || !codeTemplate.trim()) {
+                throw new Error("The LeetCode CLI returned an empty problem template.");
+            }
+            // outputFile creates any missing parent directories.
+            await fse.outputFile(filePath, codeTemplate);
         }
     }
 
@@ -191,11 +211,12 @@ class LeetCodeExecutor implements Disposable {
     }
 
     public async toggleFavorite(node: IProblem, addToFavorite: boolean): Promise<void> {
-        const commandParams: string[] = [await this.getLeetCodeBinaryPath(), "star", node.id];
+        const commandParams: string[] = [await this.getLeetCodeBinaryPath(), "star", `"${node.id}"`];
         if (!addToFavorite) {
             commandParams.push("-d");
         }
-        await this.executeCommandWithProgressEx("Updating the favorite list...", "node", commandParams);
+        // Was hardcoded to "node", ignoring the leetcode.nodePath setting.
+        await this.executeCommandWithProgressEx("Updating the favorite list...", this.nodeExecutable, commandParams);
     }
 
     public async getCompaniesAndTags(): Promise<{ companies: { [key: string]: string[] }, tags: { [key: string]: string[] } }> {

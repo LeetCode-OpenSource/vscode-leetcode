@@ -17,8 +17,8 @@ export type UserDataType = {
 class GlobalState {
     private context: vscode.ExtensionContext;
     private _state: vscode.Memento;
-    private _cookie: string;
-    private _userStatus: UserDataType;
+    private _cookie: string | undefined;
+    private _userStatus: UserDataType | undefined;
 
     public initialize(context: vscode.ExtensionContext): void {
         this.context = context;
@@ -43,10 +43,16 @@ class GlobalState {
     }
 
     public removeCookie(): void {
+        // Clear the in-memory copy too: every getter reads it first, so leaving
+        // it set meant a "removed" cookie kept being returned for the rest of
+        // the window.
+        this._cookie = undefined;
         this._state.update(CookieKey, undefined);
     }
 
     public removeAll(): void {
+        this._cookie = undefined;
+        this._userStatus = undefined;
         this._state.update(CookieKey, undefined);
         this._state.update(UserStatusKey, undefined);
     }

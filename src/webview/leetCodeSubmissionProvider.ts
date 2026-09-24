@@ -5,6 +5,7 @@ import { ViewColumn } from "vscode";
 import { openKeybindingsEditor, promptHintMessage } from "../utils/uiUtils";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
+import { parseSubmissionResult } from "../utils/parseUtils";
 
 class LeetCodeSubmissionProvider extends LeetCodeWebview {
 
@@ -12,7 +13,7 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
     private result: IResult;
 
     public show(resultString: string): void {
-        this.result = this.parseResult(resultString);
+        this.result = parseSubmissionResult(resultString);
         this.showWebviewInternal();
         this.showKeybindingsHint();
     }
@@ -26,7 +27,7 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
 
     protected getWebviewContent(): string {
         const styles: string = markdownEngine.getStyles();
-        const title: string = `## ${this.result.messages[0]}`;
+        const title: string = `## ${this.result.messages[0] ?? "Submission failed"}`;
         const messages: string[] = this.result.messages.slice(1).map((m: string) => `* ${m}`);
         const sections: string[] = Object.keys(this.result)
             .filter((key: string) => key !== "messages")
@@ -45,7 +46,7 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
             <!DOCTYPE html>
             <html>
             <head>
-                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https:; script-src vscode-resource:; style-src vscode-resource:;"/>
+                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https:; script-src vscode-resource:; style-src vscode-resource: 'unsafe-inline';"/>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 ${styles}
@@ -70,32 +71,6 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
         );
     }
 
-    private parseResult(raw: string): IResult {
-        raw = raw.concat("  √ "); // Append a dummy sentinel to the end of raw string
-        const regSplit: RegExp = /  [√×✔✘vx] ([^]+?)\n(?=  [√×✔✘vx] )/g;
-        const regKeyVal: RegExp = /(.+?): ([^]*)/;
-        const result: IResult = { messages: [] };
-        let entry: RegExpExecArray | null;
-        do {
-            entry = regSplit.exec(raw);
-            if (!entry) {
-                continue;
-            }
-            const kvMatch: RegExpExecArray | null = regKeyVal.exec(entry[1]);
-            if (kvMatch) {
-                const [key, value] = kvMatch.slice(1);
-                if (value) { // Do not show empty string
-                    if (!result[key]) {
-                        result[key] = [];
-                    }
-                    result[key].push(value);
-                }
-            } else {
-                result.messages.push(entry[1]);
-            }
-        } while (entry);
-        return result;
-    }
 }
 
 interface IResult {

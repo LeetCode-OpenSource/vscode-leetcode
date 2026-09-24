@@ -3,7 +3,9 @@
 
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
-import { IProblem, ProblemState, UserStatus } from "../shared";
+import { leetCodeChannel } from "../leetCodeChannel";
+import { IProblem, UserStatus } from "../shared";
+import { IProblemListRow, parseProblemListLine } from "../utils/parseUtils";
 import * as settingUtils from "../utils/settingUtils";
 import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
 
@@ -17,46 +19,58 @@ export async function listProblems(): Promise<IProblem[]> {
         const result: string = await leetCodeExecutor.listProblems(true, useEndpointTranslation);
         const problems: IProblem[] = [];
         const lines: string[] = result.split("\n");
-        const reg: RegExp = /^(.)\s(.{1,2})\s(.)\s\[\s*(\d*)\s*\]\s*(.*)\s*(Easy|Medium|Hard)\s*\((\s*\d+\.\d+ %)\)/;
-        const { companies, tags } = await leetCodeExecutor.getCompaniesAndTags();
+
+        // Company/tag data is supplementary. A failure there must not wipe the
+        // whole tree, so it is fetched defensively and degraded to empty.
+        let companies: { [key: string]: string[] } = {};
+        let tags: { [key: string]: string[] } = {};
+        try {
+            const extra = await leetCodeExecutor.getCompaniesAndTags();
+            companies = extra.companies;
+            tags = extra.tags;
+        } catch (extraError) {
+            leetCodeChannel.appendLine(`Failed to load company/tag metadata, continuing without it: ${extraError}`);
+        }
+
+        let skipped: number = 0;
         for (const line of lines) {
-            const match: RegExpMatchArray | null = line.match(reg);
-            if (match && match.length === 8) {
-                const id: string = match[4].trim();
-                problems.push({
-                    id,
-                    isFavorite: match[1].trim().length > 0,
-                    locked: match[2].trim().length > 0,
-                    state: parseProblemState(match[3]),
-                    name: match[5].trim(),
-                    difficulty: match[6].trim(),
-                    passRate: match[7].trim(),
-                    companies: companies[id] || ["Unknown"],
-                    tags: tags[id] || ["Unknown"],
-                });
+            if (!line.trim()) {
+                continue;
             }
+            const row: IProblemListRow | undefined = parseProblemListLine(line);
+            if (!row) {
+                skipped += 1;
+                continue;
+            }
+            problems.push({
+                id: row.id,
+                isFavorite: row.isFavorite,
+                locked: row.locked,
+                state: row.state,
+                name: row.name,
+                difficulty: row.difficulty,
+                passRate: row.passRate,
+                companies: companies[row.id] || ["Unknown"],
+                tags: tags[row.id] || ["Unknown"],
+            });
+        }
+
+        if (problems.length === 0 && skipped > 0) {
+            // Previously this produced a silently empty tree.
+            leetCodeChannel.appendLine(`Could not parse any problem from ${skipped} line(s) of CLI output:`);
+            leetCodeChannel.appendLine(result);
+            throw new Error("The LeetCode CLI returned output that could not be parsed. See the output channel.");
+        }
+        if (skipped > 0) {
+            leetCodeChannel.appendLine(`Skipped ${skipped} unparseable line(s) from the problem list.`);
         }
         return problems.reverse();
     } catch (error) {
+        leetCodeChannel.appendLine(`${error}`);
+        if (error && (error as any).result) {
+            leetCodeChannel.appendLine(`${(error as any).result}`);
+        }
         await promptForOpenOutputChannel("Failed to list problems. Please open the output channel for details.", DialogType.error);
         return [];
-    }
-}
-
-function parseProblemState(stateOutput: string): ProblemState {
-    if (!stateOutput) {
-        return ProblemState.Unknown;
-    }
-    switch (stateOutput.trim()) {
-        case "v":
-        case "✔":
-        case "√":
-            return ProblemState.AC;
-        case "X":
-        case "✘":
-        case "×":
-            return ProblemState.NotAC;
-        default:
-            return ProblemState.Unknown;
     }
 }

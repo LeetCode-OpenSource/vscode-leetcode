@@ -7,44 +7,35 @@ on:
     branches: [master]
 
 jobs:
-  linux:
-    name: Linux
-    runs-on: ubuntu-latest
+  build:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 20
+          cache: npm
 
       - name: Install Node.js modules
-        run: npm install
+        run: npm ci
+
+      - name: Compile
+        run: npm run compile
 
       - name: Lint
         run: npm run lint
 
-      - name: VSCE Packge
-        run: npx vsce package
+      - name: Unit tests
+        run: npm run test:unit
 
-  windows:
-    name: Windows
-    runs-on: windows-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
-      - name: Install Node.js modules
-        run: npm install
-
-      - name: Lint
-        run: npm run lint
-
-      - name: VSCE Packge
-        run: npx vsce package
+      - name: Package VSIX
+        run: npx @vscode/vsce package

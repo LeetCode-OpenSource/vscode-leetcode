@@ -26,20 +26,24 @@
     ],
     "preview": true,
     "activationEvents": [
-        "onCommand:leetcode.toggleLeetCodeCn",
+        "onCommand:leetcode.addFavorite",
+        "onCommand:leetcode.deleteCache",
+        "onCommand:leetcode.manageSessions",
+        "onCommand:leetcode.pickOne",
+        "onCommand:leetcode.previewProblem",
+        "onCommand:leetcode.problems.sort",
+        "onCommand:leetcode.refreshExplorer",
+        "onCommand:leetcode.removeFavorite",
+        "onCommand:leetcode.searchProblem",
+        "onCommand:leetcode.showProblem",
+        "onCommand:leetcode.showSolution",
         "onCommand:leetcode.signin",
         "onCommand:leetcode.signout",
-        "onCommand:leetcode.manageSessions",
-        "onCommand:leetcode.refreshExplorer",
-        "onCommand:leetcode.pickOne",
-        "onCommand:leetcode.showProblem",
-        "onCommand:leetcode.previewProblem",
-        "onCommand:leetcode.searchProblem",
-        "onCommand:leetcode.testSolution",
         "onCommand:leetcode.submitSolution",
         "onCommand:leetcode.switchDefaultLanguage",
-        "onCommand:leetcode.problems.sort",
-        "onView:leetCodeExplorer"
+        "onCommand:leetcode.testSolution",
+        "onView:leetCodeExplorer",
+        "onUri"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -48,12 +52,6 @@
                 "command": "leetcode.deleteCache",
                 "title": "Delete Cache",
                 "category": "LeetCode"
-            },
-            {
-                "command": "leetcode.toggleLeetCodeCn",
-                "title": "Switch Endpoint",
-                "category": "LeetCode",
-                "icon": "$(globe)"
             },
             {
                 "command": "leetcode.signin",
@@ -162,11 +160,6 @@
         },
         "menus": {
             "view/title": [
-                {
-                    "command": "leetcode.toggleLeetCodeCn",
-                    "when": "view == leetCodeExplorer",
-                    "group": "navigation@0"
-                },
                 {
                     "command": "leetcode.signin",
                     "when": "view == leetCodeExplorer",
@@ -375,16 +368,6 @@
                         "default": false,
                         "scope": "application",
                         "description": "Use the Windows Subsystem for Linux."
-                    },
-                    "leetcode.endpoint": {
-                        "type": "string",
-                        "default": "leetcode",
-                        "scope": "application",
-                        "enum": [
-                            "leetcode",
-                            "leetcode-cn"
-                        ],
-                        "description": "Endpoint of the user account."
                     },
                     "leetcode.useEndpointTranslation": {
                         "type": "boolean",
@@ -715,6 +698,9 @@
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose",
+        "pretest": "npm run compile && npm run lint",
+        "test:unit": "mocha --ui tdd \"out/test/unit/**/*.test.js\"",
+        "test": "npm run test:unit",
         "build": "vsce package",
         "vs-publish": "vsce publish"
     },
@@ -722,12 +708,16 @@
         "@types/fs-extra": "^9.0.11",
         "@types/lodash": "^4.14.170",
         "@types/markdown-it": "0.0.7",
-        "@types/mocha": "^2.2.42",
-        "@types/node": "^14.14.33",
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^22.20.4",
         "@types/require-from-string": "^1.2.0",
         "@types/vscode": "1.57.0",
+        "@vscode/test-cli": "^0.0.15",
+        "@vscode/test-electron": "^3.1.0",
+        "@vscode/vsce": "^4.0.0",
+        "mocha": "^11.8.0",
         "tslint": "^5.20.1",
-        "typescript": "^4.3.2"
+        "typescript": "^5.9.3"
     },
     "dependencies": {
         "axios": "^1.6.8",

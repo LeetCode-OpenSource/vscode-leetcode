@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import * as vscode from "vscode";
+import { ProblemState } from "./utils/parseUtils";
 
 export interface IQuickItemEx<T> extends vscode.QuickPickItem {
     value: T;
@@ -59,12 +60,10 @@ export const langExt: Map<string, string> = new Map([
     ["typescript", "ts"],
 ]);
 
-export enum ProblemState {
-    AC = 1,
-    NotAC = 2,
-    Unknown = 3,
-    Locked = 4,
-}
+// Re-exported so the pure parsers and the extension share one definition.
+// parseUtils must stay free of any `vscode` import to remain unit testable,
+// so the enum lives there and is surfaced here for existing callers.
+export { ProblemState };
 
 export enum Endpoint {
     LeetCode = "leetcode",
@@ -146,13 +145,6 @@ export const urlsCn = {
 };
 
 export const getUrl = (key: string) => {
-    const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
-    const point = leetCodeConfig.get<string>("endpoint", Endpoint.LeetCode);
-    switch (point) {
-        case Endpoint.LeetCodeCN:
-            return urlsCn[key];
-        case Endpoint.LeetCode:
-        default:
-            return urls[key];
-    }
+    // leetcode.cn only. The leetcode.com tables are intentionally not consulted.
+    return urlsCn[key];
 };
