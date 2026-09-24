@@ -193,11 +193,9 @@ class LeetCodeManager extends EventEmitter {
 
                 const childProc: cp.ChildProcess = wsl.useWsl()
                     ? cp.spawn("wsl", [leetCodeExecutor.node, leetCodeBinaryPath, "user", loginArgsMapping.get("Cookie") ?? ""], {
-                          shell: true,
                           env: createEnvOption(),
                       })
                     : cp.spawn(leetCodeExecutor.node, [leetCodeBinaryPath, "user", loginArgsMapping.get("Cookie") ?? ""], {
-                          shell: true,
                           env: createEnvOption(),
                       });
 

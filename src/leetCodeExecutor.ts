@@ -9,6 +9,7 @@ import * as requireFromString from "require-from-string";
 import { ExtensionContext } from "vscode";
 import { ConfigurationChangeEvent, Disposable, MessageItem, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Endpoint, IProblem, leetcodeHasInited, supportedPlugins } from "./shared";
+import { leetCodeChannel } from "./leetCodeChannel";
 import { executeCommand, executeCommandWithProgress } from "./utils/cpUtils";
 import { DialogOptions, openUrl } from "./utils/uiUtils";
 import * as wsl from "./utils/wslUtils";
@@ -31,9 +32,9 @@ class LeetCodeExecutor implements Disposable {
 
     public async getLeetCodeBinaryPath(): Promise<string> {
         if (wsl.useWsl()) {
-            return `${await wsl.toWslPath(`"${path.join(this.leetCodeRootPath, "bin", "leetcode")}"`)}`;
+            return await wsl.toWslPath(path.join(this.leetCodeRootPath, "bin", "leetcode"));
         }
-        return `"${path.join(this.leetCodeRootPath, "bin", "leetcode")}"`;
+        return path.join(this.leetCodeRootPath, "bin", "leetcode");
     }
 
     public async meetRequirements(context: ExtensionContext): Promise<boolean> {
@@ -45,8 +46,6 @@ class LeetCodeExecutor implements Disposable {
             if (!await fse.pathExists(this.nodeExecutable)) {
                 throw new Error(`The Node.js executable does not exist on path ${this.nodeExecutable}`);
             }
-            // Wrap the executable with "" to avoid space issue in the path.
-            this.nodeExecutable = `"${this.nodeExecutable}"`;
             if (useWsl()) {
                 this.nodeExecutable = await toWslPath(this.nodeExecutable);
             }
@@ -104,7 +103,7 @@ class LeetCodeExecutor implements Disposable {
         const templateType: string = showDescriptionInComment ? "-cx" : "-c";
         // Quote the id: leetcode.cn issues ids containing a space, such as
         // "LCP 82", and every spawn here runs through a shell.
-        const cmd: string[] = [await this.getLeetCodeBinaryPath(), "show", `"${problemNode.id}"`, templateType, "-l", language];
+        const cmd: string[] = [await this.getLeetCodeBinaryPath(), "show", problemNode.id, templateType, "-l", language];
 
         if (!needTranslation) {
             cmd.push("-T"); // use -T to force English version
@@ -184,7 +183,7 @@ class LeetCodeExecutor implements Disposable {
 
     public async submitSolution(filePath: string): Promise<string> {
         try {
-            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "submit", `"${filePath}"`]);
+            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "submit", filePath]);
         } catch (error) {
             if (error.result) {
                 return error.result;
@@ -195,9 +194,9 @@ class LeetCodeExecutor implements Disposable {
 
     public async testSolution(filePath: string, testString?: string): Promise<string> {
         if (testString) {
-            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`, "-t", `${testString}`]);
+            return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "test", filePath, "-t", testString]);
         }
-        return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "test", `"${filePath}"`]);
+        return await this.executeCommandWithProgressEx("Submitting to LeetCode...", this.nodeExecutable, [await this.getLeetCodeBinaryPath(), "test", filePath]);
     }
 
     public async switchEndpoint(endpoint: string): Promise<string> {
@@ -211,7 +210,7 @@ class LeetCodeExecutor implements Disposable {
     }
 
     public async toggleFavorite(node: IProblem, addToFavorite: boolean): Promise<void> {
-        const commandParams: string[] = [await this.getLeetCodeBinaryPath(), "star", `"${node.id}"`];
+        const commandParams: string[] = [await this.getLeetCodeBinaryPath(), "star", node.id];
         if (!addToFavorite) {
             commandParams.push("-d");
         }
@@ -243,14 +242,14 @@ class LeetCodeExecutor implements Disposable {
         return extensionConfig.get<string>("nodePath", "node" /* default value */);
     }
 
-    private async executeCommandEx(command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
+    private async executeCommandEx(command: string, args: string[], options: cp.SpawnOptions = {}): Promise<string> {
         if (wsl.useWsl()) {
             return await executeCommand("wsl", [command].concat(args), options);
         }
         return await executeCommand(command, args, options);
     }
 
-    private async executeCommandWithProgressEx(message: string, command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
+    private async executeCommandWithProgressEx(message: string, command: string, args: string[], options: cp.SpawnOptions = {}): Promise<string> {
         if (wsl.useWsl()) {
             return await executeCommandWithProgress(message, "wsl", [command].concat(args), options);
         }
@@ -259,8 +258,19 @@ class LeetCodeExecutor implements Disposable {
 
     private async removeOldCache(): Promise<void> {
         const oldPath: string = path.join(os.homedir(), ".lc");
-        if (await fse.pathExists(oldPath)) {
-            await fse.remove(oldPath);
+        if (!await fse.pathExists(oldPath)) {
+            return;
+        }
+        // This directory holds the CLI's session, so deleting it signs the user
+        // out of their other leetcode-cli tools with no warning and no undo.
+        // Move it aside instead, so it can be restored by hand if needed.
+        const backupPath: string = `${oldPath}.vscode-leetcode-backup`;
+        try {
+            await fse.remove(backupPath);
+            await fse.move(oldPath, backupPath);
+            leetCodeChannel.appendLine(`Moved the previous LeetCode CLI cache to ${backupPath}.`);
+        } catch (error) {
+            leetCodeChannel.appendLine(`Could not move the old LeetCode CLI cache aside: ${error}`);
         }
     }
 

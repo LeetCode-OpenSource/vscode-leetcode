@@ -700,9 +700,10 @@
         "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose",
         "pretest": "npm run compile && npm run lint",
         "test:unit": "mocha --ui tdd \"out/test/unit/**/*.test.js\"",
-        "test": "npm run test:unit",
+        "test": "npm run test:unit && npm run test:integration",
         "build": "vsce package",
-        "vs-publish": "vsce publish"
+        "vs-publish": "vsce publish",
+        "test:integration": "vscode-test"
     },
     "devDependencies": {
         "@types/fs-extra": "^9.0.11",

@@ -11,12 +11,12 @@ export function useWsl(): boolean {
 }
 
 export async function toWslPath(path: string): Promise<string> {
-    return (await executeCommand("wsl", ["wslpath", "-u", `"${path.replace(/\\/g, "/")}"`])).trim();
+    return (await executeCommand("wsl", ["wslpath", "-u", path.replace(/\\/g, "/")])).trim();
 }
 
 export async function toWinPath(path: string): Promise<string> {
     if (path.startsWith("\\mnt\\")) {
-        return (await executeCommand("wsl", ["wslpath", "-w", `"${path.replace(/\\/g, "/").substr(0, 6)}"`])).trim() + path.substr(7);
+        return (await executeCommand("wsl", ["wslpath", "-w", path.replace(/\\/g, "/").substr(0, 6)])).trim() + path.substr(7);
     }
     return (await executeCommand("wsl", ["wslpath", "-w", "/"])).trim() + path;
 }

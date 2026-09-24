@@ -11,7 +11,10 @@ interface IExecError extends Error {
     stderr?: string;
 }
 
-export async function executeCommand(command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
+// NOTE: no `shell` option. Arguments are passed as discrete argv elements, so
+// spaces, quotes, backticks and semicolons in problem ids, file paths and test
+// cases are inert rather than interpreted by a shell.
+export async function executeCommand(command: string, args: string[], options: cp.SpawnOptions = {}): Promise<string> {
     return new Promise((resolve: (res: string) => void, reject: (e: Error) => void): void => {
         let result: string = "";
 
@@ -59,7 +62,7 @@ export async function executeCommand(command: string, args: string[], options: c
     });
 }
 
-export async function executeCommandWithProgress(message: string, command: string, args: string[], options: cp.SpawnOptions = { shell: true }): Promise<string> {
+export async function executeCommandWithProgress(message: string, command: string, args: string[], options: cp.SpawnOptions = {}): Promise<string> {
     let result: string = "";
     await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification }, async (p: vscode.Progress<{}>) => {
         return new Promise<void>(async (resolve: () => void, reject: (e: Error) => void): Promise<void> => {

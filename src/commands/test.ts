@@ -6,10 +6,8 @@ import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IQuickItemEx, UserStatus } from "../shared";
-import { isWindows, usingCmd } from "../utils/osUtils";
 import { DialogType, promptForOpenOutputChannel, showFileSelectDialog } from "../utils/uiUtils";
 import { getActiveFilePath } from "../utils/workspaceUtils";
-import * as wsl from "../utils/wslUtils";
 import { leetCodeSubmissionProvider } from "../webview/leetCodeSubmissionProvider";
 
 export async function testSolution(uri?: vscode.Uri): Promise<void> {
@@ -88,15 +86,8 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
 }
 
 function parseTestString(test: string): string {
-    if (wsl.useWsl() || !isWindows()) {
-        return `'${test}'`;
-    }
-
-    // In windows and not using WSL
-    if (usingCmd()) {
-        return `"${test.replace(/"/g, '\\"')}"`;
-    } else {
-        // Assume using PowerShell
-        return `'${test.replace(/"/g, '\\"')}'`;
-    }
+    // Commands are spawned without a shell, so the test case is passed through
+    // as a single argv element. Adding quotes here would make them part of the
+    // literal test input, and the old escaping broke on any apostrophe.
+    return test;
 }

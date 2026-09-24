@@ -99,7 +99,7 @@ export async function showSolution(input: LeetCodeNode | vscode.Uri): Promise<vo
         problemInput = input.id;
     } else if (input instanceof vscode.Uri) {
         // Triggerred from Code Lens/context menu
-        problemInput = `"${input.fsPath}"`;
+        problemInput = input.fsPath;
     } else if (!input) {
         // Triggerred from command
         problemInput = await getActiveFilePath();
