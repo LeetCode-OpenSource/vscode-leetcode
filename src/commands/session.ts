@@ -5,7 +5,7 @@ import * as vscode from "vscode";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { IQuickItemEx } from "../shared";
-import { DialogOptions, DialogType, promptForOpenOutputChannel, promptForSignIn } from "../utils/uiUtils";
+import { DialogOptions, promptForFailure, promptForSignIn } from "../utils/uiUtils";
 
 export async function getSessionList(): Promise<ISession[]> {
     const signInStatus: string | undefined = leetCodeManager.getUser();
@@ -50,7 +50,7 @@ export async function manageSessions(): Promise<void> {
         vscode.window.showInformationMessage(`Successfully switched to session '${choice.label}'.`);
         await vscode.commands.executeCommand("leetcode.refreshExplorer");
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to switch session. Please open the output channel for details.", DialogType.error);
+        await promptForFailure("Failed to switch session.", error);
     }
 }
 
@@ -70,7 +70,7 @@ async function parseSessionsToPicks(includeOperations: boolean = false): Promise
             }
             resolve(picks);
         } catch (error) {
-            return await promptForOpenOutputChannel("Failed to list sessions. Please open the output channel for details.", DialogType.error);
+            return await promptForFailure("Failed to list sessions.", error);
         }
     });
 }
@@ -101,7 +101,7 @@ async function createSession(): Promise<void> {
         await leetCodeExecutor.createSession(session);
         vscode.window.showInformationMessage("New session created, you can switch to it by clicking the status bar.");
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to create session. Please open the output channel for details.", DialogType.error);
+        await promptForFailure("Failed to create session.", error);
     }
 }
 

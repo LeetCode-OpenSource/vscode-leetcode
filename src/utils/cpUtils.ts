@@ -4,7 +4,7 @@
 import * as cp from "child_process";
 import * as vscode from "vscode";
 import { leetCodeChannel } from "../leetCodeChannel";
-import { containsCliError } from "./parseUtils";
+import { containsCliError, summariseCliOutput } from "./parseUtils";
 
 interface IExecError extends Error {
     result?: string;
@@ -47,7 +47,12 @@ export async function executeCommand(command: string, args: string[], options: c
             // line. Matching the bare substring "ERROR" anywhere used to turn
             // ordinary judge output and problem text into fake failures.
             if (code !== 0 || containsCliError(result)) {
-                const error: IExecError = new Error(`Command "${command} ${args.toString()}" failed with exit code "${code}".`);
+                // Carry the CLI's own error line, otherwise the user only ever
+                // sees an opaque "failed with exit code 0".
+                const detail: string = summariseCliOutput(result) || summariseCliOutput(stderrText);
+                const error: IExecError = new Error(
+                    `The LeetCode CLI failed (exit code ${code}).${detail}`,
+                );
                 if (result) {
                     error.result = result; // leetcode-cli may print useful content by exit with error code
                 }

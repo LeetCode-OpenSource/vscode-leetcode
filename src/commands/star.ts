@@ -7,7 +7,7 @@ import { LeetCodeNode } from "../explorer/LeetCodeNode";
 import { leetCodeTreeDataProvider } from "../explorer/LeetCodeTreeDataProvider";
 import { leetCodeExecutor } from "../leetCodeExecutor";
 import { hasStarShortcut } from "../utils/settingUtils";
-import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
+import { promptForFailure } from "../utils/uiUtils";
 
 export async function addFavorite(node: LeetCodeNode): Promise<void> {
     try {
@@ -17,7 +17,7 @@ export async function addFavorite(node: LeetCodeNode): Promise<void> {
             customCodeLensProvider.refresh();
         }
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to add the problem to favorite. Please open the output channel for details.", DialogType.error);
+        await promptForFailure("Failed to add the problem to favorite.", error);
     }
 }
 
@@ -29,6 +29,6 @@ export async function removeFavorite(node: LeetCodeNode): Promise<void> {
             customCodeLensProvider.refresh();
         }
     } catch (error) {
-        await promptForOpenOutputChannel("Failed to remove the problem from favorite. Please open the output channel for details.", DialogType.error);
+        await promptForFailure("Failed to remove the problem from favorite.", error);
     }
 }

@@ -152,3 +152,26 @@ export function tryParseUserName(output: string): string {
     }
     return name;
 }
+
+/**
+ * Picks the most useful line out of CLI output for an error message. The raw
+ * tail is usually a stack trace, which tells the user nothing.
+ */
+export function summariseCliOutput(output: string): string {
+    const text: string = stripAnsi(output || "").trim();
+    if (!text) {
+        return "";
+    }
+    const lines: string[] = text.split("\n").map((l: string) => l.trim()).filter((l: string) => l.length > 0);
+
+    const tagged: string | undefined = lines.find((l: string) => l.indexOf("[ERROR]") >= 0);
+    if (tagged) {
+        return ` ${tagged}`;
+    }
+    const thrown: string | undefined = lines.find((l: string) => /^[A-Za-z]*Error: /.test(l));
+    if (thrown) {
+        return ` The CLI crashed: ${thrown}`;
+    }
+    const meaningful: string | undefined = lines.filter((l: string) => !l.startsWith("at ")).pop();
+    return meaningful ? ` ${meaningful.slice(0, 200)}` : "";
+}

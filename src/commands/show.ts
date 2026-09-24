@@ -14,15 +14,7 @@ import { IProblem, IQuickItemEx, languages, PREMIUM_URL_CN, ProblemState } from 
 import { genFileExt, genFileName, getNodeIdFromFile } from "../utils/problemUtils";
 import * as settingUtils from "../utils/settingUtils";
 import { IDescriptionConfiguration } from "../utils/settingUtils";
-import {
-    DialogOptions,
-    DialogType,
-    openSettingsEditor,
-    openUrl,
-    promptForOpenOutputChannel,
-    promptForSignIn,
-    promptHintMessage,
-} from "../utils/uiUtils";
+import { DialogOptions, DialogType, openSettingsEditor, openUrl, promptForFailure, promptForOpenOutputChannel, promptForSignIn, promptHintMessage } from "../utils/uiUtils";
 import { getActiveFilePath, selectWorkspaceFolder } from "../utils/workspaceUtils";
 import * as wsl from "../utils/wslUtils";
 import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
@@ -119,7 +111,7 @@ export async function showSolution(input: LeetCodeNode | vscode.Uri): Promise<vo
         leetCodeSolutionProvider.show(unescapeJS(solution));
     } catch (error) {
         leetCodeChannel.appendLine(error.toString());
-        await promptForOpenOutputChannel("Failed to fetch the top voted solution. Please open the output channel for details.", DialogType.error);
+        await promptForFailure("Failed to fetch the top voted solution.", error);
     }
 }
 

@@ -14,6 +14,19 @@ export namespace DialogOptions {
     export const singUp: vscode.MessageItem = { title: "Sign up" };
 }
 
+/**
+ * Reports a failure with its actual cause. Every command used to show only a
+ * generic "open the output channel" string, which hid the reason entirely.
+ */
+export async function promptForFailure(summary: string, error: any): Promise<void> {
+    leetCodeChannel.appendLine(`${error}`);
+    if (error && error.result) {
+        leetCodeChannel.appendLine(`${error.result}`);
+    }
+    const detail: string = error instanceof Error ? error.message : `${error}`;
+    await promptForOpenOutputChannel(detail ? `${summary} ${detail}` : summary, DialogType.error);
+}
+
 export async function promptForOpenOutputChannel(message: string, type: DialogType): Promise<void> {
     let result: vscode.MessageItem | undefined;
     switch (type) {

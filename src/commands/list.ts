@@ -7,7 +7,7 @@ import { leetCodeChannel } from "../leetCodeChannel";
 import { IProblem, UserStatus } from "../shared";
 import { IProblemListRow, parseProblemListLine } from "../utils/parseUtils";
 import * as settingUtils from "../utils/settingUtils";
-import { DialogType, promptForOpenOutputChannel } from "../utils/uiUtils";
+import { promptForFailure } from "../utils/uiUtils";
 
 export async function listProblems(): Promise<IProblem[]> {
     try {
@@ -70,7 +70,7 @@ export async function listProblems(): Promise<IProblem[]> {
         if (error && (error as any).result) {
             leetCodeChannel.appendLine(`${(error as any).result}`);
         }
-        await promptForOpenOutputChannel("Failed to list problems. Please open the output channel for details.", DialogType.error);
+        await promptForFailure("Failed to list problems.", error);
         return [];
     }
 }

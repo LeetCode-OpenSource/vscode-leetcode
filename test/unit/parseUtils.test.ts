@@ -10,6 +10,7 @@ import {
     parseSubmissionResult,
     ProblemState,
     stripAnsi,
+    summariseCliOutput,
     tryParseUserName,
 } from "../../src/utils/parseUtils";
 
@@ -232,5 +233,34 @@ suite("parseUtils.stripAnsi", () => {
     test("removes SGR sequences and leaves plain text untouched", () => {
         assert.strictEqual(stripAnsi("[38;2;0;255;0mEasy[39m"), "Easy");
         assert.strictEqual(stripAnsi("plain"), "plain");
+    });
+});
+
+suite("parseUtils.summariseCliOutput", () => {
+
+    test("prefers the CLI's own [ERROR] line", () => {
+        const out: string = "- Waiting session result\n[ERROR] http error [code=405]\n";
+        assert.strictEqual(summariseCliOutput(out).trim(), "[ERROR] http error [code=405]");
+    });
+
+    test("REGRESSION: reports a crash instead of a stack-trace tail", () => {
+        const out: string = [
+            "some noise",
+            "TypeError: Cannot read properties of null (reading 'isCurrentUserPremium')",
+            "    at Request.emit (node:events:514:20)",
+            "    at Request.<anonymous> (/x/node_modules/request/request.js:1)",
+        ].join("\n");
+        const summary: string = summariseCliOutput(out);
+        assert.ok(summary.indexOf("TypeError") >= 0, `expected the thrown error, got: ${summary}`);
+        assert.strictEqual(summary.indexOf("    at "), -1, "stack frames must not be shown to the user");
+    });
+
+    test("falls back to the last meaningful line", () => {
+        assert.strictEqual(summariseCliOutput("first line\nlast line").trim(), "last line");
+    });
+
+    test("returns an empty string for empty output", () => {
+        assert.strictEqual(summariseCliOutput(""), "");
+        assert.strictEqual(summariseCliOutput("   \n  "), "");
     });
 });

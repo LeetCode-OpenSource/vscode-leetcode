@@ -13,35 +13,12 @@ import * as wsl from "./utils/wslUtils";
 import { globalState } from "./globalState";
 import { queryUserData } from "./request/query-user-data";
 import { parseQuery } from "./utils/toolUtils";
-import { tryParseUserName } from "./utils/parseUtils";
+import { summariseCliOutput, tryParseUserName } from "./utils/parseUtils";
 
 /** How long to wait for the CLI to confirm a login before giving up. */
 const LOGIN_TIMEOUT_MS: number = 30 * 1000;
 /** A prompt repeating past this means the CLI is rejecting our input in a loop. */
 const MAX_PROMPT_REPEATS: number = 3;
-
-/**
- * Picks the most useful line out of CLI output for an error message. The raw
- * tail is usually a stack trace, which tells the user nothing.
- */
-function summariseCliOutput(output: string): string {
-    const text: string = (output || "").trim();
-    if (!text) {
-        return "";
-    }
-    const lines: string[] = text.split("\n").map((l: string) => l.trim()).filter((l: string) => l.length > 0);
-
-    const tagged: string | undefined = lines.find((l: string) => l.indexOf("[ERROR]") >= 0);
-    if (tagged) {
-        return ` ${tagged}`;
-    }
-    const thrown: string | undefined = lines.find((l: string) => /^[A-Za-z]*Error: /.test(l));
-    if (thrown) {
-        return ` The CLI crashed: ${thrown}`;
-    }
-    const meaningful: string | undefined = lines.filter((l: string) => !l.startsWith("at ")).pop();
-    return meaningful ? ` ${meaningful.slice(0, 200)}` : "";
-}
 
 class LeetCodeManager extends EventEmitter {
     private currentUser: string | undefined;

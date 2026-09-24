@@ -101,8 +101,8 @@ class LeetCodeExecutor implements Disposable {
 
     public async showProblem(problemNode: IProblem, language: string, filePath: string, showDescriptionInComment: boolean = false, needTranslation: boolean): Promise<void> {
         const templateType: string = showDescriptionInComment ? "-cx" : "-c";
-        // Quote the id: leetcode.cn issues ids containing a space, such as
-        // "LCP 82", and every spawn here runs through a shell.
+        // leetcode.cn issues ids containing a space, such as "LCP 82". They are
+        // safe unquoted because spawns pass argv elements without a shell.
         const cmd: string[] = [await this.getLeetCodeBinaryPath(), "show", problemNode.id, templateType, "-l", language];
 
         if (!needTranslation) {
