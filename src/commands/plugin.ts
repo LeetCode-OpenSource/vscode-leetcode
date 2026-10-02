@@ -82,6 +82,13 @@ export async function switchSortingStrategy(): Promise<void> {
     await leetCodeTreeDataProvider.refresh();
 }
 
+export async function toggleHideSolvedProblems(): Promise<void> {
+    const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
+    const shouldHideSolved: boolean = leetCodeConfig.get<boolean>("hideSolved", false);
+    await leetCodeConfig.update("hideSolved", !shouldHideSolved, true);
+    await leetCodeTreeDataProvider.refresh();
+}
+
 export function getSortingStrategy(): SortingStrategy {
     const leetCodeConfig: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("leetcode");
     return leetCodeConfig.get<SortingStrategy>("problems.sortStrategy", SortingStrategy.None);
