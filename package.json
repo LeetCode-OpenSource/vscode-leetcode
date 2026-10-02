@@ -39,6 +39,7 @@
         "onCommand:leetcode.submitSolution",
         "onCommand:leetcode.switchDefaultLanguage",
         "onCommand:leetcode.problems.sort",
+        "onCommand:leetcode.problems.hideSolved",
         "onView:leetCodeExplorer"
     ],
     "main": "./out/src/extension",
@@ -141,6 +142,11 @@
                 "title": "Sort Problems",
                 "category": "LeetCode",
                 "icon": "$(sort-precedence)"
+            },
+            {
+                "command": "leetcode.problems.hideSolved",
+                "title": "Hide Solved Problems",
+                "category": "LeetCode"
             }
         ],
         "viewsContainers": {
@@ -196,6 +202,11 @@
                     "command": "leetcode.problems.sort",
                     "when": "view == leetCodeExplorer",
                     "group": "overflow@3"
+                },
+                {
+                    "command": "leetcode.problems.hideSolved",
+                    "when": "view == leetCodeExplorer",
+                    "group": "overflow@4"
                 }
             ],
             "view/item/context": [
