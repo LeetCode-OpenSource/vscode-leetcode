@@ -3,6 +3,13 @@ All notable changes to the "leetcode" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [Unreleased]
+### Changed
+- Replaced the bundled `vsc-leetcode-cli` with direct GraphQL/REST calls for authentication, problems, statements, solutions, tests, submissions, and favorites.
+- Store cookies in `SecretStorage` and support local multi-account sessions.
+- Require VS Code 1.90; removed the Node.js, `leetcode.nodePath`, and `leetcode.useWsl` requirements.
+- Modernize webviews and add English/Simplified Chinese localization.
+
 ## [0.18.4]
 ### Added
 - change graphql path
