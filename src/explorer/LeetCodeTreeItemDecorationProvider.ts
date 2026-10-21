@@ -1,4 +1,3 @@
-import { URLSearchParams } from "url";
 import { FileDecoration, FileDecorationProvider, ProviderResult, ThemeColor, Uri, workspace, WorkspaceConfiguration } from "vscode";
 
 export class LeetCodeTreeItemDecorationProvider implements FileDecorationProvider {

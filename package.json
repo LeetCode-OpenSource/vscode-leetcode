@@ -8,7 +8,7 @@
     "license": "MIT",
     "icon": "resources/LeetCode.png",
     "engines": {
-        "vscode": "^1.57.0"
+        "vscode": "^1.90.0"
     },
     "repository": {
         "type": "git",
@@ -39,83 +39,85 @@
         "onCommand:leetcode.submitSolution",
         "onCommand:leetcode.switchDefaultLanguage",
         "onCommand:leetcode.problems.sort",
-        "onView:leetCodeExplorer"
+        "onView:leetCodeExplorer",
+        "onUri"
     ],
-    "main": "./out/src/extension",
+    "main": "./dist/extension.js",
+    "l10n": "./l10n",
     "contributes": {
         "commands": [
             {
                 "command": "leetcode.deleteCache",
-                "title": "Delete Cache",
+                "title": "%command.deleteCache%",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.toggleLeetCodeCn",
-                "title": "Switch Endpoint",
+                "title": "%command.toggleLeetCodeCn%",
                 "category": "LeetCode",
                 "icon": "$(globe)"
             },
             {
                 "command": "leetcode.signin",
-                "title": "Sign In",
+                "title": "%command.signin%",
                 "category": "LeetCode",
                 "icon": "$(sign-in)"
             },
             {
                 "command": "leetcode.signout",
-                "title": "Sign Out",
+                "title": "%command.signout%",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.manageSessions",
-                "title": "Manage Sessions",
+                "title": "%command.manageSessions%",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.refreshExplorer",
-                "title": "Refresh",
+                "title": "%command.refreshExplorer%",
                 "category": "LeetCode",
                 "icon": "$(refresh)"
             },
             {
                 "command": "leetcode.pickOne",
-                "title": "Pick One",
+                "title": "%command.pickOne%",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.showProblem",
-                "title": "Show Problem",
+                "title": "%command.showProblem%",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.previewProblem",
-                "title": "Preview Problem",
+                "title": "%command.previewProblem%",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.searchProblem",
-                "title": "Search Problem",
+                "title": "%command.searchProblem%",
                 "category": "LeetCode",
                 "icon": "$(search)"
             },
             {
                 "command": "leetcode.showSolution",
-                "title": "Show Top Voted Solution",
+                "title": "%command.showSolution%",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.testSolution",
-                "title": "Test in LeetCode",
+                "title": "%command.testSolution%",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.submitSolution",
-                "title": "Submit to LeetCode",
+                "title": "%command.submitSolution%",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.addFavorite",
-                "title": "Add to Favorite List",
+                "title": "%command.addFavorite%",
                 "category": "LeetCode",
                 "icon": {
                     "light": "resources/light/like.png",
@@ -124,7 +126,7 @@
             },
             {
                 "command": "leetcode.removeFavorite",
-                "title": "Remove from Favorite List",
+                "title": "%command.removeFavorite%",
                 "category": "LeetCode",
                 "icon": {
                     "light": "resources/light/dislike.png",
@@ -133,12 +135,12 @@
             },
             {
                 "command": "leetcode.switchDefaultLanguage",
-                "title": "Switch Default Language",
+                "title": "%command.switchDefaultLanguage%",
                 "category": "LeetCode"
             },
             {
                 "command": "leetcode.problems.sort",
-                "title": "Sort Problems",
+                "title": "%command.problems.sort%",
                 "category": "LeetCode",
                 "icon": "$(sort-precedence)"
             }
@@ -156,10 +158,17 @@
             "leetcode": [
                 {
                     "id": "leetCodeExplorer",
-                    "name": "Problems"
+                    "name": "%view.problems%"
                 }
             ]
         },
+        "viewsWelcome": [
+            {
+                "view": "leetCodeExplorer",
+                "contents": "%viewsWelcome.signIn%",
+                "when": "!leetcode.signedIn"
+            }
+        ],
         "menus": {
             "view/title": [
                 {
@@ -297,7 +306,7 @@
                         "type": "boolean",
                         "default": false,
                         "scope": "application",
-                        "description": "Hide solved problems."
+                        "description": "%config.hideSolved%"
                     },
                     "leetcode.defaultLanguage": {
                         "type": "string",
@@ -321,7 +330,7 @@
                             "typescript"
                         ],
                         "scope": "application",
-                        "description": "Default language for solving the problems."
+                        "description": "%config.defaultLanguage%"
                     },
                     "leetcode.showDescription": {
                         "type": "string",
@@ -337,44 +346,38 @@
                             "Show the problem description in the file's comment"
                         ],
                         "scope": "application",
-                        "description": "Specify where to show the description."
+                        "description": "%config.showDescription%"
                     },
                     "leetcode.showCommentDescription": {
                         "type": "boolean",
                         "default": false,
                         "scope": "application",
-                        "description": "[Deprecated] Include problem description in comments.",
+                        "description": "%config.showCommentDescription%",
                         "deprecationMessage": "This setting will be deprecated in 0.17.0, please use 'leetcode.showDescription' instead"
                     },
                     "leetcode.hint.setDefaultLanguage": {
                         "type": "boolean",
                         "default": true,
                         "scope": "application",
-                        "description": "Show a hint to set the default language."
+                        "description": "%config.setDefaultLanguage%"
                     },
                     "leetcode.hint.configWebviewMarkdown": {
                         "type": "boolean",
                         "default": true,
                         "scope": "application",
-                        "description": "Show a hint to change webview appearance through markdown config."
+                        "description": "%config.configWebviewMarkdown%"
                     },
                     "leetcode.hint.commentDescription": {
                         "type": "boolean",
                         "default": true,
                         "scope": "application",
-                        "description": "Show a hint to enable comment description in solution code file."
+                        "description": "%config.commentDescription%"
                     },
                     "leetcode.hint.commandShortcut": {
                         "type": "boolean",
                         "default": true,
                         "scope": "application",
-                        "description": "Show a hint to configure commands key binding."
-                    },
-                    "leetcode.useWsl": {
-                        "type": "boolean",
-                        "default": false,
-                        "scope": "application",
-                        "description": "Use the Windows Subsystem for Linux."
+                        "description": "%config.commandShortcut%"
                     },
                     "leetcode.endpoint": {
                         "type": "string",
@@ -384,24 +387,24 @@
                             "leetcode",
                             "leetcode-cn"
                         ],
-                        "description": "Endpoint of the user account."
+                        "description": "%config.endpoint%"
                     },
                     "leetcode.useEndpointTranslation": {
                         "type": "boolean",
                         "default": true,
                         "scope": "application",
-                        "description": "Use endpoint's translation (if available)"
+                        "description": "%config.useEndpointTranslation%"
                     },
                     "leetcode.workspaceFolder": {
                         "type": "string",
                         "scope": "application",
-                        "description": "The path of the workspace folder to store the problem files.",
+                        "description": "%config.workspaceFolder%",
                         "default": ""
                     },
                     "leetcode.filePath": {
                         "type": "object",
                         "scope": "application",
-                        "description": "The output folder and filename to save the problem files.",
+                        "description": "%config.filePath%",
                         "properties": {
                             "default": {
                                 "type": "object",
@@ -643,7 +646,7 @@
                         "type": "boolean",
                         "default": true,
                         "scope": "application",
-                        "description": "Show the LeetCode status bar or not."
+                        "description": "%config.enableStatusBar%"
                     },
                     "leetcode.editor.shortcuts": {
                         "type": "array",
@@ -669,25 +672,19 @@
                                 "Show the problem description page."
                             ]
                         },
-                        "description": "Customize the shortcuts in editors."
+                        "description": "%config.shortcuts%"
                     },
                     "leetcode.enableSideMode": {
                         "type": "boolean",
                         "default": true,
                         "scope": "application",
-                        "description": "Determine whether to group all webview pages into the second editor column when solving problems."
-                    },
-                    "leetcode.nodePath": {
-                        "type": "string",
-                        "default": "node",
-                        "scope": "application",
-                        "description": "The Node.js executable path. for example, C:\\Program Files\\nodejs\\node.exe"
+                        "description": "%config.enableSideMode%"
                     },
                     "leetcode.colorizeProblems": {
                         "type": "boolean",
                         "default": true,
                         "scope": "application",
-                        "description": "Add difficulty badge and colorize problems files in explorer tree."
+                        "description": "%config.colorizeProblems%"
                     },
                     "leetcode.problems.sortStrategy": {
                         "type": "string",
@@ -698,13 +695,13 @@
                             "Acceptance Rate (Ascending)",
                             "Acceptance Rate (Descending)"
                         ],
-                        "description": "Sorting strategy for problems list."
+                        "description": "%config.sortStrategy%"
                     },
                     "leetcode.allowReportData": {
                         "type": "boolean",
-                        "default": true,
+                        "default": false,
                         "scope": "application",
-                        "description": "Allow LeetCode to report anonymous usage data to improve the product."
+                        "description": "%config.allowReportData%"
                     }
                 }
             }
@@ -712,10 +709,13 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose",
-        "build": "vsce package",
+        "compile": "node esbuild.js",
+        "watch": "node esbuild.js --watch",
+        "typecheck": "tsc -p ./ --noEmit",
+        "lint": "eslint src --ext .ts",
+        "test": "tsc -p tsconfig.test.json && node --test out-test/test/unit/cookie.test.js out-test/test/unit/problemFile.test.js",
+        "build": "npm run typecheck && npm run lint && npm run test && npm run compile",
+        "package": "npm run build && vsce package",
         "vs-publish": "vsce publish"
     },
     "devDependencies": {
@@ -723,20 +723,20 @@
         "@types/lodash": "^4.14.170",
         "@types/markdown-it": "0.0.7",
         "@types/mocha": "^2.2.42",
-        "@types/node": "^14.14.33",
-        "@types/require-from-string": "^1.2.0",
-        "@types/vscode": "1.57.0",
-        "tslint": "^5.20.1",
-        "typescript": "^4.3.2"
+        "@types/node": "^20.11.30",
+        "@types/vscode": "^1.90.0",
+        "@typescript-eslint/eslint-plugin": "^7.18.0",
+        "@typescript-eslint/parser": "^7.18.0",
+        "@vscode/vsce": "^3.2.1",
+        "esbuild": "^0.25.0",
+        "eslint": "^8.57.1",
+        "typescript": "^5.4.5"
     },
     "dependencies": {
         "axios": "^1.6.8",
         "fs-extra": "^10.0.0",
         "highlight.js": "^10.7.2",
         "lodash": "^4.17.21",
-        "markdown-it": "^8.4.2",
-        "require-from-string": "^2.0.2",
-        "unescape-js": "^1.1.4",
-        "vsc-leetcode-cli": "2.8.1"
+        "markdown-it": "^8.4.2"
     }
 }

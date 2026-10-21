@@ -16,9 +16,9 @@ import { LeetCodeNode } from "./explorer/LeetCodeNode";
 import { leetCodeTreeDataProvider } from "./explorer/LeetCodeTreeDataProvider";
 import { leetCodeTreeItemDecorationProvider } from "./explorer/LeetCodeTreeItemDecorationProvider";
 import { leetCodeChannel } from "./leetCodeChannel";
-import { leetCodeExecutor } from "./leetCodeExecutor";
 import { leetCodeManager } from "./leetCodeManager";
 import { leetCodeStatusBarController } from "./statusbar/leetCodeStatusBarController";
+import { UserStatus } from "./shared";
 import { DialogType, promptForOpenOutputChannel } from "./utils/uiUtils";
 import { leetCodePreviewProvider } from "./webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "./webview/leetCodeSolutionProvider";
@@ -29,17 +29,16 @@ import { globalState } from "./globalState";
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     try {
-        if (!(await leetCodeExecutor.meetRequirements(context))) {
-            throw new Error("The environment doesn't meet requirements.");
-        }
-
         leetCodeManager.on("statusChanged", () => {
+            const signedIn: boolean = leetCodeManager.getStatus() === UserStatus.SignedIn;
+            vscode.commands.executeCommand("setContext", "leetcode.signedIn", signedIn);
             leetCodeStatusBarController.updateStatusBar(leetCodeManager.getStatus(), leetCodeManager.getUser());
             leetCodeTreeDataProvider.refresh();
         });
 
         leetCodeTreeDataProvider.initialize(context);
-        globalState.initialize(context);
+        await globalState.initialize(context);
+        await vscode.commands.executeCommand("setContext", "leetcode.signedIn", false);
 
         context.subscriptions.push(
             leetCodeStatusBarController,
@@ -47,7 +46,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             leetCodePreviewProvider,
             leetCodeSubmissionProvider,
             leetCodeSolutionProvider,
-            leetCodeExecutor,
             markdownEngine,
             codeLensController,
             explorerNodeManager,
@@ -73,14 +71,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             vscode.commands.registerCommand("leetcode.pickOne", () => show.pickOne()),
             vscode.commands.registerCommand("leetcode.searchProblem", () => show.searchProblem()),
             vscode.commands.registerCommand("leetcode.showSolution", (input: LeetCodeNode | vscode.Uri) => show.showSolution(input)),
-            vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh()),
+            vscode.commands.registerCommand("leetcode.refreshExplorer", () => leetCodeTreeDataProvider.refresh(true)),
             vscode.commands.registerCommand("leetcode.testSolution", (uri?: vscode.Uri) => {
                 TrackData.report({
                     event_key: `vscode_runCode`,
                     type: "click",
-                    extra: JSON.stringify({
-                        path: uri?.path,
-                    }),
                 });
                 return test.testSolution(uri);
             }),
@@ -88,21 +83,17 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
                 TrackData.report({
                     event_key: `vscode_submit`,
                     type: "click",
-                    extra: JSON.stringify({
-                        path: uri?.path,
-                    }),
                 });
                 return submit.submitSolution(uri);
             }),
             vscode.commands.registerCommand("leetcode.switchDefaultLanguage", () => switchDefaultLanguage()),
             vscode.commands.registerCommand("leetcode.addFavorite", (node: LeetCodeNode) => star.addFavorite(node)),
             vscode.commands.registerCommand("leetcode.removeFavorite", (node: LeetCodeNode) => star.removeFavorite(node)),
-            vscode.commands.registerCommand("leetcode.problems.sort", () => plugin.switchSortingStrategy())
+            vscode.commands.registerCommand("leetcode.problems.sort", () => plugin.switchSortingStrategy()),
+            vscode.window.registerUriHandler({ handleUri: leetCodeManager.handleUriSignIn })
         );
 
-        await leetCodeExecutor.switchEndpoint(plugin.getLeetCodeEndpoint());
         await leetCodeManager.getLoginStatus();
-        vscode.window.registerUriHandler({ handleUri: leetCodeManager.handleUriSignIn });
     } catch (error) {
         leetCodeChannel.appendLine(error.toString());
         promptForOpenOutputChannel("Extension initialization failed. Please open output channel for details.", DialogType.error);

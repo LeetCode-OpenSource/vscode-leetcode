@@ -8,7 +8,6 @@ import * as vscode from "vscode";
 import { IQuickItemEx } from "../shared";
 import { getWorkspaceConfiguration, getWorkspaceFolder } from "./settingUtils";
 import { showDirectorySelectDialog } from "./uiUtils";
-import * as wsl from "./wslUtils";
 
 export async function selectWorkspaceFolder(): Promise<string> {
     let workspaceFolderSetting: string = getWorkspaceFolder();
@@ -56,25 +55,33 @@ export async function selectWorkspaceFolder(): Promise<string> {
         }
     }
 
-    return wsl.useWsl() ? wsl.toWslPath(workspaceFolderSetting) : workspaceFolderSetting;
+    return workspaceFolderSetting;
 }
 
 export async function getActiveFilePath(uri?: vscode.Uri): Promise<string | undefined> {
-    let textEditor: vscode.TextEditor | undefined;
-    if (uri) {
-        textEditor = await vscode.window.showTextDocument(uri, { preview: false });
-    } else {
-        textEditor = vscode.window.activeTextEditor;
-    }
-
-    if (!textEditor) {
+    const document: vscode.TextDocument | undefined = await getActiveDocument(uri);
+    if (!document) {
         return undefined;
     }
-    if (textEditor.document.isDirty && !await textEditor.document.save()) {
+    return document.uri.fsPath;
+}
+
+export async function getActiveDocument(uri?: vscode.Uri): Promise<vscode.TextDocument | undefined> {
+    let document: vscode.TextDocument | undefined;
+    if (uri) {
+        document = await vscode.workspace.openTextDocument(uri);
+    } else {
+        document = vscode.window.activeTextEditor?.document;
+    }
+
+    if (!document) {
+        return undefined;
+    }
+    if (document.isDirty && !await document.save()) {
         vscode.window.showWarningMessage("Please save the solution file first.");
         return undefined;
     }
-    return wsl.useWsl() ? wsl.toWslPath(textEditor.document.uri.fsPath) : textEditor.document.uri.fsPath;
+    return document;
 }
 
 function isSubFolder(from: string, to: string): boolean {

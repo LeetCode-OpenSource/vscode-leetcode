@@ -22,27 +22,24 @@
 
 - [English Document](https://github.com/LeetCode-OpenSource/vscode-leetcode#requirements) | 中文文档
 
-## ❗️ 注意 ❗️- 无法登录 LeetCode 节点的临时解决办法
+## 登录
 
-> 注意：如果使用的是 `leetcode.cn` 账户，可以跳过此段落。
+> 注意：使用 `leetcode.cn` 时请先把站点切换为 `leetcode-cn`。
 
-近期我们发现插件出现了[无法登录 leetcode.com 节点的问题](https://github.com/LeetCode-OpenSource/vscode-leetcode/issues/478)。原因是因为近期 leetcode.com 改变了登录机制，目前我们暂时没有找到解决该问题的完美解决方案。
-
-感谢 [@yihong0618](https://github.com/yihong0618) 提供了一个临时解决办法。现在你可以直接点击登录按钮并选择第三方登录或者 `Cookie` 登录。
-
-> 注意：如果你希望使用第三方登录（**推荐**），请确保你的账户已经与第三方账户连接。如果你希望通过 `Cookie` 登录，请点击[该连接](https://github.com/LeetCode-OpenSource/vscode-leetcode/issues/478#issuecomment-564757098)查看登录步骤。
+执行 **LeetCode: Sign in**，选择 **LeetCode Cookie**（粘贴已登录浏览器里的 `Cookie` 请求头）或 **Web Authorization**。Cookie 保存在 VS Code `SecretStorage` 中，不会写入明文设置。
 
 ## 运行条件
 
-- [VS Code 1.23.0+](https://code.visualstudio.com/)
-- [Node.js 10+](https://nodejs.org)
-  > 注意：请确保`Node`在`PATH`环境变量中。您也可以通过设定 `leetcode.nodePath` 选项来指定 `Node.js` 可执行文件的路径。
+- [VS Code 1.90+](https://code.visualstudio.com/)
+- 不需要安装 Node.js；扩展直接调用 LeetCode 的 HTTPS API。
 
 ## 快速开始
 
 ![demo](https://raw.githubusercontent.com/LeetCode-OpenSource/vscode-leetcode/master/docs/gifs/demo.gif)
 
 ## 功能
+
+> 已移除内置的 LeetCode CLI 与 Node.js 依赖；登录、题库、题干、题解、测试和提交均直接使用 LeetCode 的 GraphQL/REST 接口。
 
 ### 登入登出
 
@@ -134,17 +131,15 @@
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
 | `leetcode.hideSolved`             | 指定是否要隐藏已解决的问题                                                                                                                                                                                                                                                                                    | `false`            |
 | `leetcode.defaultLanguage`        | 指定答题时使用的默认语言，可选语言有：`bash`, `c`, `cpp`, `csharp`, `golang`, `java`, `javascript`, `kotlin`, `mysql`, `php`, `python`,`python3`,`ruby`, `rust`, `scala`, `swift`, `typescript`                                                                                                               | `N/A`              |
-| `leetcode.useWsl`                 | 指定是否启用 WSL                                                                                                                                                                                                                                                                                              | `false`            |
 | `leetcode.endpoint`               | 指定使用的终端，可用终端有：`leetcode`, `leetcode-cn`                                                                                                                                                                                                                                                         | `leetcode`         |
 | `leetcode.workspaceFolder`        | 指定保存文件的工作区目录                                                                                                                                                                                                                                                                                      | `""`               |
 | `leetcode.filePath`               | 指定生成题目文件的相对文件夹路径名和文件名。点击查看[更多详细用法](https://github.com/LeetCode-OpenSource/vscode-leetcode/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E9%A2%98%E7%9B%AE%E6%96%87%E4%BB%B6%E7%9A%84%E7%9B%B8%E5%AF%B9%E6%96%87%E4%BB%B6%E5%A4%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E6%96%87%E4%BB%B6%E5%90%8D)。 |                    |
 | `leetcode.enableStatusBar`        | 指定是否在 VS Code 下方显示插件状态栏。                                                                                                                                                                                                                                                                       | `true`             |
 | `leetcode.editor.shortcuts`       | 指定在编辑器内所自定义的快捷方式。可用的快捷方式有: `submit`, `test`, `star`, `solution`, `description`。                                                                                                                                                                                                     | `["submit, test"]` |
 | `leetcode.enableSideMode`         | 指定在解决一道题时，是否将`问题预览`、`高票答案`与`提交结果`窗口集中在编辑器的第二栏。                                                                                                                                                                                                                        | `true`             |
-| `leetcode.nodePath`               | 指定 `Node.js` 可执行文件的路径。如：C:\Program Files\nodejs\node.exe                                                                                                                                                                                                                                         | `node`             |
 | `leetcode.showCommentDescription` | 指定是否要在注释中显示题干。                                                                                                                                                                                                                                                                                  | `false`            |
 | `leetcode.useEndpointTranslation` | 是否显示翻译版本内容。                                                                                                                                                                                                                                                                                        | `true`             |
-| `leetcode.allowReportData`        | 为了更好的产品体验允许上报用户埋数据                                                                                                                                                                                                                                                                          | `true`             |
+| `leetcode.allowReportData`        | 为了更好的产品体验允许上报用户埋数据                                                                                                                                                                                                                                                                          | `false`             |
 
 ## 需要帮助？
 

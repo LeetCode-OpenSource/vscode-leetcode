@@ -5,7 +5,7 @@ import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
 import { leetCodeManager } from "../leetCodeManager";
-import { Category, defaultProblem, ProblemState } from "../shared";
+import { Category, ProblemState } from "../shared";
 import { explorerNodeManager } from "./explorerNodeManager";
 import { LeetCodeNode } from "./LeetCodeNode";
 import { globalState } from "../globalState";
@@ -23,23 +23,12 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
         this.context = context;
     }
 
-    public async refresh(): Promise<void> {
-        await explorerNodeManager.refreshCache();
+    public async refresh(forceRefresh: boolean = false): Promise<void> {
+        await explorerNodeManager.refreshCache(forceRefresh);
         this.onDidChangeTreeDataEvent.fire(null);
     }
 
     public getTreeItem(element: LeetCodeNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
-        if (element.id === "notSignIn") {
-            return {
-                label: element.name,
-                collapsibleState: vscode.TreeItemCollapsibleState.None,
-                command: {
-                    command: "leetcode.signin",
-                    title: "Sign in to LeetCode",
-                },
-            };
-        }
-
         let contextValue: string;
         if (element.isProblem) {
             contextValue = element.isFavorite ? "problem-favorite" : "problem";
@@ -60,15 +49,7 @@ export class LeetCodeTreeDataProvider implements vscode.TreeDataProvider<LeetCod
 
     public getChildren(element?: LeetCodeNode | undefined): vscode.ProviderResult<LeetCodeNode[]> {
         if (!leetCodeManager.getUser()) {
-            return [
-                new LeetCodeNode(
-                    Object.assign({}, defaultProblem, {
-                        id: "notSignIn",
-                        name: "Sign in to LeetCode",
-                    }),
-                    false
-                ),
-            ];
+            return [];
         }
         if (!element) {
             // Root view

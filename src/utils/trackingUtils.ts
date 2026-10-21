@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import axios from "axios";
 import { getLeetCodeEndpoint } from "../commands/plugin";
 import { Endpoint } from "../shared";
-import { leetCodeManager } from "../leetCodeManager";
 
 const getTimeZone = (): string => {
     const endPoint: string = getLeetCodeEndpoint();
@@ -33,15 +32,10 @@ interface ITrackData {
     reportUrl: string;
 }
 
-const testReportUrl = "https://analysis.lingkou.xyz/i/event";
-const prodReportUrl = "https://analysis.leetcode.cn/i/event";
+const reportUrl = "https://analysis.leetcode.cn/i/event";
 
 function getReportUrl() {
-    if (process.env.NODE_ENV === "production") {
-        return prodReportUrl;
-    } else {
-        return testReportUrl;
-    }
+    return reportUrl;
 }
 
 const _charStr = "abacdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+=";
@@ -70,7 +64,7 @@ function getRandomString(len: number) {
 function getAllowReportDataConfig() {
     const leetCodeConfig = vscode.workspace.getConfiguration("leetcode");
     const allowReportData = !!leetCodeConfig.get<boolean>("allowReportData");
-    return allowReportData;
+    return allowReportData && vscode.env.isTelemetryEnabled;
 }
 
 class TrackData implements ITrackData {
@@ -95,7 +89,6 @@ class TrackData implements ITrackData {
             this.reportCache.push({
                 ...item,
                 referer: "vscode",
-                target: leetCodeManager.getUser() ?? "",
                 anonymous_id: item.anonymous_id ?? (randomId as string),
             });
         });
@@ -112,7 +105,6 @@ class TrackData implements ITrackData {
         this.reportCache = [];
         try {
             this.isSubmit = true;
-            axios.defaults.withCredentials = true;
             await axios.post(this.reportUrl, `dataList=${encodeURIComponent(dataList)}`, {
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",

@@ -1,7 +1,7 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
-import { commands, ConfigurationChangeEvent, Disposable, ViewColumn, WebviewPanel, window, workspace } from "vscode";
+import { commands, ConfigurationChangeEvent, Disposable, ViewColumn, Webview, WebviewPanel, window, workspace } from "vscode";
 import { openSettingsEditor, promptHintMessage } from "../utils/uiUtils";
 import { markdownEngine } from "./markdownEngine";
 
@@ -22,9 +22,8 @@ export abstract class LeetCodeWebview implements Disposable {
         if (!this.panel) {
             this.panel = window.createWebviewPanel(this.viewType, title, { viewColumn, preserveFocus }, {
                 enableScripts: true,
-                enableCommandUris: true,
                 enableFindWidget: true,
-                retainContextWhenHidden: true,
+                retainContextWhenHidden: false,
                 localResourceRoots: markdownEngine.localResourceRoots,
             });
             this.panel.onDidDispose(this.onDidDisposeWebview, this, this.listeners);
@@ -64,6 +63,19 @@ export abstract class LeetCodeWebview implements Disposable {
     protected abstract getWebviewOption(): ILeetCodeWebviewOption;
 
     protected abstract getWebviewContent(): string;
+
+    protected get webview(): Webview | undefined {
+        return this.panel?.webview;
+    }
+
+    protected getNonce(): string {
+        let text: string = "";
+        const possible: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for (let i: number = 0; i < 32; i += 1) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return text;
+    }
 
     private async showMarkdownConfigHint(): Promise<void> {
         await promptHintMessage(

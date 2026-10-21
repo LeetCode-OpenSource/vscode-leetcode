@@ -1,14 +1,18 @@
 // Copyright (c) jdneo. All rights reserved.
 // Licensed under the MIT license.
 
+import * as fse from "fs-extra";
 import * as _ from "lodash";
 import * as path from "path";
-import * as unescapeJS from "unescape-js";
 import * as vscode from "vscode";
+import { buildProblemFile } from "../api/problemFile";
+import { fetchQuestionDetail } from "../api/question";
+import type { IQuestionDetail } from "../api/question";
+import { getLeetCodeRequest } from "../api/request";
+import { fetchTopSolution } from "../api/solution";
 import { explorerNodeManager } from "../explorer/explorerNodeManager";
 import { LeetCodeNode } from "../explorer/LeetCodeNode";
 import { leetCodeChannel } from "../leetCodeChannel";
-import { leetCodeExecutor } from "../leetCodeExecutor";
 import { leetCodeManager } from "../leetCodeManager";
 import { Endpoint, IProblem, IQuickItemEx, languages, PREMIUM_URL_CN, PREMIUM_URL_GLOBAL, ProblemState } from "../shared";
 import { genFileExt, genFileName, getNodeIdFromFile } from "../utils/problemUtils";
@@ -24,12 +28,20 @@ import {
     promptHintMessage,
 } from "../utils/uiUtils";
 import { getActiveFilePath, selectWorkspaceFolder } from "../utils/workspaceUtils";
-import * as wsl from "../utils/wslUtils";
 import { leetCodePreviewProvider } from "../webview/leetCodePreviewProvider";
 import { leetCodeSolutionProvider } from "../webview/leetCodeSolutionProvider";
 import * as list from "./list";
 import { getLeetCodeEndpoint } from "./plugin";
 import { globalState } from "../globalState";
+
+async function findProblemById(id: string): Promise<IProblem | undefined> {
+    const cached: IProblem | undefined = explorerNodeManager.getNodeById(id);
+    if (cached) {
+        return cached;
+    }
+    const problems: IProblem[] = await list.listProblems();
+    return problems.find((problem: IProblem) => problem.id === id);
+}
 
 export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: boolean = false): Promise<void> {
     let node: IProblem;
@@ -41,7 +53,7 @@ export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: b
             vscode.window.showErrorMessage(`Failed to resolve the problem id from file: ${activeFilePath}.`);
             return;
         }
-        const cachedNode: IProblem | undefined = explorerNodeManager.getNodeById(id);
+        const cachedNode: IProblem | undefined = await findProblemById(id);
         if (!cachedNode) {
             vscode.window.showErrorMessage(`Failed to resolve the problem with id: ${id}.`);
             return;
@@ -60,8 +72,15 @@ export async function previewProblem(input: IProblem | vscode.Uri, isSideMode: b
     }
 
     const needTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
-    const descString: string = await leetCodeExecutor.getDescription(node.id, needTranslation);
-    leetCodePreviewProvider.show(descString, node, isSideMode);
+    let detail: IQuestionDetail;
+    try {
+        detail = await fetchQuestionDetail(getLeetCodeRequest(), node.slug);
+    } catch (error) {
+        leetCodeChannel.appendLine(`[ERROR] Failed to fetch the problem description: ${error}`);
+        await promptForOpenOutputChannel("Failed to fetch the problem description. Please open the output channel for details.", DialogType.error);
+        return;
+    }
+    leetCodePreviewProvider.show(detail, node, isSideMode, needTranslation);
 }
 
 export async function pickOne(): Promise<void> {
@@ -93,31 +112,32 @@ export async function searchProblem(): Promise<void> {
 }
 
 export async function showSolution(input: LeetCodeNode | vscode.Uri): Promise<void> {
-    let problemInput: string | undefined;
+    let node: IProblem | undefined;
     if (input instanceof LeetCodeNode) {
-        // Triggerred from explorer
-        problemInput = input.id;
-    } else if (input instanceof vscode.Uri) {
-        // Triggerred from Code Lens/context menu
-        problemInput = `"${input.fsPath}"`;
-    } else if (!input) {
-        // Triggerred from command
-        problemInput = await getActiveFilePath();
+        node = input;
+    } else {
+        let filePath: string | undefined;
+        if (input instanceof vscode.Uri) {
+            filePath = input.fsPath;
+        } else {
+            filePath = await getActiveFilePath();
+        }
+        if (!filePath) {
+            vscode.window.showErrorMessage("Failed to resolve the current problem file.");
+            return;
+        }
+        const id: string = await getNodeIdFromFile(filePath);
+        node = id ? await findProblemById(id) : undefined;
     }
 
-    if (!problemInput) {
-        vscode.window.showErrorMessage("Invalid input to fetch the solution data.");
+    if (!node) {
+        vscode.window.showErrorMessage("Failed to resolve the problem for the solution.");
         return;
     }
 
-    const language: string | undefined = await fetchProblemLanguage();
-    if (!language) {
-        return;
-    }
     try {
-        const needTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
-        const solution: string = await leetCodeExecutor.showSolution(problemInput, language, needTranslation);
-        leetCodeSolutionProvider.show(unescapeJS(solution));
+        const solution = await fetchTopSolution(getLeetCodeRequest(), node.slug);
+        leetCodeSolutionProvider.show(solution.title || node.name, solution.content);
     } catch (error) {
         leetCodeChannel.appendLine(error.toString());
         await promptForOpenOutputChannel("Failed to fetch the top voted solution. Please open the output channel for details.", DialogType.error);
@@ -185,12 +205,23 @@ async function showProblemInternal(node: IProblem): Promise<void> {
             }
         }
 
-        finalPath = wsl.useWsl() ? await wsl.toWinPath(finalPath) : finalPath;
-
         const descriptionConfig: IDescriptionConfiguration = settingUtils.getDescriptionConfiguration();
         const needTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
+        const detail: IQuestionDetail = await fetchQuestionDetail(getLeetCodeRequest(), node.slug);
 
-        await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment, needTranslation);
+        if (!await fse.pathExists(finalPath)) {
+            const endpointName: string = getLeetCodeEndpoint() === Endpoint.LeetCodeCN ? "leetcode.cn" : "leetcode.com";
+            const fileContent: string = buildProblemFile({
+                detail,
+                problem: node,
+                language,
+                includeDescription: descriptionConfig.showInComment,
+                useTranslation: needTranslation,
+                endpoint: endpointName,
+            });
+            await fse.writeFile(finalPath, fileContent);
+        }
+
         const promises: any[] = [
             vscode.window.showTextDocument(vscode.Uri.file(finalPath), {
                 preview: false,
@@ -204,7 +235,7 @@ async function showProblemInternal(node: IProblem): Promise<void> {
             ),
         ];
         if (descriptionConfig.showInWebview) {
-            promises.push(showDescriptionView(node));
+            promises.push(showDescriptionView(node, detail, needTranslation));
         }
 
         await Promise.all(promises);
@@ -213,8 +244,13 @@ async function showProblemInternal(node: IProblem): Promise<void> {
     }
 }
 
-async function showDescriptionView(node: IProblem): Promise<void> {
-    return previewProblem(node, vscode.workspace.getConfiguration("leetcode").get<boolean>("enableSideMode", true));
+async function showDescriptionView(node: IProblem, detail: IQuestionDetail, useTranslation: boolean): Promise<void> {
+    return leetCodePreviewProvider.show(
+        detail,
+        node,
+        vscode.workspace.getConfiguration("leetcode").get<boolean>("enableSideMode", true),
+        useTranslation,
+    );
 }
 async function parseProblemsToPicks(p: Promise<IProblem[]>): Promise<Array<IQuickItemEx<IProblem>>> {
     return new Promise(async (resolve: (res: Array<IQuickItemEx<IProblem>>) => void): Promise<void> => {
@@ -268,7 +304,7 @@ async function resolveRelativePath(relativePath: string, node: IProblem, selecte
                 return _.upperFirst(_.camelCase(node.name));
             case "kebabcasename":
             case "kebab-case-name":
-                return _.kebabCase(node.name);
+                return _.kebabCase(node.name) || node.slug;
             case "snakecasename":
             case "snake_case_name":
                 return _.snakeCase(node.name);

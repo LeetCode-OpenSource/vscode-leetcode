@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import { ViewColumn } from "vscode";
+import type { ISubmissionResult } from "../api/submission";
 import { openKeybindingsEditor, promptHintMessage } from "../utils/uiUtils";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
 import { markdownEngine } from "./markdownEngine";
@@ -9,10 +10,10 @@ import { markdownEngine } from "./markdownEngine";
 class LeetCodeSubmissionProvider extends LeetCodeWebview {
 
     protected readonly viewType: string = "leetcode.submission";
-    private result: IResult;
+    private result: ISubmissionResult;
 
-    public show(resultString: string): void {
-        this.result = this.parseResult(resultString);
+    public show(result: ISubmissionResult): void {
+        this.result = result;
         this.showWebviewInternal();
         this.showKeybindingsHint();
     }
@@ -25,27 +26,50 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
     }
 
     protected getWebviewContent(): string {
-        const styles: string = markdownEngine.getStyles();
-        const title: string = `## ${this.result.messages[0]}`;
-        const messages: string[] = this.result.messages.slice(1).map((m: string) => `* ${m}`);
-        const sections: string[] = Object.keys(this.result)
-            .filter((key: string) => key !== "messages")
-            .map((key: string) => [
-                `### ${key}`,
-                "```",
-                this.result[key].join("\n"),
-                "```",
-            ].join("\n"));
-        const body: string = markdownEngine.render([
-            title,
-            ...messages,
-            ...sections,
-        ].join("\n"));
+        const status: string = this.result.statusMessage || this.result.state;
+        const lines: string[] = [`## ${status}`];
+
+        if (this.result.runtime || this.result.memory || this.result.totalCorrect !== undefined) {
+            const details: string[] = [];
+            if (this.result.runtime) {
+                details.push(`* Runtime: ${this.result.runtime}`);
+            }
+            if (this.result.memory) {
+                details.push(`* Memory: ${this.result.memory}`);
+            }
+            if (this.result.totalCorrect !== undefined) {
+                const total: string = this.result.totalTestcases !== undefined
+                    ? ` / ${this.result.totalTestcases}`
+                    : "";
+                details.push(`* Passed: ${this.result.totalCorrect}${total}`);
+            }
+            lines.push("", ...details);
+        }
+
+        if (this.result.compileError) {
+            lines.push("", "### Compile Error", "```text", this.result.compileError, "```");
+        }
+        if (this.result.runtimeError) {
+            lines.push("", "### Runtime Error", "```text", this.result.runtimeError, "```");
+        }
+        if (this.result.lastTestcase) {
+            lines.push("", "### Last Testcase", "```text", this.result.lastTestcase, "```");
+        }
+        if (this.result.codeOutput) {
+            lines.push("", "### Output", "```text", this.result.codeOutput, "```");
+        }
+        if (this.result.expectedOutput) {
+            lines.push("", "### Expected", "```text", this.result.expectedOutput, "```");
+        }
+
+        const body: string = markdownEngine.render(lines.join("\n"));
+        const webview = this.webview!;
+        const styles: string = markdownEngine.getStyles(webview);
         return `
             <!DOCTYPE html>
             <html>
             <head>
-                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https:; script-src vscode-resource:; style-src vscode-resource:;"/>
+                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: data: ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline';"/>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 ${styles}
@@ -57,10 +81,6 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
         `;
     }
 
-    protected onDidDisposeWebview(): void {
-        super.onDidDisposeWebview();
-    }
-
     private async showKeybindingsHint(): Promise<void> {
         await promptHintMessage(
             "hint.commandShortcut",
@@ -69,38 +89,6 @@ class LeetCodeSubmissionProvider extends LeetCodeWebview {
             (): Promise<any> => openKeybindingsEditor("leetcode solution"),
         );
     }
-
-    private parseResult(raw: string): IResult {
-        raw = raw.concat("  √ "); // Append a dummy sentinel to the end of raw string
-        const regSplit: RegExp = /  [√×✔✘vx] ([^]+?)\n(?=  [√×✔✘vx] )/g;
-        const regKeyVal: RegExp = /(.+?): ([^]*)/;
-        const result: IResult = { messages: [] };
-        let entry: RegExpExecArray | null;
-        do {
-            entry = regSplit.exec(raw);
-            if (!entry) {
-                continue;
-            }
-            const kvMatch: RegExpExecArray | null = regKeyVal.exec(entry[1]);
-            if (kvMatch) {
-                const [key, value] = kvMatch.slice(1);
-                if (value) { // Do not show empty string
-                    if (!result[key]) {
-                        result[key] = [];
-                    }
-                    result[key].push(value);
-                }
-            } else {
-                result.messages.push(entry[1]);
-            }
-        } while (entry);
-        return result;
-    }
-}
-
-interface IResult {
-    [key: string]: string[];
-    messages: string[];
 }
 
 export const leetCodeSubmissionProvider: LeetCodeSubmissionProvider = new LeetCodeSubmissionProvider();

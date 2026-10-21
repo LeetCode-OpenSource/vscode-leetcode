@@ -14,10 +14,10 @@ class ExplorerNodeManager implements Disposable {
     private companySet: Set<string> = new Set<string>();
     private tagSet: Set<string> = new Set<string>();
 
-    public async refreshCache(): Promise<void> {
+    public async refreshCache(forceRefresh: boolean = false): Promise<void> {
         this.dispose();
         const shouldHideSolved: boolean = shouldHideSolvedProblem();
-        for (const problem of await list.listProblems()) {
+        for (const problem of await list.listProblems(forceRefresh)) {
             if (shouldHideSolved && problem.state === ProblemState.AC) {
                 continue;
             }

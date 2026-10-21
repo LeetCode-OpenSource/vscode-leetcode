@@ -6,45 +6,39 @@ on:
   pull_request:
     branches: [master]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  linux:
-    name: Linux
-    runs-on: ubuntu-latest
+  build:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 20
+          cache: npm
 
-      - name: Install Node.js modules
-        run: npm install
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
 
       - name: Lint
         run: npm run lint
 
-      - name: VSCE Packge
-        run: npx vsce package
+      - name: Unit tests
+        run: npm test
 
-  windows:
-    name: Windows
-    runs-on: windows-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
-      - name: Install Node.js modules
-        run: npm install
-
-      - name: Lint
-        run: npm run lint
-
-      - name: VSCE Packge
-        run: npx vsce package
+      - name: Package VSIX
+        run: npm run package
