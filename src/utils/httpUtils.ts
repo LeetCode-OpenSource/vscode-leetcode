@@ -1,18 +1,13 @@
 import axios, { AxiosRequestConfig, AxiosPromise } from "axios";
 import { omit } from "lodash";
 import { globalState } from "../globalState";
-import { DialogType, promptForOpenOutputChannel } from "./uiUtils";
 
 const referer = "vscode-lc-extension";
 
-export function LcAxios<T = any>(path: string, settings?: AxiosRequestConfig): AxiosPromise<T> {
-    const cookie = globalState.getCookie();
+export function LcAxios<T = any>(path: string, settings?: AxiosRequestConfig, cookieOverride?: string): AxiosPromise<T> {
+    const cookie = cookieOverride ?? globalState.getCookie();
     if (!cookie) {
-        promptForOpenOutputChannel(
-            `Failed to obtain the cookie. Please log in again.`,
-            DialogType.error
-        );
-        return Promise.reject("Failed to obtain the cookie.");
+        return Promise.reject(new Error("Failed to obtain the cookie. Please log in again."));
     }
     return axios(path, {
         headers: {

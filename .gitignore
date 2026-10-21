@@ -59,8 +59,14 @@ typings/
 
 # Output
 out
+out-test
+dist
 *.vsix
 .vscode-test
 
 # Mac
 .DS_Store
+
+# Local secrets (never commit cookies or tokens)
+cookie.txt
+.secrets/

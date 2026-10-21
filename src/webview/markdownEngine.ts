@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import * as hljs from "highlight.js";
-import * as MarkdownIt from "markdown-it";
+import MarkdownIt = require("markdown-it");
 import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
@@ -41,18 +41,18 @@ class MarkdownEngine implements vscode.Disposable {
         return this.engine.render(md, env);
     }
 
-    public getStyles(): string {
+    public getStyles(webview: vscode.Webview): string {
         return [
-            this.getBuiltinStyles(),
+            this.getBuiltinStyles(webview),
             this.getSettingsStyles(),
         ].join(os.EOL);
     }
 
-    private getBuiltinStyles(): string {
+    private getBuiltinStyles(webview: vscode.Webview): string {
         let styles: vscode.Uri[] = [];
         try {
             const stylePaths: string[] = require(path.join(this.config.extRoot, "package.json"))["contributes"]["markdown.previewStyles"];
-            styles = stylePaths.map((p: string) => vscode.Uri.file(path.join(this.config.extRoot, p)).with({ scheme: "vscode-resource" }));
+            styles = stylePaths.map((p: string) => webview.asWebviewUri(vscode.Uri.file(path.join(this.config.extRoot, p))));
         } catch (error) {
             leetCodeChannel.appendLine("[Error] Fail to load built-in markdown style file.");
         }

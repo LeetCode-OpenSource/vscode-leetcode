@@ -12,13 +12,6 @@ export enum UserStatus {
     SignedOut = 2,
 }
 
-export const loginArgsMapping: Map<string, string> = new Map([
-    ["LeetCode", "-l"],
-    ["Cookie", "-c"],
-    ["GitHub", "-g"],
-    ["LinkedIn", "-i"],
-]);
-
 export const languages: string[] = [
     "bash",
     "c",
@@ -76,6 +69,8 @@ export interface IProblem {
     locked: boolean;
     state: ProblemState;
     id: string;
+    slug: string;
+    questionId?: string;
     name: string;
     difficulty: string;
     passRate: string;
@@ -88,6 +83,8 @@ export const defaultProblem: IProblem = {
     locked: false,
     state: ProblemState.Unknown,
     id: "",
+    slug: "",
+    questionId: undefined,
     name: "",
     difficulty: "",
     passRate: "",

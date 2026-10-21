@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import { commands, ViewColumn } from "vscode";
+import type { IQuestionDetail } from "../api/question";
 import { getLeetCodeEndpoint } from "../commands/plugin";
 import { Endpoint, IProblem } from "../shared";
 import { ILeetCodeWebviewOption, LeetCodeWebview } from "./LeetCodeWebview";
@@ -10,17 +11,19 @@ import { markdownEngine } from "./markdownEngine";
 class LeetCodePreviewProvider extends LeetCodeWebview {
     protected readonly viewType: string = "leetcode.preview";
     private node: IProblem;
-    private description: IDescription;
+    private detail: IQuestionDetail;
     private sideMode: boolean = false;
+    private useTranslation: boolean = true;
 
     public isSideMode(): boolean {
         return this.sideMode;
     }
 
-    public show(descString: string, node: IProblem, isSideMode: boolean = false): void {
-        this.description = this.parseDescription(descString, node);
+    public show(detail: IQuestionDetail, node: IProblem, isSideMode: boolean = false, useTranslation: boolean = true): void {
+        this.detail = detail;
         this.node = node;
         this.sideMode = isSideMode;
+        this.useTranslation = useTranslation;
         this.showWebviewInternal();
     }
 
@@ -65,34 +68,53 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 }
                 </style>`,
         };
-        const { title, url, category, difficulty, likes, dislikes, body } = this.description;
+        const title: string = this.useTranslation
+            ? (this.detail.translatedTitle || this.detail.title)
+            : this.detail.title;
+        const url: string = this.getProblemUrl();
+        const body: string = this.useTranslation
+            ? (this.detail.translatedContent || this.detail.content)
+            : this.detail.content;
+
         const head: string = markdownEngine.render(`# [${title}](${url})`);
         const info: string = markdownEngine.render(
             [
-                `| Category | Difficulty | Likes | Dislikes |`,
-                `| :------: | :--------: | :---: | :------: |`,
-                `| ${category} | ${difficulty} | ${likes} | ${dislikes} |`,
-            ].join("\n")
+                `| Difficulty |`,
+                `| :--------: |`,
+                `| ${this.detail.difficulty} |`,
+            ].join("\n"),
         );
-        const tags: string = [
-            `<details>`,
-            `<summary><strong>Tags</strong></summary>`,
-            markdownEngine.render(this.description.tags.map((t: string) => `[\`${t}\`](${this.getTagLink(t)})`).join(" | ")),
-            `</details>`,
-        ].join("\n");
-        const companies: string = [
-            `<details>`,
-            `<summary><strong>Companies</strong></summary>`,
-            markdownEngine.render(this.description.companies.map((c: string) => `\`${c}\``).join(" | ")),
-            `</details>`,
-        ].join("\n");
+        const tagItems: string[] = this.detail.topicTags.length > 0
+            ? this.detail.topicTags.map((tag) => {
+                const label: string = this.useTranslation ? (tag.translatedName || tag.name) : tag.name;
+                return `[\`${label}\`](${this.getTagLink(tag.slug)})`;
+            })
+            : this.node.tags.map((tag: string) => `[\`${tag}\`](${this.getTagLink(tag)})`);
+        const tags: string = tagItems.length > 0
+            ? [
+                `<details>`,
+                `<summary><strong>Tags</strong></summary>`,
+                markdownEngine.render(tagItems.join(" | ")),
+                `</details>`,
+            ].join("\n")
+            : "";
+        const companies: string = this.node.companies.length > 0
+            ? [
+                `<details>`,
+                `<summary><strong>Companies</strong></summary>`,
+                markdownEngine.render(this.node.companies.map((company: string) => `\`${company}\``).join(" | ")),
+                `</details>`,
+            ].join("\n")
+            : "";
         const links: string = markdownEngine.render(`[Submissions](${this.getSubmissionsLink(url)}) | [Solution](${this.getSolutionsLink(url)})`);
+        const webview = this.webview!;
+        const nonce: string = this.getNonce();
         return `
             <!DOCTYPE html>
             <html>
             <head>
-                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https:; script-src vscode-resource: 'unsafe-inline'; style-src vscode-resource: 'unsafe-inline';"/>
-                ${markdownEngine.getStyles()}
+                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: data: ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';"/>
+                ${markdownEngine.getStyles(webview)}
                 ${!this.sideMode ? button.style : ""}
                 <style>
                     code { white-space: pre-wrap; }
@@ -107,7 +129,7 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
                 <hr />
                 ${links}
                 ${!this.sideMode ? button.element : ""}
-                <script>
+                <script nonce="${nonce}">
                     const vscode = acquireVsCodeApi();
                     ${!this.sideMode ? button.script : ""}
                 </script>
@@ -130,42 +152,11 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
         }
     }
 
-    // private async hideSideBar(): Promise<void> {
-    //     await commands.executeCommand("workbench.action.focusSideBar");
-    //     await commands.executeCommand("workbench.action.toggleSidebarVisibility");
-    // }
-
-    private parseDescription(descString: string, problem: IProblem): IDescription {
-        const [
-            ,
-            ,
-            /* title */ url,
-            ,
-            ,
-            ,
-            ,
-            ,
-            /* tags */ /* langs */ category,
-            difficulty,
-            likes,
-            dislikes,
-            ,
-            ,
-            ,
-            ,
-            /* accepted */ /* submissions */ /* testcase */ ...body
-        ] = descString.split("\n");
-        return {
-            title: problem.name,
-            url,
-            tags: problem.tags,
-            companies: problem.companies,
-            category: category.slice(2),
-            difficulty: difficulty.slice(2),
-            likes: likes.split(": ")[1].trim(),
-            dislikes: dislikes.split(": ")[1].trim(),
-            body: body.join("\n").replace(/<pre>[\r\n]*([^]+?)[\r\n]*<\/pre>/g, "<pre><code>$1</code></pre>"),
-        };
+    private getProblemUrl(): string {
+        const base: string = getLeetCodeEndpoint() === Endpoint.LeetCodeCN
+            ? "https://leetcode.cn"
+            : "https://leetcode.com";
+        return `${base}/problems/${this.detail.titleSlug}/description/`;
     }
 
     private getTagLink(tag: string): string {
@@ -182,21 +173,10 @@ class LeetCodePreviewProvider extends LeetCodeWebview {
     private getSolutionsLink(url: string): string {
         return url.replace("/description/", "/solutions/") + "?source=vscode";
     }
+
     private getSubmissionsLink(url: string): string {
         return url.replace("/description/", "/submissions/") + "?source=vscode";
     }
-}
-
-interface IDescription {
-    title: string;
-    url: string;
-    tags: string[];
-    companies: string[];
-    category: string;
-    difficulty: string;
-    likes: string;
-    dislikes: string;
-    body: string;
 }
 
 interface IWebViewMessage {

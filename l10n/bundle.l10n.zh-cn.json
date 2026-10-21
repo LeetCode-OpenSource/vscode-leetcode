@@ -1,0 +1,19 @@
+{
+    "Successfully signed in as {0}.": "已登录，账号：{0}。",
+    "Paste the Cookie header copied from leetcode.cn": "粘贴从 leetcode.cn 复制的 Cookie 请求头",
+    "LeetCode Cookie": "LeetCode Cookie",
+    "Paste the Cookie header copied from browser DevTools": "粘贴从浏览器开发者工具复制的 Cookie 请求头",
+    "Web Authorization": "网页授权",
+    "Open the browser to authorize login on the website": "在浏览器中打开授权页面完成登录",
+    "Successfully signed out.": "已退出登录。",
+    "Switched to session \"{0}\".": "已切换到会话“{0}”。",
+    "Session \"{0}\" is ready.": "会话“{0}”已就绪。",
+    "Session \"{0}\" deleted.": "已删除会话“{0}”。",
+    "Active": "当前",
+    "User: {0}": "账号：{0}",
+    "Enter the new session name.": "输入新会话名称。",
+    "Session name must not be empty": "会话名称不能为空",
+    "Paste the Cookie header for this session.": "粘贴该会话的 Cookie 请求头。",
+    "Cannot delete an active session.": "不能删除当前正在使用的会话。",
+    "This operation cannot be reverted. Are you sure to delete the session: {0}?": "此操作不可恢复，确定删除会话“{0}”？"
+}
