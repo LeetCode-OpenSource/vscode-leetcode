@@ -89,7 +89,7 @@ export async function testSolution(uri?: vscode.Uri): Promise<void> {
 
 function parseTestString(test: string): string {
     if (wsl.useWsl() || !isWindows()) {
-        return `'${test}'`;
+        return `'${test.replace(/'/g, "'\\''")}'`;
     }
 
     // In windows and not using WSL
@@ -97,6 +97,6 @@ function parseTestString(test: string): string {
         return `"${test.replace(/"/g, '\\"')}"`;
     } else {
         // Assume using PowerShell
-        return `'${test.replace(/"/g, '\\"')}'`;
+        return `'${test.replace(/'/g, "''")}'`;
     }
 }
